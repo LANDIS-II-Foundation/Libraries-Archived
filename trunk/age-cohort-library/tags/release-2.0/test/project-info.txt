@@ -1,0 +1,6 @@
+#  project information
+
+project-name	Landis.Test.AgeCohort
+project-type	library
+version		2.0
+release		official
