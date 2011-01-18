@@ -1,5 +1,5 @@
 //  Copyright 2005-2010 Portland State University, University of Wisconsin
-//  Authors:  Srinivas S., Robert M. Scheller, James B. Domingo
+//  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Cohorts;
 
@@ -54,7 +54,6 @@ namespace Landis.Library.BiomassCohorts
         public static void Initialize(int         successionTimeStep,
                                       ICalculator biomassCalculator)
         {
-            Console.Out.WriteLine("INSIDE INITIALIZE - COHORTS.cs");
             Cohorts.successionTimeStep = successionTimeStep;
             Cohorts.biomassCalculator  = biomassCalculator;
         }

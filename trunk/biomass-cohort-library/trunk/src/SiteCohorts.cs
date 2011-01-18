@@ -1,5 +1,5 @@
 //  Copyright 2005-2010 Portland State University, University of Wisconsin
-//  Authors:  Srinivas S., Robert M. Scheller, James B. Domingo
+//  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
 using Landis.Cohorts;
@@ -24,7 +24,7 @@ namespace Landis.Library.BiomassCohorts
         public int InitialBiomass;
 
 
-        public new bool HasAge()
+        /*public new bool HasAge()
         {
             return true;
         }
@@ -39,14 +39,14 @@ namespace Landis.Library.BiomassCohorts
         public new bool HasLeafBiomass()
         {
             return false;
-        }
+        }*/
 
 
         //---------------------------------------------------------------------
 
         private List<SpeciesCohorts> cohorts;
         private int totalBiomass;
-        private int prevYearMortality;
+        //private int prevYearMortality;
 
         //---------------------------------------------------------------------
 
@@ -76,33 +76,6 @@ namespace Landis.Library.BiomassCohorts
             }
         }*/
 
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// The total mortality at the site during the previous year.
-        /// </summary>
-        // public int PrevYearMortality
-        /*int ISiteCohorts.PrevYearMortality
-        {
-            get
-            {
-                return prevYearMortality;
-            }
-        }*/
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// The total mortality at the site during the previous year.
-        /// </summary>
-        // public int PrevYearMortality
-        /*public int PrevYearMortality
-        {
-            get
-            {
-                return prevYearMortality;
-            }
-        }*/
 
         //---------------------------------------------------------------------
 
@@ -134,13 +107,14 @@ namespace Landis.Library.BiomassCohorts
 
         /*
         AgeOnlyCohorts.ISpeciesCohorts Landis.Cohorts.ISiteCohorts<AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
+        //AgeOnlyCohorts.ISpeciesCohorts ISiteCohorts<AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
         {
             get
             {
                 return GetCohorts(species);
             }
-        }
-        */
+        }*/
+        
 
         //---------------------------------------------------------------------
 
@@ -148,7 +122,7 @@ namespace Landis.Library.BiomassCohorts
         {
             this.cohorts = new List<SpeciesCohorts>();
             this.totalBiomass = 0;
-            this.prevYearMortality = 0;
+            //this.prevYearMortality = 0;
             //staticPrevYearMortality = this.prevYearMortality;
         }
 
@@ -163,7 +137,7 @@ namespace Landis.Library.BiomassCohorts
             foreach (SpeciesCohorts speciesCohorts in this.cohorts)
                 clone.cohorts.Add(speciesCohorts.Clone());
             clone.totalBiomass = this.totalBiomass;
-            clone.prevYearMortality = this.prevYearMortality;
+            //clone.prevYearMortality = this.prevYearMortality;
             return clone;
         }
 
@@ -220,7 +194,7 @@ namespace Landis.Library.BiomassCohorts
                 InsertIterator(itor, itors);
             }
 
-            int siteMortality = 0;
+            //int siteMortality = 0;
 
             //  Loop through iterators until they're exhausted
             while (itors.Count > 0)
@@ -269,7 +243,7 @@ namespace Landis.Library.BiomassCohorts
                 }
             }
 
-            prevYearMortality = siteMortality;
+            //prevYearMortality = siteMortality;
             //staticPrevYearMortality = this.prevYearMortality;
         }
 
@@ -407,6 +381,7 @@ namespace Landis.Library.BiomassCohorts
         //---------------------------------------------------------------------
 
         // public IEnumerator<ISpeciesCohorts> GetEnumerator()
+        /**/
         public new IEnumerator<ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)
@@ -415,21 +390,21 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
-        /*
+        
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-        */
+        
         //---------------------------------------------------------------------
 
-        /*
-        IEnumerator<AgeOnlyCohorts.ISpeciesCohorts> IEnumerable<AgeOnlyCohorts.ISpeciesCohorts>.GetEnumerator()
+        
+        /*IEnumerator<AgeOnlyCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
-        }
-        */
+        }*/
+        
 
         //---------------------------------------------------------------------
 
