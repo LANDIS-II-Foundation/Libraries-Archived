@@ -1,4 +1,4 @@
-using Wisc.Flel.GeospatialModeling.Landscapes;
+using Landis.SpatialModeling;
 
 namespace Landis.Cohorts
 {
