@@ -19,19 +19,7 @@ namespace Landis.Library.BiomassCohorts
         void Grow(ActiveSite site, bool isSuccessionTimestep);
 
 
-         /*int PrevYearMortality
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The total biomass of all the cohorts.
-        /// </summary>
-       int TotalBiomass
-        {
-            get;
-        }
-
+/*
         //---------------------------------------------------------------------
 
         /// <summary>

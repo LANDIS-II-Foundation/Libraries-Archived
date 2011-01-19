@@ -17,36 +17,15 @@ namespace Landis.Library.BiomassCohorts
     public class SiteCohorts
         : AgeOnlyCohorts.SiteCohorts,
         ISiteCohorts
-    // Landis.Cohorts.TypeIndependent.ISiteCohorts
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
         public int InitialBiomass;
 
-
-        /*public new bool HasAge()
-        {
-            return true;
-        }
-
-
-        public new bool HasBiomass()
-        {
-            return true;
-        }
-
-
-        public new bool HasLeafBiomass()
-        {
-            return false;
-        }*/
-
-
         //---------------------------------------------------------------------
 
         private List<SpeciesCohorts> cohorts;
-        private int totalBiomass;
-        //private int prevYearMortality;
+        //private int totalBiomass;
 
         //---------------------------------------------------------------------
 
@@ -121,9 +100,7 @@ namespace Landis.Library.BiomassCohorts
         public SiteCohorts()
         {
             this.cohorts = new List<SpeciesCohorts>();
-            this.totalBiomass = 0;
-            //this.prevYearMortality = 0;
-            //staticPrevYearMortality = this.prevYearMortality;
+            //this.totalBiomass = 0;
         }
 
         //---------------------------------------------------------------------
@@ -136,8 +113,7 @@ namespace Landis.Library.BiomassCohorts
             SiteCohorts clone = new SiteCohorts();
             foreach (SpeciesCohorts speciesCohorts in this.cohorts)
                 clone.cohorts.Add(speciesCohorts.Clone());
-            clone.totalBiomass = this.totalBiomass;
-            //clone.prevYearMortality = this.prevYearMortality;
+            //clone.totalBiomass = this.totalBiomass;
             return clone;
         }
 
@@ -243,8 +219,6 @@ namespace Landis.Library.BiomassCohorts
                 }
             }
 
-            //prevYearMortality = siteMortality;
-            //staticPrevYearMortality = this.prevYearMortality;
         }
 
         //---------------------------------------------------------------------
@@ -284,7 +258,6 @@ namespace Landis.Library.BiomassCohorts
                     cohorts.RemoveAt(i);
             }
 
-            //totalBiomass -= totalReduction;
             return totalReduction;
         }
 
@@ -293,8 +266,6 @@ namespace Landis.Library.BiomassCohorts
         // void AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(AgeOnlyCohorts.ICohortDisturbance disturbance)
         public override void RemoveMarkedCohorts(AgeOnlyCohorts.ICohortDisturbance disturbance)
         {
-            // Console.Out.WriteLine("A1");
-
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new DisturbanceEventArgs(disturbance.CurrentSite,
                                                                        disturbance.Type));
@@ -306,8 +277,6 @@ namespace Landis.Library.BiomassCohorts
         // void AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         public override void RemoveMarkedCohorts(AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
-            // Console.Out.WriteLine("A2");
-
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new DisturbanceEventArgs(disturbance.CurrentSite,
                                                                        disturbance.Type));
