@@ -15,8 +15,8 @@ using log4net;
 namespace Landis.Library.BiomassCohorts
 {
     public class SiteCohorts
-        : AgeOnlyCohorts.SiteCohorts,
-        ISiteCohorts
+        : AgeOnlyCohorts.SiteCohorts, ISiteCohorts//, Landis.Cohorts.ISiteCohorts<ISpeciesCohorts>
+        
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
@@ -84,8 +84,8 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
-        /*
-        AgeOnlyCohorts.ISpeciesCohorts Landis.Cohorts.ISiteCohorts<AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
+        
+        /*AgeOnlyCohorts.ISpeciesCohorts Landis.Cohorts.ISiteCohorts<AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
         //AgeOnlyCohorts.ISpeciesCohorts ISiteCohorts<AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
         {
             get

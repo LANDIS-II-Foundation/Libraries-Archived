@@ -19,7 +19,7 @@ namespace Landis.Library.BiomassCohorts
         void Grow(ActiveSite site, bool isSuccessionTimestep);
 
 
-/*
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Landis.Library.BiomassCohorts
         /// The total of all the cohorts' biomass reductions.
         /// </returns>
         int RemoveCohorts(IDisturbance disturbance);
-
+/*
 
         void AddNewCohort(ISpecies species, int initialBiomass);
 
