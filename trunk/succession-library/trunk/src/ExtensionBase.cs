@@ -171,9 +171,9 @@ namespace Landis.Library.Succession
             else
                 sites = disturbedSites;
 
+            ComputeShade(sites);
             ReproduceCohorts(sites);
             AgeCohorts(sites, isSuccessionTimestep);
-            ComputeShade(sites);
 
             if (!isSuccessionTimestep)
                 SiteVars.Disturbed.ActiveSiteValues = false;

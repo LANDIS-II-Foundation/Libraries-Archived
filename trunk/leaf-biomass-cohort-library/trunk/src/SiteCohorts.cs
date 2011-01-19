@@ -23,7 +23,7 @@ namespace Landis.Library.LeafBiomassCohorts
         //private int prevYearMortality;
         //private int totalBiomass;
 
-        public new bool HasAge()
+        /*public new bool HasAge()
         {
             return true;
         }
@@ -38,7 +38,7 @@ namespace Landis.Library.LeafBiomassCohorts
         public new bool HasLeafBiomass()
         {
             return true;
-        }
+        }*/
 
         //---------------------------------------------------------------------
 
@@ -426,18 +426,18 @@ namespace Landis.Library.LeafBiomassCohorts
                     return speciesCohorts;
             }
             return null;
-        }
+        }*/
 
         //---------------------------------------------------------------------
-
-        Landis.Library.BaseCohorts.ISpeciesCohorts Landis.Library.BaseCohorts.ISiteCohorts.this[ISpecies species]
+        /*
+        Landis.Library.Cohorts.ISpeciesCohorts Landis.Library.Cohorts.ISiteCohorts.this[ISpecies species]
         {
             get
             {
                 return GetCohorts(species);
             }
-        }
-        */
+        }*/
+        
         //---------------------------------------------------------------------
 
     }
