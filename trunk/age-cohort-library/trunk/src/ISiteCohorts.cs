@@ -29,9 +29,6 @@ namespace Landis.Library.AgeOnlyCohorts
         /// </summary>
         //bool IsMaturePresent(ISpecies species);
 
-        //bool HasAge(); //{return false;}  
-        //bool HasBiomass(); //{return false;}
-        //bool HasLeafBiomass(); //{return false;}
 
         /// <summary>
         /// Removes the cohorts which are damaged by a disturbance.
@@ -47,11 +44,6 @@ namespace Landis.Library.AgeOnlyCohorts
 
 
         void AddNewCohort(ISpecies species);
-
-        // TO BE FIXED !!
-        //void AddNewCohort(ISpecies species, int initialBiomass);
-
-        //void Grow(ActiveSite site, bool successionTimestep);
 
         void Grow(ushort years,
                   ActiveSite site,
