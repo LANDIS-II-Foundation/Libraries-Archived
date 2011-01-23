@@ -102,7 +102,8 @@ namespace Landis.Library.AgeOnlyCohorts
         /// </summary>
         public void AddNewCohort()
         {
-            this.ages.Add(0);
+            //this.ages.Add(0);
+            this.ages.Add(1);  //now adding with initial age 1
         }
 
         //---------------------------------------------------------------------

@@ -12,6 +12,5 @@ namespace Landis.Library.AgeOnlyCohorts
         /// </summary>
         // bool Damage(ICohort cohort);
         bool MarkCohortForDeath(ICohort cohort);
-        // bool 
     }
 }

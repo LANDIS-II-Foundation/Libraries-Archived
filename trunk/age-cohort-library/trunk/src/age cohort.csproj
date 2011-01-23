@@ -35,7 +35,8 @@
     <Reference Include="Landis.Core">
       <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Cohorts">
+    <Reference Include="Landis.Library.Cohorts, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4004.39395, Culture=neutral, processorArchitecture=x86">

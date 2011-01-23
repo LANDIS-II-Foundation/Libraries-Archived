@@ -7,13 +7,14 @@ namespace Landis.Library.AgeOnlyCohorts
     /// <summary>
     /// The age cohorts for a particular species at a site.
     /// </summary>
-    public interface ISpeciesCohorts//<ICohort>
-        : IEnumerable<ICohort>
+    public interface ISpeciesCohorts
+        : Landis.Library.Cohorts.ISpeciesCohorts<ICohort>
+        //: IEnumerable<ICohort>
     {
         /// <summary>
         /// The number of cohorts in the collection.
         /// </summary>
-        int Count
+        /*int Count
         {
             get;
         }
@@ -36,6 +37,6 @@ namespace Landis.Library.AgeOnlyCohorts
         bool IsMaturePresent
         {
             get;
-        }
+        }*/
     }
 }
