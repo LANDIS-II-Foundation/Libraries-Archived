@@ -1,6 +1,6 @@
 using Landis.Core;
 
-namespace Landis.Cohorts
+namespace Landis.Library.Cohorts
 {
     /// <summary>
     /// An individual cohort for a species.

@@ -75,13 +75,11 @@
   <ItemGroup>
     <Compile Include="DeathEventArgs.cs" />
     <Compile Include="DeathEventHandler.cs" />
-    <Compile Include="ICohort.cs" />
+    <Compile Include="ICohort.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ISiteCohorts.cs" />
     <Compile Include="ISpeciesCohorts.cs" />
-    <Compile Include="type-indpendent\CohortAttribute.cs" />
-    <Compile Include="type-indpendent\ICohort.cs" />
-    <Compile Include="type-indpendent\ISiteCohorts.cs" />
-    <Compile Include="type-indpendent\ISpeciesCohorts.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

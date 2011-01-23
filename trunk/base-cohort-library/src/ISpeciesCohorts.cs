@@ -1,7 +1,7 @@
 using Landis.Core;
 using System.Collections.Generic;
 
-namespace Landis.Cohorts
+namespace Landis.Library.Cohorts
 {
     /// <summary>
     /// The cohorts for a particular species at a site.

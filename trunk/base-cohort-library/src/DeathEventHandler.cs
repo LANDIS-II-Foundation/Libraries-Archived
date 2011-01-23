@@ -1,4 +1,4 @@
-namespace Landis.Cohorts
+namespace Landis.Library.Cohorts
 {
     /// <summary>
     /// Represents a method that handles cohort-death events.
