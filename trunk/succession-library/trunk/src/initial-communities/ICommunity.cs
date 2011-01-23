@@ -1,4 +1,5 @@
 using Landis.Library.AgeOnlyCohorts;
+using System.Collections.Generic;
 
 namespace Landis.Library.InitialCommunities
 {
@@ -20,7 +21,8 @@ namespace Landis.Library.InitialCommunities
         /// <summary>
         /// The site cohorts in the community.
         /// </summary>
-        ISiteCohorts Cohorts
+        List<ISpeciesCohorts> Cohorts
+        //ISiteCohorts Cohorts
         {
             get;
         }

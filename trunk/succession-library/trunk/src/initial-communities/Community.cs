@@ -1,4 +1,5 @@
 using Landis.Library.AgeOnlyCohorts;
+using System.Collections.Generic;
 
 namespace Landis.Library.InitialCommunities
 {
@@ -6,7 +7,8 @@ namespace Landis.Library.InitialCommunities
         : ICommunity
     {
         private ushort mapCode;
-        private ISiteCohorts cohorts;
+        //private ISiteCohorts cohorts;
+        private List<ISpeciesCohorts> cohorts;
 
         //---------------------------------------------------------------------
 
@@ -19,7 +21,7 @@ namespace Landis.Library.InitialCommunities
 
         //---------------------------------------------------------------------
 
-        public ISiteCohorts Cohorts
+        public List<ISpeciesCohorts> Cohorts//ISiteCohorts Cohorts
         {
             get {
                 return cohorts;
@@ -29,7 +31,8 @@ namespace Landis.Library.InitialCommunities
         //---------------------------------------------------------------------
 
         public Community(ushort                 mapCode,
-                         ISiteCohorts cohorts)
+            List<ISpeciesCohorts> cohorts)
+                         //ISiteCohorts cohorts)
         {
             this.mapCode = mapCode;
             this.cohorts = cohorts;

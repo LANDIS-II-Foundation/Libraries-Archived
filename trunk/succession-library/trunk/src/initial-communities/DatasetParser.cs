@@ -9,23 +9,13 @@ namespace Landis.Library.InitialCommunities
     /// A parser that reads a dataset of initial communities from text input.
     /// </summary>
     public class DatasetParser
-        // : Landis.TextParser<IDataset>
         : TextParser<IDataset>
     {
         private int successionTimestep;
-        //private Species.IDataset speciesDataset;
         private ISpeciesDataset speciesDataset;
 
         private static readonly string name = "Initial Communities";
 
-        //---------------------------------------------------------------------
-
-        /*public override string LandisDataValue
-        {
-            get {
-                return "Initial Communities";
-            }
-        }*/
 
         //---------------------------------------------------------------------
 
@@ -67,16 +57,13 @@ namespace Landis.Library.InitialCommunities
 
                 //  Read species and their ages
                 List<ISpeciesCohorts> speciesCohortsList;
-                //List<System.Collections.Generic.IEnumerable<Library.Cohort.AgeOnly.ISpeciesCohorts<Library.Cohort.AgeOnly.ICohort>>> speciesCohortsList;
                 
                 speciesCohortsList = new List<ISpeciesCohorts>();
-                //speciesCohortsList = new List<System.Collections.Generic.IEnumerable<Library.Cohort.AgeOnly.ISpeciesCohorts<Library.Cohort.AgeOnly.ICohort>>>();
                 Dictionary <string, int> speciesLineNumbers = new Dictionary<string, int>();
                 while (! AtEndOfInput && CurrentName != mapCode.Name) {
                     StringReader currentLine = new StringReader(CurrentLine);
 
                     ReadValue(speciesName, currentLine);
-                    //Species.ISpecies species = speciesDataset[speciesName.Value.Actual];
                     ISpecies species = speciesDataset[speciesName.Value.Actual];
                     if (species == null)
                         throw new InputValueException(speciesName.Value.String,
@@ -118,11 +105,9 @@ namespace Landis.Library.InitialCommunities
                     GetNextLine();
                 }
 
-            //    dataset.Add(new Community(mapCode.Value.Actual,
-            //                              new Library.Cohort.AgeOnly.SiteCohorts(ISpeciesCohorts<ICohort> speciesCohortsList)));
-
-                dataset.Add(new Community(mapCode.Value.Actual,
-                                          new SiteCohorts(speciesCohortsList)));
+                //dataset.Add(new Community(mapCode.Value.Actual,
+                //                          new SiteCohorts(speciesCohortsList)));
+                dataset.Add(new Community(mapCode.Value.Actual, speciesCohortsList));
             }
 
             return dataset;
