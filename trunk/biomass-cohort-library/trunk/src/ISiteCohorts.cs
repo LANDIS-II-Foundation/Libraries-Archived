@@ -13,26 +13,9 @@ namespace Landis.Library.BiomassCohorts
     public interface ISiteCohorts
         : Landis.Library.AgeOnlyCohorts.ISiteCohorts//<ISpeciesCohorts>
     {
-        //void AddNewCohort(ISpecies species, int initialBiomass);
-
-        //void Grow(ActiveSite site, bool isSuccessionTimestep);
-
-
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Computes who much a disturbance damages the cohorts by reducing
-        /// their biomass.
-        /// </summary>
-        /// <returns>
-        /// The total of all the cohorts' biomass reductions.
-        /// </returns>
         int RemoveCohorts(IDisturbance disturbance);
-/*
-
-        void AddNewCohort(ISpecies species, int initialBiomass);
-
-        void Grow(ActiveSite site, bool isSuccessionTimestep);*/
+        void AddNewCohort(ISpecies species, ushort age, int initialBiomass);
+        string Write();
+        void Grow(ActiveSite site, bool isSuccessionTimestep);
     }
 }

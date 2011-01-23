@@ -11,7 +11,7 @@ namespace Landis.Library.BiomassCohorts
     /// A species cohort with biomass information.
     /// </summary>
     public class Cohort
-        : ICohort//, Landis.Cohorts.TypeIndependent.ICohort
+        : ICohort
     {
         private ISpecies species;
         private CohortData data;
@@ -55,24 +55,6 @@ namespace Landis.Library.BiomassCohorts
             }
         }
 
-        //---------------------------------------------------------------------
-
-        /*public static readonly CohortAttribute AgeAttribute = new CohortAttribute("Age");
-        public static readonly CohortAttribute BiomassAttribute = new CohortAttribute("Biomass");
-        public static readonly CohortAttribute[] Attributes = new CohortAttribute[]{ AgeAttribute, BiomassAttribute };
-
-        //---------------------------------------------------------------------
-
-        object Landis.Cohorts.TypeIndependent.ICohort.this[CohortAttribute attribute]
-        {
-            get {
-                if (attribute == AgeAttribute)
-                    return data.Age;
-                if (attribute == BiomassAttribute)
-                    return data.Biomass;
-                return null;
-            }
-        }*/
 
         //---------------------------------------------------------------------
 

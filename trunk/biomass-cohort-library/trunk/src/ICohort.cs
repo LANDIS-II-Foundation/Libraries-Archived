@@ -19,10 +19,6 @@ namespace Landis.Library.BiomassCohorts
             get;
         }
 
-        //ushort Age
-        //{
-        //    get;
-        //}
 
         //---------------------------------------------------------------------
 

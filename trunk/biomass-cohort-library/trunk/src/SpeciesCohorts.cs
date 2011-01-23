@@ -91,7 +91,7 @@ namespace Landis.Library.BiomassCohorts
             this.species = species;
             this.cohortData = new List<CohortData>();
             this.isMaturePresent = false;
-            AddNewCohort(initialBiomass);
+            AddNewCohort(1, initialBiomass);
         }
 
         //---------------------------------------------------------------------
@@ -125,9 +125,9 @@ namespace Landis.Library.BiomassCohorts
         /// <summary>
         /// Adds a new cohort.
         /// </summary>
-        public void AddNewCohort(int initialBiomass)
+        public void AddNewCohort(ushort age, int initialBiomass)
         {
-            this.cohortData.Add(new CohortData(1, initialBiomass));
+            this.cohortData.Add(new CohortData(age, initialBiomass));
         }
 
         //---------------------------------------------------------------------
@@ -211,9 +211,6 @@ namespace Landis.Library.BiomassCohorts
         /// </returns>
         public int GrowCohort(int        index,
                               ActiveSite site)
-                              //ref int    siteBiomass,
-                              //int        prevYearSiteMortality,
-                              //out int    cohortMortality)
         {
             Debug.Assert(0 <= index && index <= cohortData.Count);
             Debug.Assert(site != null);
@@ -235,11 +232,7 @@ namespace Landis.Library.BiomassCohorts
 
             cohort.IncrementAge();
 
-            // int biomassChange = (int)Cohorts.BiomassCalculator.ComputeChange(cohort, site);//, siteBiomass);//, prevYearSiteMortality);
-
             int biomassChange = (int)Cohorts.BiomassCalculator.ComputeChange(cohort, site); //, siteBiomass, prevYearSiteMortality);
-
-            // Console.Out.WriteLine("B={0:0.00}, Age={1}, delta={2}", cohort.Biomass, cohort.Age, biomassChange);
 
             Debug.Assert(-(cohort.Biomass) <= biomassChange);  // Cohort can't loss more biomass than it has
 
@@ -407,74 +400,5 @@ namespace Landis.Library.BiomassCohorts
             foreach (CohortData data in cohortData)
                 yield return new Landis.Library.AgeOnlyCohorts.Cohort(species, data.Age);
         }
-        //---------------------------------------------------------------------
-
-        // IEnumerator<Landis.Biomass.ICohort> IEnumerable<Landis.Biomass.ICohort>.GetEnumerator()
-        
-        /*IEnumerator<ICohort> GetEnumerator()
-        {
-            //Console.Out.WriteLine("************* Aloha !! I am inside the enumerator method *************");
-            foreach (CohortData data in cohortData)
-                yield return new Cohort(species, data);
-                // yield return new Landis.Library.BiomassCohorts.Cohort(species, data);
-        }*/
-
-
-        //---------------------------------------------------------------------
-
-        //IEnumerator<Landis.Cohorts.ICohort> IEnumerable<Landis.Cohorts.ICohort>.GetEnumerator()
-        //{
-
-        //}
-
-        //---------------------------------------------------------------------
-        
-        /*
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            // return ((IEnumerable<ICohort>) this).GetEnumerator();
-            return GetEnumerator();
-        }
-        */
-
-        //---------------------------------------------------------------------
-        
-        /*        
-        IEnumerator<ICohort> GetEnumerator()
-        {
-            Console.Out.WriteLine("Itor 2");
-            foreach (CohortData data in cohortData)
-                yield return new Landis.Library.BiomassCohorts.Cohort(species, data);
-        }
-        
-
-        
-        IEnumerator<Landis.Library.AgeOnlyCohorts.ICohort> IEnumerable<Landis.Library.AgeOnlyCohorts.ICohort>.GetEnumerator()
-        {
-            Console.Out.WriteLine("Itor 3");
-            foreach (CohortData data in cohortData)
-                yield return new Landis.Library.AgeOnlyCohorts.Cohort(species, data.Age);
-        }*/
-
-
-        //---------------------------------------------------------------------
-        /*
-        IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return new Cohort(species, data);
-        }*/
-
-        //---------------------------------------------------------------------
-        /*
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            Console.Out.WriteLine("Itor 1");
-            return ((IEnumerable<ICohort>)this).GetEnumerator();
-            // return GetEnumerator();
-        }*/
-
-
-        //---------------------------------------------------------------------
     }
 }
