@@ -2,7 +2,6 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
-using Landis.Cohorts;
 using Landis.SpatialModeling;
 
 namespace Landis.Library.BiomassCohorts

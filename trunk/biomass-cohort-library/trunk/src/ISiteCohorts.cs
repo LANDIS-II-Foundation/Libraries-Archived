@@ -2,7 +2,6 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
-using Landis.Cohorts;
 using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
 
@@ -12,11 +11,11 @@ namespace Landis.Library.BiomassCohorts
     /// All the biomass cohorts at a site.
     /// </summary>
     public interface ISiteCohorts
-        : Landis.Cohorts.ISiteCohorts<ISpeciesCohorts>
+        : Landis.Library.AgeOnlyCohorts.ISiteCohorts//<ISpeciesCohorts>
     {
-        void AddNewCohort(ISpecies species, int initialBiomass);
+        //void AddNewCohort(ISpecies species, int initialBiomass);
 
-        void Grow(ActiveSite site, bool isSuccessionTimestep);
+        //void Grow(ActiveSite site, bool isSuccessionTimestep);
 
 
 

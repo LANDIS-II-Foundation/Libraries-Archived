@@ -1,9 +1,7 @@
 //  Copyright 2005-2010 Portland State University, University of Wisconsin
 //  Authors:  Robert M. Scheller, James B. Domingo
 
-using Landis.Cohorts;
 using Landis.SpatialModeling;
-//using Landis.SpatialModeling.CoreServices;
 
 namespace Landis.Library.BiomassCohorts
 {
@@ -14,7 +12,7 @@ namespace Landis.Library.BiomassCohorts
         : Landis.Library.AgeOnlyCohorts.ICohort
     {
         /// <summary>
-        /// The cohort's biomass (units?).
+        /// The cohort's biomass (g m-2).
         /// </summary>
         int Biomass
         {

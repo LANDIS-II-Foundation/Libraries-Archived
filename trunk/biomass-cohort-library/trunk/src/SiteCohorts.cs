@@ -2,7 +2,6 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
-using Landis.Cohorts;
 using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
 using System.Collections;
@@ -16,6 +15,7 @@ namespace Landis.Library.BiomassCohorts
 {
     public class SiteCohorts
         : AgeOnlyCohorts.SiteCohorts, ISiteCohorts//, Landis.Cohorts.ISiteCohorts<ISpeciesCohorts>
+        //: ISiteCohorts, Landis.Cohorts.TypeIndependent.ISiteCohorts
         
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -360,10 +360,10 @@ namespace Landis.Library.BiomassCohorts
         //---------------------------------------------------------------------
 
         
-        IEnumerator IEnumerable.GetEnumerator()
+        /*IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
+        }*/
         
         //---------------------------------------------------------------------
 
@@ -406,8 +406,8 @@ namespace Landis.Library.BiomassCohorts
             get {
                 return GetCohorts(species);
             }
-        }
-        */
+        }*/
+        
     }
 }
 

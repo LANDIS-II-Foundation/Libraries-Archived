@@ -62,11 +62,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cohort.cs" />
-    <Compile Include="CohortData.cs" />
+    <Compile Include="CohortData.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CohortDefoliation.cs" />
     <Compile Include="CohortGrowthReduction.cs" />
     <Compile Include="Cohorts.cs" />
     <Compile Include="DeathEventArgs.cs" />
+    <Compile Include="DeathEventHandler.cs" />
     <Compile Include="DisturbanceEventArgs.cs" />
     <Compile Include="DisturbanceEventHandler.cs" />
     <Compile Include="ICalculator.cs" />

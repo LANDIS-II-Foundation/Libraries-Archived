@@ -2,9 +2,7 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
-using Landis.Cohorts;
 using Landis.SpatialModeling;
-//using Landis.SpatialModeling.CoreServices;
 
 using System;
 

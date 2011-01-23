@@ -1,8 +1,6 @@
 //  Copyright 2005-2010 Portland State University, University of Wisconsin
 //  Authors:  Robert M. Scheller, James B. Domingo
 
-using Landis.Cohorts;
-
 using System;
 
 namespace Landis.Library.BiomassCohorts
@@ -95,7 +93,7 @@ namespace Landis.Library.BiomassCohorts
         /// <summary>
         /// Computes the total biomass for all the cohorts, not including young cohorts.
         /// </summary>
-        public static int ComputeNonYoungBiomass(ISiteCohorts siteCohorts)
+        public static int ComputeNonYoungBiomass(SiteCohorts siteCohorts)
         {
             int totalBiomass = 0;
             foreach (ISpeciesCohorts speciesCohorts in siteCohorts) {

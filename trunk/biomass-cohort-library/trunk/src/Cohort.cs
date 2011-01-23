@@ -2,8 +2,6 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
-using Landis.Cohorts;
-using Landis.Cohorts.TypeIndependent;
 using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
 
@@ -13,7 +11,7 @@ namespace Landis.Library.BiomassCohorts
     /// A species cohort with biomass information.
     /// </summary>
     public class Cohort
-        : ICohort, Landis.Cohorts.TypeIndependent.ICohort
+        : ICohort//, Landis.Cohorts.TypeIndependent.ICohort
     {
         private ISpecies species;
         private CohortData data;
@@ -59,7 +57,7 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
-        public static readonly CohortAttribute AgeAttribute = new CohortAttribute("Age");
+        /*public static readonly CohortAttribute AgeAttribute = new CohortAttribute("Age");
         public static readonly CohortAttribute BiomassAttribute = new CohortAttribute("Biomass");
         public static readonly CohortAttribute[] Attributes = new CohortAttribute[]{ AgeAttribute, BiomassAttribute };
 
@@ -74,7 +72,7 @@ namespace Landis.Library.BiomassCohorts
                     return data.Biomass;
                 return null;
             }
-        }
+        }*/
 
         //---------------------------------------------------------------------
 
