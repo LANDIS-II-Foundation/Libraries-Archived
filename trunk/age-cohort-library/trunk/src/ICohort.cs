@@ -15,12 +15,5 @@ namespace Landis.Library.AgeOnlyCohorts
         {
             get;
         }
-        /// <summary>
-        /// The cohort's species.
-        /// </summary>
-        /*ISpecies Species
-        {
-            get;
-        }*/
     }
 }

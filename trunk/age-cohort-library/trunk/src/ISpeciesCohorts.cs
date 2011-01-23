@@ -9,34 +9,6 @@ namespace Landis.Library.AgeOnlyCohorts
     /// </summary>
     public interface ISpeciesCohorts
         : Landis.Library.Cohorts.ISpeciesCohorts<ICohort>
-        //: IEnumerable<ICohort>
     {
-        /// <summary>
-        /// The number of cohorts in the collection.
-        /// </summary>
-        /*int Count
-        {
-            get;
-        }
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// The species of the cohorts.
-        /// </summary>
-        ISpecies Species
-        {
-            get;
-        }
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Is at least one sexually mature cohort present?
-        /// </summary>
-        bool IsMaturePresent
-        {
-            get;
-        }*/
     }
 }

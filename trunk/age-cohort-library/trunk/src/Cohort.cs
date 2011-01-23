@@ -9,7 +9,7 @@ namespace Landis.Library.AgeOnlyCohorts
     /// A species cohort with only age information.
     /// </summary>
     public class Cohort
-        : ICohort//, TypeIndependent.ICohort
+        : ICohort
     {
         private ISpecies species;
         private ushort age;
@@ -32,22 +32,6 @@ namespace Landis.Library.AgeOnlyCohorts
             }
         }
 
-        //---------------------------------------------------------------------
-
-        //public static readonly CohortAttribute AgeAttribute = new CohortAttribute("Age");
-        //public static readonly CohortAttribute[] Attributes = new CohortAttribute[]{ AgeAttribute };
-
-        //---------------------------------------------------------------------
-        /*
-        object TypeIndependent.ICohort.this[CohortAttribute attribute]
-        {
-            get {
-                if (attribute == AgeAttribute)
-                    return age;
-                return null;
-            }
-        }*/
-        
 
         //---------------------------------------------------------------------
 

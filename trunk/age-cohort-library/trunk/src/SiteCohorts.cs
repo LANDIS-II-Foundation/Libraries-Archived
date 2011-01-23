@@ -9,7 +9,7 @@ using System;
 namespace Landis.Library.AgeOnlyCohorts
 {
     public class SiteCohorts
-        : ISiteCohorts//, Landis.Cohorts.TypeIndependent.ISiteCohorts
+        : ISiteCohorts
     {
         private List<SpeciesCohorts> spp_cohorts;
 
@@ -59,7 +59,6 @@ namespace Landis.Library.AgeOnlyCohorts
         //---------------------------------------------------------------------
 
         public SiteCohorts(IEnumerable<ISpeciesCohorts> cohorts)
-        //public SiteCohorts(ISpeciesCohorts cohorts)
         {
             this.spp_cohorts = new List<SpeciesCohorts>();
             foreach (ISpeciesCohorts speciesCohorts in cohorts)
@@ -68,16 +67,6 @@ namespace Landis.Library.AgeOnlyCohorts
             }
         }
 
-        //---------------------------------------------------------------------
-
-        /*public SiteCohorts(SiteCohorts cohorts)
-        {
-            this.spp_cohorts = new List<SpeciesCohorts>();
-            foreach (ISpeciesCohorts speciesCohorts in cohorts)
-            {
-                this.spp_cohorts.Add(new SpeciesCohorts(speciesCohorts));
-            }
-        }*/
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -191,54 +180,11 @@ namespace Landis.Library.AgeOnlyCohorts
             return msg;
         }
         
-        /*IEnumerator IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }*/
-        
-
-        //---------------------------------------------------------------------
-
-        /*
-        IEnumerator<Landis.Cohorts.TypeIndependent.ISpeciesCohorts> IEnumerable<Landis.Cohorts.TypeIndependent.ISpeciesCohorts>.GetEnumerator()
-        {
-            foreach (SpeciesCohorts speciesCohorts in cohorts)
-                yield return (Landis.Cohorts.TypeIndependent.ISpeciesCohorts) speciesCohorts;
         }
         
 
-        //---------------------------------------------------------------------
-
-        
-        IList<ISpecies> Landis.Cohorts.TypeIndependent.ISiteCohorts.SpeciesPresent
-        {
-            get {
-                List<ISpecies> speciesPresent = new List<ISpecies>(cohorts.Count);
-                foreach (ISpeciesCohorts speciesCohorts in cohorts)
-                    speciesPresent.Add(speciesCohorts.Species);
-                return speciesPresent;
-            }
-        }
-        
-
-        //---------------------------------------------------------------------
-
-        
-        Landis.Cohorts.TypeIndependent.ISpeciesCohorts Landis.Cohorts.TypeIndependent.ISiteCohorts.this[ISpecies species]
-        {
-            get {
-                return (Landis.Cohorts.TypeIndependent.ISpeciesCohorts) GetCohorts(species);
-            }
-        }
-        */
-
-        /*public void AddNewCohort(ISpecies species, int initialBiomass)
-        {
-
-        }
-
-        public void Grow(ActiveSite site, bool successionTimestep)
-        {
-        }*/
     }
 }

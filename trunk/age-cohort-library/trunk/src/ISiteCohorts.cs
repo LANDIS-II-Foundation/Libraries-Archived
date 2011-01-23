@@ -10,45 +10,21 @@ namespace Landis.Library.AgeOnlyCohorts
     /// All the age cohorts at a site.
     /// </summary>
     public interface ISiteCohorts
-        //: Cohorts.ISiteCohorts<ISpeciesCohorts>//IEnumerable<ISpeciesCohorts>
+        : Cohorts.ISiteCohorts<ISpeciesCohorts>//IEnumerable<ISpeciesCohorts>
     {
 
-        /// <summary>
-        /// Gets the cohorts for a particular species.
-        /// </summary>
-        ISpeciesCohorts this[ISpecies species]
-        {
-            get;
-        }
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Gets a list of the species present at the site.
-        /// </summary>
-        IList<ISpecies> ListOfSpeciesPresent
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Is at least one sexually mature cohort present for a particular
-        /// species?
-        /// </summary>
-        bool IsMaturePresent(ISpecies species);
-
 
         /// <summary>
         /// Removes the cohorts which are damaged by a disturbance.
         /// </summary>
-        // void RemoveMarkedCohorts(ICohortDisturbance disturbance);
+        void RemoveMarkedCohorts(ICohortDisturbance disturbance);
 
         //---------------------------------------------------------------------
 
         /// <summary>
         /// Removes the cohorts which are damaged by a disturbance.
         /// </summary>
-        // void RemoveMarkedCohorts(ISpeciesCohortsDisturbance disturbance);
+        void RemoveMarkedCohorts(ISpeciesCohortsDisturbance disturbance);
 
 
         void AddNewCohort(ISpecies species);
