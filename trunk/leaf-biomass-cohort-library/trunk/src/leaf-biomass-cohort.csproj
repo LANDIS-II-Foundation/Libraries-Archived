@@ -68,6 +68,7 @@
     <Compile Include="CohortGrowthReduction.cs" />
     <Compile Include="Cohorts.cs" />
     <Compile Include="DeathEventArgs.cs" />
+    <Compile Include="DeathEventHandler.cs" />
     <Compile Include="DisturbanceEventArgs.cs" />
     <Compile Include="DisturbanceEventHandler.cs" />
     <Compile Include="ICalculator.cs" />

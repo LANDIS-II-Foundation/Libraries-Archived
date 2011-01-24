@@ -1,6 +1,7 @@
+//  Copyright 2005-2010 Portland State University, University of Wisconsin
+//  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.SpatialModeling;
-using Landis.Cohorts;
 
 namespace Landis.Library.LeafBiomassCohorts
 {
@@ -8,7 +9,7 @@ namespace Landis.Library.LeafBiomassCohorts
     /// A species cohort with biomass information.
     /// </summary>
     public interface ICohort
-        : Library.AgeOnlyCohorts.ICohort
+        : Landis.Library.AgeOnlyCohorts.ICohort
     {
         /// <summary>
         /// The cohort's biomass (g / m^2).
@@ -25,11 +26,11 @@ namespace Landis.Library.LeafBiomassCohorts
         {
             get;
         }
-        
-        
+
+
         int Biomass {get;}
         //---------------------------------------------------------------------
 
-        
+
     }
 }

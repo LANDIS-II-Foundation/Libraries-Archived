@@ -8,7 +8,8 @@ namespace Landis.Library.LeafBiomassCohorts
     /// </summary>
     public interface ISpeciesCohorts
         // :Landis.Library.BaseCohorts.ISpeciesCohorts<ICohort>
-        : Landis.Cohorts.ISpeciesCohorts<ICohort>
+        //: Landis.Cohorts.ISpeciesCohorts<ICohort>
+        : Landis.Library.Cohorts.ISpeciesCohorts<Landis.Library.LeafBiomassCohorts.ICohort>
     {
     }
 }

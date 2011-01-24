@@ -1,7 +1,7 @@
 using Edu.Wisc.Forest.Flel.Util;
 
 using Landis.Core;
-using Landis.Cohorts;
+//using Landis.Cohorts;
 using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
 
@@ -18,8 +18,7 @@ namespace Landis.Library.LeafBiomassCohorts
     /// The cohorts for a particular species at a site.
     /// </summary>
     public class SpeciesCohorts
-        : ISpeciesCohorts,
-          Landis.Cohorts.TypeIndependent.ISpeciesCohorts,
+        : LeafBiomassCohorts.ISpeciesCohorts,
           AgeOnlyCohorts.ISpeciesCohorts
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -93,7 +92,7 @@ namespace Landis.Library.LeafBiomassCohorts
             this.species = species;
             this.cohortData = new List<CohortData>();
             this.isMaturePresent = false;
-            AddNewCohort(initialWoodBiomass, initialLeafBiomass);
+            AddNewCohort(1, initialWoodBiomass, initialLeafBiomass);
         }
 
         //---------------------------------------------------------------------
@@ -127,9 +126,9 @@ namespace Landis.Library.LeafBiomassCohorts
         /// <summary>
         /// Adds a new cohort.
         /// </summary>
-        public void AddNewCohort(float initialWoodBiomass, float initialLeafBiomass)
+        public void AddNewCohort(ushort age, float initialWoodBiomass, float initialLeafBiomass)
         {
-            this.cohortData.Add(new CohortData(1, initialWoodBiomass, initialLeafBiomass));
+            this.cohortData.Add(new CohortData(age, initialWoodBiomass, initialLeafBiomass));
         }
 
         //---------------------------------------------------------------------
@@ -168,7 +167,7 @@ namespace Landis.Library.LeafBiomassCohorts
             int youngCount = 0;
             float totalWoodBiomass = 0;
             float totalLeafBiomass = 0;
-            
+
             for (int i = cohortData.Count - 1; i >= 0; i--) {
                 CohortData data = cohortData[i];
                 if (data.Age <= Cohorts.SuccessionTimeStep) {
@@ -242,9 +241,9 @@ namespace Landis.Library.LeafBiomassCohorts
 
             if(annualTimestep) cohort.IncrementAge();
             float[] biomassChange = Cohorts.BiomassCalculator.ComputeChange(cohort, site);//, siteBiomass, prevYearSiteMortality);
-            
+
             Debug.Assert(-(cohort.WoodBiomass + cohort.LeafBiomass) <= biomassChange[0] + biomassChange[1]);  // Cohort can't loss more biomass than it has
-            
+
             //UI.WriteLine("B={0:0.00}, Age={1}, delta={2}", cohort.Biomass, cohort.Age, biomassChange);
 
 
@@ -257,7 +256,7 @@ namespace Landis.Library.LeafBiomassCohorts
             //                    biomassChange, cohort.Biomass, siteBiomass);
 
             //cohortMortality = Cohorts.BiomassCalculator.MortalityWithoutLeafLitter;
-            
+
             if (cohort.WoodBiomass + cohort.LeafBiomass > 0) {
                 cohortData[index] = cohort.Data;
                 return index + 1;
@@ -326,10 +325,10 @@ namespace Landis.Library.LeafBiomassCohorts
             isMaturePresent = false;
             int totalReduction = 0;
             for (int i = cohortData.Count - 1; i >= 0; i--) {
-                
+
                 Cohort cohort = new Cohort(species, cohortData[i]);
                 float[] reduction = disturbance.RemoveMarkedCohort(cohort);
-                
+
                 if (reduction[0] + reduction[1] > 0) {
                     totalReduction += (int) (reduction[0] + reduction[1]);
                     if (reduction[1] < cohort.LeafBiomass) {
@@ -380,17 +379,17 @@ namespace Landis.Library.LeafBiomassCohorts
             //  item doesn't mess up the loop.
             isMaturePresent = false;
             int totalReduction = 0;
-            
+
             for (int i = cohortData.Count - 1; i >= 0; i--) {
                 if (isSpeciesCohortDamaged[i]) {
                     Cohort cohort = new Cohort(species, cohortData[i]);
                     totalReduction += (int) (cohort.WoodBiomass + cohort.LeafBiomass);
-                    
+
                     Cohort.KilledByAgeOnlyDisturbance(disturbance, cohort,
                         disturbance.CurrentSite,
                         disturbance.Type);
 
-                    
+
                     RemoveCohort(i, cohort, disturbance.CurrentSite,
                                  disturbance.Type);
                     cohort = null;
@@ -402,60 +401,19 @@ namespace Landis.Library.LeafBiomassCohorts
         }
 
         //---------------------------------------------------------------------
-        /*
-        IEnumerator<Landis.Library.BaseCohorts.ICohort> IEnumerable<Library.BaseCohorts.ICohort>.GetEnumerator()
+
+        IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
         {
+            //Console.Out.WriteLine("Itor 1");
             foreach (CohortData data in cohortData)
                 yield return new Cohort(species, data);
         }
- 
+
         //---------------------------------------------------------------------
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<ICohort>) this).GetEnumerator();
-        }
-
-        //---------------------------------------------------------------------
-
-        IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
-        // IEnumerator<ICohort> GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return Landis.Library.BaseCohorts.Cohort(species, data.Age);
-        }
-        */
-        //---------------------------------------------------------------------
-
-        /*
-        IEnumerator<TypeIndependent.ICohort> IEnumerable<TypeIndependent.ICohort>.GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return new Cohort(species, data);
-        }
-        */
-
-
-        //---------------------------------------------------------------------
-
-        //IEnumerator<Landis.Biomass.ICohort> IEnumerable<Landis.Biomass.ICohort>.GetEnumerator()
-        IEnumerator<ICohort> GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return new Cohort(species, data);
-        }
-
-        //---------------------------------------------------------------------
-
-        IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return new Cohort(species, data);
-        }
-        //---------------------------------------------------------------------
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
+            //Console.Out.WriteLine("Itor 2");
             return ((IEnumerable<ICohort>)this).GetEnumerator();
         }
 
@@ -463,27 +421,10 @@ namespace Landis.Library.LeafBiomassCohorts
 
         IEnumerator<Landis.Library.AgeOnlyCohorts.ICohort> IEnumerable<Landis.Library.AgeOnlyCohorts.ICohort>.GetEnumerator()
         {
+            //Console.Out.WriteLine("Itor 3");
             foreach (CohortData data in cohortData)
                 yield return new Landis.Library.AgeOnlyCohorts.Cohort(species, data.Age);
-            // yield return new Landis.Library.BiomassCohorts.Cohort(species, data);
         }
-
-        //---------------------------------------------------------------------
-
-        IEnumerator<Landis.Cohorts.TypeIndependent.ICohort> IEnumerable<Landis.Cohorts.TypeIndependent.ICohort>.GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return new Cohort(species, data);
-        }
-        //---------------------------------------------------------------------
-
-/*        IEnumerator<Landis.Library.BaseCohorts.ICohort> IEnumerable<Landis.Library.BaseCohorts.ICohort>.GetEnumerator()
-        {
-            foreach (CohortData data in cohortData)
-                yield return new Landis.Library.BaseCohorts.Cohort(species, data.Age);
-        }
-        */
-        //---------------------------------------------------------------------
 
     }
 }

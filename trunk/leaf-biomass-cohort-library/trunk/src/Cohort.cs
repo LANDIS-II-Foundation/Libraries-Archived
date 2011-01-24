@@ -1,8 +1,9 @@
+//  Copyright 2005-2010 Portland State University, University of Wisconsin
+//  Authors:  Robert M. Scheller, James B. Domingo
+
 using Edu.Wisc.Forest.Flel.Util;
 
 using Landis.Core;
-using Landis.Cohorts;
-using Landis.Cohorts.TypeIndependent;
 using Landis.SpatialModeling;
 
 namespace Landis.Library.LeafBiomassCohorts
@@ -11,7 +12,7 @@ namespace Landis.Library.LeafBiomassCohorts
     /// A species cohort with biomass information.
     /// </summary>
     public class Cohort
-        : ICohort, Landis.Cohorts.TypeIndependent.ICohort
+        : ICohort
     {
         private ISpecies species;
         private CohortData data;
@@ -71,30 +72,7 @@ namespace Landis.Library.LeafBiomassCohorts
             }
         }
 
-        //---------------------------------------------------------------------
-        
-        public static readonly CohortAttribute AgeAttribute = new CohortAttribute("Age");
-        public static readonly CohortAttribute WoodBiomassAttribute = new CohortAttribute("WoodBiomass");
-        public static readonly CohortAttribute LeafBiomassAttribute = new CohortAttribute("LeafBiomass");
-        public static readonly CohortAttribute[] Attributes = new CohortAttribute[]{ AgeAttribute, WoodBiomassAttribute, LeafBiomassAttribute };
-        
-        //---------------------------------------------------------------------
-        
-        object Landis.Cohorts.TypeIndependent.ICohort.this[CohortAttribute attribute]
-        {
-            get {
-                if (attribute == AgeAttribute)
-                    return data.Age;
-                
-                if (attribute == WoodBiomassAttribute)
-                    return data.WoodBiomass;
-                
-                if (attribute == LeafBiomassAttribute)
-                    return data.LeafBiomass;
-                return null;
-            }
-        }
-        
+
         //---------------------------------------------------------------------
 
         public Cohort(ISpecies species,
@@ -146,7 +124,7 @@ namespace Landis.Library.LeafBiomassCohorts
             float newBiomass = data.WoodBiomass + delta;
             data.WoodBiomass = (float) System.Math.Max(0.0, newBiomass);
         }
-        
+
         //---------------------------------------------------------------------
 
         /// <summary>
