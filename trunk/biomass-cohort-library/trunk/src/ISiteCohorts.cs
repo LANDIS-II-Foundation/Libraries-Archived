@@ -11,7 +11,7 @@ namespace Landis.Library.BiomassCohorts
     /// All the biomass cohorts at a site.
     /// </summary>
     public interface ISiteCohorts
-        : Landis.Library.AgeOnlyCohorts.ISiteCohorts//<ISpeciesCohorts>
+        : Landis.Library.AgeOnlyCohorts.ISiteCohorts
     {
         int RemoveCohorts(IDisturbance disturbance);
         void AddNewCohort(ISpecies species, ushort age, int initialBiomass);

@@ -15,7 +15,7 @@ namespace Landis.Library.BiomassCohorts
 {
     public class SiteCohorts
         : ISiteCohorts, AgeOnlyCohorts.ISiteCohorts
-        
+
     {
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
@@ -60,7 +60,7 @@ namespace Landis.Library.BiomassCohorts
                 return GetCohorts(species);
             }
         }
-        
+
 
         //---------------------------------------------------------------------
 
@@ -281,11 +281,18 @@ namespace Landis.Library.BiomassCohorts
 
             //totalBiomass += initialBiomass;
         }
-        public void AddNewCohort(ISpecies species) { }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Add new age-only cohort.  Only used to maintain interface.  .DO NOT USE.
+        /// </summary>
+        public void AddNewCohort(ISpecies species)
+        {
+        }
 
         //---------------------------------------------------------------------
 
-        
+
         public bool IsMaturePresent(ISpecies species)
         {
             for (int i = 0; i < cohorts.Count; i++) {
@@ -296,7 +303,7 @@ namespace Landis.Library.BiomassCohorts
             }
             return false;
         }
-        
+
 
         //---------------------------------------------------------------------
 
@@ -320,6 +327,7 @@ namespace Landis.Library.BiomassCohorts
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
         }
+        //---------------------------------------------------------------------
 
         public string Write()
         {
@@ -330,7 +338,7 @@ namespace Landis.Library.BiomassCohorts
             return list;
         }
 
-        
+
     }
 }
 
