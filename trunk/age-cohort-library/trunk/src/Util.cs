@@ -14,7 +14,7 @@ namespace Landis.Library.AgeOnlyCohorts
         /// <returns>
         /// The age of the oldest cohort or 0 if there are no cohorts.
         /// </returns>
-        /*public static ushort GetMaxAge(ISpeciesCohorts cohorts)
+        public static ushort GetMaxAge(ISpeciesCohorts cohorts)
         {
             if (cohorts == null)
                 return 0;
@@ -25,7 +25,7 @@ namespace Landis.Library.AgeOnlyCohorts
                 break;
             }
             return max;
-        }*/
+        }
 
         //---------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ namespace Landis.Library.AgeOnlyCohorts
         /// The age of the oldest cohort or 0 if there are no cohorts.
         /// </returns>
         //public static ushort GetMaxAge(ISiteCohorts<ISpeciesCohorts<ICohort>> cohorts)
-        /*    public static ushort GetMaxAge(ISiteCohorts cohorts)
+        public static ushort GetMaxAge(ISiteCohorts cohorts)
         {
             if (cohorts == null)
                 return 0;
@@ -48,7 +48,7 @@ namespace Landis.Library.AgeOnlyCohorts
                     max = maxSpeciesAge;
             }
             return max;
-        }*/
+        }
 
         //---------------------------------------------------------------------
 
