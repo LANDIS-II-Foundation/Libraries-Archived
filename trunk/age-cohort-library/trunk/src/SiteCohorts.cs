@@ -1,6 +1,5 @@
 
 using Landis.Core;
-//using Landis.Cohorts.TypeIndependent;
 using System.Collections;
 using System.Collections.Generic;
 using Landis.SpatialModeling;
@@ -104,7 +103,7 @@ namespace Landis.Library.AgeOnlyCohorts
         {
             //  Go through list of species cohorts from back to front so that
             //  a removal does not mess up the loop.
-            
+
             for (int i = spp_cohorts.Count - 1; i >= 0; i--) {
                 spp_cohorts[i].RemoveMarkedCohorts(disturbance);
                 if (spp_cohorts[i].Count == 0)
@@ -164,7 +163,7 @@ namespace Landis.Library.AgeOnlyCohorts
             foreach (ISpeciesCohorts speciesCohorts in spp_cohorts)
                 yield return speciesCohorts;
         }
- 
+
         //---------------------------------------------------------------------
 
         public string Write()
@@ -179,12 +178,12 @@ namespace Landis.Library.AgeOnlyCohorts
             }
             return msg;
         }
-        
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-        
+
 
     }
 }
