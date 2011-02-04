@@ -21,8 +21,7 @@ namespace Landis.Library.Succession
             /// A method to add new young cohort for a particular species at a
             /// site.
             /// </summary>
-            public delegate void AddNewCohort(ISpecies   species,
-                                              ActiveSite site);
+            public delegate void AddNewCohort(ISpecies species, ActiveSite site);
 
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -30,11 +29,17 @@ namespace Landis.Library.Succession
             /// A method to determine if there is sufficient light at a site for
             /// a species to reproduce.
             /// </summary>
-            public delegate bool SufficientResources(ISpecies   species,
-                                                     ActiveSite site);
+            public delegate bool SufficientResources(ISpecies   species, ActiveSite site);
 
-
+            /// <summary>
+            /// A method to determine if a species can establish given the establishment probabilities.
+            /// </summary>
             public delegate bool Establish(ISpecies species, ActiveSite site);
+
+            /// <summary>
+            /// A method for determining whether a mature cohort is present at a site for a given species.
+            /// </summary>
+            public delegate bool MaturePresent(ISpecies species, ActiveSite site);
         }
 
         //---------------------------------------------------------------------
@@ -50,6 +55,7 @@ namespace Landis.Library.Succession
         private static Delegates.AddNewCohort addNewCohort;
         private static Delegates.SufficientResources lightMethod = ReproductionDefaults.SufficientResources;
         private static Delegates.Establish estbMethod = ReproductionDefaults.Establish;
+        private static Delegates.MaturePresent isMaturePresentMethod;
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
@@ -64,6 +70,11 @@ namespace Landis.Library.Succession
         {
             get {
                 return addNewCohort;
+            }
+            set
+            {
+                Require.ArgumentNotNull(value);
+                addNewCohort = value;
             }
         }
 
@@ -103,20 +114,34 @@ namespace Landis.Library.Succession
 
         //---------------------------------------------------------------------
 
-        public static void Initialize(SeedingAlgorithm       seedingAlgorithm,
-                                      Delegates.AddNewCohort addNewCohort)
+        public static Delegates.MaturePresent MaturePresent
         {
-            // Reproduction.establishProbabilities = establishProbabilities;
+            get
+            {
+                return isMaturePresentMethod;
+            }
+
+            set
+            {
+                Require.ArgumentNotNull(value);
+                isMaturePresentMethod = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
+        public static void Initialize(SeedingAlgorithm       seedingAlgorithm)//,
+                                      //Delegates.AddNewCohort addNewCohort)
+        {
 
             seeding = new Seeding(seedingAlgorithm);
 
-            Reproduction.addNewCohort = addNewCohort;
+            //Reproduction.addNewCohort = addNewCohort;
 
             // SiteVars.Cohorts = Model.Core.Landscape.NewSiteVar<ISiteCohorts>();
 
             // Model.Core.RegisterSiteVar(SiteVars.Cohorts, "Succession.Cohorts");
 
-            // SiteVars.Cohorts = Model.Core.GetSiteVar<ISiteCohorts>("Succession.Cohorts");
+            //SiteVars.Cohorts = Model.Core.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts");
 
             speciesDataset = Model.Core.Species;
             int speciesCount = speciesDataset.Count;
@@ -133,21 +158,6 @@ namespace Landis.Library.Succession
             planting = new Planting();
 
         }
-
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Changes the table of establishment probabilities because of a
-        /// change in climate.
-        /// </summary>
-
-        /*
-        public static void ChangeEstablishProbabilities(double[,] establishProbabilities)
-        {
-            Reproduction.establishProbabilities = establishProbabilities;
-        }
-        */
 
         //---------------------------------------------------------------------
 
@@ -301,20 +311,6 @@ namespace Landis.Library.Succession
                 seeding.Do(site);
         }
 
-        //---------------------------------------------------------------------
-        /*
-        /// <summary>
-        /// Gets the establishment probablity for a particular species at a
-        /// site.
-        /// </summary>
-        public static double GetEstablishProbability(ISpecies   species,
-                                                     ActiveSite site)
-        {
-            double duble = 0;
-            return duble;
-            //return establishProbabilities[Model.Core.Ecoregion[site].Index, species.Index];
-        }
-       */
 
         //---------------------------------------------------------------------
     }

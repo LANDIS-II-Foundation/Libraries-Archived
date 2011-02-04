@@ -14,8 +14,8 @@ namespace Landis.Library.Succession
         {
             return Reproduction.SufficientResources(species, site) &&
                    Reproduction.Establish(species, site) &&
-                   //Reproduction.MaturePresent(species, site);
-                   SiteVars.Cohorts[site].IsMaturePresent(species);
+                   Reproduction.MaturePresent(species, site);
+                   //SiteVars.Cohorts[site].IsMaturePresent(species);
                     
         }
     }

@@ -12,12 +12,12 @@ namespace Landis.Library.Succession
         private static ISiteVar<int> timeOfLast;
         private static ISiteVar<byte> shade;
         private static ISiteVar<bool> disturbed;
-        private static ISiteVar<SiteCohorts> cohorts;
+        /*private static ISiteVar<ISiteCohorts> cohorts;
 
 
         //---------------------------------------------------------------------
         
-        internal static ISiteVar<SiteCohorts> Cohorts
+        internal static ISiteVar<ISiteCohorts> Cohorts
         {
             get
             {
@@ -28,7 +28,7 @@ namespace Landis.Library.Succession
             {
                 cohorts = value;
             }
-        }
+        }*/
 
         //---------------------------------------------------------------------
 

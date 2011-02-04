@@ -42,8 +42,8 @@ namespace Landis.Library.Succession
                 return false;
             }
 
-            // if (Reproduction.MaturePresent(species, site)) {
-            if (SiteVars.Cohorts[site].IsMaturePresent(species)) {
+            if (Reproduction.MaturePresent(species, site)) {
+            //if (SiteVars.Cohorts[site].IsMaturePresent(species)) {
                 if (isDebugEnabled)
                     log.DebugFormat("site {0}: {1} seeded on site",
                                     site.Location, species.Name);
@@ -75,8 +75,8 @@ namespace Landis.Library.Succession
                 {
                     Site neighbor = site.GetNeighbor(reloc.Location);
                     if (neighbor != null && neighbor.IsActive)
-                        // if (Reproduction.MaturePresent(species, neighbor)) 
-                        if (SiteVars.Cohorts[site].IsMaturePresent(species))
+                        if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
+                        // if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                 }                              
                 
@@ -87,8 +87,8 @@ namespace Landis.Library.Succession
                     if(rCol == 0)
                         neighbor = site.GetNeighbor(new RelativeLocation(0, rRow));
                     if (neighbor != null && neighbor.IsActive)
-                        // if (Reproduction.MaturePresent(species, neighbor)) 
-                        if (SiteVars.Cohorts[site].IsMaturePresent(species))
+                        if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
+                        // if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                 }
 
@@ -96,8 +96,8 @@ namespace Landis.Library.Succession
                 {
                     Site neighbor = site.GetNeighbor(new RelativeLocation(rRow * -1, rCol * -1));
                     if (neighbor != null && neighbor.IsActive)
-                        // if (Reproduction.MaturePresent(species, neighbor)) 
-                        if (SiteVars.Cohorts[site].IsMaturePresent(species))
+                        if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
+                        //if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                  }
 
@@ -107,8 +107,8 @@ namespace Landis.Library.Succession
                     if(rCol == 0)
                         neighbor = site.GetNeighbor(new RelativeLocation(0, rRow * -1));
                     if (neighbor != null && neighbor.IsActive)
-                        // if (Reproduction.MaturePresent(species, neighbor)) 
-                        if (SiteVars.Cohorts[site].IsMaturePresent(species))
+                        if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
+                        // if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                 }
 

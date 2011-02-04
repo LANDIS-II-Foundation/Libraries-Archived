@@ -23,7 +23,7 @@ namespace Landis.Library.InitialCommunities
 
         //---------------------------------------------------------------------
 
-        public ICommunity Find(ushort mapCode)
+        public ICommunity Find(int mapCode)
         {
             foreach (ICommunity community in communities)
                 if (community.MapCode == mapCode)

@@ -63,8 +63,8 @@ namespace Landis.Library.Succession
         /// Initializes the instance and its associated site variables.
         /// </summary>
         protected void Initialize(ICore modelCore,
-                                  SeedingAlgorithms seedAlg,
-                                  Reproduction.Delegates.AddNewCohort addNewCohort)
+                                  SeedingAlgorithms seedAlg)//,
+                                  //Reproduction.Delegates.AddNewCohort addNewCohort)
         {
             Model.Core = modelCore;
             SiteVars.Initialize();
@@ -94,9 +94,9 @@ namespace Landis.Library.Succession
 
             // Reproduction.Initialize(establishProbabilities, algorithm, addNewCohort == null ? null : new Reproduction.Delegates.AddNewCohort(addNewCohort));
 
-            
-            Reproduction.Initialize(algorithm,
-                                    addNewCohort == null ? null : new Reproduction.Delegates.AddNewCohort(addNewCohort));
+
+            Reproduction.Initialize(algorithm);//,
+                                    //addNewCohort == null ? null : new Reproduction.Delegates.AddNewCohort(addNewCohort));
         }
 
         //---------------------------------------------------------------------
@@ -118,7 +118,7 @@ namespace Landis.Library.Succession
                 foreach (Site site in Model.Core.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    ushort mapCode = (ushort)pixel.MapCode.Value;
+                    int mapCode = pixel.MapCode.Value;
                     if (!site.IsActive)
                         continue;
                     ActiveSite activeSite = (ActiveSite)site;
@@ -311,21 +311,6 @@ namespace Landis.Library.Succession
             {
                 Reproduction.Reproduce(site);
 
-                /*#if WATCH_CHANGING_GC
-                                bool collectionCountChanged = false;
-                                for (int generation = 0; generation <= maxGeneration; generation++) {
-                                    int currentCount = GC.CollectionCount(generation);
-                                    if (collectionCounts[generation] != currentCount) {
-                                        collectionCountChanged = true;
-                                        collectionCounts[generation] = currentCount;
-                                    }
-                                }
-                                if (collectionCountChanged) {
-                                    logger.Info(string.Format("Site {0}, index = {1}", site.Location, site.DataIndex));
-                                    for (int generation = 0; generation <= maxGeneration; generation++)
-                                        logger.Info(string.Format("  gen {0}: {1}", generation, collectionCounts[generation]));
-                                }
-                #endif*/
                 if (ShowProgress)
                     Update(progressBar, site.DataIndex);
             }
@@ -337,8 +322,6 @@ namespace Landis.Library.Succession
                 logger.Debug(string.Format("  gen {0}: {1}", generation,
                                           GC.CollectionCount(generation)));
         }
-        // }
-        // }
 
         //---------------------------------------------------------------------
         

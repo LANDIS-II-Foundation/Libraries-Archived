@@ -7,7 +7,7 @@ namespace Landis.Library.Succession
 {
     public class InitCommPixel : Pixel
     {
-        public Band<byte> MapCode  = "The numeric code for each initial community";
+        public Band<int> MapCode  = "The numeric code for each initial community";
 
         public InitCommPixel() 
         {
