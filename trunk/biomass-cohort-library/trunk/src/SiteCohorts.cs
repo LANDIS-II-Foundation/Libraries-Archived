@@ -67,8 +67,8 @@ namespace Landis.Library.BiomassCohorts
         public SiteCohorts()
         {
             this.cohorts = new List<SpeciesCohorts>();
-            //this.totalBiomass = 0;
         }
+        //---------------------------------------------------------------------
         public void Grow(ushort years, ActiveSite site, int? successionTimestep, ICore mCore)
         {
             Grow(site, successionTimestep.HasValue);
@@ -277,9 +277,8 @@ namespace Landis.Library.BiomassCohorts
             }
 
             if (!speciesPresent)
-                cohorts.Add(new SpeciesCohorts(species, initialBiomass));
+                cohorts.Add(new SpeciesCohorts(species, age, initialBiomass));
 
-            //totalBiomass += initialBiomass;
         }
         //---------------------------------------------------------------------
 

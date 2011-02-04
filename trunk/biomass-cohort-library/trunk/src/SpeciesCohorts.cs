@@ -86,12 +86,13 @@ namespace Landis.Library.BiomassCohorts
         /// Initializes a new instance with one young cohort (age = 1).
         /// </summary>
         public SpeciesCohorts(ISpecies species,
+                              ushort initialAge,
                               int   initialBiomass)
         {
             this.species = species;
             this.cohortData = new List<CohortData>();
             this.isMaturePresent = false;
-            AddNewCohort(1, initialBiomass);
+            AddNewCohort(initialAge, initialBiomass);
         }
 
         //---------------------------------------------------------------------
@@ -224,8 +225,6 @@ namespace Landis.Library.BiomassCohorts
 
             //  Check for senescence
             if (cohort.Age >= species.Longevity) {
-                //siteBiomass -= cohort.Biomass;
-                //cohortMortality = cohort.Biomass;
                 RemoveCohort(index, cohort, site, null);
                 return index;
             }
@@ -237,7 +236,6 @@ namespace Landis.Library.BiomassCohorts
             Debug.Assert(-(cohort.Biomass) <= biomassChange);  // Cohort can't loss more biomass than it has
 
             cohort.ChangeBiomass(biomassChange);
-            //siteBiomass += biomassChange;
 
             //if (isDebugEnabled)
             //    log.DebugFormat("    biomass: change = {0}, cohort = {1}, site = {2}",
