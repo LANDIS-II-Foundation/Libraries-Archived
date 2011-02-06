@@ -25,8 +25,5 @@ namespace Landis.Library.Cohorts
 		/// </summary>
 		bool IsMaturePresent(ISpecies species);
 
-        //bool HasAge(); //{return false;}  
-        //bool HasBiomass(); //{return false;}
-        //bool HasLeafBiomass(); //{return false;}
 	}
 }
