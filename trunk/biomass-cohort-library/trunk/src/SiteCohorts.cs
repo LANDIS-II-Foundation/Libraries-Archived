@@ -199,7 +199,7 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
-        public int RemoveCohorts(IDisturbance disturbance)
+        public int ReduceOrKillBiomassCohorts(IDisturbance disturbance)
         {
             int totalReduction = 0;
             //  Go through list of species cohorts from back to front so that
@@ -221,7 +221,7 @@ namespace Landis.Library.BiomassCohorts
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new DisturbanceEventArgs(disturbance.CurrentSite,
                                                                        disturbance.Type));
-            RemoveCohorts(new WrappedDisturbance(disturbance));
+            ReduceOrKillBiomassCohorts(new WrappedDisturbance(disturbance));
         }
 
         //---------------------------------------------------------------------

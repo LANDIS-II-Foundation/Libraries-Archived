@@ -42,7 +42,7 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
-        public int RemoveMarkedCohort(ICohort cohort)
+        public int ReduceOrKillMarkedCohort(ICohort cohort)
         {
             if (ageCohortDisturbance.MarkCohortForDeath(cohort)) {
                 Cohort.KilledByAgeOnlyDisturbance(this, cohort,

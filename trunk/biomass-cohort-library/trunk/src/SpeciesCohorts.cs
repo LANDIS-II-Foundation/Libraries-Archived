@@ -310,7 +310,7 @@ namespace Landis.Library.BiomassCohorts
             int totalReduction = 0;
             for (int i = cohortData.Count - 1; i >= 0; i--) {
                 Cohort cohort = new Cohort(species, cohortData[i]);
-                int reduction = disturbance.RemoveMarkedCohort(cohort);
+                int reduction = disturbance.ReduceOrKillMarkedCohort(cohort);
                 if (reduction > 0) {
                     totalReduction += reduction;
                     if (reduction < cohort.Biomass) {
