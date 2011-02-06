@@ -40,7 +40,7 @@ namespace Landis.Library.LeafBiomassCohorts
 
         //---------------------------------------------------------------------
 
-        public float[] RemoveMarkedCohort(ICohort cohort)
+        public float[] ReduceOrKillMarkedCohort(ICohort cohort)
         {
             float[] damage = new float[]{0,0};
             if (ageCohortDisturbance.MarkCohortForDeath(cohort)) {

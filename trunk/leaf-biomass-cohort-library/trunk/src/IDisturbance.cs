@@ -36,6 +36,6 @@ namespace Landis.Library.LeafBiomassCohorts
         /// The amount of biomass that the cohort's biomass is to be reduced
         /// by.
         /// </returns>
-        float[] RemoveMarkedCohort(ICohort cohort);
+        float[] ReduceOrKillMarkedCohort(ICohort cohort);
     }
 }

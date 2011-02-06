@@ -86,13 +86,14 @@ namespace Landis.Library.LeafBiomassCohorts
         /// Initializes a new instance with one young cohort (age = 1).
         /// </summary>
         public SpeciesCohorts(ISpecies species,
+                                ushort initialAge,
                               float initialWoodBiomass,
                               float initialLeafBiomass)
         {
             this.species = species;
             this.cohortData = new List<CohortData>();
             this.isMaturePresent = false;
-            AddNewCohort(1, initialWoodBiomass, initialLeafBiomass);
+            AddNewCohort(initialAge, initialWoodBiomass, initialLeafBiomass);
         }
 
         //---------------------------------------------------------------------
@@ -198,26 +199,12 @@ namespace Landis.Library.LeafBiomassCohorts
         /// <param name="site">
         /// The site where the species' cohorts are located.
         /// </param>
-        /// <param name="siteBiomass">
-        /// The total biomass at the site.  This parameter is changed by the
-        /// same amount as the current cohort's biomass.
-        /// </param>
-        /// <param name="prevYearSiteMortality">
-        /// The total mortality at the site during the previous year.
-        /// </param>
-        /// <param name="cohortMortality">
-        /// The total mortality (excluding annual leaf litter) for the current
-        /// cohort.
-        /// </param>
         /// <returns>
         /// The index of the next younger cohort.  Note this may be the same
         /// as the index passed in if that cohort dies due to senescence.
         /// </returns>
         public int GrowCohort(int        index,
                               ActiveSite site,
-                              //ref float    siteBiomass,
-                              //int        prevYearSiteMortality,
-                              //out int    cohortMortality,
                               bool annualTimestep)
         {
             Debug.Assert(0 <= index && index <= cohortData.Count);
@@ -233,14 +220,14 @@ namespace Landis.Library.LeafBiomassCohorts
 
             //  Check for senescence
             if (cohort.Age >= species.Longevity) {
-                //siteBiomass -= (cohort.WoodBiomass + cohort.LeafBiomass);
-                //cohortMortality = (int) (cohort.WoodBiomass + cohort.LeafBiomass);
                 RemoveCohort(index, cohort, site, null);
                 return index;
             }
 
-            if(annualTimestep) cohort.IncrementAge();
-            float[] biomassChange = Cohorts.BiomassCalculator.ComputeChange(cohort, site);//, siteBiomass, prevYearSiteMortality);
+            if(annualTimestep) 
+                cohort.IncrementAge();
+
+            float[] biomassChange = Cohorts.BiomassCalculator.ComputeChange(cohort, site);
 
             Debug.Assert(-(cohort.WoodBiomass + cohort.LeafBiomass) <= biomassChange[0] + biomassChange[1]);  // Cohort can't loss more biomass than it has
 
@@ -249,13 +236,11 @@ namespace Landis.Library.LeafBiomassCohorts
 
             cohort.ChangeWoodBiomass(biomassChange[0]);
             cohort.ChangeLeafBiomass(biomassChange[1]);
-            //siteBiomass += (biomassChange[0] + biomassChange[1]);
 
             //if (isDebugEnabled)
             //    log.DebugFormat("    biomass: change = {0}, cohort = {1}, site = {2}",
             //                    biomassChange, cohort.Biomass, siteBiomass);
 
-            //cohortMortality = Cohorts.BiomassCalculator.MortalityWithoutLeafLitter;
 
             if (cohort.WoodBiomass + cohort.LeafBiomass > 0) {
                 cohortData[index] = cohort.Data;
@@ -327,7 +312,7 @@ namespace Landis.Library.LeafBiomassCohorts
             for (int i = cohortData.Count - 1; i >= 0; i--) {
 
                 Cohort cohort = new Cohort(species, cohortData[i]);
-                float[] reduction = disturbance.RemoveMarkedCohort(cohort);
+                float[] reduction = disturbance.ReduceOrKillMarkedCohort(cohort);
 
                 if (reduction[0] + reduction[1] > 0) {
                     totalReduction += (int) (reduction[0] + reduction[1]);

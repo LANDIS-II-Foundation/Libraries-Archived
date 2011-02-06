@@ -143,7 +143,6 @@ namespace Landis.Library.LeafBiomassCohorts
                 InsertIterator(itor, itors);
             }
 
-            //int siteMortality = 0;
 
             //  Loop through iterators until they're exhausted
             while (itors.Count > 0) {
@@ -151,10 +150,6 @@ namespace Landis.Library.LeafBiomassCohorts
                 //  The cohort's biomass is updated for 1 year's worth of
                 //  growth and mortality.
                 OldToYoungIterator itor = itors[0];
-                ///siteMortality += itor.GrowCurrentCohort(site,
-                                                        //ref totalBiomass,
-                                                        //prevYearMortality,
-                                                        //annualTimestep);
                 itor.GrowCurrentCohort(site, annualTimestep);
 
                 if (itor.MoveNext()) {
@@ -186,7 +181,6 @@ namespace Landis.Library.LeafBiomassCohorts
                 }
             }
 
-            //prevYearMortality = siteMortality;
         }
 
         //---------------------------------------------------------------------
@@ -212,7 +206,7 @@ namespace Landis.Library.LeafBiomassCohorts
 
         //---------------------------------------------------------------------
 
-        public int RemoveCohorts(IDisturbance disturbance)
+        public int ReduceOrKillBiomassCohorts(IDisturbance disturbance)
         {
             int totalReduction = 0;
 
@@ -224,27 +218,22 @@ namespace Landis.Library.LeafBiomassCohorts
                     cohorts.RemoveAt(i);
             }
 
-            //totalBiomass -= (float) totalReduction;
             return totalReduction;
         }
 
         //---------------------------------------------------------------------
 
         void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ICohortDisturbance disturbance)
-        //public override void RemoveMarkedCohorts(ICohortDisturbance disturbance)
-        // void DamageBy(ICohortDisturbance disturbance)
         {
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new DisturbanceEventArgs(disturbance.CurrentSite,
                                                                        disturbance.Type));
-            RemoveCohorts(new WrappedDisturbance(disturbance));
+            ReduceOrKillBiomassCohorts(new WrappedDisturbance(disturbance));
         }
 
         //---------------------------------------------------------------------
 
         void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ISpeciesCohortsDisturbance disturbance)
-        //public override void RemoveMarkedCohorts(ISpeciesCohortsDisturbance disturbance)
-        // void DamageBy(ISpeciesCohortsDisturbance disturbance)
         {
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new DisturbanceEventArgs(disturbance.CurrentSite,
@@ -258,7 +247,6 @@ namespace Landis.Library.LeafBiomassCohorts
                 if (cohorts[i].Count == 0)
                     cohorts.RemoveAt(i);
             }
-            //totalBiomass -= (float) totalReduction;
         }
 
         //---------------------------------------------------------------------
@@ -293,7 +281,7 @@ namespace Landis.Library.LeafBiomassCohorts
             }
 
             if (! speciesPresent)
-                cohorts.Add(new SpeciesCohorts(species, initialWoodBiomass, initialLeafBiomass));
+                cohorts.Add(new SpeciesCohorts(species, initial_age, initialWoodBiomass, initialLeafBiomass));
 
         }
         //---------------------------------------------------------------------

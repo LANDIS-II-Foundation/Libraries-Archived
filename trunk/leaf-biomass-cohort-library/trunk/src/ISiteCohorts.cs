@@ -9,10 +9,11 @@ namespace Landis.Library.LeafBiomassCohorts
     /// All the biomass cohorts at a site.
     /// </summary>
     public interface ISiteCohorts
-        : Landis.Library.AgeOnlyCohorts.ISiteCohorts
+        //: Landis.Library.AgeOnlyCohorts.ISiteCohorts
+        : Landis.Library.Cohorts.ISiteCohorts<LeafBiomassCohorts.ISpeciesCohorts>
         //: Landis.Cohorts.ISiteCohorts<ISpeciesCohorts>
     {
-        int RemoveCohorts(IDisturbance disturbance);
+        int ReduceOrKillBiomassCohorts(IDisturbance disturbance);
         void AddNewCohort(ISpecies species, ushort age, float initialWood, float initialLeaf);
         void Grow(ActiveSite site, bool isSuccessionTimestep, bool annualTimestep);
 
