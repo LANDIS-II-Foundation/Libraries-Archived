@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<project name="Windows installer for LANDIS-II main package" default="help">
+
+    <include buildfile="../../settings.build" />
+
+    <!-- ================================================================== -->
+
+    <target name="help"
+            description="Display brief message on how to list available targets">
+        <echo>Use NAnt's -projecthelp option to list the available targets</echo>
+    </target>
+
+    <property name="buildDir"
+              value="build" />
+
+    <property name="includeFile"
+              value="${buildDir}/settings.iss" />
+
+    <!-- ================================================================== -->
+    <!-- Main Targets -->
+
+    <target name="build"
+            description="Build Inno Setup include file with project settings"
+            depends="check-build-dir">
+        <uptodate property="includeFile.uptodate">
+            <targetfiles>
+                <include name="${includeFile}" />
+            </targetfiles>
+            <sourcefiles>
+                <include name="../../settings.build" />
+            </sourcefiles>
+        </uptodate>
+        <if test="${not includeFile.uptodate}">
+            <echo file="${includeFile}">
+#define Version    "${version}"
+#define MajorMinor "${major.minor}"
+
+#define Release       "${release}"
+#define ReleaseType   "${release.type}"
+#define ReleaseNumber "${release.number}"
+#define ReleaseAbbr   "${release.abbr}"
+#define ReleaseFull   "${release.full}"
+
+            </echo>
+            <echo>Wrote project settings to "${includeFile}"</echo>
+        </if>
+    </target>
+
+    <target name="clean"
+            description="Remove intermediate files in build folder">
+        <delete>
+            <fileset>
+                <include name="${buildDir}/*" />
+            </fileset>
+        </delete>
+    </target>
+
+    <!-- ================================================================== -->
+
+    <target name="check-build-dir">
+        <mkdir dir="${buildDir}"
+               if="${not directory::exists(buildDir)}" />
+    </target>
+
+</project>

@@ -1,0 +1,11 @@
+TO DO
+
+*  Move the RTF source files for the plug-ins into their respective projects
+   in the repository (e.g., .../{plug-in}/doc/{title}.rtf) for consistency
+   with all other plug-ins in the repository.  So when a plug-in developer
+   checks out one of these plug-ins, she gets all the relevant files: source
+   code, documentation, sample input files.
+
+*  Move document sources to a format that can easily be edited with free tools
+   *and* can be used to generate different output formats (e.g., PDFs, HTML,
+   etc) automatically.  DocBook?  AsciiDoc?
