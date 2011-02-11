@@ -59,8 +59,8 @@
     <Reference Include="Landis.Core.Implementation">
       <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Core.Implementation.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Plugin.Admin">
-      <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Plugin.Admin.exe</HintPath>
+    <Reference Include="Landis.Plugins.Admin">
+      <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Plugins.Admin.exe</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4000.28944, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -82,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ConsoleInterface.cs" />
   </ItemGroup>
   <ItemGroup>
