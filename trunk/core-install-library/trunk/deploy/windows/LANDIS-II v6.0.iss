@@ -1,0 +1,148 @@
+; #include "build\settings.iss"
+
+
+#define Version    "6.0"
+#define MajorMinor "6.0"
+
+#define Release       "official"
+#define ReleaseType   "official"
+; #define ReleaseNumber "3"
+#define ReleaseAbbr   ""
+#define ReleaseFull   "official release"
+
+#define VersionRelease     Version + ReleaseAbbr
+#define VersionReleaseFull Version + " (" + ReleaseFull + ")"
+
+#define PkgWindowsFiles    SourcePath
+#define PkgCommonFiles     ExtractFilePath(PkgWindowsFiles)
+#define PkgHomeDir         ExtractFilePath(PkgCommonFiles)
+#define PkgDocDir          PkgHomeDir + "\docs"
+
+; #define LandisSDK          "J:\Landis-II\SDK"
+; #define LandisSDK		   GetEnv("LANDIS_SDK")
+; #define MyDocs             GetEnv("USERPROFILE") + "\My Documents"
+
+#define LandisInstallDir   "C:\Program Files\LANDIS-II"
+#define LandisBinDir       LandisInstallDir + "\bin"
+#define LandisPlugInDir    LandisInstallDir + "\plug-ins"
+
+[Setup]
+AppName=LANDIS-II {#VersionRelease}
+AppVerName=LANDIS-II {#VersionReleaseFull}
+AppPublisher=Portland State University
+DefaultDirName={#LandisInstallDir}\{#MajorMinor}
+UsePreviousAppDir=no
+DefaultGroupName=LANDIS-II\{#MajorMinor}
+UsePreviousGroup=no
+; SourceDir={#MyDocs}\software\release
+SourceDir=C:\Program Files\LANDIS-II\6.0\bin
+OutputDir={#PkgWindowsFiles}
+
+;OutputBaseFilename=LANDIS-II-{#VersionRelease}-setup
+OutputBaseFilename=LANDIS-II-6.0-setup
+LicenseFile={#PkgDocDir}\LANDIS-II_Binary_license.rtf
+
+
+[Files]
+
+; Core framework
+Source: Landis.Core.dll; DestDir: {app}\bin
+Source: Landis.Core.Implementation.dll; DestDir: {app}\bin
+Source: Landis.SpatialModeling.dll; DestDir: {app}\bin
+Source: Landis.SpatialModeling.CoreServices.dll; DestDir: {app}\bin
+
+; Libraries
+Source: Landis.Library.AgeOnlyCohorts.dll; DestDir: {app}\bin
+Source: Landis.Library.Succession.dll; DestDir: {app}\bin
+Source: Edu.Wisc.Forest.Flel.Util.dll; DestDir: {app}\bin
+Source: log4net.dll; DestDir: {app}\bin
+Source: Troschuetz.Random.dll; DestDir: {app}\bin
+
+; Console interface
+Source: Landis.Console.exe; DestDir: {app}\bin
+Source: Landis.Console.exe.config; DestDir: {app}\bin
+
+; Command scripts that call console interface
+Source: {#PkgWindowsFiles}\landis-{#VersionRelease}.cmd; DestDir: {#LandisBinDir}
+Source: {#PkgWindowsFiles}\landis-ii.cmd; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+Source: {#PkgWindowsFiles}\landis.cmd; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+
+; Auxiliary tool for identifying versions of LANDIS-II installed
+Source: {#PkgWindowsFiles}\Landis.Versions.exe; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+Source: Edu.Wisc.Forest.Flel.Util.dll; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+
+; Auxiliary tool for administering plug-ins
+Source: Landis.PlugIns.Admin.exe; DestDir: {app}\bin
+; Source: Landis.PlugIns.Admin.exe.config; DestDir: {app}\bin
+Source: {#PkgWindowsFiles}\landis-{#VersionRelease}-extensions.cmd; DestDir: {#LandisBinDir}
+Source: {#PkgWindowsFiles}\landis-extensions.cmd; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+
+; Documentation
+Source: {#PkgDocDir}\LANDIS-II Model v6.0 Description.pdf; DestDir: {app}\docs
+Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
+
+; 3rd-party utility for setting environment variables
+Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
+
+; Script for uninstalling a LANDIS-II release
+#define UninstallReleaseScript "uninstall-landis-release.cmd"
+Source: {#PkgWindowsFiles}\{#UninstallReleaseScript}; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+
+
+[Icons]
+Name: {group}\Documentation; Filename: {app}\docs\index.html
+Name: {group}\Sample Input Files; Filename: {app}\examples
+Name: {group}\Uninstall; Filename: {uninstallexe}
+
+[Run]
+; Add the LANDIS-II bin directory to the PATH environment variable
+Filename: {#LandisBinDir}\envinst.exe; Parameters: "-silent -broadcast -addval -name=PATH -value=""{#LandisInstallDir}\bin"" -append"
+
+; Run tool to determine newest version of LANDIS-II installed
+Filename: {#LandisBinDir}\Landis.Versions.exe; Parameters: store-newest
+
+[UninstallRun]
+Filename: {#LandisBinDir}\{#UninstallReleaseScript}; Parameters: {#VersionRelease}
+
+; Remove the LANDIS-II bin directory to the PATH environment variable
+;DISABLED THE LINE BELOW BECAUSE IT SHOULD ONLY REMOVE THE BIN DIR FROM PATH IF THERE ARE NO VERSIONS INSTALLED
+;Filename: {pf}\LANDIS-II\bin\envinst.exe; Parameters: "-silent -broadcast -eraseval -name=PATH -value=""{pf}\LANDIS-II\bin"""
+
+;; EVENTUALLY TO-DO:
+;; Run the versions tool after this version's command script removed.
+;; If no versions installed, i.e. landis-newest.txt doesn't exist, then
+;; remove version-independent cmd scripts (landis.cmd, landis-ii.cmd, admin tools?)
+;; if bin now empty, remove it
+;; if parent dir ({pf}\LANDIS-II) empty, remove it
+
+[UninstallDelete]
+Name: {app}; Type: filesandordirs
+
+
+[Code]
+
+{-----------------------------------------------------------------------------}
+
+function ShouldSkipPage(CurPage: Integer): Boolean;
+begin
+  { Skip the SelectProgramGroup page because program group fixed. }
+  if CurPage = wpSelectProgramGroup then
+    Result := True
+  { Skip the SelectDestination Directory page because that directory is fixed. }
+  else if CurPage = wpSelectDir then
+    Result := True
+  else
+    Result := False
+end;
+
+{-----------------------------------------------------------------------------}
+
+function UpdateReadyMemo(Space, NewLine, MemoUserInfoInfo, MemoDirInfo,
+                         MemoTypeInfo, MemoComponentsInfo, MemoGroupInfo,
+                         MemoTasksInfo: String): String;
+  { Return text for "Ready To Install" wizard page }
+begin
+  Result := MemoDirInfo + NewLine +
+            NewLine +
+            MemoGroupInfo + NewLine;
+end;
