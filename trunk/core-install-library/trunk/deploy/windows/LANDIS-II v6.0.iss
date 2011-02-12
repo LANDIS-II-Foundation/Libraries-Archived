@@ -17,6 +17,7 @@
 #define PkgCommonFiles     ExtractFilePath(PkgWindowsFiles)
 #define PkgHomeDir         ExtractFilePath(PkgCommonFiles)
 #define PkgDocDir          PkgHomeDir + "\docs"
+#define PkgSoftwareDir     PkgHomeDir + "\software"
 
 ; #define LandisSDK          "J:\Landis-II\SDK"
 ; #define LandisSDK		   GetEnv("LANDIS_SDK")
@@ -46,21 +47,24 @@ LicenseFile={#PkgDocDir}\LANDIS-II_Binary_license.rtf
 [Files]
 
 ; Core framework
-Source: Landis.Core.dll; DestDir: {app}\bin
-Source: Landis.Core.Implementation.dll; DestDir: {app}\bin
-Source: Landis.SpatialModeling.dll; DestDir: {app}\bin
-Source: Landis.SpatialModeling.CoreServices.dll; DestDir: {app}\bin
+Source: Landis.Core.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.Core.Implementation.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.SpatialModeling.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.SpatialModeling.CoreServices.dll; DestDir: {app}\bin; Flags: replacesameversion
 
 ; Libraries
-Source: Landis.Library.AgeOnlyCohorts.dll; DestDir: {app}\bin
-Source: Landis.Library.Succession.dll; DestDir: {app}\bin
-Source: Edu.Wisc.Forest.Flel.Util.dll; DestDir: {app}\bin
-Source: log4net.dll; DestDir: {app}\bin
-Source: Troschuetz.Random.dll; DestDir: {app}\bin
+Source: Landis.Library.AgeOnlyCohorts.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.Library.Succession.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: log4net.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Troschuetz.Random.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: {#PkgSoftwareDir}\Edu.Wisc.Forest.Flel.Util.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: {#PkgSoftwareDir}\gdal_csharp.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: {#PkgSoftwareDir}\gdal_wrap.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: {#PkgSoftwareDir}\plug-ins.js; DestDir: {app}\bin; Flags: replacesameversion
 
 ; Console interface
-Source: Landis.Console.exe; DestDir: {app}\bin
-Source: Landis.Console.exe.config; DestDir: {app}\bin
+Source: Landis.Console.exe; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.Console.exe.config; DestDir: {app}\bin; Flags: replacesameversion
 
 ; Command scripts that call console interface
 Source: {#PkgWindowsFiles}\landis-{#VersionRelease}.cmd; DestDir: {#LandisBinDir}
@@ -68,12 +72,12 @@ Source: {#PkgWindowsFiles}\landis-ii.cmd; DestDir: {#LandisBinDir}; Flags: unins
 Source: {#PkgWindowsFiles}\landis.cmd; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
 
 ; Auxiliary tool for identifying versions of LANDIS-II installed
-Source: {#PkgWindowsFiles}\Landis.Versions.exe; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
+Source: {#PkgSoftwareDir}\Landis.Versions.exe; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
 Source: Edu.Wisc.Forest.Flel.Util.dll; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
 
 ; Auxiliary tool for administering plug-ins
-Source: Landis.PlugIns.Admin.exe; DestDir: {app}\bin
-; Source: Landis.PlugIns.Admin.exe.config; DestDir: {app}\bin
+Source: Landis.PlugIns.Admin.exe; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.PlugIns.Admin.exe.config; DestDir: {app}\bin; Flags: replacesameversion
 Source: {#PkgWindowsFiles}\landis-{#VersionRelease}-extensions.cmd; DestDir: {#LandisBinDir}
 Source: {#PkgWindowsFiles}\landis-extensions.cmd; DestDir: {#LandisBinDir}; Flags: uninsneveruninstall
 
@@ -82,7 +86,8 @@ Source: {#PkgDocDir}\LANDIS-II Model v6.0 Description.pdf; DestDir: {app}\docs
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
 
 ; 3rd-party utility for setting environment variables
-Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
+; Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
+Source: {#PkgWindowsFiles}\3rd-party\*; DestDir: {#LandisInstallDir}\bin
 
 ; Script for uninstalling a LANDIS-II release
 #define UninstallReleaseScript "uninstall-landis-release.cmd"
@@ -96,6 +101,7 @@ Name: {group}\Uninstall; Filename: {uninstallexe}
 
 [Run]
 ; Add the LANDIS-II bin directory to the PATH environment variable
+Filename: {#LandisBinDir}\envinst.exe; Parameters: "-silent -broadcast -addval -name=PATH -value=""{#LandisInstallDir}\6.0\bin"" -append"
 Filename: {#LandisBinDir}\envinst.exe; Parameters: "-silent -broadcast -addval -name=PATH -value=""{#LandisInstallDir}\bin"" -append"
 
 ; Run tool to determine newest version of LANDIS-II installed
