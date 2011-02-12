@@ -15,13 +15,10 @@
 
 #define PkgWindowsFiles    SourcePath
 #define PkgCommonFiles     ExtractFilePath(PkgWindowsFiles)
-#define PkgHomeDir         ExtractFilePath(PkgCommonFiles)
-#define PkgDocDir          PkgHomeDir + "\docs"
-#define PkgSoftwareDir     PkgHomeDir + "\software"
-
-; #define LandisSDK          "J:\Landis-II\SDK"
-; #define LandisSDK		   GetEnv("LANDIS_SDK")
-; #define MyDocs             GetEnv("USERPROFILE") + "\My Documents"
+#define PkgHomeDir		   "J:\Scheller\LANDIS-II\GoogleCodeExtensions\core-install-library\trunk\"
+; #define PkgHomeDir         ExtractFilePath(PkgCommonFiles)
+#define PkgDocDir          PkgHomeDir + "docs"
+#define PkgSoftwareDir     PkgHomeDir + "software"
 
 #define LandisInstallDir   "C:\Program Files\LANDIS-II"
 #define LandisBinDir       LandisInstallDir + "\bin"
@@ -86,7 +83,7 @@ Source: {#PkgDocDir}\LANDIS-II Model v6.0 Description.pdf; DestDir: {app}\docs
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
 
 ; A limited set of example input files
-Source: {#PkgDocDir}\examples\*; DestDir: {app}\examples
+Source: {#PkgDocDir}\READ ME.TXT; DestDir: {app}\examples
 
 ; Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
 Source: {#PkgWindowsFiles}\3rd-party\*; DestDir: {#LandisInstallDir}\bin
