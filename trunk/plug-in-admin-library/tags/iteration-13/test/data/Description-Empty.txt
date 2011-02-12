@@ -1,0 +1,6 @@
+>> Example of bad input file
+
+LandisData   Extension
+
+Name         "Foo Bar"
+Description  ''  << Empty string not permitted

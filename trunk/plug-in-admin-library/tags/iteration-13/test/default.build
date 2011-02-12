@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project name="Landis.Test.PlugIns.Admin">
+    <property name="project-type"    value="library"/>
+    <property name="project-version" value="1.0"/>
+    <property name="project-release" value="official" />
+
+    <property name="references-file" value="references.txt" />
+
+    <property name="has-NUnit-tests" value="true" />
+    <property name="NUnit-data-dir"  value="data" />
+
+    <include buildfile="${edu.wisc.forest.flel.common.project.build}" />
+
+    <target name="build-NUnit-data">
+        <copy todir="${NUnit-data-dir}">
+            <fileset basedir="data-src">
+                <include name="**/*" />
+            </fileset>
+            <filterchain>
+                <replacetokens>
+                    <token key="DATA_INSTALL_DIR" value="${data-installation-dir}" />
+                </replacetokens>
+            </filterchain>
+        </copy>
+
+        <exec program="msbuild"
+              workingdir="excluded-src">
+            <arg value="FooBar.proj" />
+            <arg value="${'/p:LandisBinDir=' + path::combine(build-dir, 'release')}" />
+        </exec>
+    </target>
+</project>

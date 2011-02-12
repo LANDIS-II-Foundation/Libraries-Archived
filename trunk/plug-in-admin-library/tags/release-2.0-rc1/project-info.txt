@@ -1,0 +1,6 @@
+#  project information
+
+project-name	Landis.PlugIns.Admin
+project-type	program
+version		2.0
+release		candidate 1
