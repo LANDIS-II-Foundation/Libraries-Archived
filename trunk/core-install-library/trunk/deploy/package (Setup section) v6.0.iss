@@ -73,7 +73,7 @@
 #define VersionRelease     Version + ReleaseSuffix
 
 ; #define LandisDeployDir    GetEnv("LANDIS_DEPLOY")
-#define LandisDeployDir    "J:\Scheller\LANDIS-II\deploy"
+#define LandisDocDir    "J:\Scheller\LANDIS-II\GoogleCodeExtensions\core-install-library\trunk\docs"
 #define LandisInstallDir   "C:\Program Files\LANDIS-II"
 #define LandisBinDir       LandisInstallDir + "\bin"
 #define LandisPlugInDir    LandisInstallDir + "\plug-ins"
@@ -110,4 +110,4 @@ VersionInfoVersion={#MajorMinor}.0.{#ReleaseAsInt}
 VersionInfoVersion={#MajorMinor}.{#PatchLevel}.{#ReleaseAsInt}
 #endif
 
-LicenseFile={#LandisDeployDir}\LANDIS-II_Binary_license.rtf
+LicenseFile={#LandisDocDir}\LANDIS-II_Binary_license.rtf

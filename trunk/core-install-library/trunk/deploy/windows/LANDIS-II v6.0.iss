@@ -85,7 +85,9 @@ Source: {#PkgWindowsFiles}\landis-extensions.cmd; DestDir: {#LandisBinDir}; Flag
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 Description.pdf; DestDir: {app}\docs
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
 
-; 3rd-party utility for setting environment variables
+; A limited set of example input files
+Source: {#PkgDocDir}\examples\*; DestDir: {app}\examples
+
 ; Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
 Source: {#PkgWindowsFiles}\3rd-party\*; DestDir: {#LandisInstallDir}\bin
 

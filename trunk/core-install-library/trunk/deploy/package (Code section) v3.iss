@@ -191,7 +191,7 @@ forward;
 
 //-----------------------------------------------------------------------------
 
-#include AddBackslash(LandisDeployDir) + "EnsureLandisIIDirsUC.iss"
+#include AddBackslash(GetEnv("LANDIS_DEPLOY")) + "EnsureLandisIIDirsUC.iss"
 
 //-----------------------------------------------------------------------------
 
