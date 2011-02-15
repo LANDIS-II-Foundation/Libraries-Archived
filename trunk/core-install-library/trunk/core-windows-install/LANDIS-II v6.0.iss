@@ -81,8 +81,9 @@ Source: {#PkgWindowsFiles}\landis-extensions.cmd; DestDir: {#LandisBinDir}; Flag
 ; Documentation
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 Description.pdf; DestDir: {app}\docs
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
+Source: {#PkgDocDir}\index.html; DestDir: {app}\docs
 
-; A limited set of example input files
+; No example input files but a read me.
 Source: {#PkgDocDir}\READ ME.TXT; DestDir: {app}\examples
 
 ; Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
