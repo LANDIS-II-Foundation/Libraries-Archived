@@ -51,6 +51,7 @@ Source: Landis.SpatialModeling.CoreServices.dll; DestDir: {app}\bin; Flags: repl
 
 ; Libraries
 Source: Landis.Library.AgeOnlyCohorts.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Landis.Library.Cohorts.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: Landis.Library.Succession.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: log4net.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: Troschuetz.Random.dll; DestDir: {app}\bin; Flags: replacesameversion
