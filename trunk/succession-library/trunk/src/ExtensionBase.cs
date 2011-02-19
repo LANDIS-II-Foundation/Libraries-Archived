@@ -121,7 +121,13 @@ namespace Landis.Library.Succession
                     int mapCode = pixel.MapCode.Value;
                     if (!site.IsActive)
                         continue;
-                    ActiveSite activeSite = (ActiveSite)site;
+                    
+                    //if (!modelCore.Ecoregion[site].Active)
+                    //    continue;
+
+                    //modelCore.Log.WriteLine("ecoregion = {0}.", modelCore.Ecoregion[site]);
+
+                    ActiveSite activeSite = (ActiveSite) site;
                     ICommunity community = communities.Find(mapCode);
                     if (community == null)
                     {

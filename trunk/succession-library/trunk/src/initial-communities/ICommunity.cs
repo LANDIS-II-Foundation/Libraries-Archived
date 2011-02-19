@@ -22,7 +22,6 @@ namespace Landis.Library.InitialCommunities
         /// The site cohorts in the community.
         /// </summary>
         List<ISpeciesCohorts> Cohorts
-        //ISiteCohorts Cohorts
         {
             get;
         }

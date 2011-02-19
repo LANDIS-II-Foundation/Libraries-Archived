@@ -21,7 +21,7 @@ namespace Landis.Library.InitialCommunities
 
         //---------------------------------------------------------------------
 
-        public List<ISpeciesCohorts> Cohorts//ISiteCohorts Cohorts
+        public List<ISpeciesCohorts> Cohorts
         {
             get {
                 return cohorts;
@@ -30,9 +30,7 @@ namespace Landis.Library.InitialCommunities
 
         //---------------------------------------------------------------------
 
-        public Community(ushort                 mapCode,
-            List<ISpeciesCohorts> cohorts)
-                         //ISiteCohorts cohorts)
+        public Community(ushort mapCode, List<ISpeciesCohorts> cohorts)
         {
             this.mapCode = mapCode;
             this.cohorts = cohorts;

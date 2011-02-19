@@ -105,8 +105,6 @@ namespace Landis.Library.InitialCommunities
                     GetNextLine();
                 }
 
-                //dataset.Add(new Community(mapCode.Value.Actual,
-                //                          new SiteCohorts(speciesCohortsList)));
                 dataset.Add(new Community(mapCode.Value.Actual, speciesCohortsList));
             }
 
