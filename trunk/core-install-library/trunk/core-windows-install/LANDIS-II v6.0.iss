@@ -55,9 +55,9 @@ Source: Landis.Library.Cohorts.dll; DestDir: {app}\bin; Flags: replacesameversio
 Source: Landis.Library.Succession.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: log4net.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: Troschuetz.Random.dll; DestDir: {app}\bin; Flags: replacesameversion
-Source: {#PkgSoftwareDir}\Edu.Wisc.Forest.Flel.Util.dll; DestDir: {app}\bin; Flags: replacesameversion
-Source: {#PkgSoftwareDir}\gdal_csharp.dll; DestDir: {app}\bin; Flags: replacesameversion
-Source: {#PkgSoftwareDir}\gdal_wrap.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: Edu.Wisc.Forest.Flel.Util.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: gdal_csharp.dll; DestDir: {app}\bin; Flags: replacesameversion
+Source: gdal_wrap.dll; DestDir: {app}\bin; Flags: replacesameversion
 Source: {#PkgSoftwareDir}\plug-ins.js; DestDir: {app}\bin; Flags: replacesameversion
 
 ; Console interface
