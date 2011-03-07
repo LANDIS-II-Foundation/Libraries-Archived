@@ -82,7 +82,7 @@ Source: {#PkgWindowsFiles}\landis-extensions.cmd; DestDir: {#LandisBinDir}; Flag
 ; Documentation
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 Description.pdf; DestDir: {app}\docs
 Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
-Source: {#PkgDocDir}\index.html; DestDir: {app}\docs
+; Source: {#PkgDocDir}\index.html; DestDir: {app}\docs
 
 ; No example input files but a read me.
 Source: {#PkgDocDir}\READ ME.TXT; DestDir: {app}\examples
@@ -96,7 +96,7 @@ Source: {#PkgWindowsFiles}\{#UninstallReleaseScript}; DestDir: {#LandisBinDir}; 
 
 
 [Icons]
-Name: {group}\Documentation; Filename: {app}\docs\index.html
+Name: {group}\Documentation; Filename: {app}\docs
 Name: {group}\Sample Input Files; Filename: {app}\examples
 Name: {group}\Uninstall; Filename: {uninstallexe}
 
