@@ -59,8 +59,10 @@
     <Reference Include="Landis.Core.Implementation">
       <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Core.Implementation.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Plugins.Admin">
-      <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.Plugins.Admin.exe</HintPath>
+    <Reference Include="Landis.PlugIns.Admin, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.PlugIns.Admin.exe</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4000.28944, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -85,7 +87,9 @@
     <Compile Include="ConsoleInterface.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

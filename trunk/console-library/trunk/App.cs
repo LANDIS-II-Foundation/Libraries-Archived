@@ -10,8 +10,6 @@ using Landis.SpatialModeling;
 using Landis.SpatialModeling.CoreServices;
 using Landis.Core;
 
-// using RasterIO = Wisc.Flel.GeospatialModeling.RasterIO;
-
 namespace Landis
 {
     public static class App
