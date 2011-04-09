@@ -42,7 +42,7 @@ namespace Landis.Library.Succession
             this.ShowProgress = true;
         }
 
-        
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Landis.Library.Succession
         }
 
         //---------------------------------------------------------------------
-        
+
 
         /// <summary>
         /// Initializes the instance and its associated site variables.
@@ -72,7 +72,7 @@ namespace Landis.Library.Succession
 
             disturbedSites = new DisturbedSiteEnumerator(Model.Core.Landscape,
                                                          SiteVars.Disturbed);
-            
+
             SeedingAlgorithm algorithm;
             switch (seedAlg)
             {
@@ -92,11 +92,7 @@ namespace Landis.Library.Succession
                     throw new ArgumentException(string.Format("Unknown seeding algorithm: {0}", seedAlg));
             }
 
-            // Reproduction.Initialize(establishProbabilities, algorithm, addNewCohort == null ? null : new Reproduction.Delegates.AddNewCohort(addNewCohort));
-
-
-            Reproduction.Initialize(algorithm);//,
-                                    //addNewCohort == null ? null : new Reproduction.Delegates.AddNewCohort(addNewCohort));
+            Reproduction.Initialize(algorithm);
         }
 
         //---------------------------------------------------------------------
@@ -114,14 +110,14 @@ namespace Landis.Library.Succession
             map = Model.Core.OpenRaster<InitCommPixel>(initialCommunitiesMap);
             using (map)
             {
-                InitCommPixel pixel = map.BufferPixel; 
+                InitCommPixel pixel = map.BufferPixel;
                 foreach (Site site in Model.Core.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
                     int mapCode = pixel.MapCode.Value;
                     if (!site.IsActive)
                         continue;
-                    
+
                     //if (!modelCore.Ecoregion[site].Active)
                     //    continue;
 
@@ -330,7 +326,7 @@ namespace Landis.Library.Succession
         }
 
         //---------------------------------------------------------------------
-        
+
         private void Update(ProgressBar progressBar,
                             uint currentSiteDataIndex)
         {

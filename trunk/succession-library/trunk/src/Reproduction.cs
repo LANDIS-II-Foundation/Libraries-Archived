@@ -129,19 +129,10 @@ namespace Landis.Library.Succession
         }
         //---------------------------------------------------------------------
 
-        public static void Initialize(SeedingAlgorithm       seedingAlgorithm)//,
-                                      //Delegates.AddNewCohort addNewCohort)
+        public static void Initialize(SeedingAlgorithm       seedingAlgorithm)
         {
 
             seeding = new Seeding(seedingAlgorithm);
-
-            //Reproduction.addNewCohort = addNewCohort;
-
-            // SiteVars.Cohorts = Model.Core.Landscape.NewSiteVar<ISiteCohorts>();
-
-            // Model.Core.RegisterSiteVar(SiteVars.Cohorts, "Succession.Cohorts");
-
-            //SiteVars.Cohorts = Model.Core.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts");
 
             speciesDataset = Model.Core.Species;
             int speciesCount = speciesDataset.Count;
