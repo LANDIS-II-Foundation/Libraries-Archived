@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System;
+using Landis.Core;
 
 namespace Landis.Library.Climate
 {
@@ -38,10 +39,9 @@ namespace Landis.Library.Climate
 
         //---------------------------------------------------------------------
 
-        //public AnnualClimate(IEcoregion ecoregion, int year, double latitude)
-        public AnnualClimate(int ecoregionIndex, int year, double latitude)
+        public AnnualClimate(IEcoregion ecoregion, int year, double latitude)
         {
-
+            //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
 
             IClimateRecord[] ecoClimate = new IClimateRecord[12];
 
@@ -52,7 +52,7 @@ namespace Landis.Library.Climate
             for(int mo = 0; mo < 12; mo++)
             {
 
-                ecoClimate[mo] = Climate.TimestepData[ecoregionIndex, mo];
+                ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
 
@@ -231,8 +231,6 @@ namespace Landis.Library.Climate
                 double degreeIncrement = System.Math.Abs(lastMonthTemp - MonthlyMinTemp) / (double) totalDays;
                 double Tnight = lastMonthTemp;  //start from warmer month
 
-                    //double randomT = (2 * annualClimate[i].StdDevTemp * randVar.GenerateNumber(autoRand));
-                    //Console.WriteLine("Night Temp random offset = {0}.", randomT);
                 double TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
 
                 for(int day = 1; day <= totalDays; day++)
@@ -563,7 +561,10 @@ namespace Landis.Library.Climate
 
             latIndex = (int) (latitude + 0.5) - 24;
             if (latIndex < 1)
-                throw new System.ApplicationException("Error: Lat index too small.");
+            {
+                String msg = String.Format("Error: Latitude of {0} generated an incorrect index:  {1}.", latitude, latIndex);
+                throw new System.ApplicationException(msg);
+            }
             if (latIndex > 26)
                 latIndex = 26;
 

@@ -17,14 +17,14 @@ namespace Landis.Library.Climate
         : TextParser<Dictionary<int, IClimateRecord[,]>>
     {
 
-        private IEcoregionDataset ecoregionDataset;
+        //private IEcoregionDataset ecoregionDataset;
         
         //---------------------------------------------------------------------
         public string LandisDataValue = "Climate Data";
         //---------------------------------------------------------------------
-        public ClimateParser(IEcoregionDataset ecoregionDataset)
+        public ClimateParser()
         {
-            this.ecoregionDataset = ecoregionDataset;
+            //this.ecoregionDataset = ecoregionDataset;
         }
 
         //---------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace Landis.Library.Climate
                 
                 if(!allData.ContainsKey(yr))
                 {
-                    IClimateRecord[,] climateTable = new IClimateRecord[ecoregionDataset.Count, 12];
+                    IClimateRecord[,] climateTable = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, 12];
                     allData.Add(yr, climateTable);
                     //UI.WriteLine("  Climate Parser:  Add new year = {0}.", yr);
                 }
@@ -102,9 +102,6 @@ namespace Landis.Library.Climate
                 
                 allData[yr][ecoregion.Index, mo-1] = climateRecord;
                 
-                //UI.WriteLine(" climateTable avgPpt={0:0.0}.", climateTable[ecoregion.Index, mo-1].AvgPpt);
-                //UI.WriteLine(" allData yr={0}, mo={1}, avgPpt={2:0.0}.", yr, mo, allData[yr][ecoregion.Index, mo-1].AvgPpt);
-                
                 CheckNoDataAfter("the " + par.Name + " column",
                                  currentLine);
 
@@ -119,7 +116,7 @@ namespace Landis.Library.Climate
 
         private IEcoregion GetEcoregion(InputValue<string>      ecoregionName)
         {
-            IEcoregion ecoregion = ecoregionDataset[ecoregionName.Actual];
+            IEcoregion ecoregion = Climate.ModelCore.Ecoregions[ecoregionName.Actual];
             if (ecoregion == null)
                 throw new InputValueException(ecoregionName.String,
                                               "{0} is not an ecoregion name.",

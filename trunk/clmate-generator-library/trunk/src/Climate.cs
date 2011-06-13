@@ -65,18 +65,18 @@ namespace Landis.Library.Climate
             
         }
         //---------------------------------------------------------------------
-        public static void Initialize(string filename, IEcoregionDataset ecoregionDataset, bool writeOutput, ICore mCore) 
+        public static void Initialize(string filename, bool writeOutput, ICore mCore) 
         {
             modelCore = mCore;
-            ModelCore.Log.WriteLine("Loading weather data from file \"{0}\" ...", filename);
-            ClimateParser parser = new ClimateParser(ecoregionDataset);
+            ModelCore.Log.WriteLine("   Loading weather data from file \"{0}\" ...", filename);
+            ClimateParser parser = new ClimateParser();
             allData = ModelCore.Load<Dictionary<int, IClimateRecord[,]>>(filename, parser);
             modelCore = mCore;
             
             timestepData = allData[0];
             
             if(writeOutput)
-                Write(ecoregionDataset);
+                Write(Climate.ModelCore.Ecoregions);
 
         }
     }
