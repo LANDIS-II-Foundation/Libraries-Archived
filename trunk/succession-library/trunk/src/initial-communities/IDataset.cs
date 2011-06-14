@@ -11,6 +11,6 @@ namespace Landis.Library.InitialCommunities
         /// <param name="mapCode">
         /// The community's map code.
         /// </param>
-        ICommunity Find(int mapCode);
+        ICommunity Find(uint mapCode);
     }
 }

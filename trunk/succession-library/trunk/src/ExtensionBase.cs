@@ -106,15 +106,15 @@ namespace Landis.Library.Succession
             InitialCommunities.IDataset communities = modelCore.Load<InitialCommunities.IDataset>(initialCommunities, parser);
 
             Model.Core.Log.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
-            IInputRaster<InitCommPixel> map;
-            map = Model.Core.OpenRaster<InitCommPixel>(initialCommunitiesMap);
+            IInputRaster<UIntPixel> map;
+            map = Model.Core.OpenRaster<UIntPixel>(initialCommunitiesMap);
             using (map)
             {
-                InitCommPixel pixel = map.BufferPixel;
+                UIntPixel pixel = map.BufferPixel;
                 foreach (Site site in Model.Core.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
-                    int mapCode = pixel.MapCode.Value;
+                    uint mapCode = pixel.MapCode.Value;
                     if (!site.IsActive)
                         continue;
 

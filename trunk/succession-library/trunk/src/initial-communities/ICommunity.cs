@@ -11,7 +11,7 @@ namespace Landis.Library.InitialCommunities
         /// <summary>
         /// The code that represents the community on maps.
         /// </summary>
-        ushort MapCode
+        uint MapCode
         {
             get;
         }

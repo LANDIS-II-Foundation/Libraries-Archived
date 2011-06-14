@@ -6,13 +6,12 @@ namespace Landis.Library.InitialCommunities
     public class Community
         : ICommunity
     {
-        private ushort mapCode;
-        //private ISiteCohorts cohorts;
+        private uint mapCode;
         private List<ISpeciesCohorts> cohorts;
 
         //---------------------------------------------------------------------
 
-        public ushort MapCode
+        public uint MapCode
         {
             get {
                 return mapCode;
@@ -30,7 +29,7 @@ namespace Landis.Library.InitialCommunities
 
         //---------------------------------------------------------------------
 
-        public Community(ushort mapCode, List<ISpeciesCohorts> cohorts)
+        public Community(uint mapCode, List<ISpeciesCohorts> cohorts)
         {
             this.mapCode = mapCode;
             this.cohorts = cohorts;
