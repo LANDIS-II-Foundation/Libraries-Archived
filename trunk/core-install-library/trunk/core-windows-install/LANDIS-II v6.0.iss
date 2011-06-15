@@ -87,8 +87,9 @@ Source: {#PkgDocDir}\LANDIS-II Model v6.0 User Guide.pdf; DestDir: {app}\docs
 ; No example input files but a read me.
 Source: {#PkgDocDir}\READ ME.TXT; DestDir: {app}\examples
 
-; Source: {#PkgWindowsFiles}\3rd-party\envinst.exe; DestDir: {#LandisInstallDir}\bin
+; Auxillary 3-rd party files.
 Source: {#PkgWindowsFiles}\3rd-party\*; DestDir: {#LandisInstallDir}\bin
+Source: {#PkgWindowsFiles}\gdal-files\*; DestDir: {app}\bin
 
 ; Script for uninstalling a LANDIS-II release
 #define UninstallReleaseScript "uninstall-landis-release.cmd"
