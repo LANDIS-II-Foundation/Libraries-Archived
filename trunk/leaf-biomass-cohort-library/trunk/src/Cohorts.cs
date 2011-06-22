@@ -93,6 +93,10 @@ namespace Landis.Library.LeafBiomassCohorts
         public static int ComputeNonYoungBiomass(ISiteCohorts siteCohorts)
         {
             int totalBiomass = 0;
+
+            if (siteCohorts == null)
+                return 0;
+
             foreach (ISpeciesCohorts speciesCohorts in siteCohorts) {
                 foreach (ICohort cohort in speciesCohorts) {
                     if (cohort.Age >= successionTimeStep)
