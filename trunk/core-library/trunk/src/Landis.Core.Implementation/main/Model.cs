@@ -121,7 +121,7 @@ namespace Landis
             this.plugInDataset = plugInDataset;
             //this.rasterDriverMgr = rasterDriverMgr;
             siteVarRegistry = new SiteVarRegistry();
-            
+
             this.rasterFactory = rasterFactory;
 
             rasterFactory.BindExtensionToFormat(".bin", "ENVI");
@@ -129,7 +129,8 @@ namespace Landis
             rasterFactory.BindExtensionToFormat(".gis", "LAN");
             rasterFactory.BindExtensionToFormat(".img", "HFA");
             rasterFactory.BindExtensionToFormat(".tif", "GTiff");
-
+            rasterFactory.BindExtensionToFormat(".ingr", "INGR");
+            rasterFactory.BindExtensionToFormat(".vrt",  "VRT" );
         }
 
 
@@ -151,8 +152,8 @@ namespace Landis
                 string dir = System.IO.Path.GetDirectoryName(path);
                 if (dir.Length > 0)
                     Edu.Wisc.Forest.Flel.Util.Directory.EnsureExists(dir);
-                //return rasterDriverMgr.CreateRaster<TPixel>(path, dimensions); 
-                return rasterFactory.CreateRaster<TPixel>(path, dimensions); 
+                //return rasterDriverMgr.CreateRaster<TPixel>(path, dimensions);
+                return rasterFactory.CreateRaster<TPixel>(path, dimensions);
             }
             catch (System.IO.IOException exc) {
                 string mesg = string.Format("Error opening map \"{0}\"", path);
