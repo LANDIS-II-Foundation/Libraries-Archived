@@ -1,0 +1,6 @@
+1:Foo
+22:	The line below 3 tabs.
+33:			
+444:The line below has nothing after the colon.
+555:
+6666:The last line in this file.

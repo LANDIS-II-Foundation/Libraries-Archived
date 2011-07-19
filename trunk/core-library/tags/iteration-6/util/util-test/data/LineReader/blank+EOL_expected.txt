@@ -1,0 +1,8 @@
+1:This file just has some end-of-line comments in it.
+2:Here's an EOL comment with default marker -->  ## (EOL comment)
+3:
+4:################# Another EOL comment
+5:	# This is a comment line.
+6:	## When EOL comments are trimmed, this becomes a blank line.
+7:   	   	  
+8:The line above has just whitespace.

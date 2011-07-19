@@ -1,0 +1,3 @@
+3:This is a valid line.
+0:But this line has a line number of 0.
+555: Another valid line

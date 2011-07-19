@@ -1,0 +1,41 @@
+<Project name="landscape-test" standardNamespace="test" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\Location_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\RowMajor_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\GridDimensions_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\Grid_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\GridWithType_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\DataGridInt_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\DataGridBool_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\ActiveSiteMap_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Data.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Landscape_Test.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Gac" refto="nunit.framework, Version=2.2.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" localcopy="True" />
+    <Reference type="Project" refto="landscape" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Util.Test.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Util.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="C:\software\bin\Debug" assembly="Landis.Landscape.Test" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="C:\software\bin\Debug" assembly="Landis.Landscape.Test" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="test" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

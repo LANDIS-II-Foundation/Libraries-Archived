@@ -1,0 +1,2 @@
+project-name-and-type.txt
+version-release.txt

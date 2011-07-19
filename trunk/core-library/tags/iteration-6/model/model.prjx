@@ -1,0 +1,45 @@
+<Project name="model" standardNamespace="Landis" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\Model.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ISuccession.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\Succession.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\IReproduction.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\IScenario.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\IDisturbance.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Seeding.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\DisperseSeedlMethod.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\initial-site-classes" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name="..\initial-site-classes\InputFiles.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\initial-site-classes\IClasses.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\initial-site-classes\Classes.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\initial-site-classes\IClass.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\initial-site-classes\ISiteCohorts.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\initial-site-classes\ISpeciesCohorts.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Util.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Landscape.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Raster.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Species.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.PlugIn.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="C:\software\bin\Debug" assembly="Landis.Model" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="C:\software\bin\Debug" assembly="Landis.Model" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="model" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

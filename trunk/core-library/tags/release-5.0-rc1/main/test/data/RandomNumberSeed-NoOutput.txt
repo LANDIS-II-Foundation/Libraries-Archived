@@ -1,0 +1,25 @@
+>> Example of a bad input file for scenario
+
+LandisData  Scenario
+
+
+Duration  300
+
+Species   ./species.txt
+
+Ecoregions      "./ecoregions.txt"
+EcoregionsMap   "./ecoregions.gis"
+CellLength      25.0
+
+InitialCommunities      "./init-communities.txt"
+InitialCommunitiesMap   "./init-communities.gis"
+
+
+>> Plug-in                  Initialization File
+>> -------                  -------------------
+
+   "Age-only succession"    succession.txt
+
+   >> Error: No output plug-ins; need at least one
+
+RandomNumberSeed  4,357

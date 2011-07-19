@@ -1,0 +1,5 @@
+true-chars =1TtYyX+
+
+row =11111
+row =+++++
+row =YyTyY

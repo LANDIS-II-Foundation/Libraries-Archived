@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<project name="Landis.Test.Raster.Erdas74">
+    <property name="project-type"    value="library"/>
+    <property name="project-version" value="1.0"/>
+    <property name="project-release" value="alpha 1" />
+
+    <property name="references-file" value="references.txt" />
+
+     <property name="has-NUnit-tests" value="true" />
+    <property name="NUnit-data-dir"  value="data" />
+
+   <include buildfile="${edu.wisc.forest.flel.common.project.build}" />
+</project>

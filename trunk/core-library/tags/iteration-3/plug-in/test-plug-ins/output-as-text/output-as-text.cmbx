@@ -1,0 +1,16 @@
+<Combine fileversion="1.0" name="output-as-text" description="">
+  <StartMode startupentry="output-as-text" single="True">
+    <Execute entry="output-as-text" type="None" />
+  </StartMode>
+  <Entries>
+    <Entry filename=".\.\output-as-text.prjx" />
+  </Entries>
+  <Configurations active="Debug">
+    <Configuration name="Release">
+      <Entry name="output-as-text" configurationname="Debug" build="False" />
+    </Configuration>
+    <Configuration name="Debug">
+      <Entry name="output-as-text" configurationname="Debug" build="False" />
+    </Configuration>
+  </Configurations>
+</Combine>

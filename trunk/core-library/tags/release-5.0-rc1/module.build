@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<project name="Landis-II Core Framework - Module">
+    <description>
+    	Common info shared by all the modules in the Landis-II core framework.
+    </description>
+
+    <include buildfile="version.build" />
+
+    <property name="keyfile" value="U:/LANDIS/src/c-sharp/security/Landis-II.snk" />
+
+    <include buildfile="${edu.wisc.forest.flel.common.project.build}" />
+</project>

@@ -1,0 +1,7 @@
+#  This file just some row data, but it is missing the line with
+#  "true-chars" keyword
+
+row =XXXX..
+row =XX....
+row =X.....
+

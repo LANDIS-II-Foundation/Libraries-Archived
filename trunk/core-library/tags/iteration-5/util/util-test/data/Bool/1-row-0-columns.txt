@@ -1,0 +1,6 @@
+true-chars =
+
+#  This file has only 1 empty row, so the resulting
+#  array should be [1,0].
+
+row =

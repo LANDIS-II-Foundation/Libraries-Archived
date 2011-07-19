@@ -1,0 +1,4 @@
+2:	This is a valid line.
+22:	So is this.
+222:	And this.
+2222	But this line is missing its colon after the line #.

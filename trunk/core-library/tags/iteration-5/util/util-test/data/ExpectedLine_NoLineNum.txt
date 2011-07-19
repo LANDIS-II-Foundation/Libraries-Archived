@@ -1,0 +1,3 @@
+3:This is a valid line.
+5:	So is this.
+ :But this line is missing a line number.

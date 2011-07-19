@@ -1,0 +1,63 @@
+<Project name="util" standardNamespace="util" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\input\LineReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ExpectedLine.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Bool.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\MultiLineText.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Object.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods\UShort.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods\Byte.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods\Float.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods\IByteMethods.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods\Short.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\byte methods\SByte.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputVariable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputVariableException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\ParseMethods.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\ParseMethodWrapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\ParseMethod2Wrapper.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputVar.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\diagnostics" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\diagnostics\AssertException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\diagnostics\TraceListener.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\String.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\TextReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Exception.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputValue.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\ReadMethod.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputValues.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\StringReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputValueException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\FileLineReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\MultiLineException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\InputLine.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\LineReaderException.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\TextLineReader.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Require.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\IEditable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\ITextParser.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\input\TextParser.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References />
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="TRACE" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="C:\software\bin\Debug" assembly="Landis.Util" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="TRACE" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="C:\software\bin\Debug" assembly="Landis.Util" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="Landis.Util" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

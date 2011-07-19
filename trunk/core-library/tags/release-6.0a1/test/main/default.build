@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright 2005,2007 University of Wisconsin-Madison
+  Author: James Domingo, UW-Madison, FLEL
+-->
+
+<project name="Landis.Test.Main">
+
+    <description>Tests for Main module</description>
+
+    <property name="project.type" value="library" />
+
+    <include buildfile="../../version.build" />
+
+    <include buildfile="${environment::get-variable('FLEL_DEVKIT')}/NUnit-project.build" />
+</project>

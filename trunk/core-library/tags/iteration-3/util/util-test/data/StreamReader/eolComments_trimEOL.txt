@@ -1,0 +1,6 @@
+1:This file just has some end-of-line comments in it.
+2:Here's an EOL comment with default marker -->  
+3:
+4:
+5:	# This is a comment line.
+6:	

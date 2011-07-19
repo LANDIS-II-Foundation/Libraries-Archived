@@ -1,0 +1,5 @@
+true-chars =1TtYyX+
+
+row =/---\
+row =|. .|
+row =\===/

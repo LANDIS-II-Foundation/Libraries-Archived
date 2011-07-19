@@ -1,0 +1,21 @@
+# This file has blank lines, comment lines and EOL comments.
+# Some of the comment lines, like these first 3 lines, use
+# the default comment-line marker "#".
+
+//	These lines use a different comment-line marker, which is
+//	the C++/C# comment marker.
+
+Here's an EOL comment with default marker -->  ## (EOL comment)
+
+################# Another EOL comment
+   	   	  
+The line above has just whitespace.
+
+  These next lines have EOL comments which use		// a EOL comment
+  a different marker than the default marker;		/// Another EOL comment
+  they use the C++ comment marker.
+
+# Comment line with default marker, but with   ## default EOL comment
+# Comment line with default marker, but with   // alternate EOL comment
+//Comment line with alternate marker, but with ## default EOL comment
+//Comment line with alternate marker, but with // alternate EOL comment

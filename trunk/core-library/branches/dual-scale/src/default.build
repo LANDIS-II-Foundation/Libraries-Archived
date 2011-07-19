@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright 2005-2007 University of Wisconsin-Madison
+  Author: James Domingo, UW-Madison, FLEL
+-->
+
+<project name="LANDIS-II Core Framework" default="install">
+
+    <property name="modules"
+              value="cohorts,ecoregions,main,plug-ins,species,util" />
+
+    <!--  property "config" : Configuration to build: release or debug
+                              default: all -->
+    <property name="config"
+              value="all"
+              unless="${property::exists('config')}" />
+
+    <!-- Targets ========================================================== -->
+
+    <target name="install"
+            description="Install all the core's modules and its assembly"
+            depends="install-modules,install-core" />
+
+    <target name="clean"
+            description="Clean up (remove) intermediate files for the core's modules and its assembly"
+            depends="clean-core,clean-modules" />
+
+    <target name="uninstall"
+            description="Uninstall all the core's modules and assembly"
+            depends="uninstall-core,uninstall-modules" />
+
+    <!-- Core assembly - Targets ========================================= -->
+
+    <target name="build-core"
+            description="Builds the core assembly">
+        <property name="core-target"
+                  value="${string::replace(target::get-current-target(), '-core', '')}" />
+        <call target="do-core-target" />
+    </target>
+
+    <target name="install-core"
+            description="Builds the core assembly">
+        <property name="core-target"
+                  value="${string::replace(target::get-current-target(), '-core', '')}" />
+        <call target="do-core-target" />
+    </target>
+
+    <target name="clean-core"
+            description="Remove the core">
+        <property name="core-target"
+                  value="${string::replace(target::get-current-target(), '-core', '')}" />
+        <call target="do-core-target" />
+    </target>
+
+    <target name="uninstall-core"
+            description="Uninstall the core">
+        <property name="core-target"
+                  value="${string::replace(target::get-current-target(), '-core', '')}" />
+        <call target="do-core-target" />
+    </target>
+
+    <!-- Core assembly - Internal targets ================================  -->
+
+    <target name="do-core-target">
+        <nant buildfile="core.build"
+              target="${core-target}">
+            <properties>
+                <property name="config"
+                          value="${config}"
+                          unless="${property::exists('config')}" />
+            </properties>
+        </nant>
+    </target>
+
+    <!-- Module targets =================================================== -->
+    
+    <target name="clean-modules"
+            description="Clean up (remove) intermediate files for all modules">
+        <property name="module-target"
+                  value="clean" />
+        <call target="do-all-modules" />
+    </target>
+
+    <target name="install-modules"
+            description="Install all the modules">
+        <property name="module-target"
+                  value="install" />
+        <call target="install-all" />
+    </target>
+
+    <target name="uninstall-modules"
+            description="Uninstall all the modules">
+        <property name="module-target"
+                  value="uninstall" />
+        <call target="do-all-modules" />
+    </target>
+
+    <!-- Modules - Internal targets ======================================= -->
+
+    <target name="do-all-modules">
+        <foreach item="String" in="${modules}" delim="," property="module">
+            <call target="do-module" />
+        </foreach>
+    </target>
+
+    <target name="do-module">
+        <nant buildfile="${module}/default.build"
+              target="${module-target}">
+            <properties>
+                <property name="config"
+                          value="${config}"
+                          unless="${property::exists('config')}" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="install-all"
+            depends="cohorts,ecoregions,main,plug-ins,species,util" />
+
+    <target name="cohorts" depends="species">
+        <property name="module" value="${target::get-current-target()}" />
+        <call target="do-module" />
+    </target>
+
+    <target name="ecoregions" depends="util">
+        <property name="module" value="${target::get-current-target()}" />
+        <call target="do-module" />
+    </target>
+
+    <target name="main" depends="cohorts,ecoregions,plug-ins,species,util">
+        <property name="module" value="${target::get-current-target()}" />
+        <call target="do-module" />
+    </target>
+
+    <target name="plug-ins" depends="cohorts,species,util">
+        <property name="module" value="${target::get-current-target()}" />
+        <call target="do-module" />
+    </target>
+
+    <target name="species" depends="util">
+        <property name="module" value="${target::get-current-target()}" />
+        <call target="do-module" />
+    </target>
+
+    <target name="util">
+        <property name="module" value="${target::get-current-target()}" />
+        <call target="do-module" />
+    </target>
+
+</project>

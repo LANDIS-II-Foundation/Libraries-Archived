@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright 2005, University of Wisconsin-Madison
+  Author: James Domingo, UW-Madison, FLEL
+-->
+
+<project name="Landis-II Core">
+
+    <!--  ================================================================  -->
+
+    <!--  property "core-project-info__file-list" : the file that contains
+                                                    the list of files which
+                                                    in turn contain various
+                                                    parts of the core's
+                                                    project info (name, type,
+                                                    version and release)  -->
+    <property name="core-project-info__file-list"
+              value="project-info file-list.txt" />
+
+    <!--  property "core-project-info__file" : the name of the file with all
+                                               the core's project info  -->
+    <property name="core-project-info__file"
+              value="project-info.txt" />
+
+    <!--  property "core-project-info__uptodate" : true if the file with the
+                                                   core's project info is
+                                                   up-to-date  -->
+    <uptodate property="core-project-info__uptodate">
+        <targetfiles>
+            <include name="${core-project-info__file}" />
+        </targetfiles>
+        <sourcefiles>
+            <includesfile name="${core-project-info__file-list}" />
+        </sourcefiles>
+    </uptodate>
+
+    <if test="${not core-project-info__uptodate}">
+        <call target="update-core-project-info" />
+    </if>
+
+    <!--  ================================================================  -->
+
+    <!--  Internal target to update the file with the core's project
+          information  -->
+    <target name="update-core-project-info">
+
+        <!--  property "action" : the action taken on the core's project info:
+                                  "Created" or "Updated"  -->
+        <property name="action"
+                  value="Created"
+                  if="${not file::exists(core-project-info__file)}" />
+        <property name="action"
+                  value="Updated"
+                  if="${file::exists(core-project-info__file)}" />
+
+        <foreach item="Line"
+                 in="${core-project-info__file-list}"
+                 property="filename">
+            <do>
+                <property name="append-file-contents"
+                          value="${property::exists('file-contents')}" />
+                <loadfile file="${filename}"
+                          property="file-contents" />
+                <echo message="${file-contents}"
+                      file="${core-project-info__file}"
+                      append="${append-file-contents}" />
+            </do>
+        </foreach>
+        <echo message="${action} file: ${core-project-info__file}" />
+    </target>
+
+    <!--  ================================================================  -->
+
+    <include buildfile="${edu.wisc.forest.flel.build}/project.build" />
+
+</project>

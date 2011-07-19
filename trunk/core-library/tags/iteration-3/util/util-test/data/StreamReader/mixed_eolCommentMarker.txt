@@ -1,0 +1,5 @@
+8:Here's an EOL comment with default marker -->  ## (EOL comment)
+12:The line above has just whitespace.
+14:  These next lines have EOL comments which use		
+15:  a different marker than the default marker;		
+16:  they use the C++ comment marker.

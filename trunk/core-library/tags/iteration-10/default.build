@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<project name="Landis Core Framework" default="all">
+    <target name="all" depends="cohorts,ecoregions,landscape,main,plug-ins,raster,species,succession,util" />
+
+    <target name="cohorts" depends="landscape,species">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="ecoregions" depends="landscape,raster,util">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="landscape">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="main" depends="cohorts,ecoregions,landscape,raster,plug-ins,species,util">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="plug-ins" depends="landscape,species,util">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="raster">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="species" depends="util">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+    <target name="util" depends="landscape,raster">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+
+    <!--  Succession library used by age-only and biomass succession -->
+    <target name="succession" depends="cohorts,ecoregions,landscape,main,raster,plug-ins,species,util">
+        <property name="module" value="${target::get-current-target()}" />
+        <nant buildfile="${module}/default.build" target="build">
+            <properties>
+                <property name="config" value="all" />
+            </properties>
+        </nant>
+    </target>
+
+</project>

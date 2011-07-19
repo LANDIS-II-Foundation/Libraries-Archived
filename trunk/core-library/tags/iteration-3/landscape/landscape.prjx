@@ -1,0 +1,46 @@
+<Project name="landscape" standardNamespace="landscape" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\Location.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\RowMajor.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\Site.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ILandscape.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\GridDimensions.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\Grid.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\GridWithType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\IEnumerableGrid.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\IGrid.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\IIndexableGrid.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\grids\DataGrid.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\ActiveSiteMap.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\ActiveSite.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Landscape.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ISiteVariable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\SiteVariable.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\ISiteVarWithData.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\sites\InactiveSite.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="C:\software\landis\framework\bin\Debug\Landis.Util.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="DEBUG" generatexmldocumentation="True" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="C:\software\Landis\framework\bin\Debug" assembly="Landis.Landscape" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="DEBUG" generatexmldocumentation="True" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="C:\software\Landis\framework\bin\Debug" assembly="Landis.Landscape" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="Landis.Landscape" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

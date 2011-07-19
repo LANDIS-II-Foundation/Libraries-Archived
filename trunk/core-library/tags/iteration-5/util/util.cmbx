@@ -1,0 +1,20 @@
+<Combine fileversion="1.0" name="util" description="">
+  <StartMode startupentry="util" single="True">
+    <Execute entry="util" type="None" />
+    <Execute entry="util-test" type="None" />
+  </StartMode>
+  <Entries>
+    <Entry filename=".\.\util.prjx" />
+    <Entry filename=".\util-test\util-test.prjx" />
+  </Entries>
+  <Configurations active="Debug">
+    <Configuration name="Release">
+      <Entry name="util" configurationname="Debug" build="False" />
+      <Entry name="util-test" configurationname="Debug" build="False" />
+    </Configuration>
+    <Configuration name="Debug">
+      <Entry name="util" configurationname="Debug" build="False" />
+      <Entry name="util-test" configurationname="Debug" build="False" />
+    </Configuration>
+  </Configurations>
+</Combine>

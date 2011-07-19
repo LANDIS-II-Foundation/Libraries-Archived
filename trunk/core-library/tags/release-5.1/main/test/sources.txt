@@ -1,0 +1,3 @@
+*.cs
+../../ecoregions/test/RasterDriverManager.cs
+../../ecoregions/test/InputRaster.cs

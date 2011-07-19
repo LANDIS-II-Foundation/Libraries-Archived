@@ -1,0 +1,20 @@
+<Combine fileversion="1.0" name="species" description="">
+  <StartMode startupentry="species" single="True">
+    <Execute entry="species" type="None" />
+    <Execute entry="species-test" type="None" />
+  </StartMode>
+  <Entries>
+    <Entry filename=".\.\species.prjx" />
+    <Entry filename=".\species-test\species-test.prjx" />
+  </Entries>
+  <Configurations active="Debug">
+    <Configuration name="Release">
+      <Entry name="species" configurationname="Debug" build="False" />
+      <Entry name="species-test" configurationname="Debug" build="False" />
+    </Configuration>
+    <Configuration name="Debug">
+      <Entry name="species" configurationname="Debug" build="False" />
+      <Entry name="species-test" configurationname="Debug" build="False" />
+    </Configuration>
+  </Configurations>
+</Combine>

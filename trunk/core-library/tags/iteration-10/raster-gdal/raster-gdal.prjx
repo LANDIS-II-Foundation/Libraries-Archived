@@ -1,0 +1,48 @@
+<Project name="raster-gdal" standardNamespace="raster_gdal" description="" newfilesearch="None" enableviewstate="True" version="1.1" projecttype="C#">
+  <Contents>
+    <File name=".\AssemblyInfo.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\InputBand" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\RasterBand.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\PixelType.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\InputRaster.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\RasterFactory.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\InputBand\Band.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\BlockLocation.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\InputBand\Byte.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\InputBand\SByte.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\InputBand\Short.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\InputBand\UShort.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputRaster.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\Raster.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputBand" subtype="Directory" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputBand\Band.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name=".\OutputBand\Byte.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\OutputBand\UShort.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\OutputBand\SByte.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+    <File name="..\OutputBand\Short.cs" subtype="Code" buildaction="Compile" dependson="" data="" />
+  </Contents>
+  <References>
+    <Reference type="Assembly" refto="C:\software\bin\Debug\GDAL.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Raster.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Util.dll" localcopy="True" />
+    <Reference type="Assembly" refto="C:\software\bin\Debug\Landis.Landscape.dll" localcopy="True" />
+  </References>
+  <DeploymentInformation target="" script="" strategy="File" />
+  <Configuration runwithwarnings="True" name="Debug">
+    <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+    <Execution commandlineparameters="" consolepause="False" />
+    <Output directory="C:\software\bin\Debug" assembly="Landis.Raster.GDAL" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+  </Configuration>
+  <Configurations active="Debug">
+    <Configuration runwithwarnings="True" name="Debug">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="v2.0.40607" warninglevel="4" nowarn="" includedebuginformation="True" optimize="False" unsafecodeallowed="False" generateoverflowchecks="True" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="C:\software\bin\Debug" assembly="Landis.Raster.GDAL" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+    <Configuration runwithwarnings="True" name="Release">
+      <CodeGeneration runtime="MsNet" compiler="Csc" compilerversion="" warninglevel="4" nowarn="" includedebuginformation="False" optimize="True" unsafecodeallowed="False" generateoverflowchecks="False" mainclass="" target="Library" definesymbols="" generatexmldocumentation="False" win32Icon="" noconfig="False" nostdlib="False" />
+      <Execution commandlineparameters="" consolepause="False" />
+      <Output directory="..\bin\Release" assembly="raster-gdal" executeScript="" executeBeforeBuild="" executeAfterBuild="" executeBeforeBuildArguments="" executeAfterBuildArguments="" />
+    </Configuration>
+  </Configurations>
+</Project>

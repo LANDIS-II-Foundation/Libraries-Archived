@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright 2005, University of Wisconsin-Madison
+  Author: James Domingo, UW-Madison, FLEL
+-->
+
+<project name="Landis-II Core Framework - Tests for Module">
+    <description>
+    	Common build file shared by all the NUnit test assemblies for the
+    	modules in the core framework.
+    </description>
+
+    <!--  ================================================================  -->
+
+    <!--  property "core-module__build-dir : the module's build directory  -->
+    <property name="core-module__build-dir"
+              value="../build" />
+
+    <fail if="${file::exists(core-module__build-dir)}">
+        Error:  The path for the module's build directory "${core-module__build-dir}"
+                refers to a file.
+    </fail>
+    <fail if="${not directory::exists(core-module__build-dir)}">
+        Error:  The module's build directory "${core-module__build-dir}" does
+                not exist.
+    </fail>
+
+    <!--  ================================================================  -->
+
+    <!--  property "core-module__project-info" : the automatically-generated
+                                                 NAnt build file with the
+                                                 module's project info  -->
+    <property name="core-module__project-info"
+              value="${path::combine(core-module__build-dir, 'project-info.build')}" />
+
+    <fail if="${directory::exists(core-module__project-info)}">
+        Error:  The path for the NAnt build file with the module's project
+                information "${core-module__project-info}" refers to a directory.
+    </fail>
+    <fail if="${not file::exists(core-module__project-info)}">
+        Error:  The NAnt build file with the module's project information
+                "${core-module__project-info}" does not exist.
+    </fail>
+
+    <!--  ================================================================  -->
+
+    <!--  property "tests__project-info" : text file with the project info
+                                           for the module's tests  -->
+    <property name="tests__project-info"
+              value="project-info.txt" />
+
+    <!--  property "tests__project-info__uptodate" : true if the file with the
+                                                     tests' project info is
+                                                     up-to-date  -->
+    <uptodate property="tests__project-info__uptodate">
+        <targetfiles>
+            <include name="${tests__project-info}" />
+        </targetfiles>
+        <sourcefiles>
+            <include name="${core-module__project-info}" />
+        </sourcefiles>
+    </uptodate>
+
+    <if test="${not tests__project-info__uptodate}">
+        <!--  We use a separate NAnt task so that the properties with the
+              module's project info can be included without conflicting
+              with the tests' project info  -->
+        <nant buildfile="../../module-tests project-info.build">
+            <properties>
+                <property name="core-module__project-info"
+                          value="${path::get-full-path(core-module__project-info)}" />
+                <property name="tests__project-info"
+                          value="${path::get-full-path(tests__project-info)}" />
+                <property name="tests__project-info__relative"
+                          value="${tests__project-info}" />
+            </properties>
+        </nant>
+    </if>
+
+    <!--  ================================================================  -->
+
+    <include buildfile="${edu.wisc.forest.flel.build}/NUnit-project.build" />
+
+</project>

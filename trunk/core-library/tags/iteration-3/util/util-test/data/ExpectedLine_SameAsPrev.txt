@@ -1,0 +1,4 @@
+3:	This is a valid line.
+100:	Another valid line.
+100:	BUT this line's expected line # is SAME as previous one.
+555:	Valid line.

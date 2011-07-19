@@ -1,0 +1,8 @@
+This file just has some end-of-line comments in it.
+Here's an EOL comment with default marker -->  ## (EOL comment)
+
+################# Another EOL comment
+	# This is a comment line.
+	## When EOL comments are trimmed, this becomes a blank line.
+   	   	  
+The line above has just whitespace.
