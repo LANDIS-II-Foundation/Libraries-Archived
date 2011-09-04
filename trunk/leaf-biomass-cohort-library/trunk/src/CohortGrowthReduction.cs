@@ -16,8 +16,8 @@ namespace Landis.Library.LeafBiomassCohorts
             /// site.
             /// </summary>
             public delegate double Compute(ICohort    cohort,
-                                           ActiveSite site,
-                                           int        siteBiomass);
+                                           ActiveSite site);
+                                           //int        siteBiomass);
         }
 
         //---------------------------------------------------------------------
@@ -35,8 +35,8 @@ namespace Landis.Library.LeafBiomassCohorts
             /// 0%
             /// </returns>
             public static double Compute(ICohort    cohort,
-                                         ActiveSite site,
-                                         int        siteBiomass)
+                                         ActiveSite site)
+                                         //int        siteBiomass)
             {
                 return 0.0;
             }
