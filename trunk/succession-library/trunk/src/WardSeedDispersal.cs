@@ -7,13 +7,11 @@ using Landis.SpatialModeling;
 namespace Landis.Library.Succession
 {
     /// <summary>
-    /// Brendan Ward's seed dispersal algorithm.  Code closely follows the
+    /// Brendan Ward's seed dispersal algorithm.  Code originally derived from the
     /// structure of the C++ version of algorithm in BioLandis.
     /// </summary>
     public static class WardSeedDispersal
     {
-        //private static MutableSite neighbor;
-
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
         private const int Universal = -1;
@@ -23,8 +21,6 @@ namespace Landis.Library.Succession
         public static bool Algorithm(ISpecies   species,
                                      ActiveSite site)
         {
-            //if (species.EffectiveSeedDist == EffectiveSeedDist.Universal)
-            //if (species.EffectiveSeedDist == Landis.Species.EffectiveSeedDist.Universal)
             if (species.EffectiveSeedDist == Universal)
                 return UniversalDispersal.Algorithm(species, site);
 
@@ -43,7 +39,6 @@ namespace Landis.Library.Succession
             }
 
             if (Reproduction.MaturePresent(species, site)) {
-            //if (SiteVars.Cohorts[site].IsMaturePresent(species)) {
                 if (isDebugEnabled)
                     log.DebugFormat("site {0}: {1} seeded on site",
                                     site.Location, species.Name);
@@ -54,7 +49,6 @@ namespace Landis.Library.Succession
                 log.DebugFormat("site {0}: search neighbors for {1}",
                                 site.Location, species.Name);
 
-            //UI.WriteLine("   Ward seed disersal.  Spp={0}, site={1},{2}.", species.Name, site.Location.Row, site.Location.Column);
             foreach (RelativeLocationWeighted reloc in Seeding.MaxSeedQuarterNeighborhood)
             {
                 double distance = reloc.Weight;
@@ -68,7 +62,6 @@ namespace Landis.Library.Succession
                     return false;  //Check no further
                     
                 double dispersalProb = GetDispersalProbability(EffD, MaxD, distance);
-                //UI.WriteLine("      DispersalProb={0}, EffD={1}, MaxD={2}, distance={3}.", dispersalProb, EffD, MaxD, distance);
 
                 //First check the Southeast quadrant:
                 if (dispersalProb > Model.Core.GenerateUniform())
@@ -76,7 +69,6 @@ namespace Landis.Library.Succession
                     Site neighbor = site.GetNeighbor(reloc.Location);
                     if (neighbor != null && neighbor.IsActive)
                         if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
-                        // if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                 }                              
                 
@@ -88,7 +80,6 @@ namespace Landis.Library.Succession
                         neighbor = site.GetNeighbor(new RelativeLocation(0, rRow));
                     if (neighbor != null && neighbor.IsActive)
                         if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
-                        // if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                 }
 
@@ -97,7 +88,6 @@ namespace Landis.Library.Succession
                     Site neighbor = site.GetNeighbor(new RelativeLocation(rRow * -1, rCol * -1));
                     if (neighbor != null && neighbor.IsActive)
                         if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
-                        //if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                  }
 
@@ -108,7 +98,6 @@ namespace Landis.Library.Succession
                         neighbor = site.GetNeighbor(new RelativeLocation(0, rRow * -1));
                     if (neighbor != null && neighbor.IsActive)
                         if (Reproduction.MaturePresent(species, (ActiveSite) neighbor)) 
-                        // if (SiteVars.Cohorts[site].IsMaturePresent(species))
                             return true;
                 }
 

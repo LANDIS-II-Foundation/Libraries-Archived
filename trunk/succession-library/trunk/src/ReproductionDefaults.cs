@@ -36,5 +36,17 @@ namespace Landis.Library.Succession
         }
 
         //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Determines if a species can establish on a site.
+        /// </summary>
+        public static bool PlantingEstablish(ISpecies species, ActiveSite site)
+        {
+            double establishProbability = 1.0;
+
+            return Model.Core.GenerateUniform() < establishProbability;
+        }
+
+        //---------------------------------------------------------------------
     }
 }

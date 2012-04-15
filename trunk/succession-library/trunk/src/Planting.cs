@@ -22,7 +22,6 @@ namespace Landis.Library.Succession
             //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
             public SpeciesList(IEnumerable<ISpecies> speciesList,
-                               //Species.IDataset      speciesDataset)
                                ISpeciesDataset speciesDataset)
             {
                 bitArray = new BitArray(speciesDataset.Count);
@@ -59,8 +58,8 @@ namespace Landis.Library.Succession
         protected override bool PreconditionsSatisfied(ISpecies   species,
                                                        ActiveSite site)
         {
-            return true; 
-            //return Reproduction.GetEstablishProbability(species, site) > 0;
+            //return true; 
+            return Reproduction.PlantingEstablish(species, site);
         }
 
         //---------------------------------------------------------------------

@@ -37,6 +37,11 @@ namespace Landis.Library.Succession
             public delegate bool Establish(ISpecies species, ActiveSite site);
 
             /// <summary>
+            /// A method to determine if a species can be planted given the establishment probabilities.
+            /// </summary>
+            public delegate bool PlantingEstablish(ISpecies species, ActiveSite site);
+
+            /// <summary>
             /// A method for determining whether a mature cohort is present at a site for a given species.
             /// </summary>
             public delegate bool MaturePresent(ISpecies species, ActiveSite site);
@@ -49,12 +54,14 @@ namespace Landis.Library.Succession
         private static ISpeciesDataset speciesDataset;
         private static ISiteVar<BitArray> resprout;
         private static ISiteVar<BitArray> serotiny;
+        //private static ISiteVar<BitArray> planting;
         private static ISiteVar<bool> noEstablish;
         private static IPlanting planting;
 
         private static Delegates.AddNewCohort addNewCohort;
         private static Delegates.SufficientResources lightMethod = ReproductionDefaults.SufficientResources;
         private static Delegates.Establish estbMethod = ReproductionDefaults.Establish;
+        private static Delegates.PlantingEstablish plantEstbMethod = ReproductionDefaults.PlantingEstablish;
         private static Delegates.MaturePresent isMaturePresentMethod;
 
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -114,6 +121,21 @@ namespace Landis.Library.Succession
 
         //---------------------------------------------------------------------
 
+        public static Delegates.PlantingEstablish PlantingEstablish
+        {
+            get
+            {
+                return plantEstbMethod;
+            }
+
+            set
+            {
+                Require.ArgumentNotNull(value);
+                plantEstbMethod = value;
+            }
+        }
+        //---------------------------------------------------------------------
+
         public static Delegates.MaturePresent MaturePresent
         {
             get
@@ -129,7 +151,7 @@ namespace Landis.Library.Succession
         }
         //---------------------------------------------------------------------
 
-        public static void Initialize(SeedingAlgorithm       seedingAlgorithm)
+        public static void Initialize(SeedingAlgorithm seedingAlgorithm)
         {
 
             seeding = new Seeding(seedingAlgorithm);
@@ -244,6 +266,19 @@ namespace Landis.Library.Succession
                 return;
 
             bool plantingOccurred = planting.TryAt(site);
+            //bool plantingOccurred = false;
+            //for (int index = 0; index < speciesDataset.Count; ++index)
+            //{
+            //    if (planting[site].Get(index))
+            //    {
+            //        ISpecies species = speciesDataset[index];
+            //        if (PlantingEstablish(species, site))
+            //        {
+            //            AddNewCohort(species, site);
+            //            plantingOccurred = true;
+            //        }
+            //    }
+            //}
 
             bool sufficientLight;
 
