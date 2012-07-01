@@ -35,12 +35,11 @@
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
       <HintPath>..\third-party\FLEL\util\bin\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.SpatialModeling, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.SpatialModeling.dll</HintPath>
+    <Reference Include="Landis.SpatialModeling">
+      <HintPath>..\third-party\LSML\Landis.SpatialModeling.dll</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling.CoreServices">
-      <HintPath>C:\Program Files\LANDIS-II\6.0\bin\Landis.SpatialModeling.CoreServices.dll</HintPath>
+      <HintPath>..\third-party\LSML\Landis.SpatialModeling.CoreServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
