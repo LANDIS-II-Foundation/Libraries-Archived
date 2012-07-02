@@ -114,12 +114,10 @@ namespace Landis
         /// Initializes a new instance.
         /// </summary>
         public Model(PlugIns.IDataset plugInDataset,
-                     //RasterFactory rasterDriverMgr)
                     IConfigurableRasterFactory rasterFactory)
 
         {
             this.plugInDataset = plugInDataset;
-            //this.rasterDriverMgr = rasterDriverMgr;
             siteVarRegistry = new SiteVarRegistry();
 
             this.rasterFactory = rasterFactory;
@@ -138,7 +136,6 @@ namespace Landis
 
         IInputRaster<TPixel> IRasterFactory.OpenRaster<TPixel>(string path)
         {
-            //return rasterDriverMgr.OpenRaster<TPixel>(path);
             return rasterFactory.OpenRaster<TPixel>(path);
         }
 
@@ -152,7 +149,6 @@ namespace Landis
                 string dir = System.IO.Path.GetDirectoryName(path);
                 if (dir.Length > 0)
                     Edu.Wisc.Forest.Flel.Util.Directory.EnsureExists(dir);
-                //return rasterDriverMgr.CreateRaster<TPixel>(path, dimensions);
                 return rasterFactory.CreateRaster<TPixel>(path, dimensions);
             }
             catch (System.IO.IOException exc) {
