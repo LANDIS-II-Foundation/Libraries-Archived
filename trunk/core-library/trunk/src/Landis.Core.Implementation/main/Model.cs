@@ -15,7 +15,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 
 using Landis.SpatialModeling;
-using Landis.SpatialModeling.CoreServices;
 
 using Troschuetz.Random;
 
@@ -26,11 +25,11 @@ namespace Landis
         : ICore
     {
         private PlugIns.IDataset plugInDataset;
-        //private RasterFactory rasterDriverMgr;
         private SiteVarRegistry siteVarRegistry;
         private ISpeciesDataset species;
         private IEcoregionDataset ecoregions;
         private IConfigurableRasterFactory rasterFactory;
+        private ILandscapeFactory landscapeFactory;
         private ILandscape landscape;
         private float cellLength;  // meters
         private float cellArea;    // hectares
@@ -114,13 +113,15 @@ namespace Landis
         /// Initializes a new instance.
         /// </summary>
         public Model(PlugIns.IDataset plugInDataset,
-                    IConfigurableRasterFactory rasterFactory)
+                     IConfigurableRasterFactory rasterFactory,
+                     ILandscapeFactory landscapeFactory)
 
         {
             this.plugInDataset = plugInDataset;
             siteVarRegistry = new SiteVarRegistry();
 
             this.rasterFactory = rasterFactory;
+            this.landscapeFactory = landscapeFactory;
 
             rasterFactory.BindExtensionToFormat(".bin", "ENVI");
             rasterFactory.BindExtensionToFormat(".bmp", "BMP");
@@ -319,7 +320,7 @@ namespace Landis
                 log.WriteLine("Map dimensions: {0} = {1:#,##0} cell{2}", grid.Dimensions,
                              grid.Count, (grid.Count == 1 ? "" : "s"));
                 // landscape = new Landscape(grid);
-                landscape = LandscapeFactory.CreateLandscape(grid);
+                landscape = landscapeFactory.CreateLandscape(grid);
             }
             log.WriteLine("Sites: {0:#,##0} active ({1:p1}), {2:#,##0} inactive ({3:p1})",
                          landscape.ActiveSiteCount, (landscape.Count > 0 ? ((double)landscape.ActiveSiteCount)/landscape.Count : 0),

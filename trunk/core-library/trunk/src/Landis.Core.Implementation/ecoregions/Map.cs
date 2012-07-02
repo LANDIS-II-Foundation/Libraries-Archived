@@ -1,6 +1,5 @@
 
 using Landis.SpatialModeling;
-using Landis.SpatialModeling.CoreServices;
 using Landis.Core;
 using System;
 
@@ -10,8 +9,7 @@ namespace Landis.Ecoregions
     {
         private string path;
         private IEcoregionDataset ecoregions;
-        //private RasterFactory rasterFactory;
-        private IConfigurableRasterFactory rasterFactory;
+        private IRasterFactory rasterFactory;
         
 
         //---------------------------------------------------------------------
@@ -30,8 +28,7 @@ namespace Landis.Ecoregions
         /// </param>
         public Map(string         path,
                    IEcoregionDataset       ecoregions,
-                   //RasterFactory rasterFactory)
-                    IConfigurableRasterFactory rasterFactory)
+                   IRasterFactory rasterFactory)
         {
             this.path = path;
             this.ecoregions = ecoregions;

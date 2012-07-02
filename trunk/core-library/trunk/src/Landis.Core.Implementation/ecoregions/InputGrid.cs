@@ -1,6 +1,5 @@
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.SpatialModeling;
-using Landis.SpatialModeling.CoreServices;
 using Landis.Core;
 using System;
 

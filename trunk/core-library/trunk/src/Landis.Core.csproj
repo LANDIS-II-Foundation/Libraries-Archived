@@ -38,9 +38,6 @@
     <Reference Include="Landis.SpatialModeling">
       <HintPath>..\third-party\LSML\Landis.SpatialModeling.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.SpatialModeling.CoreServices">
-      <HintPath>..\third-party\LSML\Landis.SpatialModeling.CoreServices.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Troschuetz.Random">
