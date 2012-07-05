@@ -4,17 +4,17 @@ rem  Run this script in the directory where it's located
 pushd %~dp0
 setlocal
 
-rem  Get tools for downloading and unpacking zip files on Windows.
-set ToolsVer=1.0
-set ToolsDir=download
+rem  Get toolkit for downloading and unpacking zip files on Windows.
+set ToolsDir=WinPkgTools
+echo Downloading tools to %ToolsDir%\ ...
+call %ToolsDir%\get-tools.cmd
 set DownloadTool=%ToolsDir%\Landis.Tools.DownloadFile.exe
 set ChecksumTool=%ToolsDir%\checksum.exe
 set UnZipTool=%ToolsDir%\unzip.exe
-if exist %DownloadTool% (
-  echo WinPkgTools already downloaded.
-) else (
-  .\get-WinPkgTools %ToolsVer% %ToolsDir%
-)
+
+rem  After get-tools.cmd runs, the current directory is not the one with this
+rem  script; not sure why, but we need it to be.
+cd %~dp0
 
 rem  Read LSML version # and the SHA1 checksum for that version
 for /f "tokens=1,2" %%i in (version.txt) do (
@@ -25,7 +25,9 @@ for /f "tokens=1,2" %%i in (version.txt) do (
 rem  Download the specific library version
 set LibraryFileName=LSML-%LibraryVer%.zip
 set LibraryURL=http://landis-spatial.googlecode.com/files/%LibraryFileName%
-set LibraryPackage=download\%LibraryFileName%
+set DownloadDir=download
+set LibraryPackage=%DownloadDir%\%LibraryFileName%
+if not exist %DownloadDir% mkdir %DownloadDir%
 if exist %LibraryPackage% (
   echo %LibraryFileName% already downloaded.
 ) else (
