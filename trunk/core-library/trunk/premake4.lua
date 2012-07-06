@@ -6,6 +6,27 @@ thirdPartyLibs = {
   Troschuetz = thirdPartyDir .. "/Troschuetz/Troschuetz.Random.dll"
 }
 
+-- Are we running on Windows?
+if string.match(_PREMAKE_VERSION, "^4.[123]") then
+  -- Premake 4.3 or earlier.  Since os.getversion() added in Premake 4.4, use
+  -- a simple test (does PATH env var have ";"?) to determine if on Windows.
+  onWindows = string.find(os.getenv("PATH"), ";")
+else
+  -- Premake 4.4 or later
+  local osVersion = os.getversion()
+  onWindows = string.find(osVersion.description, "Windows")
+end
+
+-- Fetch LSML if it's not present and we're generating project files
+if _ACTION and _ACTION ~= "clean" then
+  if not os.isfile(thirdPartyLibs["LSML"]) then
+    print("Fetching LSML ...")
+    local scriptExt = iif(onWindows, "cmd", "sh")
+    local LSMLscript = thirdPartyDir .. "/LSML/get-LSML." .. scriptExt
+    os.execute(LSMLscript)
+  end
+end
+
 buildDir = "build"
 
 solution "LANDIS-II_core"
