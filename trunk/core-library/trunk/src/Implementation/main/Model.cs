@@ -40,7 +40,6 @@ namespace Landis
         private int timeSinceStart;
         private SuccessionMain succession;
         private List<ExtensionMain> disturbAndOtherPlugIns;
-        public static ICore Core;
 
         private static Generator RandomNumberGenerator;
         private static BetaDistribution betaDist;
