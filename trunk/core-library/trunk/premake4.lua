@@ -87,11 +87,15 @@ solution "LANDIS-II_core"
 
 if _ACTION then
   local action = premake.action.get(_ACTION)
-  local triggerAction = premake.action.get(action.trigger)
-  local originalExecute = triggerAction.execute
-  triggerAction.execute = function()
-    if originalExecute then originalExecute() end
-    postActionExecute()
+  if not action then
+    -- An unknown action was specified (typing mistake?)
+  else
+    local triggerAction = premake.action.get(action.trigger)
+    local originalExecute = triggerAction.execute
+    triggerAction.execute = function()
+      if originalExecute then originalExecute() end
+      postActionExecute()
+    end
   end
 end
 
