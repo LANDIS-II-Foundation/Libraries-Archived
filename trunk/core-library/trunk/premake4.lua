@@ -23,6 +23,9 @@ if _ACTION and _ACTION ~= "clean" then
     print("Fetching LSML ...")
     local scriptExt = iif(onWindows, "cmd", "sh")
     local LSMLscript = thirdPartyDir .. "/LSML/get-LSML." .. scriptExt
+    if onWindows then
+      LSMLscript = path.translate(LSMLscript, "\\")
+    end
     os.execute(LSMLscript)
   end
 end
