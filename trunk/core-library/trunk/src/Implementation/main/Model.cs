@@ -39,8 +39,7 @@ namespace Landis
         private int currentTime;
         private int timeSinceStart;
         private SuccessionMain succession;
-        private List<ExtensionMain> plugInsWith2PhaseInit;
-        private List<ExtensionMain> plugInsWithCleanUp;
+        private List<ExtensionMain> disturbAndOtherPlugIns;
         public static ICore Core;
 
         private static Generator RandomNumberGenerator;
@@ -326,11 +325,7 @@ namespace Landis
 
             ecoregionSiteVar = ecoregionsMap.CreateSiteVar(landscape);
 
-            //plugInsWith2PhaseInit = new List<PlugIns.I2PhaseInitialization>();
-            //plugInsWithCleanUp = new List<PlugIns.ICleanUp>();
-
-            plugInsWith2PhaseInit = new List<ExtensionMain>();
-            plugInsWithCleanUp = new List<ExtensionMain>();
+            disturbAndOtherPlugIns = new List<ExtensionMain>();
 
             try {
                 log.WriteLine("Loading {0} plug-in ...", scenario.Succession.Info.Name);
@@ -345,12 +340,10 @@ namespace Landis
                 InitPlugIns(otherPlugIns);
 
 
-                //    Perform 2nd phase of initialization for those plug-ins
-                //    that have it.
-                /*foreach (PlugIns.I2PhaseInitialization plugIn in plugInsWith2PhaseInit)
-                    plugIn.InitializePhase2();*/
-
-                foreach (ExtensionMain plugIn in plugInsWith2PhaseInit)
+                //  Perform 2nd phase of initialization for non-succession plug-ins.
+                foreach (ExtensionMain plugIn in disturbancePlugIns)
+                    plugIn.InitializePhase2();
+                foreach (ExtensionMain plugIn in otherPlugIns)
                     plugIn.InitializePhase2();
 
                 //  Run output plug-ins for TimeSinceStart = 0 (time step 0)
@@ -397,8 +390,8 @@ namespace Landis
                 }  // main time loop
             }
             finally {
-                foreach (ExtensionMain ExtMain in plugInsWithCleanUp)
-                    ExtMain.CleanUp();
+                foreach (ExtensionMain plugIn in disturbAndOtherPlugIns)
+                    plugIn.CleanUp();
             }
             log.WriteLine("Model run is complete.");
         }
@@ -617,10 +610,7 @@ namespace Landis
 
                 loadedPlugIns[i] = loadedPlugIn;
 
-                if (loadedPlugIn is ExtensionMain)
-                    plugInsWith2PhaseInit.Add((ExtensionMain)loadedPlugIn);
-                if (loadedPlugIn is ExtensionMain)
-                    plugInsWithCleanUp.Add((ExtensionMain)loadedPlugIn);
+                disturbAndOtherPlugIns.Add(loadedPlugIn);
             }
             return loadedPlugIns;
         }
