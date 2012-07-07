@@ -103,8 +103,27 @@ function postActionExecute()
   --  If generating Visual Studio files, add HintPath elements for references
   --  with paths.
   if string.startswith(_ACTION, "vs") then
-    addHintPaths()
+    modifyCSprojFiles()
   end
+end
+
+
+-- The function below modifies the all the projects' *.csproj files, by
+-- changing each Reference that has a path in its Include attribute to use
+-- a HintPath element instead.
+
+function modifyCSprojFiles()
+  for i, prj in ipairs(solution().projects) do
+    local csprojFile = CSprojFile(prj)
+    print("Modifying " .. csprojFile.relPath .. " ...")
+    csprojFile:readLines()
+    adjustReferencePaths(csprojFile)
+    ok, err = csprojFile:writeLines()
+    if not ok then
+      error(err, 0)
+    end
+    print("  <HintPath> elements added to the project's references")
+  end -- for each project
 end
 
 -- ==========================================================================
@@ -185,23 +204,4 @@ function adjustReferencePaths(csprojFile)
     end
   end -- for each line in file
   csprojFile.lines = lines
-end
-
-
--- The function below modifies the all the projects' *.csproj files, by
--- changing each Reference that has a path in its Include attribute to use
--- a HintPath element instead.
-
-function addHintPaths()
-  for i, prj in ipairs(solution().projects) do
-    local csprojFile = CSprojFile(prj)
-    print("Modifying " .. csprojFile.relPath .. " ...")
-    csprojFile:readLines()
-    adjustReferencePaths(csprojFile)
-    ok, err = csprojFile:writeLines()
-    if not ok then
-      error(err, 0)
-    end
-    print("  <HintPath> elements added to the project's references")
-  end -- for each project
 end
