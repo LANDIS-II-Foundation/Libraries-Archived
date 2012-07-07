@@ -109,10 +109,49 @@ end
 
 -- ==========================================================================
 
+-- A class that represents a project's .csproj file.
+
+require 'class'
+CSprojFile = class()
+
+function CSprojFile:__init(proj)
+  self.project = proj
+  self.name = proj.name .. ".csproj"
+  self.absDir = proj.location
+  self.absPath = path.join(self.absDir, self.name)
+  self.relDir = path.getrelative(os.getcwd(), proj.location)
+  self.relPath = path.join(self.relDir, self.name)
+  self.lines = nil
+end
+
+function CSprojFile:readLines()
+  self.lines = { }
+  for line in io.lines(self.absPath) do
+    table.insert(self.lines, line)
+  end
+end
+
+-- Write the modified lines out to the .csproj file.
+-- Return true if successful; otherwise, return false, error message
+function CSprojFile:writeLines()
+  local outFile, errMessage = io.open(self.absPath, "w")
+  if not outFile then
+    return false, string.format("Cannot open \"%s\" for writing: %s",
+                                self.relPath, errMessage)
+  end
+  for _, line in ipairs(self.lines) do
+    outFile:write(line .. "\n")
+  end
+  outFile:close()
+  return true
+end
+
+-- ==========================================================================
+
 -- MonoDevelop cannot find referenced assemblies which have paths in their
 -- Include attribute (see https://bugzilla.xamarin.com/show_bug.cgi?id=6008).
 
--- This function reads in a *.csproj file, and looks for Reference elements
+-- This function scans the lines of a *.csproj file for Reference elements
 -- with a path in their Include attribute.  For each such Reference, the
 -- path is removed from its Include attribute, and inserted into a new
 -- HintPath element.  For example, this line:
@@ -124,15 +163,10 @@ end
 --    <Reference Include="Example.Assembly">
 --      <HintPath>some\path\to\Example.Assembly.dll</HintPath>
 --    </Reference>
---
--- If the function does no replacements, then it returns nil.  If it does
--- at least one replacement, it returns a table with all the file's lines
--- (including all the replacements).
 
-function adjustReferencePaths(csprojPath)
-  local referenceAdjusted = false
+function adjustReferencePaths(csprojFile)
   local lines = { }
-  for line in io.lines(csprojPath) do
+  for _, line in ipairs(csprojFile.lines) do
     -- Look for <Reference Include="some\path\to\Example.Assembly.dll" />
     local pattern = "(%s*)<Reference%s+Include=\"(.*)\\(.+)\""
     local indent, path, fileName = string.match(line, pattern)
@@ -146,16 +180,11 @@ function adjustReferencePaths(csprojPath)
       for _, newLine in ipairs(newLines) do
         table.insert(lines, indent .. newLine)
       end
-      referenceAdjusted = true
     else
       table.insert(lines, line)
     end
   end -- for each line in file
-  if referenceAdjusted then
-    return lines
-  else
-    return nil
-  end
+  csprojFile.lines = lines
 end
 
 
@@ -165,25 +194,14 @@ end
 
 function addHintPaths()
   for i, prj in ipairs(solution().projects) do
-    local csprojFile = prj.name .. ".csproj"
-    locationRelPath = path.getrelative(os.getcwd(), prj.location)
-    local csprojRelPath = locationRelPath .. "/" .. csprojFile
-    local csprojAbsPath = prj.location .. "/" .. csprojFile
-    print("Modifying " .. csprojRelPath .. " ...")
-    local adjustedLines = adjustReferencePaths(csprojAbsPath)
-    if adjustedLines then
-      local outFile, errMessage = io.open(csprojAbsPath, "w")
-      if not outFile then
-        error(string.format("Cannot open \"%s\" for writing: %s",
-                            csprojRelPath, errMessage))
-      end
-      for _, line in ipairs(adjustedLines) do
-        outFile:write(line .. "\n")
-      end
-      outFile:close()
-      print("  <HintPath> elements added to the project's references")
-    else
-      print("  No <HintPath> elements added; file not modified")
+    local csprojFile = CSprojFile(prj)
+    print("Modifying " .. csprojFile.relPath .. " ...")
+    csprojFile:readLines()
+    adjustReferencePaths(csprojFile)
+    ok, err = csprojFile:writeLines()
+    if not ok then
+      error(err, 0)
     end
+    print("  <HintPath> elements added to the project's references")
   end -- for each project
 end
