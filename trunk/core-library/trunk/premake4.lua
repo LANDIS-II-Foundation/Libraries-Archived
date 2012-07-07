@@ -29,6 +29,8 @@ end
 
 buildDir = "build"
 
+-- ==========================================================================
+
 solution "LANDIS-II_core"
 
   language "C#"    -- by default, Premake uses "Any CPU" for platform
@@ -74,3 +76,95 @@ solution "LANDIS-II_core"
       thirdPartyLibs["log4net"],
       thirdPartyLibs["Troschuetz"]
     }
+
+-- ==========================================================================
+
+-- MonoDevelop cannot find referenced assemblies which have paths in their
+-- Include attribute (see https://bugzilla.xamarin.com/show_bug.cgi?id=6008).
+
+-- This function reads in a *.csproj file, and looks for Reference elements
+-- with a path in their Include attribute.  For each such Reference, the
+-- path is removed from its Include attribute, and inserted into a new
+-- HintPath element.  For example, this line:
+--
+--    <Reference Include="some\path\to\Example.Assembly.dll" />
+--
+-- is replaced with 3 lines:
+--
+--    <Reference Include="Example.Assembly">
+--      <HintPath>some\path\to\Example.Assembly.dll</HintPath>
+--    </Reference>
+--
+-- If the function does no replacements, then it returns nil.  If it does
+-- at least one replacement, it returns a table with all the file's lines
+-- (including all the replacements).
+
+function adjustReferencePaths(csprojPath)
+  local referenceAdjusted = false
+  local lines = { }
+  for line in io.lines(csprojPath) do
+    -- Look for <Reference Include="some\path\to\Example.Assembly.dll" />
+    local pattern = "(%s*)<Reference%s+Include=\"(.*)\\(.+)\""
+    local indent, path, fileName = string.match(line, pattern)
+    if path then
+      fileNoExt = string.gsub(fileName, "\.[^.]+$", "")
+      local newLines = {
+        string.format("<Reference Include=\"%s\">", fileNoExt) ,
+        string.format("  <HintPath>%s\\%s</HintPath>", path, fileName) ,
+	              "</Reference>"
+      }
+      for _, newLine in ipairs(newLines) do
+        table.insert(lines, indent .. newLine)
+      end
+      referenceAdjusted = true
+    else
+      table.insert(lines, line)
+    end
+  end -- for each line in file
+  if referenceAdjusted then
+    return lines
+  else
+    return nil
+  end
+end
+
+
+-- The function below modifies the all the projects' *.csproj files, by
+-- changing each Reference that has a path in its Include attribute to use
+-- a HintPath element instead.
+
+function addHintPaths()
+  for i, prj in ipairs(solution().projects) do
+    local csprojFile = prj.name .. ".csproj"
+    locationRelPath = path.getrelative(os.getcwd(), prj.location)
+    local csprojRelPath = locationRelPath .. "/" .. csprojFile
+    local csprojAbsPath = prj.location .. "/" .. csprojFile
+    if not os.isfile(csprojAbsPath) then
+      print(csprojRelPath .. " does not exist; Generate project files first")
+    else
+      print("Reading " .. csprojRelPath .. " ...")
+      local adjustedLines = adjustReferencePaths(csprojAbsPath)
+      if adjustedLines then
+	local outFile, errMessage = io.open(csprojAbsPath, "w")
+        if not outFile then
+          error(string.format("Cannot open \"%s\" for writing: %s",
+                              csprojRelPath, errMessage))
+        end
+	for _, line in ipairs(adjustedLines) do
+          outFile:write(line .. "\n")
+        end
+        outFile:close()
+        print("  <HintPath> elements added to the file")
+      else
+        print("  No <HintPath> elements added; file not modified")
+      end
+    end
+  end -- for each project
+end
+
+
+newaction {
+  trigger = "add-hintpaths",
+  description = "Add <HintPath> to references with paths (for MonoDevelop)",
+  execute = addHintPaths
+}
