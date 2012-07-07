@@ -339,10 +339,10 @@ namespace Landis
                 succession.Initialize();
 
                 ExtensionMain[] disturbancePlugIns = LoadPlugIns(scenario.Disturbances);
-                InitPlugIns(scenario.Disturbances, disturbancePlugIns);
+                InitPlugIns(disturbancePlugIns);
 
                 ExtensionMain[] otherPlugIns = LoadPlugIns(scenario.OtherPlugIns);
-                InitPlugIns(scenario.OtherPlugIns, otherPlugIns);
+                InitPlugIns(otherPlugIns);
 
 
                 //    Perform 2nd phase of initialization for those plug-ins
@@ -627,12 +627,11 @@ namespace Landis
 
         //-----------------------------------------------------------------------
 
-        private void InitPlugIns(PlugInAndInitFile[] plugIns_Init,ExtensionMain[] distplugIn)
+        private void InitPlugIns(ExtensionMain[] plugIns)
         {
-            foreach (int i in Indexes.Of(distplugIn))
+            foreach (ExtensionMain plugIn in plugIns)
             {
-                distplugIn[i].Initialize(); //plugInAndInitFile.InitFile);
-
+                plugIn.Initialize();
             }
         }
 
