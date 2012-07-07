@@ -37,7 +37,7 @@ buildDir = "build"
 solution "LANDIS-II_core"
 
   language "C#"    -- by default, Premake uses "Any CPU" for platform
-    framework "3.5"
+  framework "3.5"
 
   configurations { "Debug", "Release" }
  
@@ -117,8 +117,15 @@ function modifyCSprojFiles()
     local csprojFile = CSprojFile(prj)
     print("Modifying " .. csprojFile.relPath .. " ...")
     csprojFile:readLines()
+
     adjustReferencePaths(csprojFile)
     print("  <HintPath> elements added to the project's references")
+    if _PREMAKE_VERSION == "4.3" then
+      -- In 4.3, the "framework" function doesn't work
+      addFramework(csprojFile)
+      print("  <TargetFrameworkVersion> element added to the project's properties")
+    end
+
     ok, err = csprojFile:writeLines()
     if not ok then
       error(err, 0)
@@ -204,4 +211,28 @@ function adjustReferencePaths(csprojFile)
     end
   end -- for each line in file
   csprojFile.lines = lines
+end
+
+-- ==========================================================================
+
+-- This function adds a new line with the target framework, right after the
+-- line with the assembly's name:
+--
+--    <AssemblyName>Landis.Core</AssemblyName>
+--    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>   <-- new line
+
+function addFramework(csprojFile)
+  local framework = csprojFile.project.framework or solution().framework
+  for i, line in ipairs(csprojFile.lines) do
+    -- Look for <Reference Include="some\path\to\Example.Assembly.dll" />
+    local pattern = "^(%s*)<AssemblyName>"
+    local indent = string.match(line, pattern)
+    if indent then
+      local frameworkLine = string.format(
+        "%s<TargetFrameworkVersion>v%s</TargetFrameworkVersion>",
+        indent, framework)
+      table.insert(csprojFile.lines, i + 1, frameworkLine)
+      break
+    end
+  end -- for each line in file
 end
