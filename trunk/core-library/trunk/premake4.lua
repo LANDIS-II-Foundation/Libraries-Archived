@@ -37,7 +37,7 @@ buildDir = "build"
 solution "LANDIS-II_core"
 
   language "C#"    -- by default, Premake uses "Any CPU" for platform
-  framework "3.5"
+    framework "3.5"
 
   configurations { "Debug", "Release" }
  
@@ -79,6 +79,29 @@ solution "LANDIS-II_core"
       thirdPartyLibs["log4net"],
       thirdPartyLibs["Troschuetz"]
     }
+
+-- ==========================================================================
+
+-- Hook in a custom function "postActionExecute" so that it's called *after*
+-- the selected action is executed.
+
+if _ACTION then
+  local action = premake.action.get(_ACTION)
+  local triggerAction = premake.action.get(action.trigger)
+  local originalExecute = triggerAction.execute
+  triggerAction.execute = function()
+    if originalExecute then originalExecute() end
+    postActionExecute()
+  end
+end
+
+function postActionExecute()
+  --  If generating Visual Studio files, add HintPath elements for references
+  --  with paths.
+  if string.startswith(_ACTION, "vs") then
+    addHintPaths()
+  end
+end
 
 -- ==========================================================================
 
@@ -142,32 +165,21 @@ function addHintPaths()
     locationRelPath = path.getrelative(os.getcwd(), prj.location)
     local csprojRelPath = locationRelPath .. "/" .. csprojFile
     local csprojAbsPath = prj.location .. "/" .. csprojFile
-    if not os.isfile(csprojAbsPath) then
-      print(csprojRelPath .. " does not exist; Generate project files first")
-    else
-      print("Reading " .. csprojRelPath .. " ...")
-      local adjustedLines = adjustReferencePaths(csprojAbsPath)
-      if adjustedLines then
-	local outFile, errMessage = io.open(csprojAbsPath, "w")
-        if not outFile then
-          error(string.format("Cannot open \"%s\" for writing: %s",
-                              csprojRelPath, errMessage))
-        end
-	for _, line in ipairs(adjustedLines) do
-          outFile:write(line .. "\n")
-        end
-        outFile:close()
-        print("  <HintPath> elements added to the file")
-      else
-        print("  No <HintPath> elements added; file not modified")
+    print("Modifying " .. csprojRelPath .. " ...")
+    local adjustedLines = adjustReferencePaths(csprojAbsPath)
+    if adjustedLines then
+      local outFile, errMessage = io.open(csprojAbsPath, "w")
+      if not outFile then
+        error(string.format("Cannot open \"%s\" for writing: %s",
+                            csprojRelPath, errMessage))
       end
+      for _, line in ipairs(adjustedLines) do
+        outFile:write(line .. "\n")
+      end
+      outFile:close()
+      print("  <HintPath> elements added to the project's references")
+    else
+      print("  No <HintPath> elements added; file not modified")
     end
   end -- for each project
 end
-
-
-newaction {
-  trigger = "add-hintpaths",
-  description = "Add <HintPath> to references with paths (for MonoDevelop)",
-  execute = addHintPaths
-}

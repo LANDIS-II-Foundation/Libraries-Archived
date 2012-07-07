@@ -25,12 +25,4 @@ is needed because Premake 4.3 doesn't support VS2010 C# projects.
   premake4.4 vs2010
 
 After running Premake, open the LANDIS-II_core.sln solution file in an IDE
-(Visual Studio, MonoDevelop) and build the solution.  If you're using
-MonoDevelop, then an extra step is required.  The C# project files must be
-modified so that MonoDevelop can properly locate the third-party assemblies.
-To modify those project files, run Premake a second time as follows:
-
-  premake4.x add-hintpaths
-
-Replace "premake4.x" with the version of Premake used the first time (i.e.,
-either "premake4.3" or "premake4.4").
+(Visual Studio, MonoDevelop) and build the solution.
