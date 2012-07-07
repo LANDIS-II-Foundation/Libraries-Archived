@@ -118,11 +118,11 @@ function modifyCSprojFiles()
     print("Modifying " .. csprojFile.relPath .. " ...")
     csprojFile:readLines()
     adjustReferencePaths(csprojFile)
+    print("  <HintPath> elements added to the project's references")
     ok, err = csprojFile:writeLines()
     if not ok then
       error(err, 0)
     end
-    print("  <HintPath> elements added to the project's references")
   end -- for each project
 end
 
