@@ -84,8 +84,6 @@ namespace Landis
 
         //---------------------------------------------------------------------
 
-        private static TextWriter writer=TextWriter.Null;
-
         private static ILog logger= LogManager.GetLogger("Landis");
 
         private static IUserInterface log;//move to ICore
@@ -656,10 +654,8 @@ namespace Landis
 
         private void InitPlugIns(PlugInAndInitFile[] plugIns_Init,ExtensionMain[] distplugIn)
         {
-            ExtensionMain[] temp = distplugIn;
             foreach (int i in Indexes.Of(distplugIn))
             {
-                PlugInAndInitFile plugInAndInitFile = plugIns_Init[i];
                 distplugIn[i].Initialize(); //plugInAndInitFile.InitFile);
 
             }
