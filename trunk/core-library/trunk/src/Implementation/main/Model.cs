@@ -577,31 +577,6 @@ namespace Landis
 
         //---------------------------------------------------------------------
 
-        private ExtensionMain[] LoadAndInitPlugIns(PlugInAndInitFile[]plugIns)
-        {
-            ExtensionMain[] loadedPlugIns = new ExtensionMain[plugIns.Length];
-            foreach (int i in Indexes.Of(plugIns)) {
-                PlugInAndInitFile plugInAndInitFile = plugIns[i];
-                log.WriteLine("Loading {0} plug-in ...", plugInAndInitFile.Info.Name);
-                ExtensionMain loadedPlugIn = Loader.Load<ExtensionMain>(plugInAndInitFile.Info);
-                loadedPlugIn.Initialize(); //plugInAndInitFile.InitFile);
-                loadedPlugIns[i] = loadedPlugIn;
-
-                /*if (loadedPlugIn is PlugIns.I2PhaseInitialization)
-                    plugInsWith2PhaseInit.Add((PlugIns.I2PhaseInitialization) loadedPlugIn);
-                if (loadedPlugIn is PlugIns.ICleanUp)
-                    plugInsWithCleanUp.Add((PlugIns.ICleanUp) loadedPlugIn);*/
-
-                if (loadedPlugIn is ExtensionMain)
-                    plugInsWith2PhaseInit.Add((ExtensionMain)loadedPlugIn);
-                if (loadedPlugIn is ExtensionMain)
-                    plugInsWithCleanUp.Add((ExtensionMain)loadedPlugIn);
-            }
-            return loadedPlugIns;
-        }
-
-        //---------------------------------------------------------------------
-
         private List<ExtensionMain> GetPlugInsToRun(ExtensionMain[] plugIns)
         {
             List<ExtensionMain> plugInsToRun = new List<ExtensionMain>();
