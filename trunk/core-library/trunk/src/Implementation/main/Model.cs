@@ -530,7 +530,7 @@ namespace Landis
 
         //---------------------------------------------------------------------
 
-        ///	<summary>
+        /// <summary>
         /// Shuffles the items in a list.
         /// </summary>
         /// <param name="list">

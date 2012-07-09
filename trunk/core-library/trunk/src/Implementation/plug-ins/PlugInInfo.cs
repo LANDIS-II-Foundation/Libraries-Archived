@@ -18,8 +18,8 @@ namespace Landis.PlugIns
         /// </summary>
         /// <param name="name">The plug-in's name</param>
         /// <param name="type">The plug-in's type</param>
-		/// <param name="implementationName">The AssemblyQualifiedName of the
-		/// class that implements the plug-in.</param>
+        /// <param name="implementationName">The AssemblyQualifiedName of the
+        /// class that implements the plug-in.</param>
         public PlugInInfo(string     name,
                           ExtensionType type,
                           string     implementationName)
