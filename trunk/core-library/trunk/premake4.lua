@@ -55,7 +55,10 @@ solution "LANDIS-II_core"
     location "src"
     kind "SharedLib"
     targetname "Landis.Core"
-    files { "src/*.cs" }
+    files {
+      "SharedAssemblyInfo.cs",
+      "src/*.cs"
+    }
     links {
       "System",
       "System.Core",
@@ -69,7 +72,10 @@ solution "LANDIS-II_core"
     location "src/Implementation"
     kind "SharedLib"
     targetname "Landis.Core.Implementation"
-    files { "src/Implementation/**.cs" }
+    files {
+      "SharedAssemblyInfo.cs",
+      "src/Implementation/**.cs"
+    }
     links {
       "Landis_Core",
       "System",
