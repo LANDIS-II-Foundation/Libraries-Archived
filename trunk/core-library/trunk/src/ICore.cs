@@ -194,7 +194,7 @@ namespace Landis.Core
         /// Optional arguments for the message.
         /// </param>
          void Info(string message,
-                                params object[] mesgArgs);
+                   params object[] mesgArgs);
 
         //--------------------------------------------------------------
 
@@ -214,19 +214,12 @@ namespace Landis.Core
 
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// Opens a text file for reading.
-        /// </summary>
-        /// <remarks>
-        /// The file is configured so that blank lines and comment lines are
-        /// skipped, and end-of-line comments are trimmed.  The marker for
-        /// comment lines is ">" while the marker for end-of-line comments is
-        /// "&lt;&lt;".
-        /// </remarks>
+        [System.Obsolete("Use Landis.Data.OpenTextFile(...) instead")]
         FileLineReader OpenTextFile(string path);
 
         //---------------------------------------------------------------------
 
+        [System.Obsolete("Use Landis.Data.Load<T>(...) instead")]
         T Load<T>(string path, ITextParser<T> parser);
 
         //---------------------------------------------------------------------
@@ -235,6 +228,7 @@ namespace Landis.Core
 
         //---------------------------------------------------------------------
 
+        [System.Obsolete("Use Landis.Data.CreateTextFile(...) instead")]
         StreamWriter CreateTextFile(string path);
 
         //---------------------------------------------------------------------

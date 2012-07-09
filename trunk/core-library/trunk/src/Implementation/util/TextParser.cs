@@ -25,7 +25,7 @@ namespace Landis
         /// </summary>
         protected void ReadLandisDataVar()
         {
-            InputVar<string> landisData = new InputVar<string>(Model.InputVarName);
+            InputVar<string> landisData = new InputVar<string>(Landis.Data.InputVarName);
             ReadVar(landisData);
             if (landisData.Value.Actual != LandisDataValue)
                 throw new InputValueException(landisData.Value.String,

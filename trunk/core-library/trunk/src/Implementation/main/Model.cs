@@ -66,22 +66,6 @@ namespace Landis
 
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// The name of the InputVariable that appears first in Landis text
-        /// input.
-        /// </summary>
-        public const string InputVarName = "LandisData";
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// The filename extension for files with serialized Landis data
-        /// objects.
-        /// </summary>
-        public const string FileExtension = "landis";
-
-        //---------------------------------------------------------------------
-
         private static ILog logger= LogManager.GetLogger("Landis");
 
         private static IUserInterface log;//move to ICore
@@ -624,122 +608,29 @@ namespace Landis
             }
         }
 
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// The markers for comments in Landis text data.
-        /// </summary>
-        public static class CommentMarkers
-        {
-            /// <summary>
-            /// The marker for comment lines.
-            /// </summary>
-            public const string Line = ">>";
-
-            /// <summary>
-            /// The marker for end-of-line comments.
-            /// </summary>
-            public const string EndOfLine = "<<";
-        }
-
         //-----------------------------------------------------------------------
 
+        // Flagged in ICore as deprecated; client code instructed to use Landis.Data directly
         public FileLineReader OpenTextFile(string path)
         {
-            Require.ArgumentNotNull(path);
-            try
-            {
-                FileLineReader reader = new FileLineReader(path);
-                reader.SkipBlankLines = true;
-
-                reader.SkipCommentLines = true;
-                reader.CommentLineMarker = CommentMarkers.Line;
-
-                reader.TrimEndComments = true;
-                reader.EndCommentMarker = CommentMarkers.EndOfLine;
-
-                return reader;
-            }
-            catch (FileNotFoundException)
-            {
-                string mesg = string.Format("Error: The file {0} does not exist", path);
-                throw new System.ApplicationException(mesg);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                string mesg = string.Format("Error: The directory does not exist");
-                throw new System.ApplicationException(mesg);
-            }
+            return Landis.Data.OpenTextFile(path);
         }
 
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// Loads an instance of T from a file.  The file may contain a
-        /// serialized form of an editable instance or it may be a text file
-        /// that needs parsing.
-        /// </summary>
+        // Flagged in ICore as deprecated; client code instructed to use Landis.Data directly
         public T Load<T>(string path,
                                 ITextParser<T> parser)
         {
-            if (Path.GetExtension(path) == FileExtension)
-            {
-                //  Deserialize an editable instance from the file
-                //  Binary serialization:
-                IFormatter formatter = new BinaryFormatter();
-                Stream stream = new FileStream(path, FileMode.Open,
-                                               FileAccess.Read, FileShare.Read);
-                using (stream)
-                {
-                    IEditable<T> editableObject = (IEditable<T>)formatter.Deserialize(stream);
-                    if (!editableObject.IsComplete)
-                        throw new System.ApplicationException("Not complete T");
-                    return editableObject.GetComplete();
-                }
-            }
-            else
-            {
-                LineReader reader = this.OpenTextFile(path);
-                try
-                {
-                    return parser.Parse(reader);
-                }
-                finally
-                {
-                    reader.Close();
-                }
-            }
+            return Landis.Data.Load<T>(path, parser);
         }
 
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// Creates a new text file for writing.
-        /// </summary>
-        /// <param name="path">
-        /// Path of the text file.
-        /// </param>
-        /// <remarks>
-        /// If the path contains any directories that does not exists, they
-        /// are created.
-        ///
-        /// If the file already exists, its current contents are overwritten.
-        /// </remarks>
-
+        // Flagged in ICore as deprecated; client code instructed to use Landis.Data directly
         public StreamWriter CreateTextFile(string path)
         {
-            Require.ArgumentNotNull(path);
-            path = path.Trim(null);
-            if (path.Length == 0)
-                throw new ArgumentException("path is empty or just whitespace");
-
-            string dir = Path.GetDirectoryName(path);
-            if (!string.IsNullOrEmpty(dir))
-            {
-                Flel.Util.Directory.EnsureExists(dir);
-            }
-
-            return new StreamWriter(path);
+            return Landis.Data.CreateTextFile(path);
         }
 
 
