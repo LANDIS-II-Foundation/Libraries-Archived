@@ -1,27 +1,23 @@
+using Landis.Core;
 using Landis.Ecoregions;
-
-using Pixel = Landis.Ecoregions.Pixel;
-
+using Landis.SpatialModeling;
 using System;
 using System.Collections.Generic;
-
-using Wisc.Flel.GeospatialModeling.Grids;
-using Wisc.Flel.GeospatialModeling.RasterIO;
 
 namespace Landis.Test.Ecoregions
 {
     /// <summary>
-    /// A raster-driver manager that handles just array-backed input rasters
+    /// A mock raster factory that handles just array-backed input rasters
     /// of ecoregion pixels.
     /// </summary>
-    public class RasterDriverManager
-        : IDriverManager
+    public class RasterFactory
+        : IRasterFactory
     {
         private Dictionary<string, object> dataArrays;
 
         //---------------------------------------------------------------------
 
-        public RasterDriverManager()
+        public RasterFactory()
         {
             this.dataArrays = new Dictionary<string, object>();
         }
@@ -45,17 +41,16 @@ namespace Landis.Test.Ecoregions
         //---------------------------------------------------------------------
 
         public IInputRaster<TPixel> OpenRaster<TPixel>(string path)
-            where TPixel : IPixel, new()
+            where TPixel : Pixel, new()
         {
-            if (typeof(TPixel) != typeof(Pixel))
-                throw new ApplicationException("Only valid pixel type is Landis.Ecoregions.Pixel");
+            if (typeof(TPixel) != typeof(EcoregionPixel))
+                throw new ApplicationException("Only valid pixel type is Landis.Ecoregions.EcoregionPixel");
 
             object data;
             if (! dataArrays.TryGetValue(path, out data))
                 throw new ApplicationException("Unknown path: " + path);
-            
-            ///byte[,] data = new byte[,]{ { 1, 2, 3}, {4, 5, 6} };
-            IInputRaster<Pixel> raster;
+
+            IInputRaster<EcoregionPixel> raster;
             if (data is byte[,])
                 raster = new InputRaster<byte>(path,
                                                (byte[,]) data,
@@ -70,9 +65,8 @@ namespace Landis.Test.Ecoregions
         //---------------------------------------------------------------------
 
         public IOutputRaster<TPixel> CreateRaster<TPixel>(string     path,
-                                                          Dimensions dimensions,
-                                                          IMetadata  metadata)
-            where TPixel : IPixel, new()
+                                                          Dimensions dimensions)
+            where TPixel : Pixel, new()
         {
             throw new NotSupportedException(GetType().FullName + " cannot write rasters");
         }

@@ -1,8 +1,9 @@
 using Edu.Wisc.Forest.Flel.Util;
+using Landis.Core;
 using Landis.Ecoregions;
+using Landis.SpatialModeling;
 using NUnit.Framework;
 using System.Collections.Generic;
-using Wisc.Flel.GeospatialModeling.Grids;
 
 namespace Landis.Test.Ecoregions
 {
@@ -10,7 +11,7 @@ namespace Landis.Test.Ecoregions
     public class Map_Test
     {
         private Dataset dataset;
-        private RasterDriverManager rasterDriverMgr;
+        private RasterFactory rasterFactory;
         private byte[,] ecoregions8Bit;
         private Dimensions dims8Bit;
         private const string path8Bit = "8-bit map";
@@ -23,7 +24,7 @@ namespace Landis.Test.Ecoregions
         [TestFixtureSetUp]
         public void Init()
         {
-            List<IParameters> ecoregionParms = new List<IParameters>();
+            List<IEcoregionParameters> ecoregionParms = new List<IEcoregionParameters>();
             ecoregionParms.Add(new Parameters("eco0", "Ecoregion A", 0, true));
             ecoregionParms.Add(new Parameters("eco11", "Ecoregion B", 11, false));
             ecoregionParms.Add(new Parameters("eco222", "Ecoregion C", 222, true));
@@ -31,7 +32,7 @@ namespace Landis.Test.Ecoregions
             ecoregionParms.Add(new Parameters("eco-65535", "Ecoregion E", 65535, true));
 
             dataset = new Dataset(ecoregionParms);
-            rasterDriverMgr = new RasterDriverManager();
+            rasterFactory = new RasterFactory();
 
             //  Initialize 8-bit ecoregion data
             ecoregions8Bit = new byte[,] {
@@ -44,7 +45,7 @@ namespace Landis.Test.Ecoregions
             };
             dims8Bit = new Dimensions(ecoregions8Bit.GetLength(0),
                                       ecoregions8Bit.GetLength(1));
-            rasterDriverMgr.SetData(path8Bit, ecoregions8Bit);
+            rasterFactory.SetData(path8Bit, ecoregions8Bit);
 
             //  Initialize 16-bit ecoregion data
             ecoregions16Bit = new ushort[,] {
@@ -58,7 +59,7 @@ namespace Landis.Test.Ecoregions
             };
             dims16Bit = new Dimensions(ecoregions16Bit.GetLength(0),
                                        ecoregions16Bit.GetLength(1));
-            rasterDriverMgr.SetData(path16Bit, ecoregions16Bit);
+            rasterFactory.SetData(path16Bit, ecoregions16Bit);
         }
 
         //---------------------------------------------------------------------
@@ -66,7 +67,7 @@ namespace Landis.Test.Ecoregions
         [Test]
         public void Map8Bit()
         {
-            Map map = new Map(path8Bit, dataset, rasterDriverMgr);
+            Map map = new Map(path8Bit, dataset, rasterFactory);
             using (IInputGrid<bool> inputGrid = map.OpenAsInputGrid()) {
                 Assert.AreEqual(dims8Bit.Rows, inputGrid.Dimensions.Rows);
                 Assert.AreEqual(dims8Bit.Columns, inputGrid.Dimensions.Columns);
@@ -85,7 +86,7 @@ namespace Landis.Test.Ecoregions
         [Test]
         public void Map16Bit()
         {
-            Map map = new Map(path16Bit, dataset, rasterDriverMgr);
+            Map map = new Map(path16Bit, dataset, rasterFactory);
             using (IInputGrid<bool> inputGrid = map.OpenAsInputGrid()) {
                 Assert.AreEqual(dims16Bit.Rows, inputGrid.Dimensions.Rows);
                 Assert.AreEqual(dims16Bit.Columns, inputGrid.Dimensions.Columns);

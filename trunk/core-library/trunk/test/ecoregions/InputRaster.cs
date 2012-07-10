@@ -44,7 +44,7 @@ namespace Landis.Test.Ecoregions
             //  location (1,1).
             this.currentPixelLoc = new Location(1, 0);
 
-            this.pixel = new Pixel();
+            this.pixel = new EcoregionPixel();
             this.convertToUShort = convertToUShort;
         }
 
