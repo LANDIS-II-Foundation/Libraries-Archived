@@ -1,3 +1,4 @@
+using Landis.Core;
 using Landis.Ecoregions;
 using Edu.Wisc.Forest.Flel.Util;
 using NUnit.Framework;
@@ -8,7 +9,7 @@ namespace Landis.Test.Ecoregions
     [TestFixture]
     public class Dataset_Test
     {
-        private List<IParameters> ecoregionParms;
+        private List<IEcoregionParameters> ecoregionParms;
         private Dataset dataset;
 
         //---------------------------------------------------------------------
@@ -16,7 +17,7 @@ namespace Landis.Test.Ecoregions
         [TestFixtureSetUp]
         public void Init()
         {
-            ecoregionParms = new List<IParameters>();
+            ecoregionParms = new List<IEcoregionParameters>();
             ecoregionParms.Add(new Parameters("eco1", "Ecoregion 1", 3,     true));
             ecoregionParms.Add(new Parameters("eco2", "Ecoregion 2", 22222, false));
             ecoregionParms.Add(new Parameters("eco9", "Ecoregion 9", 9,     true));
@@ -29,7 +30,7 @@ namespace Landis.Test.Ecoregions
         [Test]
         public void EmptyDataset()
         {
-            Dataset emptyDataset = new Dataset(new List<IParameters>());
+            Dataset emptyDataset = new Dataset(new List<IEcoregionParameters>());
             Assert.AreEqual(0, emptyDataset.Count);
         }
 
@@ -49,7 +50,7 @@ namespace Landis.Test.Ecoregions
             Assert.IsNotNull(ecoregion);
             Assert.AreEqual(expectedIndex, ecoregion.Index);
 
-            IParameters expectedParms = ecoregionParms[expectedIndex];
+            IEcoregionParameters expectedParms = ecoregionParms[expectedIndex];
             Assert.AreEqual(expectedParms.Name, ecoregion.Name);
             Assert.AreEqual(expectedParms.Description, ecoregion.Description);
             Assert.AreEqual(expectedParms.MapCode, ecoregion.MapCode);

@@ -1,3 +1,4 @@
+using Landis.Core;
 using Landis.Ecoregions;
 using Edu.Wisc.Forest.Flel.Util;
 using NUnit.Framework;
@@ -35,7 +36,7 @@ namespace Landis.Test.Ecoregions
         {
             try {
                 reader = OpenFile(filename);
-                IDataset dataset = parser.Parse(reader);
+                IEcoregionDataset dataset = parser.Parse(reader);
             }
             catch (System.Exception e) {
                 Data.Output.WriteLine(e.Message.Replace(Data.Directory, Data.DirPlaceholder));
@@ -97,10 +98,10 @@ namespace Landis.Test.Ecoregions
 
         //---------------------------------------------------------------------
 
-        private IDataset ParseFile(string filename)
+        private IEcoregionDataset ParseFile(string filename)
         {
             reader = OpenFile(filename);
-            IDataset dataset = parser.Parse(reader);
+            IEcoregionDataset dataset = parser.Parse(reader);
             reader.Close();
             return dataset;
         }
@@ -110,13 +111,13 @@ namespace Landis.Test.Ecoregions
         [Test]
         public void EmptyTable()
         {
-            IDataset dataset = ParseFile("EmptyTable.txt");
+            IEcoregionDataset dataset = ParseFile("EmptyTable.txt");
             Assert.AreEqual(0, dataset.Count);
         }
 
         //---------------------------------------------------------------------
 
-        private void CompareDatasetAndFile(IDataset dataset,
+        private void CompareDatasetAndFile(IEcoregionDataset dataset,
                                            string filename)
         {
             FileLineReader file = OpenFile(filename);
@@ -157,7 +158,7 @@ namespace Landis.Test.Ecoregions
         public void FullTable()
         {
             string filename = "FullTable.txt";
-            IDataset dataset = ParseFile(filename);
+            IEcoregionDataset dataset = ParseFile(filename);
             CompareDatasetAndFile(dataset, filename);
         }
 
