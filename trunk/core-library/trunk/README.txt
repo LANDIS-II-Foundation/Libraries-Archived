@@ -24,5 +24,25 @@ is needed because Premake 4.3 doesn't support VS2010 C# projects.
 
   premake4.4 vs2010
 
+If you going to Visual Studio/C# Express to build, you'll need to install
+the NUnit testing framework (http://www.nunit.org).  The unit tests require
+that framework.  Note that NUnit is included with SharpDevelop and
+MonoDevelop.
+
 After running Premake, open the LANDIS-II_core.sln solution file in an IDE
-(Visual Studio, MonoDevelop) and build the solution.
+(Visual Studio, Visual C# Express, SharpDevelop, MonoDevelop) and build the
+solution.
+
+The unit tests can be run within SharpDevelop and MonoDevelop.  To run the
+tests with Visual Studio, you'll need to install a third-party add-in such
+as:
+
+  Visual Nunit   -- https://sourceforge.net/projects/visualnunit/
+  TestDriven.Net -- http://www.testdriven.net/
+
+Note that Visual C# Express does not allow add-ins, so you will have to run
+the unit tests with NUnit's GUI.  Open the GUI, and then in the File menu,
+select "Open Project...".  Navigate to one of the configuration build
+directories (build/Debug, build/Release), and select one of the test
+assemblies (e.g., Landis.Tests.*.dll).  After NUnit loads the tests, click
+the "Run" button.
