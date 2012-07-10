@@ -36,9 +36,8 @@ namespace Landis.Test
         public static void InitializeDirectory(string moduleDirName)
         {
             Assembly testAssembly = Assembly.GetExecutingAssembly();
-            string testAssemblyPath = testAssembly.CodeBase;
-            if (testAssemblyPath.StartsWith("file:"))
-                testAssemblyPath = testAssemblyPath.Replace("file:", "");
+            System.Uri testAssemblyUri = new System.Uri(testAssembly.CodeBase);
+            string testAssemblyPath = testAssemblyUri.LocalPath;
  
             // Test assembly is located in SOLUTION_ROOT/build/CONFIG where
             // CONFIG is "Debug" or "Release".
