@@ -45,9 +45,9 @@ namespace Landis.Test.Species
 #pragma warning restore 0219
             }
             catch (System.Exception e) {
-                Data.Output.WriteLine();
                 Data.Output.WriteLine(e.Message.Replace(Data.Directory,
                                                         Data.DirPlaceholder));
+                Data.Output.WriteLine();
                 LineReaderException lrExc = e as LineReaderException;
                 if (lrExc != null)
                     Assert.AreEqual(errorLineNum, lrExc.LineNumber);

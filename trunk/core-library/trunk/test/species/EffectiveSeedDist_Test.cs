@@ -122,9 +122,9 @@ namespace Landis.Test.Species
                 inputVar.ReadValue(reader);
             }
             catch (InputVariableException exc) {
-                Data.Output.WriteLine();
                 Data.Output.WriteLine(exc.Message);
-                Assert.AreEqual((InputVariable) inputVar, exc.Variable);
+                Data.Output.WriteLine();
+                Assert.AreEqual((InputVariable)inputVar, exc.Variable);
                 throw;
             }
         }
