@@ -4,20 +4,20 @@ using NUnit.Framework;
 
 namespace Landis.Test.Species
 {
-	[TestFixture]
-	public class EffectiveSeedDist_Test
-	{
+    [TestFixture]
+    public class EffectiveSeedDist_Test
+    {
         InputVar<int> inputVar;
 
         //---------------------------------------------------------------------
 
-		[TestFixtureSetUp]
-		public void Init()
-		{
+        [TestFixtureSetUp]
+        public void Init()
+        {
             inputVar = new InputVar<int>("Effective Seed Dist", EffectiveSeedDist.ReadMethod);
-		}
+        }
 
-		//---------------------------------------------------------------------
+        //---------------------------------------------------------------------
 
         [Test]
         public void ReadMethod_JustDigits()
@@ -117,16 +117,16 @@ namespace Landis.Test.Species
 
         private void TryRead(string input)
         {
-        	try {
-	            StringReader reader = new StringReader(input);
-	            inputVar.ReadValue(reader);
-        	}
-        	catch (InputVariableException exc) {
-				Data.Output.WriteLine();
-				Data.Output.WriteLine(exc.Message);
-				Assert.AreEqual((InputVariable) inputVar, exc.Variable);
-				throw;
-        	}
+            try {
+                StringReader reader = new StringReader(input);
+                inputVar.ReadValue(reader);
+            }
+            catch (InputVariableException exc) {
+                Data.Output.WriteLine();
+                Data.Output.WriteLine(exc.Message);
+                Assert.AreEqual((InputVariable) inputVar, exc.Variable);
+                throw;
+            }
         }
 
         //---------------------------------------------------------------------
@@ -135,7 +135,7 @@ namespace Landis.Test.Species
         [ExpectedException(typeof(InputVariableException))]
         public void ReadMethod_Bad()
         {
-        	TryRead(" \t 2+2 \n ");
+            TryRead(" \t 2+2 \n ");
         }
 
         //---------------------------------------------------------------------
@@ -144,7 +144,7 @@ namespace Landis.Test.Species
         [ExpectedException(typeof(InputVariableException))]
         public void ReadMethod_TooLarge()
         {
-        	TryRead(" \t 9,999,999,999 \n ");
+            TryRead(" \t 9,999,999,999 \n ");
         }
-	}
+    }
 }
