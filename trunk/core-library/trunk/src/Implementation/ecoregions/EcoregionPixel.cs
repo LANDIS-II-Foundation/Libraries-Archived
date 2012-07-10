@@ -1,6 +1,6 @@
 using Landis.SpatialModeling;
 
-namespace Landis.Core
+namespace Landis.Ecoregions
 {
     public class EcoregionPixel : Pixel
     {

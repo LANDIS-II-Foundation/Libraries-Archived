@@ -1,6 +1,5 @@
-
-using Landis.SpatialModeling;
 using Landis.Core;
+using Landis.SpatialModeling;
 using System;
 
 namespace Landis.Ecoregions
