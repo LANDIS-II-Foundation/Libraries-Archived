@@ -11,24 +11,20 @@ namespace Landis.Test.Ecoregions
 		private LineReader reader;
 		private StringReader currentLine;
 
-		private const string dataDirPlaceholder = "{data folder}";
-
 		//---------------------------------------------------------------------
 
 		[TestFixtureSetUp]
 		public void Init()
 		{
+			Data.InitializeDirectory("ecoregions");
 			parser = new DatasetParser();
-
-			Data.Output.WriteLine("{0} = \"{1}\"", dataDirPlaceholder, Data.Directory);
-			Data.Output.WriteLine();
 		}
 
 		//---------------------------------------------------------------------
 
 		private FileLineReader OpenFile(string filename)
 		{
-			string path = System.IO.Path.Combine(Data.Directory, filename);
+			string path = Data.MakeInputPath(filename);
 			return Landis.Data.OpenTextFile(path);
 		}
 
@@ -42,7 +38,7 @@ namespace Landis.Test.Ecoregions
 				IDataset dataset = parser.Parse(reader);
 			}
 			catch (System.Exception e) {
-				Data.Output.WriteLine(e.Message.Replace(Data.Directory, dataDirPlaceholder));
+				Data.Output.WriteLine(e.Message.Replace(Data.Directory, Data.DirPlaceholder));
 				LineReaderException lrExc = e as LineReaderException;
 				if (lrExc != null)
 					Assert.AreEqual(errorLineNum, lrExc.LineNumber);
