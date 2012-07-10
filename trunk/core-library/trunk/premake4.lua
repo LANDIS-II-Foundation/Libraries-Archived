@@ -2,6 +2,7 @@ thirdPartyDir = "third-party"
 thirdPartyLibs = {
   FLEL       = thirdPartyDir .. "/FLEL/util/bin/Edu.Wisc.Forest.Flel.Util.dll",
   LSML       = thirdPartyDir .. "/LSML/Landis.SpatialModeling.dll",
+  RasterIO   = thirdPartyDir .. "/LSML/Landis.RasterIO.dll",
   log4net    = thirdPartyDir .. "/log4net/bin/log4net.dll",
   Troschuetz = thirdPartyDir .. "/Troschuetz/Troschuetz.Random.dll"
 }
@@ -103,6 +104,27 @@ solution "LANDIS-II_core"
       "System",
       "System.Core",
       thirdPartyLibs["FLEL"]
+    }
+
+  -- Unit tests for Ecoregions module
+  project "Landis_Ecoregions_Tests"
+    location "test/ecoregions"
+    kind "SharedLib"
+    targetname "Landis.Ecoregions.Tests"
+    files {
+      "SharedAssemblyInfo.cs",
+      "test/Data.cs",
+      "test/ecoregions/**.cs"
+    }
+    links {
+      "Landis_Core",
+      "Landis_Core_Implementation",
+      "nunit.framework",
+      "System",
+      "System.Core",
+      thirdPartyLibs["FLEL"],
+      thirdPartyLibs["LSML"],
+      thirdPartyLibs["RasterIO"]
     }
 
 -- ==========================================================================
