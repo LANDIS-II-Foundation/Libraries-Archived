@@ -1,7 +1,6 @@
+using Landis.Core;
 using Landis.Ecoregions;
-
-using Wisc.Flel.GeospatialModeling.Grids;
-using RasterIO = Wisc.Flel.GeospatialModeling.RasterIO;
+using Landis.SpatialModeling;
 
 namespace Landis.Test.Ecoregions
 {
@@ -9,15 +8,24 @@ namespace Landis.Test.Ecoregions
     /// An array-backed input raster of ecoregion pixels.
     /// </summary>
     public class InputRaster<TValue>
-        : RasterIO.InputRaster,
-          RasterIO.IInputRaster<Pixel>
+        : Landis.RasterIO.InputRaster,
+          IInputRaster<EcoregionPixel>
         where TValue : struct
     {
         private TValue[,] data;
         private Location currentPixelLoc;
-        private Pixel pixel;
+        private EcoregionPixel pixel;
         public delegate ushort ConvertToUShort<T>(T value);
         private ConvertToUShort<TValue> convertToUShort;
+
+        //---------------------------------------------------------------------
+
+        public EcoregionPixel BufferPixel
+        {
+            get {
+                return pixel;
+            }
+        }
 
         //---------------------------------------------------------------------
 
@@ -42,13 +50,12 @@ namespace Landis.Test.Ecoregions
 
         //---------------------------------------------------------------------
 
-        public Pixel ReadPixel()
+        public void ReadBufferPixel()
         {
             IncrementPixelsRead();
             currentPixelLoc = RowMajor.Next(currentPixelLoc, Dimensions.Columns);
-            pixel.Band0 = convertToUShort(data[currentPixelLoc.Row - 1,
-                                               currentPixelLoc.Column - 1]);
-            return pixel;
+            pixel.MapCode.Value = convertToUShort(data[currentPixelLoc.Row - 1,
+                                                       currentPixelLoc.Column - 1]);
         }
     }
 }
