@@ -35,7 +35,13 @@ namespace Landis.Test.Species
         {
             try {
                 reader = OpenFile(filename);
+                // This method is only called on bad files, so we expect the
+                // statement below to throw an exception.  Since we knowingly
+                // ignore the variable "dataset", disable the CS0219 warning
+                // "The variable '...' is assigned but its value is never used'.
+#pragma warning disable 0219
                 ISpeciesDataset dataset = parser.Parse(reader);
+#pragma warning restore 0219
             }
             catch (System.Exception e) {
                 Data.Output.WriteLine();
