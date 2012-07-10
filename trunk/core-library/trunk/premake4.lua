@@ -86,6 +86,26 @@ solution "LANDIS-II_core"
       thirdPartyLibs["Troschuetz"]
     }
 
+  -- Unit tests for Species module
+  project "Landis_Species_Tests"
+    location "test/species"
+    kind "SharedLib"
+    targetname "Landis.Species.Tests"
+    files {
+      "SharedAssemblyInfo.cs",
+      "test/NUnitInfo.cs",
+      "test/species/**.cs"
+    }
+    links {
+      "Landis_Core",
+      "Landis_Core_Implementation",
+      "nunit.framework",
+      "System",
+      "System.Configuration",
+      "System.Core",
+      thirdPartyLibs["FLEL"]
+    }
+
 -- ==========================================================================
 
 -- Hook in a custom function "postActionExecute" so that it's called *after*
