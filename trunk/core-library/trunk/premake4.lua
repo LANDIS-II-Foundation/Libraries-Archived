@@ -93,7 +93,7 @@ solution "LANDIS-II_core"
     targetname "Landis.Species.Tests"
     files {
       "SharedAssemblyInfo.cs",
-      "test/NUnitInfo.cs",
+      "test/Data.cs",
       "test/species/**.cs"
     }
     links {
@@ -101,7 +101,6 @@ solution "LANDIS-II_core"
       "Landis_Core_Implementation",
       "nunit.framework",
       "System",
-      "System.Configuration",
       "System.Core",
       thirdPartyLibs["FLEL"]
     }
