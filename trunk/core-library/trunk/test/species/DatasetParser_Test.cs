@@ -1,3 +1,4 @@
+using Landis.Core;
 using Landis.Species;
 using Edu.Wisc.Forest.Flel.Util;
 using NUnit.Framework;
@@ -34,7 +35,7 @@ namespace Landis.Test.Species
         {
             try {
                 reader = OpenFile(filename);
-                IDataset dataset = parser.Parse(reader);
+                ISpeciesDataset dataset = parser.Parse(reader);
             }
             catch (System.Exception e) {
                 Data.Output.WriteLine();
@@ -97,10 +98,10 @@ namespace Landis.Test.Species
 
         //---------------------------------------------------------------------
 
-        private IDataset ParseFile(string filename)
+        private ISpeciesDataset ParseFile(string filename)
         {
             reader = OpenFile(filename);
-            IDataset dataset = parser.Parse(reader);
+            ISpeciesDataset dataset = parser.Parse(reader);
             reader.Close();
             return dataset;
         }
@@ -110,13 +111,13 @@ namespace Landis.Test.Species
         [Test]
         public void EmptyTable()
         {
-            IDataset dataset = ParseFile("EmptyTable.txt");
+            ISpeciesDataset dataset = ParseFile("EmptyTable.txt");
             Assert.AreEqual(0, dataset.Count);
         }
 
         //---------------------------------------------------------------------
 
-        private void CompareDatasetAndFile(IDataset dataset,
+        private void CompareDatasetAndFile(ISpeciesDataset dataset,
                                            string filename)
         {
             FileLineReader file = OpenFile(filename);
@@ -172,7 +173,7 @@ namespace Landis.Test.Species
         public void FullTable()
         {
             string filename = "FullTable.txt";
-            IDataset dataset = ParseFile(filename);
+            ISpeciesDataset dataset = ParseFile(filename);
             CompareDatasetAndFile(dataset, filename);
         }
 
