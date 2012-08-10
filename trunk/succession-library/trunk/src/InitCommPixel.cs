@@ -5,11 +5,11 @@ using Landis.SpatialModeling;
 
 namespace Landis.Library.Succession
 {
-    public class UIntPixel : Pixel
+    public class uintPixel : Pixel
     {
         public Band<uint> MapCode  = "The numeric code for each initial community";
 
-        public UIntPixel() 
+        public uintPixel() 
         {
             SetBands(MapCode);
         }

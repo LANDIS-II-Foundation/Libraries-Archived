@@ -37,11 +37,11 @@ namespace Landis.Library.InitialCommunities
             
             Dataset dataset = new Dataset();
 
-            InputVar<ushort> mapCode = new InputVar<ushort>("MapCode");
+            InputVar<uint> mapCode = new InputVar<uint>("MapCode");
             InputVar<string> speciesName = new InputVar<string>("Species");
             InputVar<ushort> age = new InputVar<ushort>("Age");
 
-            Dictionary <ushort, int> mapCodeLineNumbers = new Dictionary<ushort, int>();
+            Dictionary <uint, int> mapCodeLineNumbers = new Dictionary<uint, int>();
 
             while (! AtEndOfInput) {
                 //  Read initial community
