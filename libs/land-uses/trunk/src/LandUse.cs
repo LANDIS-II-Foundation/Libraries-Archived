@@ -44,5 +44,17 @@ namespace Landis.Library.LandUses
             // Initialize all the actives to the first land-use in table.
             SiteVar.ActiveSiteValues = landUses[0];
         }
+
+        public static LandUse LookupName(string name)
+        {
+            if (name == null)
+                return null;
+            foreach (LandUse landUse in landUses)
+            {
+                if (landUse.Name == name)
+                    return landUse;
+            }
+            return null;
+        }
     }
 }
