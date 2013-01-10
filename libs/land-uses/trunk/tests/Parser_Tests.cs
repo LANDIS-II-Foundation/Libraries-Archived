@@ -102,13 +102,13 @@ namespace Landis.Library.LandUses.UnitTests
         }
 
         //---------------------------------------------------------------------
-/*
-        private IEcoregionDataset ParseFile(string filename)
+
+        private IList<LandUse> ParseFile(string filename)
         {
             reader = OpenFile(filename);
-            IEcoregionDataset dataset = parser.Parse(reader);
+            IList<LandUse> landUses = parser.Parse(reader);
             reader.Close();
-            return dataset;
+            return landUses;
         }
 
         //---------------------------------------------------------------------
@@ -116,12 +116,12 @@ namespace Landis.Library.LandUses.UnitTests
         [Test]
         public void EmptyTable()
         {
-            IEcoregionDataset dataset = ParseFile("EmptyTable.txt");
-            Assert.AreEqual(0, dataset.Count);
+            IList<LandUse> landUses = ParseFile("EmptyTable.txt");
+            Assert.AreEqual(0, landUses.Count);
         }
 
         //---------------------------------------------------------------------
-
+/*
         private void CompareDatasetAndFile(IEcoregionDataset dataset,
                                            string filename)
         {

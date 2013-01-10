@@ -1,0 +1,8 @@
+>> Example of good input file for land uses
+
+LandisData  "Land Uses"
+
+>> Land use              Harvest allowed?
+>> --------              ----------------
+
+>> No land uses defined
