@@ -66,7 +66,7 @@ namespace Landis.Library.LandUses.UnitTests
         }
 
         //---------------------------------------------------------------------
-/*
+
         [Test]
         [ExpectedException(typeof(LineReaderException))]
         public void LandisData_WrongName()
@@ -102,7 +102,7 @@ namespace Landis.Library.LandUses.UnitTests
         }
 
         //---------------------------------------------------------------------
-
+/*
         private IEcoregionDataset ParseFile(string filename)
         {
             reader = OpenFile(filename);

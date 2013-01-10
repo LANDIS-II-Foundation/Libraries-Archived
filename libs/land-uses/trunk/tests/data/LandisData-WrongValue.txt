@@ -1,0 +1,3 @@
+>> Example of bad input file for land uses
+
+LandisData  Ecoregions  << Wrong value; should be "Land Uses"

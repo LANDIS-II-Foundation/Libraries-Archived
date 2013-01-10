@@ -1,0 +1,3 @@
+>> Example of bad input file
+
+LandisData    << Missing value after name
