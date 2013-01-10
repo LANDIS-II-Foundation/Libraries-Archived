@@ -1,5 +1,4 @@
 using System.IO;
-using System.Reflection;
 
 namespace Landis.Library.LandUses.UnitTests
 {
@@ -24,29 +23,9 @@ namespace Landis.Library.LandUses.UnitTests
         /// <summary>
         /// Initialize the path to the directory with the test data.
         /// </summary>
-        /// <remarks>
-        /// The test data reside in a subdirectory relative to the solution's
-        /// root.  This method determines the absolute path to the directory
-        /// with the test data, stores it, and prints it to Output showing
-        /// what the DataDirPlaceholder represents.
-        /// </remarks>
-        /// <param name='dataRelPath'>
-        /// The relative path to the data directory from the solution's root
-        /// directory.
-        /// </param>
-        public static void InitializeDirectory(string dataRelPath)
+        static Data()
         {
-            Assembly testAssembly = Assembly.GetExecutingAssembly();
-            System.Uri testAssemblyUri = new System.Uri(testAssembly.CodeBase);
-            string testAssemblyPath = testAssemblyUri.LocalPath;
- 
-            // Test assembly is located in SOLUTION_ROOT/build/CONFIG where
-            // CONFIG is "Debug" or "Release".
-            string configDir = Path.GetDirectoryName(testAssemblyPath);
-            string buildDir = Path.GetDirectoryName(configDir);
-            string solutionRoot = Path.GetDirectoryName(buildDir);
- 
-            directory = Path.Combine(solutionRoot, dataRelPath);
+            directory = Path.Combine(ProjectInfo.Directory, "data");
 
             Output.WriteLine("{0} = \"{1}\"", DirPlaceholder, Directory);
             Output.WriteLine();
