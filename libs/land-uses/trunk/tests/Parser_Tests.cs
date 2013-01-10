@@ -37,10 +37,10 @@ namespace Landis.Library.LandUses.UnitTests
                 reader = OpenFile(filename);
                 // This method is only called on bad files, so we expect the
                 // statement below to throw an exception.  Since we knowingly
-                // ignore the variable "dataset", disable the CS0219 warning
+                // ignore the variable "landUses", disable the CS0219 warning
                 // "The variable '...' is assigned but its value is never used'.
 #pragma warning disable 0219
-                IList<LandUse> dataset = parser.Parse(reader);
+                IList<LandUse> landUses = parser.Parse(reader);
 #pragma warning restore 0219
             }
             catch (System.Exception e) {
@@ -57,7 +57,7 @@ namespace Landis.Library.LandUses.UnitTests
         }
 
         //---------------------------------------------------------------------
-/*
+
         [Test]
         [ExpectedException(typeof(LineReaderException))]
         public void Empty()
@@ -66,7 +66,7 @@ namespace Landis.Library.LandUses.UnitTests
         }
 
         //---------------------------------------------------------------------
-
+/*
         [Test]
         [ExpectedException(typeof(LineReaderException))]
         public void LandisData_WrongName()
