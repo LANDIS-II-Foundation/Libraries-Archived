@@ -20,11 +20,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>C:\Program Files\LANDIS-II\v6\bin\extensions\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\</OutputPath>
+    <OutputPath>C:\Program Files\LANDIS-II\v6\bin\extensions\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\land-uses.csproj">
@@ -36,6 +36,17 @@
     <Compile Include="Data.cs" />
     <Compile Include="Parser_Tests.cs" />
     <Compile Include="ProjectInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Edu.Wisc.Forest.Flel.Util, Version=1.1.400.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Core, Version=6.0.4667.18567, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
