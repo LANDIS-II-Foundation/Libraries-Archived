@@ -1,14 +1,14 @@
 using Landis.Core;
-using Landis.Ecoregions;
 using Edu.Wisc.Forest.Flel.Util;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Landis.Library.LandUses.UnitTests
 {
     [TestFixture]
-    public class DatasetParser_Test
+    public class Parser_Tests
     {
-        private DatasetParser parser;
+        private Parser parser;
         private LineReader reader;
         private StringReader currentLine;
 
@@ -17,7 +17,7 @@ namespace Landis.Library.LandUses.UnitTests
         [TestFixtureSetUp]
         public void Init()
         {
-            parser = new DatasetParser();
+            parser = new Parser();
         }
 
         //---------------------------------------------------------------------
@@ -40,7 +40,7 @@ namespace Landis.Library.LandUses.UnitTests
                 // ignore the variable "dataset", disable the CS0219 warning
                 // "The variable '...' is assigned but its value is never used'.
 #pragma warning disable 0219
-                IEcoregionDataset dataset = parser.Parse(reader);
+                IList<LandUse> dataset = parser.Parse(reader);
 #pragma warning restore 0219
             }
             catch (System.Exception e) {
@@ -57,7 +57,7 @@ namespace Landis.Library.LandUses.UnitTests
         }
 
         //---------------------------------------------------------------------
-
+/*
         [Test]
         [ExpectedException(typeof(LineReaderException))]
         public void Empty()
@@ -274,5 +274,6 @@ namespace Landis.Library.LandUses.UnitTests
         {
             TryParse("ExtraText.txt", 12);
         }
+ */
     }
 }
