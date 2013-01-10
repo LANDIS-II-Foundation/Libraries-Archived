@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "land-uses", "src\land-uses.csproj", "{0BDFD74B-8B35-4449-8470-D6142F772C90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tests", "tests\tests.csproj", "{0B0BD38D-81CD-4BE8-AC6C-543AE6051755}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit-tests", "tests\unit-tests.csproj", "{0B0BD38D-81CD-4BE8-AC6C-543AE6051755}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

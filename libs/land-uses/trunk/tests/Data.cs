@@ -1,7 +1,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace Landis.Test
+namespace Landis.Library.LandUses.UnitTests
 {
     public static class Data
     {

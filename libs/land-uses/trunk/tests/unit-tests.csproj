@@ -8,8 +8,8 @@
     <ProjectGuid>{0B0BD38D-81CD-4BE8-AC6C-543AE6051755}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>tests</RootNamespace>
-    <AssemblyName>tests</AssemblyName>
+    <RootNamespace>Landis.Library.LandUses.UnitTests</RootNamespace>
+    <AssemblyName>Landis.Library.LandUses.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -34,7 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data.cs" />
-    <Compile Include="Parser_Test.cs" />
+    <Compile Include="Parser_Tests.cs" />
     <Compile Include="ProjectInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

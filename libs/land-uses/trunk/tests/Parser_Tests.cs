@@ -3,7 +3,7 @@ using Landis.Ecoregions;
 using Edu.Wisc.Forest.Flel.Util;
 using NUnit.Framework;
 
-namespace Landis.Test.Ecoregions
+namespace Landis.Library.LandUses.UnitTests
 {
     [TestFixture]
     public class DatasetParser_Test
