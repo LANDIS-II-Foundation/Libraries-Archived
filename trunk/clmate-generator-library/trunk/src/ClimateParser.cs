@@ -20,7 +20,13 @@ namespace Landis.Library.Climate
         //private IEcoregionDataset ecoregionDataset;
         
         //---------------------------------------------------------------------
-        public string LandisDataValue = "Climate Data";
+        public override string LandisDataValue
+        {
+            get
+            {
+                return "Climate Data";
+            }
+        }
         //---------------------------------------------------------------------
         public ClimateParser()
         {

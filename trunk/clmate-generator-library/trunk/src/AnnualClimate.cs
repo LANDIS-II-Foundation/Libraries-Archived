@@ -36,6 +36,14 @@ namespace Landis.Library.Climate
         public double AnnualAET;  // Actual Evapotranspiration
         public double Snow;
         public int Year;
+        public double stdDevTempGenerator;
+        public double stdDevPptGenerator;
+
+        public void AnnualClimateInitialize()
+        {
+            stdDevTempGenerator = (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+            stdDevPptGenerator = (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+        }
 
         //---------------------------------------------------------------------
 
@@ -56,12 +64,12 @@ namespace Landis.Library.Climate
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
 
-                double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+                double standardDeviation = ecoClimate[mo].StdDevTemp * stdDevTempGenerator;
 
                 this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
                 this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
                 this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp + standardDeviation;
-                this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform()*2.0 - 1.0)));
+                this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * stdDevPptGenerator));
                 this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
 
                 this.AnnualPrecip += this.MonthlyPrecip[mo];

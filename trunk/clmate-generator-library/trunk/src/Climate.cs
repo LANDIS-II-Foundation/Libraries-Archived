@@ -52,7 +52,7 @@ namespace Landis.Library.Climate
             {
                 for(int i = 0; i < 12; i++)
                 {
-                    ModelCore.Log.WriteLine("Eco={0}, Month={1}, AvgMinTemp={2:0.0}, AvgMaxTemp={3:0.0}, StdDevTemp={4:0.0}, AvgPpt={5:0.0}, StdDevPpt={6:0.0}.",
+                    ModelCore.UI.WriteLine("Eco={0}, Month={1}, AvgMinTemp={2:0.0}, AvgMaxTemp={3:0.0}, StdDevTemp={4:0.0}, AvgPpt={5:0.0}, StdDevPpt={6:0.0}.",
                         ecoregion.Index, i+1, 
                         TimestepData[ecoregion.Index,i].AvgMinTemp,
                         TimestepData[ecoregion.Index,i].AvgMaxTemp,
@@ -68,9 +68,9 @@ namespace Landis.Library.Climate
         public static void Initialize(string filename, bool writeOutput, ICore mCore) 
         {
             modelCore = mCore;
-            ModelCore.Log.WriteLine("   Loading weather data from file \"{0}\" ...", filename);
+            ModelCore.UI.WriteLine("   Loading weather data from file \"{0}\" ...", filename);
             ClimateParser parser = new ClimateParser();
-            allData = ModelCore.Load<Dictionary<int, IClimateRecord[,]>>(filename, parser);
+            allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(filename, parser);
             modelCore = mCore;
             
             timestepData = allData[0];
