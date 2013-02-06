@@ -36,10 +36,10 @@ namespace Landis.Library.Climate
         public double AnnualAET;  // Actual Evapotranspiration
         public double Snow;
         public int Year;
-        public double stdDevTempGenerator;
-        public double stdDevPptGenerator;
+        public static double stdDevTempGenerator;
+        public static double stdDevPptGenerator;
 
-        public void AnnualClimateInitialize()
+        public static void AnnualClimateInitialize()
         {
             stdDevTempGenerator = (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
             stdDevPptGenerator = (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
