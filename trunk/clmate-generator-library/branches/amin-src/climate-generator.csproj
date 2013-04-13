@@ -60,6 +60,7 @@
     <Compile Include="ClimateParser.cs" />
     <Compile Include="ClimateRecord.cs" />
     <Compile Include="PDSI_Calculator.cs" />
+    <Compile Include="Period.cs" />
     <Compile Include="UnitSystem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

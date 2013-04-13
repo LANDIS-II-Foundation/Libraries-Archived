@@ -172,7 +172,6 @@ namespace Landis.Library.Climate
 
         // linked lists to store X values for backtracking when computing X
         public Dictionary<int, double[]> XDic = new Dictionary<int, double[]>();//final list of PDSI values
-        public Dictionary<int, string[]> XDicAveragePDSI = new Dictionary<int, string[]>();//final list of PDSI values
         public Dictionary<int, double[]> PDSI_Dic = new Dictionary<int, double[]>();//final list of PDSI values
         public LinkedList<double> Xlist = new LinkedList<double>();//final list of PDSI values
         LinkedList<double> altX1 = new LinkedList<double>();//list of X1 values
@@ -487,12 +486,18 @@ namespace Landis.Library.Climate
             LinkedListNode<double> node = Xlist.Last;
             int j = 0;
             int stYear = _AnnualClimates[0].Year;
-            string outputFilePathAnnualPDSI = @"AnnualPDSI.csv";
+            //string outputFilePathAnnualPDSI = @"AnnualPDSI.csv";
+            if(Climate.AnnualPDSI.Columns.Count == 0)
+            {
+                Climate.AnnualPDSI.Columns.Add("TimeStep", typeof(Int32));
+                Climate.AnnualPDSI.Columns.Add("Ecorigion", typeof(Int32));
+                Climate.AnnualPDSI.Columns.Add("AnnualPDSI", typeof(double));
+            }
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputFilePath, true))
             {
-                using (System.IO.StreamWriter f = new System.IO.StreamWriter(outputFilePathAnnualPDSI, true))
-                {
-                    f.WriteLine("Time-step, Ecoregion, AnnualPDSI");
+                //using (System.IO.StreamWriter f = new System.IO.StreamWriter(outputFilePathAnnualPDSI, true))
+                //{
+                    //f.WriteLine("Time-step, Ecoregion, AnnualPDSI");
 
                     file.WriteLine("Ecoregion, Time-step, Year, mo.1, mo.2, mo.3, mo.4, mo.5, mo.6, mo.7, mo.8, mo.9, mo.10, mo.11, mo.12,");
                     for (int i = 0; i < Xlist.Count(); i += 12)
@@ -516,8 +521,13 @@ namespace Landis.Library.Climate
                             {
 
                                 annualPDSI = annualPDSI / 12;
-                                annPDSI = "\r" + _AnnualClimates[j - 1].TimeStep + "," + _AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(annualPDSI, 2) + ",";
-                                f.WriteLine(annPDSI);
+                                System.Data.DataRow pRow = Climate.AnnualPDSI.NewRow();
+                                pRow["TimeStep"] = _AnnualClimates[j - 1].TimeStep;
+                                pRow["Ecorigion"] = _AnnualClimates[j - 1].Ecoregion.Name.Substring(3);
+                                pRow["AnnualPDSI"] =  Math.Round(annualPDSI, 2);
+                                Climate.AnnualPDSI.Rows.Add(pRow);
+                                //annPDSI = "\r" + _AnnualClimates[j - 1].TimeStep + "," + _AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(annualPDSI, 2) + ",";
+                                //f.WriteLine(annPDSI);
                                 //XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new string[2]{_AnnualClimates[j - 1].Ecoregion.Name, Math.Round(annualPDSI, 2).ToString()});
                                 //XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new {ecoregion = _AnnualClimates[j - 1].Ecoregion.Name, annPdsi = Math.Round(annualPDSI, 2)});
                                 annPDSI = "";
@@ -542,7 +552,7 @@ namespace Landis.Library.Climate
 
                         //}
                     }
-                }
+                //}
             }
 
 
