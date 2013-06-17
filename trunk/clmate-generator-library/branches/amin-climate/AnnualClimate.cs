@@ -101,6 +101,75 @@ namespace Landis.Library.Climate
 
 
         }
+        public AnnualClimate(IEcoregion ecoregion, NoClimateChangeMode mode, int year, double latitude)
+        {
+            if (mode == Landis.Library.Climate.NoClimateChangeMode.spinup_Average)
+            {
+               
+                //get average data and assign 
+                //Climate.TimestepData = Climate.AllData[];
+            }
+            else if (mode == Landis.Library.Climate.NoClimateChangeMode.spinup_Random)
+            {
+               // get randomly from all data
+                int rndIndex = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.AllData.Count-1));
+                Climate.TimestepData = Climate.AllData[rndIndex];
+                
+       
+            }
+            //TimeStep = timeStep;
+            //Climate.TimestepData = Climate.AllData[TimeStep];
+            ////Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
+            Ecoregion = ecoregion;
+            IClimateRecord[] ecoClimate = new IClimateRecord[12];
+
+            this.Year = year;
+            this.AnnualPrecip = 0.0;
+            this.AnnualN = 0.0;
+
+            for (int mo = 0; mo < 12; mo++)
+            {
+
+                ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
+                //ecoClimate[mo] = Climate.TimestepData[TimeStep, mo];
+
+                double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
+
+                double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+
+                this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
+                this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
+                this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp + standardDeviation;
+                this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+                this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
+
+                this.AnnualPrecip += this.MonthlyPrecip[mo];
+
+                if (this.MonthlyPrecip[mo] < 0)
+                    this.MonthlyPrecip[mo] = 0;
+
+                double hr = CalculateDayNightLength(mo, latitude);
+                this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+                this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+
+                //this.DOY[mo] = DayOfYear(mo);
+            }
+
+
+            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
+            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
+            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
+
+            this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+            this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
+
+            for (int mo = 5; mo < 8; mo++)
+                this.JJAtemperature += this.MonthlyTemp[mo];
+            this.JJAtemperature /= 3.0;
+
+
+        }
         public AnnualClimate(IEcoregion ecoregion, int year, double latitude)
         {
             //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
