@@ -33,10 +33,12 @@ namespace Landis.Library.Climate
 
             public const string LandisData = "LandisData";
             public const string ClimateConfigFile = "ClimateConfigFile";
-            public const string ClimateFileFormat = "ClimateFileFormat";
+            public const string ClimateTimeSeries = "ClimateTimeSeries";
             public const string ClimateFile = "ClimateFile";
-            public const string SpinUpClimateFileFormat = "SpinUpClimateFileFormat";
+            public const string ClimateFileFormat = "ClimateFileFormat";
+            public const string SpinUpClimateTimeSeries = "SpinUpClimateTimeSeries";
             public const string SpinUpClimateFile = "SpinUpClimateFile";
+            public const string SpinUpClimateFileFormat = "SpinUpClimateFileFormat";
 
 
         }
@@ -101,29 +103,41 @@ namespace Landis.Library.Climate
             //ReadVar(climateConfigFile);
             //parameters.ClimateConfigFile = climateConfigFile.Value;
 
-            InputVar<string> climateFileFormat = new InputVar<string>(Names.ClimateFileFormat);
-            ReadVar(climateFileFormat);
-            parameters.ClimateFileFormat = climateFileFormat.Value;
+            InputVar<string> climateTimeSeries = new InputVar<string>(Names.ClimateTimeSeries);
+            ReadVar(climateTimeSeries);
+            parameters.ClimateTimeSeries = climateTimeSeries.Value;
 
             InputVar<string> climateFile = new InputVar<string>(Names.ClimateFile);
             ReadVar(climateFile);
             parameters.ClimateFile = climateFile.Value;
 
-            InputVar<string> spinUpClimateFileFormat = new InputVar<string>(Names.SpinUpClimateFileFormat);
-            ReadVar(spinUpClimateFileFormat);
-            parameters.SpinUpClimateFileFormat = spinUpClimateFileFormat.Value;
+            InputVar<string> climateFileFormat = new InputVar<string>(Names.ClimateFileFormat);
+            ReadVar(climateFileFormat);
+            parameters.ClimateFileFormat = climateFileFormat.Value;
+
+
+            
+
+            InputVar<string> spinUpClimateTimeSeries = new InputVar<string>(Names.SpinUpClimateTimeSeries);
+            ReadVar(spinUpClimateTimeSeries);
+            parameters.SpinUpClimateTimeSeries = spinUpClimateTimeSeries.Value;
 
             InputVar<string> spinUpClimateFile = new InputVar<string>(Names.SpinUpClimateFile);
-            if (spinUpClimateFileFormat.Value != "no")
+            InputVar<string> spinUpClimateFileFormat = new InputVar<string>(Names.SpinUpClimateFileFormat);
+            if (spinUpClimateTimeSeries.Value != "no")
             {
                 ReadVar(spinUpClimateFile);
                 parameters.SpinUpClimateFile = spinUpClimateFile.Value;
+
+                ReadVar(spinUpClimateFileFormat);
+                parameters.SpinUpClimateFileFormat = spinUpClimateFileFormat.Value;
             }
             else
             {
                 GetNextLine();
+                GetNextLine();
             }
-
+            
             return parameters; //.GetComplete();
 
 

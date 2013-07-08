@@ -21,10 +21,12 @@ namespace Landis.Library.Climate
 //        private SeedingAlgorithms seedAlg;
 
         private string climateConfigFile;
+        private string climateTimeSeries;
         private string climateFileFormat;
         private string climateFile;
         private string spinUpClimateFileFormat;
         private string spinUpClimateFile;
+        private string spinUpClimateTimeSeries;
 
 
 
@@ -66,19 +68,19 @@ namespace Landis.Library.Climate
         /// </summary>
         /// 
 
-        public string ClimateFileFormat			
+        public string ClimateTimeSeries
         {
             get
             {
-                return climateFileFormat;
+                return climateTimeSeries;
             }
             set
             {
-                
-                climateFileFormat = value;
+
+                climateTimeSeries = value;
             }
         }
-        
+
         public string ClimateFile
         {
             get {
@@ -92,7 +94,33 @@ namespace Landis.Library.Climate
             }
         }
 
-        public string SpinUpClimateFileFormat  
+        public string ClimateFileFormat
+        {
+            get
+            {
+                return climateFileFormat;
+            }
+            set
+            {
+
+                climateFileFormat = value;
+            }
+        }
+
+        public string SpinUpClimateTimeSeries  
+        {
+            get
+            {
+                return spinUpClimateTimeSeries;
+            }
+            set
+            {
+
+                spinUpClimateTimeSeries = value;
+            }
+        }
+
+        public string SpinUpClimateFileFormat
         {
             get
             {

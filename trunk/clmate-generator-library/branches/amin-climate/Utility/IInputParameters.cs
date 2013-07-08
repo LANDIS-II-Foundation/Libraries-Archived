@@ -15,11 +15,12 @@ namespace Landis.Library.Climate
         //int Timestep{ get;set;}
         //string LandisDataValue { }
 
-        string ClimateFileFormat { get; set; }
+        string ClimateTimeSeries { get; set; }
         string ClimateFile { get; set; }
-        string SpinUpClimateFileFormat { get; set; }
+        string ClimateFileFormat { get; set; }
+        string SpinUpClimateTimeSeries { get; set; }
         string SpinUpClimateFile { get; set; }
-
+        string SpinUpClimateFileFormat { get; set; }
  
 
 

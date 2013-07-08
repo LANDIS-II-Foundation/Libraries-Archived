@@ -151,12 +151,12 @@ namespace Landis.Library.Climate
             //Climate.Convert_FileFormat(parameters.ClimateFileFormat, parameters.ClimateFile), Climate.Convert_FileFormat(parameters.SpinUpClimateFileFormat, parameters.SpinUpClimateFile)
             ClimateParser parser = new ClimateParser();
             ClimateParser spinup_parser = new ClimateParser();
-            string convertedClimateFileName = Climate.Convert_FileFormat(configParameters.ClimateFileFormat, configParameters.ClimateFile);
+            string convertedClimateFileName = Climate.Convert_FileFormat(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat);
             allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
             //modelCore = mCore;
             if (configParameters.SpinUpClimateFileFormat.ToLower() != "no")
             {
-                string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateFileFormat, configParameters.SpinUpClimateFile);
+                string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.ClimateFileFormat);
                 spinup_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
             // Have to ask
@@ -386,36 +386,36 @@ namespace Landis.Library.Climate
 
 
         /// <summary>
-        /// Converts USGS Data to Input climate Data 
+        /// Converts USGS Data to Standard Input climate Data 
         /// </summary>
         /// 
-        public static string Convert_FileFormat(String Format, string File)
+        public static string Convert_FileFormat(String timeSeries, string File, string fileFormat)
         {
             string readableFile = "";
-            if (Format.Contains("MonthlyStandard"))
+            if (timeSeries.Contains("MonthlyStandard"))
                 return File;
-            else if (Format.Contains("HistAverage"))//AverageMonthly
+            else if (timeSeries.Contains("HistAverage"))//AverageMonthly
             {
-                if (Format.Contains("Daily"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(Period.Daily, File);
-                else if(Format.Contains("Monthly"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(Period.Monthly, File);
+                if (timeSeries.Contains("Daily"))
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
+                else if(timeSeries.Contains("Monthly"))
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
 
             }
-            else if (Format.Contains("MonthlyAverage"))//AverageMonthly
+            else if (timeSeries.Contains("MonthlyAverage"))//AverageMonthly
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(Period.Monthly, File);
+                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
             }
-            else if (Format.Contains("HistRandom"))//AverageMonthly
+            else if (timeSeries.Contains("HistRandom"))//AverageMonthly
             {
-                if (Format.Contains("Daily"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(Period.Daily, File);
-                else if (Format.Contains("Monthly"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(Period.Monthly, File);
+                if (timeSeries.Contains("Daily"))
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
+                else if (timeSeries.Contains("Monthly"))
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
             }
-            else if (Format.Contains("DailyGCM"))
+            else if (timeSeries.Contains("DailyGCM"))
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(Period.Daily, File);
+                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
             }
             return readableFile;
 
