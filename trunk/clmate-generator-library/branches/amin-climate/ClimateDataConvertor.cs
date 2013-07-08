@@ -10,7 +10,7 @@ namespace Landis.Library.Climate
 {
     public class ClimateDataConvertor
     {
-
+ 
         private static string maxTriggerWord = "maxtemp";
         private static string minTriggerWord = "mintemp";
         private static string prcpTriggerWord = "ppt";
