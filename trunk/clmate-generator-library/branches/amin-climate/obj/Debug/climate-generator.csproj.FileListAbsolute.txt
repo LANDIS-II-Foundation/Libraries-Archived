@@ -7,11 +7,14 @@ D:\PSU\Landis_II\amin-branch\climate-generator\bin\Debug\Landis.SpatialModeling.
 D:\PSU\Landis_II\amin-branch\climate-generator\bin\Debug\Troschuetz.Random.dll
 D:\PSU\Landis_II\amin-branch\climate-generator\obj\Debug\Landis.Library.Climate.dll
 D:\PSU\Landis_II\amin-branch\climate-generator\obj\Debug\Landis.Library.Climate.pdb
-C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Climate.dll
-C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Climate.pdb
 D:\PSU\Landis_II\amin-branch\BDA_Climate_LatestCentury\climate-generator\obj\Debug\ResolveAssemblyReference.cache
 D:\PSU\Landis_II\amin-branch\BDA_Climate_LatestCentury\climate-generator\obj\Debug\Landis.Library.Climate.dll
 D:\PSU\Landis_II\amin-branch\BDA_Climate_LatestCentury\climate-generator\obj\Debug\Landis.Library.Climate.pdb
 E:\Landis_II\BDA_Climate_LatestCentury\climate-generator\obj\Debug\Landis.Library.Climate.dll
 E:\Landis_II\BDA_Climate_LatestCentury\climate-generator\obj\Debug\Landis.Library.Climate.pdb
 E:\Landis_II\BDA_Climate_LatestCentury\climate-generator\obj\Debug\climate-generator.csprojResolveAssemblyReference.cache
+C:\Users\amin2\Landis\BDA_Climate_LatestCentury\climate-generator\obj\Debug\climate-generator.csprojResolveAssemblyReference.cache
+C:\Users\amin2\Landis\BDA_Climate_LatestCentury\climate-generator\obj\Debug\Landis.Library.Climate.dll
+C:\Users\amin2\Landis\BDA_Climate_LatestCentury\climate-generator\obj\Debug\Landis.Library.Climate.pdb
+C:\Program Files\LANDIS-II\v6\bin\Landis.Library.Climate.dll
+C:\Program Files\LANDIS-II\v6\bin\Landis.Library.Climate.pdb

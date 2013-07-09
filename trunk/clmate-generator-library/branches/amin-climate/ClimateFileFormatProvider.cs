@@ -26,7 +26,7 @@ namespace Landis.Library.Climate
             this.timeStep = ((this.format == "PRISM") ? TimeStep.Monthly : TimeStep.Daily);
             switch (this.format.ToLower())
             {
-                case "gfdla_a1fi":
+                case "gfdl_a1fi":
                 {
                     this.maxTempTrigerWord = "maxtemp";
                     this.minTempTrigerWord = "mintemp";
@@ -36,11 +36,11 @@ namespace Landis.Library.Climate
                 case "prism":
                 {
                     this.maxTempTrigerWord = "maxtemp";
-                    this.minTempTrigerWord = "mintemp";
+                    this.minTempTrigerWord = "mintemp"; 
                     this.precipTrigerWord = "ppt";
                     break;
                 }
-                case "gridded_observ":
+                case "griddedobserv":
                 {
                     this.maxTempTrigerWord = "TMax";
                     this.minTempTrigerWord = "TMin";
@@ -50,7 +50,8 @@ namespace Landis.Library.Climate
                 default:
                 {
                     Climate.ModelCore.UI.WriteLine("Error in ClimateFileFormatProvider: the given \"{0}\" file format is not supported.", this.format);
-                    break;
+                    throw new ApplicationException("Error in ClimateFileFormatProvider: the given \"" + this.format + "\" file format is not supported.");
+                    //break;
                 }
             }
         }

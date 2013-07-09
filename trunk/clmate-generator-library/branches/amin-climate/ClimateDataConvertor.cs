@@ -542,6 +542,7 @@ namespace Landis.Library.Climate
             else if (timeStep == TimeStep.Monthly)
             {
 
+                unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;
 
                 //string path = @"D:\PSU\Landis_II\amin-branch\USGS_Data\Hayhoe_Climate_Data1.csv";
                 sreader = new StreamReader(path);
@@ -627,22 +628,36 @@ namespace Landis.Library.Climate
                     {
                         if (field.Contains("#"))
                         {
+                            
+                            triggerWordsCheckingTime++;
+                            if (triggerWordsCheckingTime > 1)
+                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord)
+                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}.", climateFile, unmatched_TriggerWords);
+                            throw new ApplicationException("Error in ClimateDataConvertor: Converting "+climateFile+" file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + ".");
+                    
+
                             //tempScenarioName = CurrentScenarioName;
                             if (field.ToLower().Contains(prcpTriggerWord.ToLower()))
                             {
                                 //CurrentScenarioName = field.Substring(1, 4);
                                 CurrentScenarioType = prcpTriggerWord;
-
+                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(prcpTriggerWord, "");
                             }
 
-                            else if (field.ToLower().Contains(maxTriggerWord.ToLower()) || field.ToLower().Contains(minTriggerWord.ToLower()))
-                            {
+                            //else if (field.ToLower().Contains(maxTriggerWord.ToLower()) || field.ToLower().Contains(minTriggerWord.ToLower()))
+                            //{
                                 //CurrentScenarioName = field.Substring(1, 4);
-                                if (field.ToLower().Contains(maxTriggerWord.ToLower()))
-                                    CurrentScenarioType = maxTriggerWord;
-                                if (field.ToLower().Contains(minTriggerWord.ToLower()))
-                                    CurrentScenarioType = minTriggerWord.ToLower();
+                            else if (field.ToLower().Contains(maxTriggerWord.ToLower()))
+                            {
+                                CurrentScenarioType = maxTriggerWord;
+                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(maxTriggerWord, "");
                             }
+                            else if (field.ToLower().Contains(minTriggerWord.ToLower()))
+                            {
+                                CurrentScenarioType = minTriggerWord.ToLower();
+                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(minTriggerWord, "");
+                            }
+                            //}
 
 
                             //if (tempScenarioName != CurrentScenarioName)// firstFlag == false)
@@ -1154,9 +1169,8 @@ namespace Landis.Library.Climate
                     }
                 }
 
-
-
-
+                if (unmatched_TriggerWords != "")
+                    Climate.ModelCore.UI.WriteLine("Error in converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}.", climateFile, unmatched_TriggerWords);
 
             }
 
