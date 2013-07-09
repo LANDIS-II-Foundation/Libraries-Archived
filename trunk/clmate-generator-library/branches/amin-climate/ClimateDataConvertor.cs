@@ -120,7 +120,10 @@ namespace Landis.Library.Climate
                             triggerWordsCheckingTime++;
                             if (triggerWordsCheckingTime > 1)
                                 if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord)
-                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}.", climateFile, unmatched_TriggerWords);
+                                {
+                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords,  formatProvider.SelectedFormat);
+                                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
+                                }
 
                             //tempScenarioName = CurrentScenarioName;
                             //if (field.ToLower().Contains(maxTriggerWord) || field.ToLower().Contains(minTriggerWord))
@@ -532,7 +535,10 @@ namespace Landis.Library.Climate
                     }
                 }
                 if (unmatched_TriggerWords != "")
-                    Climate.ModelCore.UI.WriteLine("Error in converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}.", climateFile, unmatched_TriggerWords);
+                {
+                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
+                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
+                }
 
             }
             #endregion
@@ -632,8 +638,10 @@ namespace Landis.Library.Climate
                             triggerWordsCheckingTime++;
                             if (triggerWordsCheckingTime > 1)
                                 if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord)
-                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}.", climateFile, unmatched_TriggerWords);
-                            throw new ApplicationException("Error in ClimateDataConvertor: Converting "+climateFile+" file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + ".");
+                                {
+                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
+                                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
+                                }
                     
 
                             //tempScenarioName = CurrentScenarioName;
@@ -641,7 +649,7 @@ namespace Landis.Library.Climate
                             {
                                 //CurrentScenarioName = field.Substring(1, 4);
                                 CurrentScenarioType = prcpTriggerWord;
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(prcpTriggerWord, "");
+                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(", " + prcpTriggerWord, "");
                             }
 
                             //else if (field.ToLower().Contains(maxTriggerWord.ToLower()) || field.ToLower().Contains(minTriggerWord.ToLower()))
@@ -655,7 +663,7 @@ namespace Landis.Library.Climate
                             else if (field.ToLower().Contains(minTriggerWord.ToLower()))
                             {
                                 CurrentScenarioType = minTriggerWord.ToLower();
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(minTriggerWord, "");
+                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(", " + minTriggerWord, "");
                             }
                             //}
 
@@ -1170,7 +1178,10 @@ namespace Landis.Library.Climate
                 }
 
                 if (unmatched_TriggerWords != "")
-                    Climate.ModelCore.UI.WriteLine("Error in converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}.", climateFile, unmatched_TriggerWords);
+                {
+                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
+                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
+                }
 
             }
 

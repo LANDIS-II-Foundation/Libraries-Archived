@@ -18,6 +18,7 @@ namespace Landis.Library.Climate
         public string MaxTempTrigerWord { get { return this.maxTempTrigerWord; } }
         public string MinTempTrigerWord { get { return this.minTempTrigerWord; } }
         public string PrecipTrigerWord { get { return this.precipTrigerWord; } }
+        public string SelectedFormat { get { return format; } }
   
         //------
         public ClimateFileFormatProvider(string format)

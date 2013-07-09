@@ -156,7 +156,8 @@ namespace Landis.Library.Climate
             //modelCore = mCore;
             if (configParameters.SpinUpClimateFileFormat.ToLower() != "no")
             {
-                string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.ClimateFileFormat);
+                ModelCore.Log.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
+                string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat);
                 spinup_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
             // Have to ask
