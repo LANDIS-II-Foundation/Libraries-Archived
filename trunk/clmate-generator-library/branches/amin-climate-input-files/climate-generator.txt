@@ -1,0 +1,50 @@
+LandisData "Climate Config"				
+		
+>>-----StandardMonthly------NoSpinup---------------TimeStep--------------------------------------------
+		
+>>ClimateTimeSeries			MonthlyStandard
+>>ClimateFile				"I:/Research/Samba/scheller_lab/Lucash/LANDIS_Input_Files/CNF_input_files-Plot_CN1-4haRes/ClimateInputs-FHEM.txt"
+>>ClimateFileFormat			GFDLA_A1fi
+
+>>SpinUpClimateTimeSeries 		no	
+>>SpinUpClimateFile			
+>>SpinUpClimateFileFormat		
+
+
+>>-----dailyclimate---------PRISM-------Avg-------------------------------------------
+
+>>ClimateTimeSeries			DailyHistAverage
+>>ClimateFile				GFDLA1fi_6.20.13.csv
+>>ClimateFileFormat			GFDLA_A1fi
+
+>>SpinUpClimateTimeSeries 		MonthlyAverage  <<MonthlyRandom>	
+>>SpinUpClimateFile			PRISM_data_AFRI_4.18.13.csv
+>>SpinUpClimateFileFormat		PRISM
+
+
+
+>>-----dailyclimate--------PRISM-------Random-------------------------------------------
+
+>>ClimateTimeSeries			DailyHistRandom
+>>ClimateFile				GFDLA1fi_6.20.13.csv
+>>ClimateFileFormat			GFDLA_A1fi
+
+>>SpinUpClimateTimeSeries 		MonthlyAverage <<MonthlyRandom>
+>>SpinUpClimateFile			PRISM_data_AFRI_4.18.13.csv
+>>SpinUpClimateFileFormat		PRISM
+
+
+
+
+>>-----GCM----------------PRISM--------TimeStep--------------------------------------------
+
+ClimateTimeSeries			DailyGCM
+ClimateFile				GFDLA1fi_6.20.13.csv
+ClimateFileFormat			gfdl_a1fi
+
+>>GFDLA1fi_6.20.13.csv		gfdl_a1fi
+>>Daily_Mauer_Baseline.csv 	GiddedObserv
+
+SpinUpClimateTimeSeries 		MonthlyAverage <<MonthlyRandom>
+SpinUpClimateFile			PRISM_data_AFRI_4.18.13.csv
+SpinUpClimateFileFormat			PRISM
