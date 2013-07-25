@@ -52,13 +52,13 @@ namespace Landis.Library.Succession
                 maxSeedDistance = Math.Max(maxSeedDistance, species.MaxSeedDist);
 
             double cellLength = (double) Model.Core.CellLength;
-            Model.Core.Log.WriteLine("   Creating Dispersal Neighborhood List.");
+            Model.Core.UI.WriteLine("   Creating Dispersal Neighborhood List.");
 
             List<RelativeLocationWeighted> neighborhood = new List<RelativeLocationWeighted>();
 
             double neighborRadius = maxSeedDistance + (cellLength / 2.0);
             int numCellRadius = (int) (neighborRadius / cellLength);
-            Model.Core.Log.WriteLine("   Dispersal:  NeighborRadius={0}, CellLength={1}, numCellRadius={2}",
+            Model.Core.UI.WriteLine("   Dispersal:  NeighborRadius={0}, CellLength={1}, numCellRadius={2}",
                         neighborRadius, cellLength, numCellRadius);
             double centroidDistance = 0.0;
 

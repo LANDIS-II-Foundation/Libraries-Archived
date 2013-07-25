@@ -14,7 +14,16 @@ namespace Landis.Library.InitialCommunities
         private int successionTimestep;
         private ISpeciesDataset speciesDataset;
 
-        private static readonly string name = "Initial Communities";
+        //private static readonly string name = "Initial Communities";
+
+        public override string LandisDataValue
+        {
+            get
+            {
+                return "Initial Communities";
+            }
+        }
+
 
 
         //---------------------------------------------------------------------
@@ -30,10 +39,11 @@ namespace Landis.Library.InitialCommunities
 
         protected override IDataset Parse()
         {
-            InputVar<string> landisData = new InputVar<string>("LandisData");
-            ReadVar(landisData);
-            if (landisData.Value.Actual != name)
-                throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", name);
+            //InputVar<string> landisData = new InputVar<string>("LandisData");
+            //ReadVar(landisData);
+            //if (landisData.Value.Actual != name)
+            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", name);
+            ReadLandisDataVar();
             
             Dataset dataset = new Dataset();
 

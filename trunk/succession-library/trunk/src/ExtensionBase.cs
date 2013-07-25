@@ -101,11 +101,11 @@ namespace Landis.Library.Succession
                                              string initialCommunitiesMap,
                                              ICore modelCore)
         {
-            Model.Core.Log.WriteLine("   Loading initial communities from file \"{0}\" ...", initialCommunities);
+            Model.Core.UI.WriteLine("   Loading initial communities from file \"{0}\" ...", initialCommunities);
             InitialCommunities.DatasetParser parser = new InitialCommunities.DatasetParser(Timestep, Model.Core.Species);
-            InitialCommunities.IDataset communities = modelCore.Load<InitialCommunities.IDataset>(initialCommunities, parser);
+            InitialCommunities.IDataset communities = Landis.Data.Load<InitialCommunities.IDataset>(initialCommunities, parser);
 
-            Model.Core.Log.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
+            Model.Core.UI.WriteLine("   Reading initial communities map \"{0}\" ...", initialCommunitiesMap);
             IInputRaster<uintPixel> map;
             map = Model.Core.OpenRaster<uintPixel>(initialCommunitiesMap);
             using (map)
@@ -127,7 +127,7 @@ namespace Landis.Library.Succession
                     ICommunity community = communities.Find(mapCode);
                     if (community == null)
                     {
-                        throw new ApplicationException("Unknown map code for initial community");
+                        throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
                     }
                     InitializeSite(activeSite, community);
                 }
@@ -207,7 +207,7 @@ namespace Landis.Library.Succession
             {
                 System.Console.WriteLine("Ageing cohorts ...");
                 prevSiteDataIndex = null;
-                progressBar = Model.Core.Log.CreateProgressMeter(Model.Core.Landscape.ActiveSiteCount); // NewProgressBar();
+                progressBar = Model.Core.UI.CreateProgressMeter(Model.Core.Landscape.ActiveSiteCount); // NewProgressBar();
             }
 
             foreach (ActiveSite site in sites)
@@ -260,7 +260,7 @@ namespace Landis.Library.Succession
             {
                 System.Console.WriteLine("Computing shade ...");
                 prevSiteDataIndex = null;
-                progressBar = Model.Core.Log.CreateProgressMeter(Model.Core.Landscape.ActiveSiteCount); //NewProgressBar();
+                progressBar = Model.Core.UI.CreateProgressMeter(Model.Core.Landscape.ActiveSiteCount); //NewProgressBar();
             }
 
             foreach (ActiveSite site in sites)
@@ -306,7 +306,7 @@ namespace Landis.Library.Succession
             {
                 System.Console.WriteLine("Cohort reproduction ...");
                 prevSiteDataIndex = null;
-                progressBar = Model.Core.Log.CreateProgressMeter(Model.Core.Landscape.ActiveSiteCount); // NewProgressBar();
+                progressBar = Model.Core.UI.CreateProgressMeter(Model.Core.Landscape.ActiveSiteCount); // NewProgressBar();
             }
 
             foreach (ActiveSite site in sites)
