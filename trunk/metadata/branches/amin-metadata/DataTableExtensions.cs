@@ -1,0 +1,291 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+//using System.Threading.Tasks;
+
+namespace Landis.Library.Metadata
+{
+    public static class DataTableExtensions //<T> where T : new()
+    {
+        
+        /// <summary>
+        /// Set DataFieldAttributes of the given Type to the columns of the DataTable.
+        /// This should be called befor adding data to the data table.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>ok
+        /// 
+        /// <param name="tbl"></param>
+        public static void SetColumns<T>(this DataTable tbl) where T : new()
+        { 
+            var dataObject = Activator.CreateInstance<T>();
+            var tpDataObject = dataObject.GetType();
+            tbl.Rows.Clear();
+            tbl.Columns.Clear();
+
+            foreach (var property in tpDataObject.GetProperties())
+            {
+                var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), true);
+                if (null != attributes && attributes.Length > 0)
+                {
+                    if (property.CanRead)
+                    {
+                        //object value = property.GetValue(dataObject, null);
+                        tbl.Columns.Add(property.Name, property.PropertyType);
+                        //fieldMetadatas.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc });
+                        //dataRow[clm] = value;
+                    }
+                }
+            }
+        }
+
+        //------
+        public static T GetDataObjectAt<T>(this DataTable tbl, int index) where T : new()
+        {
+            return GetDataObject<T>(tbl.Rows[index]);
+        }
+
+        //------
+        public static T GetDataObject<T>(this DataRow dataRow) where T: new()
+        {
+            var dataObject = Activator.CreateInstance<T>();
+            var tpDataObject = dataObject.GetType();
+
+            foreach (var property in tpDataObject.GetProperties())
+            {
+                var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), true);
+                if (null != attributes && attributes.Length > 0)
+                {
+                    if (property.CanWrite)
+                    {
+                        DataColumn clm = dataRow.Table.Columns[property.Name];
+                        if (null != clm)
+                        {
+                            object value = dataRow[clm];
+                            property.SetValue(dataObject, (value == DBNull.Value)?null:value, null);
+                        }
+                    }
+                }
+            }
+            return dataObject;
+        }
+
+        //------
+        public static DataRow GetDataRow(object dataObject, DataTable tbl)
+        {
+            var tpDataObject = dataObject.GetType();
+
+            DataRow dataRow = tbl.NewRow();
+            foreach (var property in tpDataObject.GetProperties())
+            {
+                var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), true);
+                if (null != attributes && attributes.Length > 0)
+                {
+                    if (property.CanRead)
+                    {
+                        object value = property.GetValue(dataObject, null);
+                        DataColumn clm = tbl.Columns.Add(property.Name, property.PropertyType);
+                        dataRow[clm] = value;
+                    }
+                }
+            }
+            return dataRow;
+        }
+
+        //------
+        public static void AppendDataObjects(this DataTable tbl, IEnumerable dataObjects)
+        {
+            foreach (object obj in dataObjects)
+            {
+                AddDataObject(tbl, obj);
+            }
+            tbl.AcceptChanges();
+            //return tbl;
+        }
+
+        ////------
+        //public static void SaveDataObjectsIntoTable(this DataTable tbl, IEnumerable dataObjects)
+        //{
+        //    tbl.Rows.Clear();
+        //    AppendDataObjects(tbl, dataObjects);
+        //}
+
+        //------
+        public static void AddDataObject(this DataTable tbl, object dataObject)
+        {
+            if (tbl.Columns.Count == 0)
+                throw new ApplicationException("Error in adding DAtaObject/s into the table: No culomn has been defined in the table. Call SetColumns() function befor adding DataObject to the table.");
+
+            var tpDataObject = dataObject.GetType();
+
+            DataRow dataRow = tbl.NewRow();
+            foreach (var property in tpDataObject.GetProperties())
+            {
+                var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), true);
+                if (null != attributes && attributes.Length > 0)
+                {
+                    if (property.CanRead)
+                    {
+                        object value = property.GetValue(dataObject, null);
+                        DataColumn clm = tbl.Columns[property.Name];//, property.PropertyType);
+                        dataRow[clm] = value;
+                    }
+                }
+            }
+            tbl.Rows.Add(dataRow);
+            tbl.AcceptChanges();
+
+        }
+
+        //------
+        public static void WriteToFile(this DataTable tbl, string filePath, bool append)
+        {
+
+            System.IO.StreamWriter file;
+            StringBuilder strb = new StringBuilder();
+            if (!append)
+            {
+                file = new System.IO.StreamWriter(filePath, append);
+                foreach (DataColumn col in tbl.Columns)
+                {
+                    strb.AppendFormat("{0}, ", col.ColumnName);
+                }
+                file.WriteLine(strb.ToString());
+                file.Close();
+                file.Dispose();
+            }
+            file = new System.IO.StreamWriter(filePath, append);
+            foreach (DataRow dr in tbl.Rows)
+            {
+                strb = new StringBuilder();
+                foreach (DataColumn col in tbl.Columns)
+                {
+                    strb.AppendFormat("{0}, ", dr[col].ToString());
+                }
+                file.WriteLine(strb.ToString());
+            }
+            file.Close();
+            file.Dispose();
+        }
+
+
+        //------
+
+
+
+
+        //public DataTable GetDataTable(this IEnumerable<object> dataObjects)
+        //{
+        //    DataTable tbl = new DataTable();
+        //    foreach (object obj in dataObjects)
+        //    {
+        //        tbl.Rows.Add(GetDataRow(obj));
+        //    }
+        //    tbl.AcceptChanges();
+        //    return tbl;
+        //}
+
+        //------
+        //public DataTable GetDataTable(this IEnumerable<object> dataObjects)
+        //{
+        //    DataTable tbl = new DataTable();
+        //    foreach (object obj in dataObjects)
+        //    {
+        //        tbl.Rows.Add(this.GetDataRow(obj));
+        //    }
+        //    tbl.AcceptChanges();
+        //    return tbl;
+        //}
+
+        //------
+        //public List<FieldMetadata> GetFieldMetadatas()
+        //{
+        //    return this.fieldMetadatas;
+        //}
+
+
+
+        //public static DataTable GetDataTable(this object dataObject)
+        //{
+        //    var tpDataObject = dataObject.GetType();
+
+        //    DataTable tbl = new DataTable();
+        //    DataRow dataRow = tbl.NewRow();
+        //    foreach (var property in tpDataObject.GetProperties())
+        //    {
+        //        var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), true);
+        //        if (null != attributes && attributes.Length > 0)
+        //        {
+        //            if (property.CanRead)
+        //            {
+        //                object value = property.GetValue(dataObject, null);
+        //                DataColumn clm = tbl.Columns.Add(property.Name, property.PropertyType);
+        //                dataRow[clm] = value;
+        //            }
+        //        }
+        //    }
+
+        //    tbl.Rows.Add(dataRow);
+        //    tbl.AcceptChanges();
+        //    return tbl;
+        //}
+
+    }
+
+}
+
+
+
+
+
+
+/*
+
+
+public static class DataObjectExtensions {
+ * 
+	public static T ToDataObject<T>( this DataRow dataRow ) where T : new() {
+		var dataObject = Activator.CreateInstance<T>();
+		var tpDataObject = dataObject.GetType();
+
+		foreach ( var property in tpDataObject.GetProperties() ) {
+			var attributes = property.GetCustomAttributes( typeof( DataColumnAttribute ), true );
+			if ( null != attributes && attributes.Length > 0 ) {
+				if ( property.CanWrite ) {
+					DataColumn clm = dataRow.Table.Columns[property.Name];
+					if ( null != clm ) {
+						object value = dataRow[clm];
+						property.SetValue( dataObject, value, null );
+					}
+				}
+			}
+		}
+
+		return dataObject;
+	}
+	public static DataTable ToDataTable( this object dataObject ) {
+		var tpDataObject = dataObject.GetType();
+
+		DataTable tbl = new DataTable();
+		DataRow dataRow = tbl.NewRow();
+		foreach ( var property in tpDataObject.GetProperties() ) {
+			var attributes = property.GetCustomAttributes( typeof( DataColumnAttribute ), true );
+			if ( null != attributes && attributes.Length> 0 ) {
+				if ( property.CanRead ) {
+					object value = property.GetValue( dataObject, null );
+					DataColumn clm = tbl.Columns.Add( property.Name, property.PropertyType );
+					dataRow[clm] = value;
+				}
+			}
+		}
+
+		tbl.Rows.Add( dataRow );
+		tbl.AcceptChanges();
+		return tbl;
+	}
+}
+ *
+ * 
+*/
