@@ -6,6 +6,7 @@ using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
 //using Landis.Library.Succession;
 using System.Collections.Generic;
+using System;
 
 namespace Landis.Library.Climate
 {
@@ -40,7 +41,8 @@ namespace Landis.Library.Climate
             public const string SpinUpClimateFile = "SpinUpClimateFile";
             public const string SpinUpClimateFileFormat = "SpinUpClimateFileFormat";
 
-
+           
+            
         }
 
         //---------------------------------------------------------------------
@@ -66,6 +68,8 @@ namespace Landis.Library.Climate
         public InputParametersParser()
         {
             this.landisDataValue = "Climate Config";
+
+           
             //this.ecoregionDataset = PlugIn.ModelCore.Ecoregions;
             //this.speciesDataset = PlugIn.ModelCore.Species;
             //this.speciesLineNums = new Dictionary<string, int>();
@@ -97,7 +101,8 @@ namespace Landis.Library.Climate
             //ReadVar(timestep);
             //parameters.Timestep = timestep.Value;
 
-
+            //HashSet<string> climateTimeSeries_PossibleValues = new HashSet<string>(new string[] { "MothlyHistRandom", "DailyHistRandom", "MonthlyHistAverage", "DailyHistAverage", "MonthlyStandard", "DailyGCM" });
+            string climateTimeSeries_PossibleValues = "MonthlyRandom, MonthlyAverage, DailyHistRandom, DailyHistAverage, MonthlyStandard, DailyGCM";
 
             //InputVar<string> climateConfigFile = new InputVar<string>(Names.ClimateConfigFile);
             //ReadVar(climateConfigFile);
@@ -106,6 +111,7 @@ namespace Landis.Library.Climate
             InputVar<string> climateTimeSeries = new InputVar<string>(Names.ClimateTimeSeries);
             ReadVar(climateTimeSeries);
             parameters.ClimateTimeSeries = climateTimeSeries.Value;
+
 
             InputVar<string> climateFile = new InputVar<string>(Names.ClimateFile);
             ReadVar(climateFile);
@@ -136,6 +142,12 @@ namespace Landis.Library.Climate
             {
                 GetNextLine();
                 GetNextLine();
+            }
+
+            if (!climateTimeSeries_PossibleValues.ToLower().Contains(parameters.ClimateTimeSeries.ToLower()) || !climateTimeSeries_PossibleValues.ToLower().Contains(parameters.SpinUpClimateTimeSeries.ToLower()))
+            {
+                //Climate.ModelCore.UI.WriteLine("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values dould be: " + climateTimeSeries_PossibleValues);
+                throw new ApplicationException("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values are: " + climateTimeSeries_PossibleValues);
             }
             
             return parameters; //.GetComplete();

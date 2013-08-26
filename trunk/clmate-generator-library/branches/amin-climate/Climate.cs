@@ -18,8 +18,10 @@ namespace Landis.Library.Climate
 
     public class Climate
     {
-        private static Dictionary<int, IClimateRecord[,]> allData;
+        private static Dictionary<int, IClimateRecord[,]> future_allData;
         private static Dictionary<int, IClimateRecord[,]> spinup_allData;
+        private static int[] randSelectedTimeSteps_future;
+        private static int[] randSelectedTimeSteps_spinup;
         private static IClimateRecord[,] timestepData;
         private static ICore modelCore;
         private static bool flag;
@@ -66,7 +68,7 @@ namespace Landis.Library.Climate
         {
             get
             {
-                return allData;
+                return future_allData;
             }
         }
          public static Dictionary<int, IClimateRecord[,]> Spinup_AllData
@@ -76,6 +78,10 @@ namespace Landis.Library.Climate
                 return spinup_allData;
             }
         }
+
+         public static int[] RandSelectedTimeSteps_future { get { return randSelectedTimeSteps_future; } }
+         public static int[] RandSelectedTimeSteps_spinup { get { return randSelectedTimeSteps_spinup; } }
+
         //---------------------------------------------------------------------
         public static IClimateRecord[,] TimestepData
         {
@@ -152,7 +158,7 @@ namespace Landis.Library.Climate
             ClimateParser parser = new ClimateParser();
             ClimateParser spinup_parser = new ClimateParser();
             string convertedClimateFileName = Climate.Convert_FileFormat(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat);
-            allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
+            future_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
             //modelCore = mCore;
             if (configParameters.SpinUpClimateTimeSeries.ToLower() != "no")
             {
@@ -160,16 +166,27 @@ namespace Landis.Library.Climate
                 string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat);
                 spinup_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
-            // Have to ask
 
-            timestepData = allData[0]; //time step zero!
+            if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
+            {
+                Climate.randSelectedTimeSteps_future = new int[Climate.future_allData.Count];
+                for (int i = 0; i < Climate.future_allData.Count; i++)
+                    Climate.randSelectedTimeSteps_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
+
+                Climate.randSelectedTimeSteps_spinup = new int[Climate.spinup_allData.Count];
+                for (int i = 0; i < Climate.spinup_allData.Count; i++)
+                    Climate.randSelectedTimeSteps_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
+            }
+
+            // Have to ask
+            
+            timestepData = future_allData[0]; //time step zero!
 
             //timestepData = allData[1];
             //TimestepData[1,11].AvgMinTemp,  //should get ecoregion (index=1), month 11, time step 1
 
             if (writeOutput)
                 Write(Climate.ModelCore.Ecoregions);
-
         }
 
         public static void GenerateClimate_GetPDSI(int startYear, int endYear)
@@ -187,7 +204,7 @@ namespace Landis.Library.Climate
 
                 for (int i = startYear; i <= endYear; i++)
                 {
-                    acs[i - startYear] = new AnnualClimate(ecoregion, 0, Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion], i); // Latitude should be given
+                    acs[i - startYear] = new AnnualClimate(ecoregion, 0, Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion]); // Latitude should be given
                     //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
                     //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
                 }
@@ -199,7 +216,7 @@ namespace Landis.Library.Climate
 
                 //If timestep is 0 then calculate otherwise get the mon_T_normal for timestep 0
 
-                Climate.TimestepData = allData[0];
+                Climate.TimestepData = future_allData[0];
                 for (int mo = 0; mo < 12; mo++)
                 {
                     climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
@@ -212,17 +229,16 @@ namespace Landis.Library.Climate
             }
         }
 
-        public static void GetPDSI(int startYear)
+        public static void GetPDSI(int startYear, ClimatePhase climatePhase = ClimatePhase.Future_Climate)
         {
             Climate.Flag = false;
             string outputFilePath = "";
-            if (File.Exists("C:\\Program Files\\LANDIS-II\\v6\\examples\\base-BDA_1\\bda\\PDSI_BaseBDA.csv"))
-                outputFilePath = @"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\bda\PDSI_BaseBDA.csv";
+            if (File.Exists("bda\\PDSI_BaseBDA.csv")) //("C:\\Program Files\\LANDIS-II\\v6\\examples\\base-BDA_1\\bda\\PDSI_BaseBDA.csv"))
+                outputFilePath = @"bda\PDSI_BaseBDA.csv";// @"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\bda\PDSI_BaseBDA.csv";
             else
             {
-                File.Create("C:\\Program Files\\LANDIS-II\\v6\\examples\\base-BDA_1\\bda\\PDSI_BaseBDA.csv");
-                outputFilePath = @"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\bda\PDSI_BaseBDA.csv";
-
+                File.Create ("bda\\PDSI_BaseBDA.csv");//("C:\\Program Files\\LANDIS-II\\v6\\examples\\base-BDA_1\\bda\\PDSI_BaseBDA.csv");
+                outputFilePath = @"bda\PDSI_BaseBDA.csv"; //@"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\bda\PDSI_BaseBDA.csv";
             }
             File.WriteAllText(outputFilePath, String.Empty);
             Climate.annualPDSI = new System.Data.DataTable();//final list of annual PDSI values
@@ -233,7 +249,7 @@ namespace Landis.Library.Climate
                     if (true)//(ecoregion.Index == 0)
                     {
                         AnnualClimate[] acs;
-                        int numOfYears = allData.Count - 1; //-1 is because we dont want the timestep 0
+                        int numOfYears = future_allData.Count - 1; //-1 is because we dont want the timestep 0
                         acs = new AnnualClimate[numOfYears];
                         int timestepIndex = 0;
 
@@ -242,18 +258,18 @@ namespace Landis.Library.Climate
 
                         //If timestep is 0 then calculate otherwise get the mon_T_normal for timestep 0
 
-                        Climate.TimestepData = allData[0];
+                        Climate.TimestepData = future_allData[0];
                         for (int mo = 0; mo < 12; mo++)
                         {
                             climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
                             mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
                         }
 
-                        foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in allData)
+                        foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
                         {
                             if (timeStep.Key != 0)
                             {
-                                acs[timestepIndex] = new AnnualClimate(ecoregion, startYear + timeStep.Key, Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion], timeStep.Key); // Latitude should be given
+                                acs[timestepIndex] = new AnnualClimate(ecoregion, startYear + timeStep.Key, Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion], climatePhase, timeStep.Key); // Latitude should be given
                                 timestepIndex++;
                             }
                         }
@@ -395,7 +411,7 @@ namespace Landis.Library.Climate
             string readableFile = "";
             if (timeSeries.Contains("MonthlyStandard"))
                 return File;
-            else if (timeSeries.Contains("HistAverage"))//AverageMonthly
+            else if (timeSeries.Contains("Average"))//AverageMonthly
             {
                 if (timeSeries.Contains("Daily"))
                     return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
@@ -407,7 +423,7 @@ namespace Landis.Library.Climate
             {
                 return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
             }
-            else if (timeSeries.Contains("HistRandom"))//AverageMonthly
+            else if (timeSeries.Contains("Random"))//AverageMonthly
             {
                 if (timeSeries.Contains("Daily"))
                     return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
@@ -417,6 +433,11 @@ namespace Landis.Library.Climate
             else if (timeSeries.Contains("DailyGCM"))
             {
                 return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
+            }
+            else
+            {
+                throw new Exception("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
+                Climate.ModelCore.UI.WriteLine("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
             }
             return readableFile;
 

@@ -15,6 +15,8 @@ namespace Landis.Library.Climate
 
     public class AnnualClimate
     {
+        private ClimatePhase climatePhase;
+
         public double[] MonthlyTemp = new double[12];
         public double[] MonthlyMinTemp = new double[12];
         public double[] MonthlyMaxTemp = new double[12];
@@ -22,7 +24,7 @@ namespace Landis.Library.Climate
         public double[] MonthlyPAR = new double[12];
         public double[] MonthlyVarTemp = new double[12];
         public double[] MonthlyPptVarTemp = new double[12];
-        public int tempEcoIndex = -1 ;
+        public int tempEcoIndex = -1;
             
         public double[] MonthlyPET = new double[12];  // Potential Evapotranspiration
         public double[] MonthlyVPD = new double[12];  // Vapor Pressure Deficit
@@ -49,23 +51,52 @@ namespace Landis.Library.Climate
         public int TimeStep { get; set; }
 
         //---------------------------------------------------------------------
-        public AnnualClimate(IEcoregion ecoregion, int year, double latitude, int timeStep = Int32.MinValue)
+        public AnnualClimate(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
         {
-            if (timeStep == Int32.MinValue)
-                AnnualClimate_Base(ecoregion, year, latitude);
-            else if(Climate.ConfigParameters.ClimateFileFormat.Contains("Hist"))
+            this.climatePhase = spinupOrfuture;
+
+            //if (timeStep == Int32.MinValue && !Climate.ConfigParameters.ClimateFileFormat.Contains("Average"))
+            //{
+            //    AnnualClimate_Base(ecoregion, actualYear, latitude); //The ordinary old AnnualClimate function. This has been left here so that there lagacy uses of AnnualClimate are still supported.
+            //}
+            //else if(Climate.ConfigParameters.ClimateFileFormat.Contains("Hist"))
+            //{
+            if (timeStep == Int32.MinValue && (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average")))
             {
-                AnnualClimate_Avg_Rand(ecoregion, year, latitude);
+                AnnualClimate_Avg(ecoregion, actualYear, latitude);
             }
-            else
+            //}
+            else if (TimeStep != Int32.MinValue)
             {
                 TimeStep = timeStep;
-                Climate.TimestepData = Climate.AllData[TimeStep];
+
+                //Presumption: The RandSelectedTimeSteps_future has been filled out in Climate.Initialize()
+                if (Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("random") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random")) // a specific timeStep is provided but it points to an item in the preprocessed-randomly-selected-timesteps for returning the climate
+                {
+                    if (Climate.RandSelectedTimeSteps_future == null)
+                    {
+                        Climate.ModelCore.UI.WriteLine("Error in creating new AnnualClimate: Climate library has not been initialized.");
+                        throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
+                    }
+                    if (this.climatePhase == ClimatePhase.Future_Climate)
+                        Climate.TimestepData = Climate.AllData[Climate.RandSelectedTimeSteps_future[TimeStep]]; 
+                    else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                        Climate.TimestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_spinup[TimeStep]];
+                }
+                else // a specific timeStep is provided (no random and no average)
+                {
+                    if (this.climatePhase == ClimatePhase.Future_Climate)
+                        Climate.TimestepData = Climate.AllData[TimeStep];
+                    else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                        Climate.TimestepData = Climate.Spinup_AllData[TimeStep];
+                }
+
+
                 //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
                 Ecoregion = ecoregion;
                 IClimateRecord[] ecoClimate = new IClimateRecord[12];
 
-                this.Year = year;
+                this.Year = actualYear;
                 this.AnnualPrecip = 0.0;
                 this.AnnualN = 0.0;
 
@@ -100,24 +131,27 @@ namespace Landis.Library.Climate
 
                 this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
                 this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-                this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
+                this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
 
                 this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
                 this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-                this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
+                this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
 
                 for (int mo = 5; mo < 8; mo++)
                     this.JJAtemperature += this.MonthlyTemp[mo];
                 this.JJAtemperature /= 3.0;
             }
+            else
+            {
+                Climate.ModelCore.UI.WriteLine("Error in creating a new AnnualClimate: the There is an inconsistancy between the passed arguments and the parameters set up in the climate-input-file.");
+                throw new ApplicationException("Error in creating a new AnnualClimate: the There is an inconsistancy between the passed arguments and the parameters set up in the climate-input-file.");
+            }
 
         }
-        private void AnnualClimate_Avg_Rand(IEcoregion ecoregion, int year, double latitude)
+        private void AnnualClimate_Avg(IEcoregion ecoregion, int year, double latitude)
         { 
             // check average or random
 
-            if (Climate.ConfigParameters.ClimateFileFormat.Contains("Average") )
-            {
                 if (ecoregion.Index != tempEcoIndex)
                 {
                     tempEcoIndex = ecoregion.Index;
@@ -137,13 +171,24 @@ namespace Landis.Library.Climate
                         this.MonthlyPAR[i] = 0.0;
 
                     }
+
+                    int allDataCount = 0;
+                    if (this.climatePhase == ClimatePhase.Future_Climate)
+                        allDataCount = Climate.AllData.Count;
+                    else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                        allDataCount = Climate.Spinup_AllData.Count;
                
                     for (int mo = 0; mo < 12; mo++)
                     {
 
-                        for (int stp = 0; stp < Climate.AllData.Count; stp++)
+                        for (int stp = 0; stp < allDataCount; stp++)
                         {
-                            Climate.TimestepData = Climate.AllData[stp];
+                            
+                            if (this.climatePhase == ClimatePhase.Future_Climate)
+                                Climate.TimestepData = Climate.AllData[stp];
+                            else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                                Climate.TimestepData = Climate.Spinup_AllData[stp];
+
                             ecoClimateT[ecoregion.Index,mo] = Climate.TimestepData[ecoregion.Index, mo];
                             //avgEcoClimate = ecoClimateT;
 
@@ -178,16 +223,12 @@ namespace Landis.Library.Climate
 
                     Climate.TimestepData = avgEcoClimate;
                 }
-            }
-            else if (Climate.ConfigParameters.ClimateFileFormat.Contains("Random"))
-            {
-               // get randomly from all data
-                //Climate.t
-                int rndIndex = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.AllData.Count -1));
-                Climate.TimestepData = Climate.AllData[rndIndex];
-                
-       
-            }
+            
+
+
+
+
+
             //TimeStep = timeStep;
             //Climate.TimestepData = Climate.AllData[TimeStep];
             ////Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
@@ -199,7 +240,6 @@ namespace Landis.Library.Climate
 
             for (int mo = 0; mo < 12; mo++)
             {
-
                 ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
                 //ecoClimate[mo] = Climate.TimestepData[TimeStep, mo];
 
@@ -254,7 +294,6 @@ namespace Landis.Library.Climate
 
             for (int mo = 0; mo < 12; mo++)
             {
-
                 ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
@@ -316,7 +355,6 @@ namespace Landis.Library.Climate
         //---------------------------------------------------------------------------
         public void SetAnnualN(double Nslope, double Nintercept)
         {
-
             AnnualN = CalculateAnnualN(AnnualPrecip, Nslope, Nintercept);
             for (int mo = 0; mo < 12; mo++)
                 MonthlyNdeposition[mo] = AnnualN * MonthlyPrecip[mo] / AnnualPrecip;
