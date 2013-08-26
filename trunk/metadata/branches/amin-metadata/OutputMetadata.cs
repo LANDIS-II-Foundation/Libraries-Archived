@@ -33,14 +33,14 @@ namespace Landis.Library.Metadata
             Fields.Clear();
             foreach (var property in tpDataObject.GetProperties())
             {
-                var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), true);
+                var attributes = property.GetCustomAttributes(typeof(DataFieldAttribute), false);
                 if (attributes.Length > 0)
                 {
                     if (null != attributes)
                     {
                         if (property.CanRead)
                         {
-                            Fields.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc });
+                            Fields.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
                         }
                     }
                 }
@@ -55,7 +55,7 @@ namespace Landis.Library.Metadata
         public XmlNode Get_XmlNode(XmlDocument doc)
         {
             XmlNode node = doc.CreateElement("Output");
-            
+
             XmlAttribute typeAtt = doc.CreateAttribute("type");
             typeAtt.Value = this.Type.ToString();
             node.Attributes.Append(typeAtt);
@@ -64,13 +64,13 @@ namespace Landis.Library.Metadata
             nameAtt.Value = this.Name;
             node.Attributes.Append(nameAtt);
 
-            XmlAttribute fileAtt = doc.CreateAttribute("file");
+            XmlAttribute fileAtt = doc.CreateAttribute("filePath"); //the output file path
             fileAtt.Value = this.FilePath;
             node.Attributes.Append(fileAtt);
 
             if(this.Type == OutputType.Table)
             {
-                XmlAttribute MetadataFileAtt = doc.CreateAttribute("MetadataFile");
+                XmlAttribute MetadataFileAtt = doc.CreateAttribute("MetadataFilePath");
                 MetadataFileAtt.Value = this.MetadataFilePath;
                 node.Attributes.Append(MetadataFileAtt);
             }
@@ -84,10 +84,10 @@ namespace Landis.Library.Metadata
                 map_DataTypeAtt.Value = this.Map_DataType.ToString();
                 node.Attributes.Append(map_DataTypeAtt);
             }
-           
-            //It is commented so it does not append fiels to the extension xml node
-            //node.AppendChild(Get_Fields_XmlNode(doc));
 
+            /*  It is commented so it does not append fiels to the extension xml node
+            node.AppendChild(Get_Fields_XmlNode(doc));
+            */
             return node;
             
             //XmlElement element = new XmlElement();

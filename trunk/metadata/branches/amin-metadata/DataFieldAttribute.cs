@@ -10,7 +10,8 @@ namespace Landis.Library.Metadata
     public class DataFieldAttribute : Attribute 
     { 
         public string Unit; 
-        public string Desc; 
+        public string Desc;
+        public string Format;
     }
 
 }

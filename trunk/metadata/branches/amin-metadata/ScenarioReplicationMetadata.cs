@@ -36,7 +36,7 @@ namespace Landis.Library.Metadata
             //timeIntervalAtt.Value = this.TimeInterval.ToString();
             //node.Attributes.Append(timeIntervalAtt);
 
-            XmlAttribute rasterOutCellSizeAtt = doc.CreateAttribute("rasterOutCellSize");
+            XmlAttribute rasterOutCellSizeAtt = doc.CreateAttribute("rasterOutCellArea");
             rasterOutCellSizeAtt.Value = this.RasterOutCellArea.ToString();
             node.Attributes.Append(rasterOutCellSizeAtt);
 

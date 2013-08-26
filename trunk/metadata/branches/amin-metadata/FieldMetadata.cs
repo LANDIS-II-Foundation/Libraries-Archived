@@ -12,6 +12,7 @@ namespace Landis.Library.Metadata
         public string Name { get; set; }
         public string Desc { get; set; }
         public string Unit { get; set; }
+        public string Format { get; set; }
 
         public XmlNode Get_XmlNode(XmlDocument doc)
         {
@@ -25,10 +26,20 @@ namespace Landis.Library.Metadata
             discAtt.Value = this.Desc;
             node.Attributes.Append(discAtt);
 
-            XmlAttribute unitAtt = doc.CreateAttribute("unit");
-            unitAtt.Value = this.Unit;
-            node.Attributes.Append(unitAtt);
-            
+            if (this.Unit != null)
+            {
+                XmlAttribute unitAtt = doc.CreateAttribute("unit");
+                unitAtt.Value = this.Unit;
+                node.Attributes.Append(unitAtt);
+            }
+
+            if (this.Format != null)
+            {
+                XmlAttribute formatAt = doc.CreateAttribute("format");
+                formatAt.Value = this.Format;
+                node.Attributes.Append(formatAt);
+            }
+
             return node;
         }
     }
