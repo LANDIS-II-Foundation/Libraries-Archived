@@ -157,13 +157,15 @@ namespace Landis.Library.Climate
             //Climate.Convert_FileFormat(parameters.ClimateFileFormat, parameters.ClimateFile), Climate.Convert_FileFormat(parameters.SpinUpClimateFileFormat, parameters.SpinUpClimateFile)
             ClimateParser parser = new ClimateParser();
             ClimateParser spinup_parser = new ClimateParser();
-            string convertedClimateFileName = "Century_Climate_Inputs_Monthly.txt";//Climate.Convert_FileFormat(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat);
+            //"Century_Climate_Inputs_Monthly.txt";//
+            string convertedClimateFileName = Climate.Convert_FileFormat(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat);
             future_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
             //modelCore = mCore;
             if (configParameters.SpinUpClimateTimeSeries.ToLower() != "no")
             {
                 ModelCore.Log.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
-                string convertedSpinupClimateFileName = "Century_Climate_Inputs_PRISM_Monthly.txt";//Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat);
+                //"Century_Climate_Inputs_PRISM_Monthly.txt";//
+                string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat);
                 spinup_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
 
