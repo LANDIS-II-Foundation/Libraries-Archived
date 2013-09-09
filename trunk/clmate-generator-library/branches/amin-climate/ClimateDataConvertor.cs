@@ -226,12 +226,12 @@ namespace Landis.Library.Climate
                                 //{
 
                                 century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMax_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count +1;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_MaxT);
+                                updatedIndex += i + climateFileActiveEcoregions.Count;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_MaxT);
                                 //updatedIndex +=  numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_Var);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_STD);
                                 IndexMax_MeanT = IndexMax_MeanT + 9;
                                 //IndexMax_MaxT = IndexMax_MaxT + 12;
                                 IndexMax_Var = IndexMax_Var + 9;
@@ -263,12 +263,12 @@ namespace Landis.Library.Climate
                                 //{
                                 //currentSTD = fields[indexofSTD];
                                 century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMin_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count +1;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_MaxT);
+                                updatedIndex += i + climateFileActiveEcoregions.Count;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_Var);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -305,12 +305,12 @@ namespace Landis.Library.Climate
                                 //{
                                 //currentSTD = fields[indexofSTD];
                                 century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexPrcp_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count +1;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_MaxT);
+                                updatedIndex += i + climateFileActiveEcoregions.Count;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_Var);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -772,12 +772,12 @@ namespace Landis.Library.Climate
                                 //{
                                 //currentSTD = fields[indexofSTD];
                                 century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexPrcp_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count +1;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_MaxT);
+                                updatedIndex += i + climateFileActiveEcoregions.Count;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_Var);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -811,12 +811,12 @@ namespace Landis.Library.Climate
                                 //{
 
                                 century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMax_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count +1;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_MaxT);
+                                updatedIndex += i + climateFileActiveEcoregions.Count;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_MaxT);
                                 //updatedIndex +=  numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_Var);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_STD);
                                 IndexMax_MeanT = IndexMax_MeanT + 9;
                                 //IndexMax_MaxT = IndexMax_MaxT + 12;
                                 IndexMax_Var = IndexMax_Var + 9;
@@ -850,12 +850,12 @@ namespace Landis.Library.Climate
                                 //{
                                 //currentSTD = fields[indexofSTD];
                                 century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMin_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count +1;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_MaxT);
+                                updatedIndex += i + climateFileActiveEcoregions.Count;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_Var);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
