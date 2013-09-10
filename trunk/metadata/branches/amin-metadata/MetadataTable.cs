@@ -54,6 +54,13 @@ namespace Landis.Library.Metadata
             this.tbl.WriteToFile(this.filePath, true);
         }
 
+        //------
+        public void Clear()
+        {
+            ObjectsList.Clear();
+            tbl.Clear();
+        }
+
         
 
     }

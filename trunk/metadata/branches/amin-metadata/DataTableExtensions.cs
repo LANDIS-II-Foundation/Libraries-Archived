@@ -130,7 +130,8 @@ namespace Landis.Library.Metadata
                     {
                         object value = property.GetValue(dataObject, null);
                         DataColumn clm = tbl.Columns[property.Name];//, property.PropertyType);
-                        dataRow[clm] = value;
+                        string format = ((DataFieldAttribute)attributes[0]).Format;
+                        dataRow[clm] = format == null ? value : string.Format("{0:"+format+"}", value);
                     }
                 }
             }
@@ -153,18 +154,21 @@ namespace Landis.Library.Metadata
                     strb.AppendFormat("{0}, ", col.ColumnName);
                 }
                 file.WriteLine(strb.ToString());
-                file.Close();
-                file.Dispose();
+                //file.Close();
+                //file.Dispose();
             }
-            file = new System.IO.StreamWriter(filePath, append);
-            foreach (DataRow dr in tbl.Rows)
+            else
             {
-                strb = new StringBuilder();
-                foreach (DataColumn col in tbl.Columns)
+                file = new System.IO.StreamWriter(filePath, append);
+                foreach (DataRow dr in tbl.Rows)
                 {
-                    strb.AppendFormat("{0}, ", dr[col].ToString());
+                    strb = new StringBuilder();
+                    foreach (DataColumn col in tbl.Columns)
+                    {
+                        strb.AppendFormat("{0}, ", dr[col].ToString());
+                    }
+                    file.WriteLine(strb.ToString());
                 }
-                file.WriteLine(strb.ToString());
             }
             file.Close();
             file.Dispose();
