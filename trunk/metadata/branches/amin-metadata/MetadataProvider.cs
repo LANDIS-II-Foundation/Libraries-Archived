@@ -84,9 +84,8 @@ namespace Landis.Library.Metadata
 
                     XmlNode fieldsNode = om.Get_Fields_XmlNode(outDoc);
                     outputNode.AppendChild(fieldsNode);
-                    
 
-                    
+                   
                     file = new System.IO.StreamWriter(metadataFolderPath + "\\" + folderName + "\\" + om.Name + "_Metadata.xml", false);
                     //string strMetadata = GetMetadataString();
                     file.WriteLine(outputMetadataNode.OuterXml);
