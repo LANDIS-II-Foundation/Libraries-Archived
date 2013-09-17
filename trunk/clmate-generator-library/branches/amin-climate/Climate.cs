@@ -71,7 +71,7 @@ namespace Landis.Library.Climate
                 return future_allData;
             }
         }
-         public static Dictionary<int, IClimateRecord[,]> Spinup_AllData
+        public static Dictionary<int, IClimateRecord[,]> Spinup_AllData
         {
             get
             {
@@ -171,12 +171,19 @@ namespace Landis.Library.Climate
 
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
             {
-                Climate.randSelectedTimeSteps_future = new int[Climate.future_allData.Count];
+                Climate.randSelectedTimeSteps_future = new int[Climate.future_allData.Count];//should be future_allData.Count or it needs to be different?
                 for (int i = 0; i < Climate.future_allData.Count; i++)
                     Climate.randSelectedTimeSteps_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
 
-                Climate.randSelectedTimeSteps_spinup = new int[Climate.spinup_allData.Count];
-                for (int i = 0; i < Climate.spinup_allData.Count; i++)
+                int maxSpeciesAge = modelCore.Species.Max(sp => sp.Longevity);
+                //int maxSpeciesAge = 0;
+                //foreach (ISpecies sp in ModelCore.Species)
+                //{ 
+                //    if(sp. maxSpeciesAge 
+                //}
+
+                Climate.randSelectedTimeSteps_spinup = new int[maxSpeciesAge]; //new int[Climate.spinup_allData.Count];
+                for (int i = 0; i < maxSpeciesAge; i++)
                     Climate.randSelectedTimeSteps_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
             }
 

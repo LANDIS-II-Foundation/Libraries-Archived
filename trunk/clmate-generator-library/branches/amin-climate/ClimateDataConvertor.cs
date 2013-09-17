@@ -83,7 +83,7 @@ namespace Landis.Library.Climate
                 //double AverageMaxSTD = 0;
                 double AverageMin = 0;
                 //double AverageMinSTD = 0;
-                double AveragePrecp = 0;
+                double SumPrecp = 0;
 
                 double AverageSTDT = 0;
                 double StdDevPpt = 0;
@@ -366,7 +366,7 @@ namespace Landis.Library.Climate
                             file.WriteLine("LandisData" + " \"Climate Data\" \n");
                             file.WriteLine("ClimateTable \n");
                             //file.WriteLine(tempScenarioName + "\n");
-                            file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
+                            file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "SumPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
                             file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\t" + "(cm)" + "\t" + "(cm)" + "\n");
                             //file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "\t" + "AvgMaxT" + "\t" + "StdMaxT" + "\t" + "AvgMinT" + "\t" + "StdMinT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\n");
                             // file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\n");
@@ -412,7 +412,7 @@ namespace Landis.Library.Climate
                                                 //AverageMaxSTD += Math.Round(Convert.ToDouble(row.Value[2]), 2);
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                AveragePrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
@@ -425,20 +425,20 @@ namespace Landis.Library.Climate
                                             else
                                             {
 
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
+                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                                 currentMonth = Convert.ToInt16(row.Key.Substring(5, 2));
                                                 //if (tempMonth != currentMonth)
 
                                                 AverageMax = 0;
                                                 AverageMin = 0;
-                                                AveragePrecp = 0;
+                                                SumPrecp = 0;
                                                 AverageSTDT = 0;
                                                 StdDevPpt = 0;
 
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                AveragePrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
@@ -456,7 +456,7 @@ namespace Landis.Library.Climate
                                             //}
                                             if (currentMonth == 12)
                                             {
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
+                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                             }
                                             //else if (tempEco != i)
                                             //    currentTimeS = 0;
@@ -472,7 +472,7 @@ namespace Landis.Library.Climate
                                             //AverageMaxSTD = 0;
                                             AverageMin = 0;
                                             //AverageMinSTD = 0;
-                                            AveragePrecp = 0;
+                                            SumPrecp = 0;
                                             //AveragePrecSTD = 0;
 
                                             AverageSTDT = 0;
@@ -481,7 +481,7 @@ namespace Landis.Library.Climate
                                             numberOfDays = 0;
                                             AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                             AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                            AveragePrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
                                             AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                             StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
                                             //sums = 0;
@@ -500,7 +500,7 @@ namespace Landis.Library.Climate
                                     //AverageMaxSTD = 0;
                                     AverageMin = 0;
                                     //AverageMinSTD = 0;
-                                    AveragePrecp = 0;
+                                    SumPrecp = 0;
                                     //AveragePrecSTD = 0;
 
                                     AverageSTDT = 0;
@@ -540,7 +540,7 @@ namespace Landis.Library.Climate
                                 //AverageMaxSTD = 0;
                                 AverageMin = 0;
                                 //AverageMinSTD = 0;
-                                AveragePrecp = 0;
+                                SumPrecp = 0;
                                 //AveragePrecSTD = 0;
 
                                 AverageSTDT = 0;
@@ -621,7 +621,7 @@ namespace Landis.Library.Climate
                 //double AverageMaxSTD = 0;
                 double AverageMin = 0;
                 //double AverageMinSTD = 0;
-                double AveragePrecp = 0;
+                double SumPrecp = 0;
 
                 double AverageSTDT = 0;
                 double StdDevPpt = 0;
@@ -912,7 +912,7 @@ namespace Landis.Library.Climate
                             file.WriteLine("ClimateTable \n");
                             //file.WriteLine(tempScenarioName + "\n");
 
-                            file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
+                            file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "SumPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
                             file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\t" + "(cm)" + "\t" + "(cm)" + "\n");
                             //file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\n");
                             //file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\n");
@@ -942,7 +942,7 @@ namespace Landis.Library.Climate
                                             {
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                AveragePrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 numberOfDays++;
@@ -950,7 +950,7 @@ namespace Landis.Library.Climate
                                             }
                                             else
                                             {
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
+                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                                 //file.WriteLine("eco1" + "\t" + currentYear + "\t" + currentMonth + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(AverageMaxSTD / numberOfDays, 2) + "\t" + Math.Round(AverageMinT / numberOfDays, 2) + "\t" + Math.Round(AverageMinSTD / numberOfDays, 2) + "\t" + Math.Round(AveragePrec / numberOfDays, 2) + "\t" + Math.Round(AveragePrecSTD / numberOfDays, 2) + "\n");
                                                 //tempMonth = currentMonth;
                                                 currentMonth = Convert.ToInt16(row.Key.Substring(5, 2));
@@ -960,14 +960,14 @@ namespace Landis.Library.Climate
                                                 //AverageMaxSTD = 0;
                                                 AverageMin = 0;
                                                 //AverageMinSTD = 0;
-                                                AveragePrecp = 0;
+                                                SumPrecp = 0;
                                                 //AveragePrecSTD = 0;
                                                 AverageSTDT = 0;
                                                 StdDevPpt = 0;
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                AveragePrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 //sums = 0;
@@ -983,7 +983,7 @@ namespace Landis.Library.Climate
                                             //    file.WriteLine("eco" + tempEco.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\n");
 
                                             if (currentMonth == 12)
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
+                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                             ////if (currentTimeS == 0 && currentMonth == 12 && i==2)
                                             //    file.WriteLine("eco2" + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\n");
 
@@ -999,7 +999,7 @@ namespace Landis.Library.Climate
                                             //AverageMaxSTD = 0;
                                             AverageMin = 0;
                                             //AverageMinSTD = 0;
-                                            AveragePrecp = 0;
+                                            SumPrecp = 0;
                                             //AveragePrecSTD = 0;
 
                                             AverageSTDT = 0;
@@ -1015,7 +1015,7 @@ namespace Landis.Library.Climate
                                     //AverageMaxSTD = 0;
                                     AverageMin = 0;
                                     //AverageMinSTD = 0;
-                                    AveragePrecp = 0;
+                                    SumPrecp = 0;
                                     //AveragePrecSTD = 0;
 
                                     AverageSTDT = 0;
@@ -1054,7 +1054,7 @@ namespace Landis.Library.Climate
                                 //AverageMaxSTD = 0;
                                 AverageMin = 0;
                                 //AverageMinSTD = 0;
-                                AveragePrecp = 0;
+                                SumPrecp = 0;
                                 //AveragePrecSTD = 0;
 
                                 AverageSTDT = 0;
