@@ -15,6 +15,8 @@ namespace Landis.Library.Metadata
          public const string g_N_m2_yr1 = "g N m-2 yr-1";
          public const string g_C_m_2 = "g C m-2";
          public const string cm = "cm";
-         public const string oC = "oC";
+         //public const string oC = "oC";
+         public const string g_B_m_2 = "g Biomass m-2";
+         public const string Count = "count";
     }
 }
