@@ -12,6 +12,7 @@ namespace Landis.Library.Metadata
         public string Unit; 
         public string Desc;
         public string Format;
+        //public bool SppList;
     }
 
 }

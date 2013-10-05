@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+//using Landis.Core;
 //using System.Threading.Tasks;
 
 namespace Landis.Library.Metadata
@@ -116,7 +117,7 @@ namespace Landis.Library.Metadata
         public static void AddDataObject(this DataTable tbl, object dataObject)
         {
             if (tbl.Columns.Count == 0)
-                throw new ApplicationException("Error in adding DAtaObject/s into the table: No culomn has been defined in the table. Call SetColumns() function befor adding DataObject to the table.");
+                throw new ApplicationException("Error in adding DataObject/s into the table: No culomn has been defined in the table. Call SetColumns() function befor adding DataObject to the table.");
 
             var tpDataObject = dataObject.GetType();
 
@@ -128,10 +129,23 @@ namespace Landis.Library.Metadata
                 {
                     if (property.CanRead)
                     {
-                        object value = property.GetValue(dataObject, null);
-                        DataColumn clm = tbl.Columns[property.Name];//, property.PropertyType);
-                        string format = ((DataFieldAttribute)attributes[0]).Format;
-                        dataRow[clm] = format == null ? value : string.Format("{0:"+format+"}", value);
+                        //bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                        //if (sppString)
+                        //{
+                        //    object value = property.GetValue(dataObject, null);
+                        //    for(int i=index; i++; ExtensionMetadata.Core.Species.Count)
+                        //    {
+                        //        DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.Core.Species[index])];
+                        //        dataRow[clm] = format == null ? value(index) : string.Format("{0:" + format + "}", value(index));
+                        //    }
+                        //}
+                        //else
+                        {
+                            object value = property.GetValue(dataObject, null);
+                            DataColumn clm = tbl.Columns[property.Name];//, property.PropertyType);
+                            string format = ((DataFieldAttribute)attributes[0]).Format;
+                            dataRow[clm] = format == null ? value : string.Format("{0:" + format + "}", value);
+                        }
                     }
                 }
             }
