@@ -97,7 +97,8 @@ namespace Landis.Library.Metadata
             }
             catch(InvalidCastException ex)
             {
-                
+                //string message = 
+                throw new ApplicationException(String.Format("Error generating metadata: {0}.", ex.ToString()));
             }
 
 
