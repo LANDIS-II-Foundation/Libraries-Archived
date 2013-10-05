@@ -55,7 +55,7 @@ namespace Landis.Library.Metadata
 
         public XmlNode Get_XmlNode(XmlDocument doc)
         {
-            XmlNode node = doc.CreateElement("Output");
+            XmlNode node = doc.CreateElement("output");
 
             XmlAttribute typeAtt = doc.CreateAttribute("type");
             typeAtt.Value = this.Type.ToString();

@@ -18,7 +18,7 @@ namespace Landis.Library.Metadata
 
         public XmlNode Get_XmlNode(XmlDocument doc)
         {
-            XmlNode node = doc.CreateElement("cenario-replication");
+            XmlNode node = doc.CreateElement("scenario-replication");
 
             XmlAttribute folderAtt = doc.CreateAttribute("folderName");
             folderAtt.Value = this.FolderName;
@@ -28,7 +28,7 @@ namespace Landis.Library.Metadata
             timeMinAtt.Value = this.TimeMin.ToString();
             node.Attributes.Append(timeMinAtt);
 
-            XmlAttribute timeMaxAtt = doc.CreateAttribute("timeMin");
+            XmlAttribute timeMaxAtt = doc.CreateAttribute("timeMax");
             timeMaxAtt.Value = this.TimeMax.ToString();
             node.Attributes.Append(timeMaxAtt);
 
