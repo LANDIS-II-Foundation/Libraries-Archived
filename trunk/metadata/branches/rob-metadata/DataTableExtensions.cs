@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Data;
 using System.Linq;
 using System.Text;
-//using Landis.Core;
+using Landis.Core;
 //using System.Threading.Tasks;
 
 namespace Landis.Library.Metadata
@@ -33,10 +34,18 @@ namespace Landis.Library.Metadata
                 {
                     if (property.CanRead)
                     {
-                        //object value = property.GetValue(dataObject, null);
-                        tbl.Columns.Add(property.Name, property.PropertyType);
-                        //fieldMetadatas.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc });
-                        //dataRow[clm] = value;
+                        //bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                        //if (sppString)
+                        //{
+                        //    foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
+                        //    {
+                        //        tbl.Columns.Add(String.Format(property.Name + species.Name), property.PropertyType);
+                        //    }
+                        //}
+                        //else
+                        {
+                            tbl.Columns.Add(property.Name, property.PropertyType);
+                        }
                     }
                 }
             }
@@ -114,6 +123,7 @@ namespace Landis.Library.Metadata
         //}
 
         //------
+        // Function adds a row of data to a data table.
         public static void AddDataObject(this DataTable tbl, object dataObject)
         {
             if (tbl.Columns.Count == 0)
@@ -129,17 +139,18 @@ namespace Landis.Library.Metadata
                 {
                     if (property.CanRead)
                     {
-                        //bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
-                        //if (sppString)
-                        //{
-                        //    object value = property.GetValue(dataObject, null);
-                        //    for(int i=index; i++; ExtensionMetadata.Core.Species.Count)
-                        //    {
-                        //        DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.Core.Species[index])];
-                        //        dataRow[clm] = format == null ? value(index) : string.Format("{0:" + format + "}", value(index));
-                        //    }
-                        //}
-                        //else
+                        bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                        if (sppString)
+                        {
+                            double[] value = (double[])property.GetValue(dataObject, null);
+                            for (int index = 0; index <= ExtensionMetadata.ModelCore.Species.Count; index++)
+                            {
+                                DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.ModelCore.Species[index])];
+                                string format = ((DataFieldAttribute)attributes[0]).Format;
+                                dataRow[clm] = format == null ? value[index].ToString() : string.Format("{0:" + format + "}", value[index].ToString());
+                            }
+                        }
+                        else
                         {
                             object value = property.GetValue(dataObject, null);
                             DataColumn clm = tbl.Columns[property.Name];//, property.PropertyType);

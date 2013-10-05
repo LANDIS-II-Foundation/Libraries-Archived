@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using Landis.Core;
+using Landis.SpatialModeling;
 
 namespace Landis.Library.Metadata
 {
@@ -13,22 +14,22 @@ namespace Landis.Library.Metadata
         public int TimeInterval { get; set; }  
         public ScenarioReplicationMetadata ScenarioReplicationMetadata { get; set; }
         public List<OutputMetadata> OutputMetadatas { get; set; }
-        //private static ICore modelCore;
-        ////---------------------------------------------------------------------
+        private static ICore modelCore;
+        //---------------------------------------------------------------------
 
-        //public static ICore ModelCore
-        //{
-        //    get
-        //    {
-        //        return modelCore;
-        //    }
-        //}
-
-
-        //public ExtensionMetadata(ICore mCore)
-        public ExtensionMetadata()
+        public static ICore ModelCore
         {
-            //modelCore = mCore;
+            get
+            {
+                return modelCore;
+            }
+        }
+
+
+        public ExtensionMetadata(ICore mCore)
+        //public ExtensionMetadata()
+        {
+            modelCore = mCore;
             ScenarioReplicationMetadata = new ScenarioReplicationMetadata();
             OutputMetadatas = new List<OutputMetadata>();
 
