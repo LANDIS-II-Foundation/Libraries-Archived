@@ -34,15 +34,17 @@ namespace Landis.Library.Metadata
                 {
                     if (property.CanRead)
                     {
-                        //bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
-                        //if (sppString)
-                        //{
-                        //    foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
-                        //    {
-                        //        tbl.Columns.Add(String.Format(property.Name + species.Name), property.PropertyType);
-                        //    }
-                        //}
-                        //else
+                        bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                        if (sppString)
+                        {
+                            //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding column headers for Species ...");
+                            foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
+                            {
+                                //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding column header for {0} ...", species.Name);
+                                tbl.Columns.Add(String.Format(property.Name + species.Name), typeof(double)); //property.PropertyType);
+                            }
+                        }
+                        else
                         {
                             tbl.Columns.Add(property.Name, property.PropertyType);
                         }
@@ -142,12 +144,13 @@ namespace Landis.Library.Metadata
                         bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
                         if (sppString)
                         {
-                            double[] value = (double[])property.GetValue(dataObject, null);
-                            for (int index = 0; index <= ExtensionMetadata.ModelCore.Species.Count; index++)
+
+                            double[] value = (double[]) property.GetValue(dataObject, null);
+                            foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
                             {
-                                DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.ModelCore.Species[index])];
+                                DataColumn clm = tbl.Columns[(property.Name + species.Name)];
                                 string format = ((DataFieldAttribute)attributes[0]).Format;
-                                dataRow[clm] = format == null ? value[index].ToString() : string.Format("{0:" + format + "}", value[index].ToString());
+                                dataRow[clm] = format == null ? value[species.Index].ToString() : string.Format("{0:" + format + "}", value[species.Index].ToString());
                             }
                         }
                         else

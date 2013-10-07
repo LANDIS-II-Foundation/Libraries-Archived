@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
 using System.Xml;
+using Landis.Core;
 
 namespace Landis.Library.Metadata
 {
@@ -41,7 +42,21 @@ namespace Landis.Library.Metadata
                     {
                         if (property.CanRead)
                         {
-                            Fields.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
+                            bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                            if (sppString)
+                            {
+                                //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding XML for Species ...");
+                                foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
+                                {
+                                    //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding XML for {0} ...", species.Name);
+                                    Fields.Add(new FieldMetadata { Name = (property.Name + species.Name), Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
+                                    //tbl.Columns.Add(String.Format(property.Name + species.Name), typeof(double)); //property.PropertyType);
+                                }
+                            }
+                            else
+                            {
+                                Fields.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
+                            }
                         }
                     }
                 }
