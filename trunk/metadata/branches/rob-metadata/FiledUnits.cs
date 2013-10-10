@@ -18,5 +18,7 @@ namespace Landis.Library.Metadata
          //public const string oC = "oC";
          public const string g_B_m_2 = "g Biomass m-2";
          public const string Count = "count";
+         public const string Percentage = "percentage";
+         public const string Mg_ha = "Mg ha-1";
     }
 }
