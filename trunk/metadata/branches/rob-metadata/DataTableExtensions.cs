@@ -12,6 +12,8 @@ namespace Landis.Library.Metadata
 {
     public static class DataTableExtensions //<T> where T : new()
     {
+        private static System.IO.StreamWriter file;
+
         
         /// <summary>
         /// Set DataFieldAttributes of the given Type to the columns of the DataTable.
@@ -172,11 +174,24 @@ namespace Landis.Library.Metadata
         public static void WriteToFile(this DataTable tbl, string filePath, bool append)
         {
 
-            System.IO.StreamWriter file;
+            //System.IO.StreamWriter file;
+  
+
             StringBuilder strb = new StringBuilder();
             if (!append)
             {
-                file = new System.IO.StreamWriter(filePath, append);
+                try
+                {
+                    file = Landis.Data.CreateTextFile(filePath);
+                }
+                catch (Exception err)
+                {
+                    string mesg = string.Format("{0}", err.Message);
+                    throw new System.ApplicationException(mesg);
+                }
+                file.AutoFlush = true;
+
+                //file = new System.IO.StreamWriter(filePath, append);
                 foreach (DataColumn col in tbl.Columns)
                 {
                     strb.AppendFormat("{0}, ", col.ColumnName);
@@ -187,7 +202,7 @@ namespace Landis.Library.Metadata
             }
             else
             {
-                file = new System.IO.StreamWriter(filePath, append);
+                //file = new System.IO.StreamWriter(filePath, append);
                 foreach (DataRow dr in tbl.Rows)
                 {
                     strb = new StringBuilder();
@@ -198,8 +213,8 @@ namespace Landis.Library.Metadata
                     file.WriteLine(strb.ToString());
                 }
             }
-            file.Close();
-            file.Dispose();
+            //file.Close();
+            //file.Dispose();
         }
 
 
