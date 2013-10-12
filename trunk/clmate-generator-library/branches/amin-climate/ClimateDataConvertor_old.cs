@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -12,87 +11,13 @@ namespace Landis.Library.Climate
     public class ClimateDataConvertor
     {
 
-        private static string maxTriggerWord; //= "Tmax";// "maxtemp";//
-        private static string minTriggerWord; //= "Tmin";// "mintemp";//
-        private static string prcpTriggerWord; //= "Prcp";// "ppt";//
-        private static Dictionary<string, double[]> century_climate_Dic;
-        private static int firstYear;
-        private static int lastYear;
-        private static string currentYear;
-        private static int currentMonth;
-        private static SortedList<int, Core.IEcoregion> climateFileActiveEcoregions;
-        
-        public static Dictionary<string, double[]> Climate_Dic { get { return century_climate_Dic; } }
+        private static string maxTriggerWord = "maxtemp";
+        private static string minTriggerWord = "mintemp";
+        private static string prcpTriggerWord = "ppt";
 
-        public static void Convert_USGS_to_ClimateData_FillAlldata(TimeStep timeStep, string climateFile, string climateFileFormat, ClimatePhase climatePhase)
+        public static string Convert_USGS_to_ClimateData(Period period, string climateFile)
         {
-            
-            Dictionary<int, IClimateRecord[,]> allDataRef;
-            if(climatePhase == ClimatePhase.Future_Climate)
-                allDataRef = Climate.AllData;
-            if(climatePhase == ClimatePhase.SpinUp_Climate)
-                allDataRef = Climate.Spinup_AllData;
 
-
-            Convert_USGS_to_ClimateData(timeStep, climateFile, climateFileFormat);
-            if (timeStep == TimeStep.Daily)
-            { 
-
-
-                 for (int j = firstYear; j <= lastYear; j++)
-                            {
-                                for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
-                                {
-                                    currentYear = j.ToString();
-
-                                    foreach (KeyValuePair<string, double[]> row in century_climate_Dic)
-                                    {
-
-                                        if (currentYear == row.Key.Substring(0, 4).ToString())
-                                        {
-
-                                            if (currentMonth == Convert.ToInt16(row.Key.Substring(5, 2)))
-                                            {
-
-
-
-                                            }
-
-
-                                            else
-                                            {
-
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(Math.Sqrt(SumVarPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(SumVarPpt, 2) + "\n");
-                                                
-                                            }
-
-
-
-
-
-
-
-
-
-                
-            }
-            else if (timeStep == TimeStep.Monthly)
-            { 
-            
-            }
-            
-        }
-
-
-        public static string Convert_USGS_to_ClimateData(TimeStep timeStep, string climateFile, string climateFileFormat)
-        {
-            ClimateFileFormatProvider formatProvider = new ClimateFileFormatProvider(climateFileFormat);
-            maxTriggerWord = formatProvider.MaxTempTrigerWord;
-            minTriggerWord = formatProvider.MinTempTrigerWord;
-            prcpTriggerWord = formatProvider.PrecipTrigerWord;
-
-            string unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord +", "+ prcpTriggerWord;
-            int triggerWordsCheckingTime = 0;
             string path = climateFile;
             StreamReader sreader;
             string centuryPath = "";
@@ -101,7 +26,7 @@ namespace Landis.Library.Climate
             //List<string> DailyClimate;
 
             #region GCM Input file is Daily--- convert to monthly
-            if (timeStep == TimeStep.Daily)
+            if (period == Period.Daily)
             {
 
                 //string path = @"D:\PSU\Landis_II\amin-branch\USGS_Data\Hayhoe_Climate_Data1.csv";
@@ -110,7 +35,7 @@ namespace Landis.Library.Climate
                 string[] fields;
                 //string tempScenarioName = "";
                 DataTable _dataTableDataByTime = new DataTable();
-                int numberOfAllEcoregions = 0;
+                int numberOfAllEcorigions = 0;
                 line = sreader.ReadLine();
                 fields = line.Split(',');
                 //tempScenarioName = fields[0].Substring(1, fields[0].LastIndexOf("t") - 2);
@@ -121,7 +46,7 @@ namespace Landis.Library.Climate
                 //string CurrentScenarioName = "";
 
                 string CurrentScenarioType = "";
-                century_climate_Dic = new Dictionary<string, double[]>();
+                Dictionary<string, double[]> century_climate_Dic = new Dictionary<string, double[]>();
 
                 //string currentT;
                 //string currentSTD;
@@ -142,19 +67,19 @@ namespace Landis.Library.Climate
                 int IndexPrcp_STD = 8;
 
                 //bool firstFlag = false;
-                currentYear = "";
+                string currentYear = "";
                 int currentTimeS = 0;
-                currentMonth = 1;
+                int currentMonth = 1;
                 int tempEco = 1;
                 double AverageMax = 0;
 
                 //double AverageMaxSTD = 0;
                 double AverageMin = 0;
                 //double AverageMinSTD = 0;
-                double SumPrecp = 0;
+                double AveragePrecp = 0;
 
                 double AverageSTDT = 0;
-                double SumVarPpt = 0;
+                double StdDevPpt = 0;
                 //double AveragePrecSTD = 0;
                 int numberOfDays = 0;
                 double[] tempSum = new double[31];
@@ -166,36 +91,15 @@ namespace Landis.Library.Climate
                 bool emptytxt = false;
                 int updatedIndex = 0;
 
-                int ecoIndex = -1;
-                climateFileActiveEcoregions = new SortedList<int, Core.IEcoregion>();
-
                 foreach (string field in fields)
                 {
-
-                    if (field != "")
-                        if (Convert.ToInt16(field) > ecoIndex)
-                        {
-                            ecoIndex = Convert.ToInt16(field);
-                            Core.IEcoregion eco = Climate.ModelCore.Ecoregions.Where(P => P.Index == ecoIndex).FirstOrDefault();
-                            //numberOfAllEcoregions = Convert.ToInt16(field);
-                            if (eco != null && eco.Active)
-                            {
-                                if(!climateFileActiveEcoregions.ContainsKey(eco.Index))
-                                    climateFileActiveEcoregions.Add(eco.Index, eco);
-                            }
-                            else
-                            {
-                                //Climate.ModelCore.UI.WriteLine("ClimateDataConvertor: Number of active ecoregions does not match the input file. The climate data for ecoregion with index {0} was ignored.", numberOfAllEcoregions);
-                                Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; Number of active ecoregions does not match the input file.", climateFile);
-                                throw new ApplicationException("Error in ClimateDataConvertor: Converting" + climateFile + "file into standard format; Number of active ecoregions does not match the input file.");
-                            }
-
-                        }
+                    if (field != "" && Convert.ToInt16(field) > numberOfAllEcorigions)
+                    {
+                        numberOfAllEcorigions = Convert.ToInt16(field);
+                    }
                 }
-                
-
                 //12 beacuse for each ecoriogn we need Max_MinT,Max_MaxT,Max_Var Max_Std, Min_MinT,Min_MaxT,Min_Var Min_Std, Prcp_MinT,Prcp_MaxT,Prcp_Var Prcp_Std
-                int dicSize = climateFileActiveEcoregions.Count * 9; //climatefileActiveEcoregions.Count * 9; //Climate.ModelCore.Ecoregions.Count * 9;
+                int dicSize = numberOfAllEcorigions * 9;
                 sreader.Close();
                 StreamReader reader = new StreamReader(path);
 
@@ -207,33 +111,20 @@ namespace Landis.Library.Climate
                     {
                         if (field.Contains("#"))
                         {
-                            triggerWordsCheckingTime++;
-                            if (triggerWordsCheckingTime > 1)
-                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord)
-                                {
-                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords,  formatProvider.SelectedFormat);
-                                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
-                                }
-
                             //tempScenarioName = CurrentScenarioName;
-                            //if (field.ToLower().Contains(maxTriggerWord) || field.ToLower().Contains(minTriggerWord))
-                            //{
+                            if (field.ToLower().Contains(maxTriggerWord) || field.ToLower().Contains(minTriggerWord))
+                            {
                                 //CurrentScenarioName = field.Substring(1, field.LastIndexOf("t") - 2);
-                            if (field.ToLower().Contains(maxTriggerWord.ToLower()))
-                            {
-                                CurrentScenarioType = maxTriggerWord;
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(maxTriggerWord, "");
+                                if (field.ToLower().Contains(maxTriggerWord))
+                                    CurrentScenarioType = maxTriggerWord;
+                                if (field.ToLower().Contains(minTriggerWord))
+                                    CurrentScenarioType = minTriggerWord;
                             }
-                            else if (field.ToLower().Contains(minTriggerWord.ToLower()))
-                            {
-                                CurrentScenarioType = minTriggerWord;
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace( ", " + minTriggerWord, "");
-                            }
-                            else if (field.ToLower().Contains(prcpTriggerWord.ToLower()))
+                            if (field.ToLower().Contains(prcpTriggerWord))
                             {
                                 //CurrentScenarioName = field.Substring(1, field.LastIndexOf("p") - 2);
                                 CurrentScenarioType = prcpTriggerWord;
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(", " + prcpTriggerWord, "");
+
                             }
 
                             //if (tempScenarioName != CurrentScenarioName)// firstFlag == false)
@@ -252,7 +143,6 @@ namespace Landis.Library.Climate
 
 
                     }
-
 
                     if (fields[0] == string.Empty && !fields[0].Contains("#"))
                     {
@@ -275,31 +165,31 @@ namespace Landis.Library.Climate
                     {
 
                         key = fields[0].ToString();
-                        if (CurrentScenarioType.ToLower().Contains(maxTriggerWord.ToLower()))
+                        if (CurrentScenarioType.Contains(maxTriggerWord))
                         {
                             IndexMax_MeanT = 0;
                             //IndexMax_MaxT = 1;
                             IndexMax_Var = 1;
                             IndexMax_STD = 2;
                             //int indexofSTD = 0;
-                            //indexofSTD = fields.Length - (numberOfAllEcoregions);
+                            //indexofSTD = fields.Length - (numberOfAllEcorigions);
                             if (!century_climate_Dic.Keys.Contains(key))
                                 century_climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
 
                             //set index of max and maxSTD for each ecorigion
-                            for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                            for (int i = 1; i <= numberOfAllEcorigions; i++)
                             {
-                                //currentT = fields[i+1];
+                                //currentT = fields[i];
                                 //if (indexofSTD < 26)
                                 //{
 
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMax_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_MaxT);
-                                //updatedIndex +=  numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_Var);
-                                updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i]), IndexMax_MeanT);
+                                updatedIndex += i + numberOfAllEcorigions;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_MaxT);
+                                //updatedIndex +=  numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_Var);
+                                updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_STD);
                                 IndexMax_MeanT = IndexMax_MeanT + 9;
                                 //IndexMax_MaxT = IndexMax_MaxT + 12;
                                 IndexMax_Var = IndexMax_Var + 9;
@@ -311,32 +201,32 @@ namespace Landis.Library.Climate
 
                             }
                         }
-                        else if (CurrentScenarioType.ToLower().Contains(minTriggerWord.ToLower()))
+                        else if (CurrentScenarioType.Contains(minTriggerWord))
                         {
                             IndexMin_MeanT = 3;
                             //IndexMin_MaxT = 5;
                             IndexMin_Var = 4;
                             IndexMin_STD = 5;
                             //int indexofSTD = 0;
-                            //indexofSTD = fields.Length - (numberOfAllEcoregions);
+                            //indexofSTD = fields.Length - (numberOfAllEcorigions);
 
                             // century_climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
                             if (!century_climate_Dic.Keys.Contains(key))
                                 century_climate_Dic.Add(key, new double[dicSize]);
                             //set index of max and maxSTD for each ecorigion
-                            for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                            for (int i = 1; i <= numberOfAllEcorigions; i++)
                             {
-                                //currentT = fields[i+1];
+                                //currentT = fields[i];
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMin_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_MaxT);
-                                //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_Var);
-                                updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i]), IndexMin_MeanT);
+                                updatedIndex += i + numberOfAllEcorigions;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_MaxT);
+                                //updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_Var);
+                                updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -351,7 +241,7 @@ namespace Landis.Library.Climate
 
                             }
                         }
-                        else if (CurrentScenarioType.ToLower().Contains(prcpTriggerWord.ToLower()))
+                        else if (CurrentScenarioType.Contains(prcpTriggerWord))
                         {
                             IndexPrcp_MeanT = 6;
                             //IndexPrcp_MaxT = 9;
@@ -360,25 +250,25 @@ namespace Landis.Library.Climate
 
                             //IndexSTD = 5;
                             //int indexofSTD = 0;
-                            //indexofSTD = fields.Length - (numberOfAllEcoregions);
+                            //indexofSTD = fields.Length - (numberOfAllEcorigions);
 
                             // century_climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
                             if (!century_climate_Dic.Keys.Contains(key))
                                 century_climate_Dic.Add(key, new double[dicSize]);
                             //set index of max and maxSTD for each ecorigion
-                            for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                            for (int i = 1; i <= numberOfAllEcorigions; i++)
                             {
-                                //currentT = fields[i+1];
+                                //currentT = fields[i];
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexPrcp_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
-                                //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_Var);
-                                updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i]), IndexPrcp_MeanT);
+                                updatedIndex += i + numberOfAllEcorigions;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_MaxT);
+                                //updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_Var);
+                                updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -394,7 +284,6 @@ namespace Landis.Library.Climate
                         }
 
                     }
-
 
                     //if (CurrentScenarioName != tempScenarioName || reader.EndOfStream)
                     if (reader.EndOfStream)
@@ -423,6 +312,7 @@ namespace Landis.Library.Climate
                         IndexPrcp_Var = 7;
                         IndexPrcp_STD = 8;
 
+
                         //int AverageMaxT = 0;
                         //int AverageMaxSTD = 1;
                         //int AverageMinT = 1;
@@ -434,32 +324,25 @@ namespace Landis.Library.Climate
                             file.WriteLine("LandisData" + " \"Climate Data\" \n");
                             file.WriteLine("ClimateTable \n");
                             //file.WriteLine(tempScenarioName + "\n");
-                            file.WriteLine(">>Eco" + "\t\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDevPpt" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
-                            file.WriteLine(">>Name" + "\t\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\t" + "(cm)" + "\t" + "(cm)" + "\n");
+                            file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
+                            file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\t" + "(cm)" + "\t" + "(cm)" + "\n");
                             //file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "\t" + "AvgMaxT" + "\t" + "StdMaxT" + "\t" + "AvgMinT" + "\t" + "StdMinT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\n");
                             // file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(C)" + "\n");
                             //initialize currentYear and month
-
                             currentYear = century_climate_Dic.First().Key.Substring(0, 4).ToString();
                             //starting timestep
                             currentTimeS = 0;
                             currentMonth = Convert.ToInt16(century_climate_Dic.First().Key.Substring(5, 2).ToString());
                             tempEco = 1;
 
-
-                            lastYear = century_climate_Dic.AsEnumerable().Select(ax => Convert.ToInt32(ax.Key.Substring(0, 4).ToString())).Distinct().ToList().Max();
-                            firstYear = century_climate_Dic.AsEnumerable().Select(ai => Convert.ToInt32(ai.Key.Substring(0, 4).ToString())).Distinct().ToList().Min();
+                            int lastYear = century_climate_Dic.AsEnumerable().Select(ax => Convert.ToInt32(ax.Key.Substring(0, 4).ToString())).Distinct().ToList().Max();
+                            int firstYear = century_climate_Dic.AsEnumerable().Select(ai => Convert.ToInt32(ai.Key.Substring(0, 4).ToString())).Distinct().ToList().Min();
                             if ((double)century_climate_Dic.Count / 12 > (double)lastYear - firstYear)
                                 lastYear = lastYear - 1;
 
-
-
-
-
-
                             for (int j = firstYear; j <= lastYear; j++)
                             {
-                                for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                                for (int i = 1; i <= numberOfAllEcorigions; i++)
                                 {
                                     currentYear = j.ToString();
 
@@ -480,9 +363,9 @@ namespace Landis.Library.Climate
                                                 //AverageMaxSTD += Math.Round(Convert.ToDouble(row.Value[2]), 2);
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
+                                                AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
+                                                StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
 
                                                 numberOfDays++;
@@ -493,22 +376,22 @@ namespace Landis.Library.Climate
                                             else
                                             {
 
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(Math.Sqrt(SumVarPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(SumVarPpt, 2) + "\n");
+                                                file.WriteLine("eco" + i.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                                 currentMonth = Convert.ToInt16(row.Key.Substring(5, 2));
                                                 //if (tempMonth != currentMonth)
 
                                                 AverageMax = 0;
                                                 AverageMin = 0;
-                                                SumPrecp = 0;
+                                                AveragePrecp = 0;
                                                 AverageSTDT = 0;
-                                                SumVarPpt = 0;
+                                                StdDevPpt = 0;
 
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
+                                                AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
+                                                StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
                                                 numberOfDays++;
                                             }
@@ -524,7 +407,7 @@ namespace Landis.Library.Climate
                                             //}
                                             if (currentMonth == 12)
                                             {
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(Math.Sqrt(SumVarPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(SumVarPpt, 2) + "\n");
+                                                file.WriteLine("eco" + i.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                             }
                                             //else if (tempEco != i)
                                             //    currentTimeS = 0;
@@ -540,18 +423,18 @@ namespace Landis.Library.Climate
                                             //AverageMaxSTD = 0;
                                             AverageMin = 0;
                                             //AverageMinSTD = 0;
-                                            SumPrecp = 0;
+                                            AveragePrecp = 0;
                                             //AveragePrecSTD = 0;
 
                                             AverageSTDT = 0;
-                                            SumVarPpt = 0;
+                                            StdDevPpt = 0;
 
                                             numberOfDays = 0;
                                             AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                             AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                            AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
                                             AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                            SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
+                                            StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
                                             //sums = 0;
                                             //stdTemp = 0;
                                             //prpSums = 0;
@@ -568,11 +451,11 @@ namespace Landis.Library.Climate
                                     //AverageMaxSTD = 0;
                                     AverageMin = 0;
                                     //AverageMinSTD = 0;
-                                    SumPrecp = 0;
+                                    AveragePrecp = 0;
                                     //AveragePrecSTD = 0;
 
                                     AverageSTDT = 0;
-                                    SumVarPpt = 0;
+                                    StdDevPpt = 0;
 
                                     IndexMax_MeanT = IndexMax_MeanT + 9;
                                     //IndexMax_MaxT = IndexMax_MaxT + 12;
@@ -587,7 +470,7 @@ namespace Landis.Library.Climate
                                     IndexPrcp_Var = IndexPrcp_Var + 9;
                                     IndexPrcp_STD = IndexPrcp_STD + 9;
                                 }
-                                //file.WriteLine("eco" + numberOfAllEcoregions.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\n");
+                                //file.WriteLine("eco" + numberOfAllEcorigions.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(StdDevPpt), 2) + "\t" + "0.0" + "\n");
 
                                 tempEco = 1;
                                 currentTimeS = currentTimeS + 1;
@@ -608,11 +491,11 @@ namespace Landis.Library.Climate
                                 //AverageMaxSTD = 0;
                                 AverageMin = 0;
                                 //AverageMinSTD = 0;
-                                SumPrecp = 0;
+                                AveragePrecp = 0;
                                 //AveragePrecSTD = 0;
 
                                 AverageSTDT = 0;
-                                SumVarPpt = 0;
+                                StdDevPpt = 0;
                             }
 
                         }
@@ -624,21 +507,18 @@ namespace Landis.Library.Climate
 
                     }
                 }
-                if (unmatched_TriggerWords != "")
-                {
-                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
-                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
-                }
+
+
+
 
             }
             #endregion
 
 
             #region PRISM Data
-            else if (timeStep == TimeStep.Monthly)
+            else if (period == Period.Monthly)
             {
 
-                unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;
 
                 //string path = @"D:\PSU\Landis_II\amin-branch\USGS_Data\Hayhoe_Climate_Data1.csv";
                 sreader = new StreamReader(path);
@@ -646,7 +526,7 @@ namespace Landis.Library.Climate
                 string[] fields;
                 //string tempScenarioName = "";
                 DataTable _dataTableDataByTime = new DataTable();
-                int numberOfAllEcoregions = 0;
+                int numberOfAllEcorigions = 0;
                 line = sreader.ReadLine();
                 fields = line.Split(',');
                 //tempScenarioName = fields[0].Substring(1, fields[0].LastIndexOf("t") - 2);
@@ -658,7 +538,7 @@ namespace Landis.Library.Climate
                 //string CurrentScenarioName = "";
 
                 string CurrentScenarioType = "";
-                century_climate_Dic = new Dictionary<string, double[]>();
+                Dictionary<string, double[]> century_climate_Dic = new Dictionary<string, double[]>();
 
                 //string currentT;
                 //string currentSTD;
@@ -679,20 +559,20 @@ namespace Landis.Library.Climate
                 int IndexPrcp_STD = 8;
 
                 //bool firstFlag = false;
-                currentYear = "";
+                string currentYear = "";
                 //starting timestep
                 int currentTimeS = 0;
-                currentMonth = 1;
+                int currentMonth = 1;
                 int tempEco = 1;
                 double AverageMax = 0;
 
                 //double AverageMaxSTD = 0;
                 double AverageMin = 0;
                 //double AverageMinSTD = 0;
-                double SumPrecp = 0;
+                double AveragePrecp = 0;
 
                 double AverageSTDT = 0;
-                double sumVarPpt = 0;
+                double StdDevPpt = 0;
                 //double AveragePrecSTD = 0;
                 int numberOfDays = 0;
                 double[] tempSum = new double[31];
@@ -704,37 +584,15 @@ namespace Landis.Library.Climate
                 bool emptytxt = false;
                 int updatedIndex = 0;
 
-
-               // IEnumerable<Core.IEcoregion> activeEcoregions = Climate.ModelCore.Ecoregions.Where(P => P.Active);
-                int ecoIndex = -1;
-                climateFileActiveEcoregions = new SortedList<int, Core.IEcoregion>();
-                
                 foreach (string field in fields)
                 {
-                    if (field != "") 
-                        if(Convert.ToInt16(field) > ecoIndex)
-                        {
-                            ecoIndex = Convert.ToInt16(field);
-                            Core.IEcoregion  eco = Climate.ModelCore.Ecoregions.Where(P => P.Index == ecoIndex).FirstOrDefault();
-                            //numberOfAllEcoregions = Convert.ToInt16(field);
-                            if (eco != null && eco.Active)
-                            {
-                                if(!climateFileActiveEcoregions.ContainsKey(eco.Index))
-                                    climateFileActiveEcoregions.Add(eco.Index, eco);
-                            }
-                            else 
-                            {
-                                //Climate.ModelCore.UI.WriteLine("ClimateDataConvertor: Number of active ecoregions does not match the input file. The climate data for ecoregion with index {0} was ignored.", numberOfAllEcoregions);
-                                Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; Number of active ecoregions does not match the input file.", climateFile);
-                                throw new ApplicationException("Error in ClimateDataConvertor: Converting" + climateFile + "file into standard format; Number of active ecoregions does not match the input file.");
-                            }
-
-                        }
+                    if (field != "" && Convert.ToInt16(field) > numberOfAllEcorigions)
+                    {
+                        numberOfAllEcorigions = Convert.ToInt16(field);
+                    }
                 }
-                
-
                 //12 beacuse for each ecoriogn we need Max_MinT,Max_MaxT,Max_Var Max_Std, Min_MinT,Min_MaxT,Min_Var Min_Std, Prcp_MinT,Prcp_MaxT,Prcp_Var Prcp_Std
-                int dicSize = climateFileActiveEcoregions.Count * 9;// Climate.ModelCore.Ecoregions.Count * 9;
+                int dicSize = numberOfAllEcorigions * 9;
                 sreader.Close();
                 StreamReader reader = new StreamReader(path);
 
@@ -746,38 +604,22 @@ namespace Landis.Library.Climate
                     {
                         if (field.Contains("#"))
                         {
-                            
-                            triggerWordsCheckingTime++;
-                            if (triggerWordsCheckingTime > 1)
-                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord)
-                                {
-                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
-                                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
-                                }
-                    
-
                             //tempScenarioName = CurrentScenarioName;
-                            if (field.ToLower().Contains(prcpTriggerWord.ToLower()))
+                            if (field.ToLower().Contains(prcpTriggerWord))
                             {
                                 //CurrentScenarioName = field.Substring(1, 4);
                                 CurrentScenarioType = prcpTriggerWord;
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(", " + prcpTriggerWord, "");
+
                             }
 
-                            //else if (field.ToLower().Contains(maxTriggerWord.ToLower()) || field.ToLower().Contains(minTriggerWord.ToLower()))
-                            //{
+                            else if (field.ToLower().Contains(maxTriggerWord) || field.Contains(minTriggerWord))
+                            {
                                 //CurrentScenarioName = field.Substring(1, 4);
-                            else if (field.ToLower().Contains(maxTriggerWord.ToLower()))
-                            {
-                                CurrentScenarioType = maxTriggerWord;
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(maxTriggerWord, "");
+                                if (field.ToLower().Contains(maxTriggerWord))
+                                    CurrentScenarioType = maxTriggerWord;
+                                if (field.ToLower().Contains(minTriggerWord))
+                                    CurrentScenarioType = minTriggerWord;
                             }
-                            else if (field.ToLower().Contains(minTriggerWord.ToLower()))
-                            {
-                                CurrentScenarioType = minTriggerWord.ToLower();
-                                unmatched_TriggerWords = unmatched_TriggerWords.Replace(", " + minTriggerWord, "");
-                            }
-                            //}
 
 
                             //if (tempScenarioName != CurrentScenarioName)// firstFlag == false)
@@ -817,7 +659,7 @@ namespace Landis.Library.Climate
                     {
 
                         key = fields[0].ToString();
-                        if (CurrentScenarioType.ToLower().Contains(prcpTriggerWord.ToLower()))
+                        if (CurrentScenarioType.Contains(prcpTriggerWord))
                         {
                             IndexPrcp_MeanT = 6;
                             //IndexPrcp_MaxT = 9;
@@ -826,25 +668,25 @@ namespace Landis.Library.Climate
 
                             //IndexSTD = 5;
                             //int indexofSTD = 0;
-                            //indexofSTD = fields.Length - (numberOfAllEcoregions);
+                            //indexofSTD = fields.Length - (numberOfAllEcorigions);
 
                             // century_climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
                             if (!century_climate_Dic.Keys.Contains(key))
                                 century_climate_Dic.Add(key, new double[dicSize]);
                             //set index of max and maxSTD for each ecorigion
-                            for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                            for (int i = 1; i <= numberOfAllEcorigions; i++)
                             {
-                                //currentT = fields[i+1];
+                                //currentT = fields[i];
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexPrcp_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
-                                //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_Var);
-                                updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i]), IndexPrcp_MeanT);
+                                updatedIndex += i + numberOfAllEcorigions;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_MaxT);
+                                //updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_Var);
+                                updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexPrcp_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -859,31 +701,31 @@ namespace Landis.Library.Climate
 
                         }
 
-                        else if (CurrentScenarioType.ToLower().Contains(maxTriggerWord.ToLower()))
+                        else if (CurrentScenarioType.Contains(maxTriggerWord))
                         {
                             IndexMax_MeanT = 0;
                             //IndexMax_MaxT = 1;
                             IndexMax_Var = 1;
                             IndexMax_STD = 2;
                             //int indexofSTD = 0;
-                            //indexofSTD = fields.Length - (numberOfAllEcoregions);
+                            //indexofSTD = fields.Length - (numberOfAllEcorigions);
                             if (!century_climate_Dic.Keys.Contains(key))
                                 century_climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
 
                             //set index of max and maxSTD for each ecorigion
-                            for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                            for (int i = 1; i <= numberOfAllEcorigions; i++)
                             {
-                                //currentT = fields[i+1];
+                                //currentT = fields[i];
                                 //if (indexofSTD < 26)
                                 //{
 
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMax_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_MaxT);
-                                //updatedIndex +=  numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_Var);
-                                updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i]), IndexMax_MeanT);
+                                updatedIndex += i + numberOfAllEcorigions;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_MaxT);
+                                //updatedIndex +=  numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_Var);
+                                updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMax_STD);
                                 IndexMax_MeanT = IndexMax_MeanT + 9;
                                 //IndexMax_MaxT = IndexMax_MaxT + 12;
                                 IndexMax_Var = IndexMax_Var + 9;
@@ -895,34 +737,33 @@ namespace Landis.Library.Climate
 
                             }
                         }
-                        else if (CurrentScenarioType.ToLower().Contains(minTriggerWord.ToLower()))
+                        else if (CurrentScenarioType.Contains(minTriggerWord))
                         {
                             IndexMin_MeanT = 3;
                             //IndexMin_MaxT = 5;
                             IndexMin_Var = 4;
                             IndexMin_STD = 5;
                             //int indexofSTD = 0;
-                            //indexofSTD = fields.Length - (numberOfAllEcoregions);
+                            //indexofSTD = fields.Length - (numberOfAllEcorigions);
 
                             // century_climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
 
                             //set index of max and maxSTD for each ecorigion
                             if (!century_climate_Dic.Keys.Contains(key))
                                 century_climate_Dic.Add(key, new double[dicSize]);
-                            for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                            for (int i = 1; i <= numberOfAllEcorigions; i++)
                             {
-                                
-                                //currentT = fields[i+1];
+                                //currentT = fields[i];
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i+1]), IndexMin_MeanT);
-                                updatedIndex += i + climateFileActiveEcoregions.Count;
-                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_MaxT);
-                                //updatedIndex += numberOfAllEcoregions;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_Var);
-                                updatedIndex += climateFileActiveEcoregions.Count;
-                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_STD);
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[i]), IndexMin_MeanT);
+                                updatedIndex += i + numberOfAllEcorigions;
+                                //century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_MaxT);
+                                //updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_Var);
+                                updatedIndex += numberOfAllEcorigions;
+                                century_climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex]), IndexMin_STD);
 
 
                                 //century_climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -980,8 +821,8 @@ namespace Landis.Library.Climate
                             file.WriteLine("ClimateTable \n");
                             //file.WriteLine(tempScenarioName + "\n");
 
-                            file.WriteLine(">>Eco" + "\t\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDevPpt" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
-                            file.WriteLine(">>Name" + "\t\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\t" + "(cm)" + "\t" + "(cm)" + "\n");
+                            file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\t" + "VarT" + "\t" + "VarPpt" + "\n");
+                            file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\t" + "(cm)" + "\t" + "(cm)" + "\n");
                             //file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "Month" + "\t" + "AvgMinT" + "\t" + "AvgMaxT" + "\t" + "StdDevT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\t" + "PAR" + "\n");
                             //file.WriteLine(">>Name" + "\t" + "Step" + "\t" + "\t" + "(C)" + "\t" + "(C)" + "\t" + "(k)" + "\t" + "(cm)" + "\t" + "Ppt" + "\t" + "µmol m-2 s-1" + "\n");
                             //file.WriteLine(">>Eco" + "\t" + "Time" + "\t" + "\t" + "AvgMaxT" + "\t" + "StdMaxT" + "\t" + "AvgMinT" + "\t" + "StdMinT" + "\t" + "AvgPpt" + "\t" + "StdDev" + "\n");
@@ -992,13 +833,13 @@ namespace Landis.Library.Climate
                             currentTimeS = 0;
                             currentMonth = Convert.ToInt16(century_climate_Dic.First().Key.Substring(5, 2).ToString());
                             tempEco = 1;
-                            lastYear = century_climate_Dic.AsEnumerable().Select(ax => Convert.ToInt32(ax.Key.Substring(0, 4).ToString())).Distinct().ToList().Max();
-                            firstYear = century_climate_Dic.AsEnumerable().Select(ai => Convert.ToInt32(ai.Key.Substring(0, 4).ToString())).Distinct().ToList().Min();
+                            int lastYear = century_climate_Dic.AsEnumerable().Select(ax => Convert.ToInt32(ax.Key.Substring(0, 4).ToString())).Distinct().ToList().Max();
+                            int firstYear = century_climate_Dic.AsEnumerable().Select(ai => Convert.ToInt32(ai.Key.Substring(0, 4).ToString())).Distinct().ToList().Min();
                             if ((double)century_climate_Dic.Count / 12 > (double)lastYear - firstYear)
                                 lastYear = lastYear - 1;
                             for (int j = firstYear; j <= lastYear; j++)
                             {
-                                for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
+                                for (int i = 1; i <= numberOfAllEcorigions; i++)
                                 {
                                     currentYear = j.ToString();
                                     foreach (KeyValuePair<string, double[]> row in century_climate_Dic)
@@ -1010,15 +851,15 @@ namespace Landis.Library.Climate
                                             {
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                                AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
+                                                StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 numberOfDays++;
 
                                             }
                                             else
                                             {
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(sumVarPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(sumVarPpt, 2) + "\n");
+                                                file.WriteLine("eco" + i.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                                 //file.WriteLine("eco1" + "\t" + currentYear + "\t" + currentMonth + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(AverageMaxSTD / numberOfDays, 2) + "\t" + Math.Round(AverageMinT / numberOfDays, 2) + "\t" + Math.Round(AverageMinSTD / numberOfDays, 2) + "\t" + Math.Round(AveragePrec / numberOfDays, 2) + "\t" + Math.Round(AveragePrecSTD / numberOfDays, 2) + "\n");
                                                 //tempMonth = currentMonth;
                                                 currentMonth = Convert.ToInt16(row.Key.Substring(5, 2));
@@ -1028,16 +869,16 @@ namespace Landis.Library.Climate
                                                 //AverageMaxSTD = 0;
                                                 AverageMin = 0;
                                                 //AverageMinSTD = 0;
-                                                SumPrecp = 0;
+                                                AveragePrecp = 0;
                                                 //AveragePrecSTD = 0;
                                                 AverageSTDT = 0;
-                                                sumVarPpt = 0;
+                                                StdDevPpt = 0;
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                                AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
+                                                StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 //sums = 0;
                                                 //stdTemp = 0;
                                                 //prpSums = 0;
@@ -1051,7 +892,7 @@ namespace Landis.Library.Climate
                                             //    file.WriteLine("eco" + tempEco.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\n");
 
                                             if (currentMonth == 12)
-                                                file.WriteLine(climateFileActiveEcoregions.ElementAt(i).Value.Name + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(SumPrecp, 2) + "\t" + Math.Round(sumVarPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(sumVarPpt , 2) + "\n");
+                                                file.WriteLine("eco" + i.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\t" + Math.Round(AverageSTDT / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt / numberOfDays, 2) + "\n");
                                             ////if (currentTimeS == 0 && currentMonth == 12 && i==2)
                                             //    file.WriteLine("eco2" + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\n");
 
@@ -1067,11 +908,11 @@ namespace Landis.Library.Climate
                                             //AverageMaxSTD = 0;
                                             AverageMin = 0;
                                             //AverageMinSTD = 0;
-                                            SumPrecp = 0;
+                                            AveragePrecp = 0;
                                             //AveragePrecSTD = 0;
 
                                             AverageSTDT = 0;
-                                            sumVarPpt = 0;
+                                            StdDevPpt = 0;
 
                                             numberOfDays = 0;
 
@@ -1083,11 +924,11 @@ namespace Landis.Library.Climate
                                     //AverageMaxSTD = 0;
                                     AverageMin = 0;
                                     //AverageMinSTD = 0;
-                                    SumPrecp = 0;
+                                    AveragePrecp = 0;
                                     //AveragePrecSTD = 0;
 
                                     AverageSTDT = 0;
-                                    sumVarPpt = 0;
+                                    StdDevPpt = 0;
                                     IndexMax_MeanT = IndexMax_MeanT + 9;
                                     //IndexMax_MaxT = IndexMax_MaxT + 12;
                                     IndexMax_Var = IndexMax_Var + 9;
@@ -1122,15 +963,15 @@ namespace Landis.Library.Climate
                                 //AverageMaxSTD = 0;
                                 AverageMin = 0;
                                 //AverageMinSTD = 0;
-                                SumPrecp = 0;
+                                AveragePrecp = 0;
                                 //AveragePrecSTD = 0;
 
                                 AverageSTDT = 0;
-                                sumVarPpt = 0;
+                                StdDevPpt = 0;
                             }
 
 
-                            //    for (int i = 1; i <= numberOfAllEcoregions; i++)
+                            //    for (int i = 1; i <= numberOfAllEcorigions; i++)
                             //    {
 
                             //        foreach (KeyValuePair<string, double[]> row in century_climate_Dic)
@@ -1275,7 +1116,7 @@ namespace Landis.Library.Climate
                             //        IndexPrcp_Var = IndexPrcp_Var + 9;
                             //        IndexPrcp_STD = IndexPrcp_STD + 9;
                             //    }
-                            //    file.WriteLine("eco" + numberOfAllEcoregions.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\n");
+                            //    file.WriteLine("eco" + numberOfAllEcorigions.ToString() + "\t" + currentTimeS + "\t" + currentMonth + "\t" + Math.Round(AverageMin / numberOfDays, 2) + "\t" + Math.Round(AverageMax / numberOfDays, 2) + "\t" + Math.Round(Math.Sqrt(AverageSTDT / numberOfDays), 2) + "\t" + Math.Round(AveragePrecp / numberOfDays, 2) + "\t" + Math.Round(StdDevPpt, 2) + "\t" + "0.0" + "\n");
 
 
 
@@ -1290,11 +1131,9 @@ namespace Landis.Library.Climate
                     }
                 }
 
-                if (unmatched_TriggerWords != "")
-                { 
-                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
-                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
-                }
+
+
+
 
             }
 
@@ -1305,4 +1144,3 @@ namespace Landis.Library.Climate
         }
     }
 }
-

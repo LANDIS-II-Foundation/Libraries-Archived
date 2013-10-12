@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualClimate.cs" />
+    <Compile Include="AnnualClimate_Daily.cs" />
+    <Compile Include="AnnualClimate_Monthly.cs" />
     <Compile Include="Climate.cs" />
     <Compile Include="ClimateDataConvertor.cs" />
     <Compile Include="ClimateFileFormatProvider.cs" />
