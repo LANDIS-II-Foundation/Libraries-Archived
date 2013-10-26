@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using Landis.Core;
-//by Amin 
+//by Amin
 using Landis.Extension.Succession.Century;
 
 namespace Landis.Library.Climate
