@@ -128,7 +128,7 @@ namespace Landis.Library.Climate
             {
                 for (int i = 0; i < 12; i++)
                 {
-                    ModelCore.Log.WriteLine("Eco={0}, Month={1}, AvgMinTemp={2:0.0}, AvgMaxTemp={3:0.0}, StdDevTemp={4:0.0}, AvgPpt={5:0.0}, StdDevPpt={6:0.0}.",
+                    ModelCore.UI.WriteLine("Eco={0}, Month={1}, AvgMinTemp={2:0.0}, AvgMaxTemp={3:0.0}, StdDevTemp={4:0.0}, AvgPpt={5:0.0}, StdDevPpt={6:0.0}.",
                         ecoregion.Index, i + 1,
                         TimestepData[ecoregion.Index, i].AvgMinTemp,
                         TimestepData[ecoregion.Index, i].AvgMaxTemp,
@@ -145,7 +145,7 @@ namespace Landis.Library.Climate
         {
             InputParametersParser inParamsParser= new InputParametersParser();
             //inParamsParser.Parse();
-            configParameters = mCore.Load<IInputParameters>(climateConfigFilename, inParamsParser);
+            configParameters = Landis.Data.Load<IInputParameters>(climateConfigFilename, inParamsParser);
             // call parser--- read climate-generator.txt
             //climate.ClimateFileFormat,...
             // call   Climate.Convert_FileFormat(climate.ClimateFileFormat,--)--- return string--> fill all data
@@ -153,20 +153,20 @@ namespace Landis.Library.Climate
 
             modelCore = mCore;
 
-            ModelCore.Log.WriteLine("   Loading weather data from file \"{0}\" ...", configParameters.ClimateFile);
+            ModelCore.UI.WriteLine("   Loading weather data from file \"{0}\" ...", configParameters.ClimateFile);
             //Climate.Convert_FileFormat(parameters.ClimateFileFormat, parameters.ClimateFile), Climate.Convert_FileFormat(parameters.SpinUpClimateFileFormat, parameters.SpinUpClimateFile)
             ClimateParser parser = new ClimateParser();
             ClimateParser spinup_parser = new ClimateParser();
             //"Century_Climate_Inputs_Monthly.txt";//
             string convertedClimateFileName = Climate.Convert_FileFormat(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat);
-            future_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
+            future_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
             //modelCore = mCore;
             if (configParameters.SpinUpClimateTimeSeries.ToLower() != "no")
             {
-                ModelCore.Log.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
+                ModelCore.UI.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
                 //"Century_Climate_Inputs_PRISM_Monthly.txt";//
                 string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat);
-                spinup_allData = modelCore.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
+                spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
 
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
@@ -198,7 +198,7 @@ namespace Landis.Library.Climate
                 Write(Climate.ModelCore.Ecoregions);
         }
 
-        public static void GenerateClimate_GetPDSI(int startYear, int endYear)
+        public static void GenerateClimate_GetPDSI(int startYear, int endYear, int latitude, double fieldCapacity, double wiltingPoint)
         {
             string outputFilePath = @"PDSI_BaseBDA_Genrated_Climate.csv";
             File.WriteAllText(outputFilePath, String.Empty);
@@ -213,7 +213,7 @@ namespace Landis.Library.Climate
 
                 for (int i = startYear; i <= endYear; i++)
                 {
-                    acs[i - startYear] = new AnnualClimate(ecoregion, 0, Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion]); // Latitude should be given
+                    acs[i - startYear] = new AnnualClimate(ecoregion, 0, latitude); // Latitude should be given
                     //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
                     //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
                 }
@@ -232,13 +232,13 @@ namespace Landis.Library.Climate
 
                     mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
                 }
-                double AWC = Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[ecoregion] - Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[ecoregion];
-                double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
+                double AWC = fieldCapacity - wiltingPoint;
+                //double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
                 new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, outputFilePath, UnitSystem.metrics);
             }
         }
 
-        public static void GetPDSI(int startYear, ClimatePhase climatePhase = ClimatePhase.Future_Climate)
+        public static void GetPDSI(int startYear, int latitude, double fieldCapacity, double wiltingPoint, ClimatePhase climatePhase = ClimatePhase.Future_Climate)
         {
             Climate.Flag = false;
             string outputFilePath = "";
@@ -278,12 +278,13 @@ namespace Landis.Library.Climate
                         {
                             if (timeStep.Key != 0)
                             {
-                                acs[timestepIndex] = new AnnualClimate(ecoregion, startYear + timeStep.Key, Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion], climatePhase, timeStep.Key); // Latitude should be given
+                                acs[timestepIndex] = new AnnualClimate(ecoregion, startYear + timeStep.Key, latitude, climatePhase, timeStep.Key); // Latitude should be given
                                 timestepIndex++;
                             }
                         }
-                        double AWC = Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[ecoregion] - Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[ecoregion];
-                        double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
+                        //double AWC = Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[ecoregion] - Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[ecoregion];
+                        double AWC = fieldCapacity - wiltingPoint;
+                        //double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
                         new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, outputFilePath, UnitSystem.metrics);
                     }
                 }
@@ -445,8 +446,8 @@ namespace Landis.Library.Climate
             }
             else
             {
+                ModelCore.UI.WriteLine("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
                 throw new Exception("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
-                Climate.ModelCore.UI.WriteLine("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
             }
             return readableFile;
 
