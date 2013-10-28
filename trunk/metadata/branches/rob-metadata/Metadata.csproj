@@ -58,7 +58,6 @@
     <Compile Include="MapDataType.cs" />
     <Compile Include="MetadataProvider.cs" />
     <Compile Include="MetadataTable.cs" />
-    <Compile Include="ModelMetadata.cs" />
     <Compile Include="OutputMetadata.cs" />
     <Compile Include="OutputType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

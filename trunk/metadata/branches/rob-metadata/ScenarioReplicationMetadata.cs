@@ -14,15 +14,15 @@ namespace Landis.Library.Metadata
         public int TimeMax {get; set;}
         //public int TimeInterval {get; set;} 
         public float RasterOutCellArea {get; set;}
-        public string ProjectionFilePath {get; set;} 
+        public string ProjectionFilePath {get; set;}  // Need to fix LSML first.
 
         public XmlNode Get_XmlNode(XmlDocument doc)
         {
             XmlNode node = doc.CreateElement("scenario-replication");
 
-            XmlAttribute folderAtt = doc.CreateAttribute("folderName");
-            folderAtt.Value = this.FolderName;
-            node.Attributes.Append(folderAtt);
+            //XmlAttribute folderAtt = doc.CreateAttribute("folderName");
+            //folderAtt.Value = this.FolderName;
+            //node.Attributes.Append(folderAtt);
 
             XmlAttribute timeMinAtt = doc.CreateAttribute("timeMin");
             timeMinAtt.Value = this.TimeMin.ToString();
@@ -40,9 +40,9 @@ namespace Landis.Library.Metadata
             rasterOutCellSizeAtt.Value = this.RasterOutCellArea.ToString();
             node.Attributes.Append(rasterOutCellSizeAtt);
 
-            XmlAttribute speciesFileAtt = doc.CreateAttribute("projectionFilePath");
-            speciesFileAtt.Value = this.ProjectionFilePath;
-            node.Attributes.Append(speciesFileAtt);
+            //XmlAttribute speciesFileAtt = doc.CreateAttribute("projectionFilePath");
+            //speciesFileAtt.Value = this.ProjectionFilePath;
+            //node.Attributes.Append(speciesFileAtt);
 
             //XmlAttribute MetadataFileAtt = doc.CreateAttribute("MetadataFile");
             //MetadataFileAtt.Value = this.MetadataFile;
