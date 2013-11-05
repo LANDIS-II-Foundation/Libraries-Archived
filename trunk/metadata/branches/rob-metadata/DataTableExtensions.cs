@@ -213,7 +213,7 @@ namespace Landis.Library.Metadata
                     file.WriteLine(strb.ToString());
                 }
             }
-            //file.Close();
+            file.Close();
             //file.Dispose();
         }
 
