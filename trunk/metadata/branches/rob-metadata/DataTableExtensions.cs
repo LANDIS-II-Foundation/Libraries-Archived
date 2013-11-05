@@ -202,6 +202,7 @@ namespace Landis.Library.Metadata
             }
             else
             {
+                //file = Landis.Data.OpenTextFile(filePath);
                 //file = new System.IO.StreamWriter(filePath, append);
                 foreach (DataRow dr in tbl.Rows)
                 {
@@ -213,8 +214,8 @@ namespace Landis.Library.Metadata
                     file.WriteLine(strb.ToString());
                 }
             }
-            file.Close();
-            //file.Dispose();
+            //file.Close();
+            file.Dispose();
         }
 
 
