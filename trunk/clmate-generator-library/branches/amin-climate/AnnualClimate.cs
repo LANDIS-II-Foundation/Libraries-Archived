@@ -171,8 +171,10 @@ namespace Landis.Library.Climate
                 this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
                 this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
 
-                this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-                this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+                //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate); //GrowingSeason replaced with GrowingDD in both Begin and End
+                //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+                this.BeginGrowing = CalculateBeginGrowingDD(ecoClimate);
+                this.EndGrowing = CalculateEndGrowingDD(ecoClimate);
                 this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
 
                 for (int mo = 5; mo < 8; mo++)
@@ -316,8 +318,10 @@ namespace Landis.Library.Climate
             this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
             this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
 
-            this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+            //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+            this.BeginGrowing = CalculateBeginGrowingDD(ecoClimate);
+            this.EndGrowing = CalculateEndGrowingDD(ecoClimate);
             this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
 
             for (int mo = 5; mo < 8; mo++)
@@ -367,8 +371,10 @@ namespace Landis.Library.Climate
             this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
             this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
 
-            this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+            //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+            this.BeginGrowing = CalculateBeginGrowingDD(ecoClimate);
+            this.EndGrowing = CalculateEndGrowingDD(ecoClimate);
             this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
 
             for (int mo = 5; mo < 8; mo++)
@@ -465,77 +471,113 @@ namespace Landis.Library.Climate
 
 
         //---------------------------------------------------------------------------
-        private static int CalculateBeginGrowingSeason(IClimateRecord[] annualClimate)
+        private static int CalculateBeginGrowingDD(IClimateRecord[] annualClimate)
         //Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C):
         {
-
+            double day= annualClimate[0].Day;  //This is a placeholder.  We need to link this to the day of the year from IClimateRecord
             double lastMonthMinTemp = annualClimate[0].AvgMinTemp;
-            int dayCnt = 15;  //the middle of February
-            int beginGrowingSeason = -1;
 
-            for (int i = 1; i < 7; i++)  //Begin looking in February (1).  Should be safe for at least 100 years.
+            for (int i = 1 ; i < 162; i++)  //Loop through all the days of the year from day 1 to day 162
             {
+                
+               double Tnight = MinTemp;  //we need to get the minimum night temperature of each day 
 
-                int totalDays = (DaysInMonth(i, 3) + DaysInMonth(i - 1, 3)) / 2;
-                double MonthlyMinTemp = annualClimate[i].AvgMinTemp;// + (monthlyTempSD[i] * randVar.GenerateNumber());
-
-                //Now interpolate between days:
-                double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;
-                double Tnight = MonthlyMinTemp;  //start from warmer month
-                double TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-
-                for (int day = 1; day <= totalDays; day++)
+               for (int day = 1; day <= totalDays; day++)
                 {
-                    if (TnightRandom <= 0)
-                        beginGrowingSeason = (dayCnt + day);
-                    Tnight += degreeIncrement;  //work backwards to find last frost day.
-                    TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-                }
-
-                lastMonthMinTemp = MonthlyMinTemp;
-                dayCnt += totalDays;  //new monthly mid-point
+                    if (Tnight > 0)           //find the first day that night temp goes above zero, that is when the growing season should start. 
+                }                             //this used to be less than zero in order to find the LAST frost day. we need to verify that the updated version is correct -AMK
             }
-            return beginGrowingSeason;
-        }
+         }
+        //the below code is the older version. I made these changes on 11/7/13 to help incorporation of the climate library
+        //private static int CalculateBeginGrowingSeason(IClimateRecord[] annualClimate)
+        ////Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C):
+        //{
+
+        //    double lastMonthMinTemp = annualClimate[0].AvgMinTemp;
+        //    int dayCnt = 15;  //the middle of February
+        //    int beginGrowingSeason = -1;
+
+        //    for (int i = 1; i < 7; i++)  //Begin looking in February (1).  Should be safe for at least 100 years.
+        //    {
+
+        //        int totalDays = (DaysInMonth(i, 3) + DaysInMonth(i - 1, 3)) / 2;
+        //        double MonthlyMinTemp = annualClimate[i].AvgMinTemp;// + (monthlyTempSD[i] * randVar.GenerateNumber());
+
+        //        //Now interpolate between days:
+        //        double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;
+        //        double Tnight = MonthlyMinTemp;  //start from warmer month
+        //        double TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+
+        //        for (int day = 1; day <= totalDays; day++)
+        //        {
+        //            if (TnightRandom <= 0)
+        //                beginGrowingSeason = (dayCnt + day);
+        //            Tnight += degreeIncrement;  //work backwards to find last frost day.
+        //            TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+        //        }
+
+        //        lastMonthMinTemp = MonthlyMinTemp;
+        //        dayCnt += totalDays;  //new monthly mid-point
+        //    }
+        //    return beginGrowingSeason;
+        //}
 
         //---------------------------------------------------------------------------
-        private static int CalculateEndGrowingSeason(IClimateRecord[] annualClimate)//, Random autoRand)
-        //Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
+        private static int CalculateEndGrowingDD(IClimateRecord[] annualClimate)
+        //Calculate End Growing Degree Day 
         {
-            //Climate.ModelCore.NormalDistribution.Mu = 0.0;
-            //Climate.ModelCore.NormalDistribution.Sigma = 1.0;
-            //NormalRandomVar randVar = new NormalRandomVar(0, 1);
+            double day= annualClimate[0].Day;  //This is a placeholder.  We need to link this to the day of the year from IClimateRecord
+            double lastMonthMinTemp = annualClimate[0].AvgMinTemp;
 
-            //Defaults for the middle of July:
-            double lastMonthTemp = annualClimate[6].AvgMinTemp;
-            int dayCnt = 198;
-            //int endGrowingSeason = 198;
-
-            for (int i = 7; i < 12; i++)  //Begin looking in August.  Should be safe for at least 100 years.
+            for (int i = 1 ; i > 162; i++)  //Loop through all the days of the year from day 163-365
             {
-                int totalDays = (DaysInMonth(i, 3) + DaysInMonth(i - 1, 3)) / 2;
-                double MonthlyMinTemp = annualClimate[i].AvgMinTemp;
+                
+               double Tnight = MinTemp;  //we need to get the minimum night temperature of each day 
 
-                //Now interpolate between days:
-                double degreeIncrement = System.Math.Abs(lastMonthTemp - MonthlyMinTemp) / (double)totalDays;
-                double Tnight = lastMonthTemp;  //start from warmer month
-
-                double TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-
-                for (int day = 1; day <= totalDays; day++)
+               for (int day = 1; day <= totalDays; day++)
                 {
-                    if (TnightRandom <= 0)
-                        return (dayCnt + day);
-                    Tnight -= degreeIncrement;  //work forwards to find first frost day.
-                    TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-                    //Console.WriteLine("Tnight = {0}.", TnightRandom);
-                }
-
-                lastMonthTemp = MonthlyMinTemp;
-                dayCnt += totalDays;  //new monthly mid-point
+                    if (Tnight < 0)           //find the first day that night temp goes below zero, that is when the growing season should end. 
+                }                             
             }
-            return 365;
-        }
+         }
+
+        //private static int CalculateEndGrowingSeason(IClimateRecord[] annualClimate)//, Random autoRand)
+        ////Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
+        //{
+        //    //Climate.ModelCore.NormalDistribution.Mu = 0.0;
+        //    //Climate.ModelCore.NormalDistribution.Sigma = 1.0;
+        //    //NormalRandomVar randVar = new NormalRandomVar(0, 1);
+
+        //    //Defaults for the middle of July:
+        //    double lastMonthTemp = annualClimate[6].AvgMinTemp;
+        //    int dayCnt = 198;
+        //    //int endGrowingSeason = 198;
+
+        //    for (int i = 7; i < 12; i++)  //Begin looking in August.  Should be safe for at least 100 years.
+        //    {
+        //        int totalDays = (DaysInMonth(i, 3) + DaysInMonth(i - 1, 3)) / 2;
+        //        double MonthlyMinTemp = annualClimate[i].AvgMinTemp;
+
+        //        //Now interpolate between days:
+        //        double degreeIncrement = System.Math.Abs(lastMonthTemp - MonthlyMinTemp) / (double)totalDays;
+        //        double Tnight = lastMonthTemp;  //start from warmer month
+
+        //        double TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+
+        //        for (int day = 1; day <= totalDays; day++)
+        //        {
+        //            if (TnightRandom <= 0)
+        //                return (dayCnt + day);
+        //            Tnight -= degreeIncrement;  //work forwards to find first frost day.
+        //            TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+        //            //Console.WriteLine("Tnight = {0}.", TnightRandom);
+        //        }
+
+        //        lastMonthTemp = MonthlyMinTemp;
+        //        dayCnt += totalDays;  //new monthly mid-point
+        //    }
+        //    return 365;
+        //}
 
 
         //---------------------------------------------------------------------------
