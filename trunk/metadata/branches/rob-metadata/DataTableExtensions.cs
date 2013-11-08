@@ -182,7 +182,8 @@ namespace Landis.Library.Metadata
             {
                 try
                 {
-                    file = Landis.Data.CreateTextFile(filePath);
+                    file = new System.IO.StreamWriter(filePath, append);
+                    //file = Landis.Data.CreateTextFile(filePath);
                 }
                 catch (Exception err)
                 {
@@ -191,7 +192,7 @@ namespace Landis.Library.Metadata
                 }
                 file.AutoFlush = true;
 
-                //file = new System.IO.StreamWriter(filePath, append);
+                
                 foreach (DataColumn col in tbl.Columns)
                 {
                     strb.AppendFormat("{0}, ", col.ColumnName);
