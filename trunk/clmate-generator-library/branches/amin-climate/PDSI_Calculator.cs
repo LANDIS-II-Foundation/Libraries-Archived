@@ -8,11 +8,11 @@ namespace Landis.Library.Climate
 {
     public class PDSI_Calculator
     {
-        protected AnnualClimate[] _AnnualClimates;
+        protected AnnualClimate_Monthly[] _AnnualClimates;
         private double[] mon_T_normal;
         private Potential[] _Potential;// = new Potential[12];
         public int Verbose { get; set; }
-        protected AnnualClimate annClimate;
+        protected AnnualClimate_Monthly annClimate;
         protected int annClimateIndex;
         public PDSI_Calculator()
         {
@@ -374,7 +374,7 @@ namespace Landis.Library.Climate
         /// <param name="annualClimate"></param>
         /// <param name="month"></param>
         /// <returns></returns>
-        public void CalculatePDSI(AnnualClimate[] annualClimates, double[] historic_mon_Temp_Normal, double awc, double latitude, string outputFilePath, UnitSystem arsUnitSystem)
+        public void CalculatePDSI(AnnualClimate_Monthly[] annualClimates, double[] historic_mon_Temp_Normal, double awc, double latitude, string outputFilePath, UnitSystem arsUnitSystem)
         {
             //double fieldCapacity = Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[_AnnualClimates[0].Ecoregion]; //- Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[_AnnualClimates[0].Ecoregion];
             _AnnualClimates = annualClimates;

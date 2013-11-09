@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Landis.Library.Climate
 {
     /// <summary>
-    /// Weather parameters for each month.
+    /// Weather parameters for each month/day
     /// </summary>
     public interface IClimateRecord
     {

@@ -39,6 +39,10 @@
     <Reference Include="Landis.Core">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Landis.Extension.Succession.Century, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Extension.Succession.Century.dll</HintPath>
+    </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4023.30148, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
@@ -52,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnualClimate.cs" />
+    <Compile Include="AnnualClimate_Daily.cs" />
+    <Compile Include="AnnualClimate_Monthly.cs" />
     <Compile Include="Climate.cs" />
     <Compile Include="ClimateDataConvertor.cs" />
     <Compile Include="ClimateFileFormatProvider.cs" />
@@ -70,7 +76,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetName).dll "C:\Program Files\LANDIS-II\v6\bin\extensions\"</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
