@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Data;
 using System.Linq;
 using System.Text;
-//using Landis.Core;
+using Landis.Core;
 //using System.Threading.Tasks;
 
 namespace Landis.Library.Metadata
 {
     public static class DataTableExtensions //<T> where T : new()
     {
+        private static System.IO.StreamWriter file;
+
         
         /// <summary>
         /// Set DataFieldAttributes of the given Type to the columns of the DataTable.
@@ -33,10 +36,20 @@ namespace Landis.Library.Metadata
                 {
                     if (property.CanRead)
                     {
-                        //object value = property.GetValue(dataObject, null);
-                        tbl.Columns.Add(property.Name, property.PropertyType);
-                        //fieldMetadatas.Add(new FieldMetadata { Name = property.Name, Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc });
-                        //dataRow[clm] = value;
+                        bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                        if (sppString)
+                        {
+                            //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding column headers for Species ...");
+                            foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
+                            {
+                                //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding column header for {0} ...", species.Name);
+                                tbl.Columns.Add(String.Format(property.Name + species.Name), typeof(double)); //property.PropertyType);
+                            }
+                        }
+                        else
+                        {
+                            tbl.Columns.Add(property.Name, property.PropertyType);
+                        }
                     }
                 }
             }
@@ -114,6 +127,7 @@ namespace Landis.Library.Metadata
         //}
 
         //------
+        // Function adds a row of data to a data table.
         public static void AddDataObject(this DataTable tbl, object dataObject)
         {
             if (tbl.Columns.Count == 0)
@@ -129,17 +143,19 @@ namespace Landis.Library.Metadata
                 {
                     if (property.CanRead)
                     {
-                        //bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
-                        //if (sppString)
-                        //{
-                        //    object value = property.GetValue(dataObject, null);
-                        //    for(int i=index; i++; ExtensionMetadata.Core.Species.Count)
-                        //    {
-                        //        DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.Core.Species[index])];
-                        //        dataRow[clm] = format == null ? value(index) : string.Format("{0:" + format + "}", value(index));
-                        //    }
-                        //}
-                        //else
+                        bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                        if (sppString)
+                        {
+
+                            double[] value = (double[]) property.GetValue(dataObject, null);
+                            foreach (ISpecies species in ExtensionMetadata.ModelCore.Species)
+                            {
+                                DataColumn clm = tbl.Columns[(property.Name + species.Name)];
+                                string format = ((DataFieldAttribute)attributes[0]).Format;
+                                dataRow[clm] = format == null ? value[species.Index].ToString() : string.Format("{0:" + format + "}", value[species.Index].ToString());
+                            }
+                        }
+                        else
                         {
                             object value = property.GetValue(dataObject, null);
                             DataColumn clm = tbl.Columns[property.Name];//, property.PropertyType);
@@ -158,11 +174,25 @@ namespace Landis.Library.Metadata
         public static void WriteToFile(this DataTable tbl, string filePath, bool append)
         {
 
-            System.IO.StreamWriter file;
+            //System.IO.StreamWriter file;
+  
+
             StringBuilder strb = new StringBuilder();
             if (!append)
             {
-                file = new System.IO.StreamWriter(filePath, append);
+                try
+                {
+                    file = new System.IO.StreamWriter(filePath, append);
+                    //file = Landis.Data.CreateTextFile(filePath);
+                }
+                catch (Exception err)
+                {
+                    string mesg = string.Format("{0}", err.Message);
+                    throw new System.ApplicationException(mesg);
+                }
+                file.AutoFlush = true;
+
+                
                 foreach (DataColumn col in tbl.Columns)
                 {
                     strb.AppendFormat("{0}, ", col.ColumnName);
@@ -173,6 +203,7 @@ namespace Landis.Library.Metadata
             }
             else
             {
+                //file = Landis.Data.OpenTextFile(filePath);
                 file = new System.IO.StreamWriter(filePath, append);
                 foreach (DataRow dr in tbl.Rows)
                 {

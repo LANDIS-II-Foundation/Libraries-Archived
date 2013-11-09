@@ -35,7 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Landis.Core">
-      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.SpatialModeling">
+      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\Landis.SpatialModeling.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,7 +57,6 @@
     <Compile Include="MapDataType.cs" />
     <Compile Include="MetadataProvider.cs" />
     <Compile Include="MetadataTable.cs" />
-    <Compile Include="ModelMetadata.cs" />
     <Compile Include="OutputMetadata.cs" />
     <Compile Include="OutputType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,7 +65,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetName).dll "C:\Program Files\LANDIS-II\v6\bin\extensions\"</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -9,7 +9,8 @@ namespace Landis.Library.Metadata
     {
         Nominal = 0,
         Ordinal = 1,
-        Quantitative = 2,
-        Scale = 3,
+        //Quantitative = 2,
+        //Scale = 3,
+        Continuous = 2
     }
 }
