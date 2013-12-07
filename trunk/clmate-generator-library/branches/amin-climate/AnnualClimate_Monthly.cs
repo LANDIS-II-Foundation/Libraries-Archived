@@ -32,6 +32,14 @@ namespace  Landis.Library.Climate
         {
             this.climatePhase = spinupOrfuture;
 
+
+            if (Climate.AllData_granularity == TemporalGranularity.Daily && spinupOrfuture == ClimatePhase.Future_Climate)
+            {
+                this.AnnualCliamte_From_AnnualCliamte_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  timeStep);
+                return;
+            }
+
+ 
             //if (timeStep == Int32.MinValue && !Climate.ConfigParameters.ClimateFileFormat.Contains("Average"))
             //{
             //    AnnualClimate_Base(ecoregion, actualYear, latitude); //The ordinary old AnnualClimate function. This has been left here so that there lagacy uses of AnnualClimate are still supported.
@@ -73,11 +81,11 @@ namespace  Landis.Library.Climate
                                 Climate.ModelCore.UI.WriteLine("Error in creating new AnnualClimate: Climate library has not been initialized.");
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
-                            Climate.TimestepData = Climate.AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
+                            Climate.TimestepData = Climate.AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
                         }
                         else //Historic
                         {
-                            Climate.TimestepData = Climate.AllData[TimeStep];
+                            Climate.TimestepData = Climate.AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -90,11 +98,11 @@ namespace  Landis.Library.Climate
                                 Climate.ModelCore.UI.WriteLine("Error in creating new AnnualClimate: Climate library has not been initialized.");
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
-                            Climate.TimestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_spinup[TimeStep]];
+                            Climate.TimestepData = Climate.Spinup_AllData.ElementAt(Climate.RandSelectedTimeSteps_spinup[TimeStep]).Value;
                         }
                         else //Historic
                         {
-                            Climate.TimestepData = Climate.Spinup_AllData[TimeStep];
+                            Climate.TimestepData = Climate.Spinup_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -196,9 +204,9 @@ namespace  Landis.Library.Climate
                     {
 
                         if (this.climatePhase == ClimatePhase.Future_Climate)
-                            Climate.TimestepData = Climate.AllData[stp];
+                            Climate.TimestepData = Climate.AllData.ElementAt(stp).Value;
                         else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
-                            Climate.TimestepData = Climate.Spinup_AllData[stp];
+                            Climate.TimestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
 
                         ecoClimateT[ecoregion.Index, mo] = Climate.TimestepData[ecoregion.Index, mo];
                         //avgEcoClimate = ecoClimateT;
@@ -351,7 +359,74 @@ namespace  Landis.Library.Climate
 
 
         }
+        private void AnnualCliamte_From_AnnualCliamte_Daily(IEcoregion ecoregion,  int actualYear, double latitude, ClimatePhase spinupOrfuture,  int timeStep)
+        {
+            int nDays;
+            int dayOfYear = 0;
+            AnnualClimate_Daily annDaily = new AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep); //for the same timeStep
 
+            for (int mo = 0; mo < 12; mo++)
+            {
+                /*
+                nDays = DaysInMonth(mo, actualYear);
+                int dayOfMo = Convert.ToInt32(Climate.ModelCore.GenerateUniform() * nDays);
+
+                MonthlyTemp[mo] = annDaily.DailyTemp[dayOfYear + dayOfMo];
+                MonthlyMinTemp[mo] = annDaily.DailyMinTemp[dayOfYear + dayOfMo];
+                MonthlyMaxTemp[mo] = annDaily.DailyMaxTemp[dayOfYear + dayOfMo];
+                MonthlyPrecip[mo] = annDaily.DailyPrecip[dayOfYear + dayOfMo];
+                MonthlyPAR[mo] = annDaily.DailyPAR[dayOfYear + dayOfMo];
+                MonthlyVarTemp[mo] = annDaily.DailyVarTemp[dayOfYear + dayOfMo];
+                MonthlyPptVarTemp[mo] = annDaily.DailyPptVarTemp[dayOfYear + dayOfMo];
+                */
+                
+
+                
+                nDays = DaysInMonth(mo, actualYear);
+                for (int d=1; d <= nDays; d++)
+                {
+                    
+
+                    MonthlyTemp[mo]+= annDaily.DailyTemp[dayOfYear];
+                    MonthlyMinTemp[mo] += annDaily.DailyMinTemp[dayOfYear];
+                    MonthlyMaxTemp[mo] += annDaily.DailyMaxTemp[dayOfYear];
+                    MonthlyPrecip[mo] += annDaily.DailyPrecip[dayOfYear];
+                    MonthlyPAR[mo] += annDaily.DailyPAR[dayOfYear];
+                    MonthlyVarTemp[mo] += annDaily.DailyVarTemp[dayOfYear];
+                    MonthlyPptVarTemp[mo] += annDaily.DailyPptVarTemp[dayOfYear];
+                    
+                }
+
+
+                MonthlyTemp[mo] /= nDays;
+                MonthlyMinTemp[mo] /= nDays;
+                MonthlyMaxTemp[mo] /= nDays;
+                //MonthlyPrecip[mo] /= nDays;
+                MonthlyPAR[mo] /= nDays;
+                MonthlyVarTemp[mo] /= nDays;
+                MonthlyPptVarTemp[mo] /= nDays;
+
+                dayOfYear++;
+                //dayOfYear += nDays;
+                
+            }
+            
+
+            //-----------------------------------------
+            //this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
+            //this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
+            //this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
+
+            //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+            //this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
+
+            //for (int mo = 5; mo < 8; mo++)
+            //    this.JJAtemperature += this.MonthlyTemp[mo];
+            //this.JJAtemperature /= 3.0;
+            //------------------------------------------
+            
+        }
 
 
 

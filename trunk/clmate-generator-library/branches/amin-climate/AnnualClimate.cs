@@ -79,7 +79,11 @@ namespace Landis.Library.Climate
 
         protected static double CalculateDayNightLength(int month, double latitude)
         {
-            double DOY = (double)DayOfYear(month);
+            double DOY = 0.0;
+            if (Climate.AllData_granularity == TemporalGranularity.Daily)
+                DOY = month;
+            else if(Climate.AllData_granularity == TemporalGranularity.Monthly)
+                DOY = (double)DayOfYear(month);
             double LatRad = latitude * (2.0 * Math.PI) / 360;
             double r = 1.0 - 0.0167 * Math.Cos(0.0172 * (DOY - 3));       //radius vector of the sun
             double z = 0.39785 * Math.Sin(4.868961 + 0.017203 * DOY + 0.033446 * Math.Sin(6.224111 + 0.017202 * DOY));

@@ -18,6 +18,8 @@ namespace Landis.Library.Climate
 
     public class Climate
     {
+        private static TemporalGranularity future_allData_granularity;
+        private static TemporalGranularity spinup_allData_granularity;
         private static Dictionary<int, IClimateRecord[,]> future_allData;
         private static Dictionary<int, IClimateRecord[,]> spinup_allData;
         private static int[] randSelectedTimeSteps_future;
@@ -26,6 +28,8 @@ namespace Landis.Library.Climate
         private static ICore modelCore;
         private static bool flag;
         private static IInputParameters configParameters;
+        internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_future_cache;
+        internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_spinup_cache;
 
         private static System.Data.DataTable annualPDSI;
         private static double[] landscapAnnualPDSI;
@@ -63,6 +67,21 @@ namespace Landis.Library.Climate
                 landscapAnnualPDSI = value;
             }
 
+        }
+
+        public static TemporalGranularity AllData_granularity
+        {
+            get
+            {
+                return future_allData_granularity;
+            }
+        }
+        public static TemporalGranularity Spinup_allData_granularity
+        {
+            get
+            {
+                return spinup_allData_granularity;
+            }
         }
         public static Dictionary<int, IClimateRecord[,]> AllData
         {
@@ -158,15 +177,17 @@ namespace Landis.Library.Climate
             ClimateParser parser = new ClimateParser();
             ClimateParser spinup_parser = new ClimateParser();
             //"Century_Climate_Inputs_Monthly.txt";//
-            string convertedClimateFileName = Climate.Convert_FileFormat(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat);
-            future_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
+            Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
+            Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
+            string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, ClimatePhase.Future_Climate);
+//            future_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
             //modelCore = mCore;
             if (configParameters.SpinUpClimateTimeSeries.ToLower() != "no")
             {
                 ModelCore.UI.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
                 //"Century_Climate_Inputs_PRISM_Monthly.txt";//
-                string convertedSpinupClimateFileName = Climate.Convert_FileFormat(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat);
-                spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
+                string convertedSpinupClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat, ClimatePhase.SpinUp_Climate);
+//                spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
 
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
@@ -188,9 +209,10 @@ namespace Landis.Library.Climate
             }
 
             // Have to ask
-
-            timestepData = future_allData[0]; //time step zero!
-
+            
+           
+                // timestepData = future_allData.ElementAt(0).Value; //time step zero!
+            
             //timestepData = allData[1];
             //TimestepData[1,11].AvgMinTemp,  //should get ecoregion (index=1), month 11, time step 1
 
@@ -407,37 +429,50 @@ namespace Landis.Library.Climate
 
 
         /// <summary>
-        /// Converts USGS Data to Standard Input climate Data 
+        /// Converts USGS Data to Standard Input climate Data and fill out the Future_AllData and/or Spinup_AllData
         /// </summary>
         /// 
-        public static string Convert_FileFormat(String timeSeries, string File, string fileFormat)
+        public static string ConvertFileFormat_FillOutAllData(String timeSeries, string File, string fileFormat, ClimatePhase climatePhase)
         {
+            if (climatePhase == ClimatePhase.Future_Climate && timeSeries.Contains("Daily"))
+                future_allData_granularity = TemporalGranularity.Daily;
+                
+            else if (climatePhase == ClimatePhase.Future_Climate && timeSeries.Contains("Monthly"))
+                future_allData_granularity = TemporalGranularity.Monthly;
+
+                spinup_allData_granularity = TemporalGranularity.Monthly;
+
             string readableFile = "";
             if (timeSeries.Contains("MonthlyStandard"))
                 return File;
-            else if (timeSeries.Contains("Average"))//AverageMonthly
+
+            else if (timeSeries.Contains("Average") || timeSeries.Contains("Random"))
             {
                 if (timeSeries.Contains("Daily"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, File, fileFormat, climatePhase);
                 else if (timeSeries.Contains("Monthly"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, File, fileFormat, climatePhase);
 
             }
+            
             else if (timeSeries.Contains("MonthlyAverage"))//AverageMonthly
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
+                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, File, fileFormat, climatePhase);
             }
-            else if (timeSeries.Contains("Random"))//AverageMonthly
-            {
-                if (timeSeries.Contains("Daily"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
-                else if (timeSeries.Contains("Monthly"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Monthly, File, fileFormat);
-            }
+            
+            //else if (timeSeries.Contains("Random"))
+            //{
+            //    if (timeSeries.Contains("Daily"))
+            //        return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, File, fileFormat, climatePhase);
+            //    else if (timeSeries.Contains("Monthly"))
+            //        return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, File, fileFormat, climatePhase);
+            //}
+            
             else if (timeSeries.Contains("DailyGCM"))
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData(TimeStep.Daily, File, fileFormat);
+                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, File, fileFormat, climatePhase);
             }
+            
             else
             {
                 ModelCore.UI.WriteLine("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
