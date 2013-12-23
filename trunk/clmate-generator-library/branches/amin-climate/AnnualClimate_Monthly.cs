@@ -153,9 +153,9 @@ namespace  Landis.Library.Climate
                 this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
                 this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
 
-                this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-                this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-                this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
+                this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+                this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
+                this.growingDegreeDays = GrowSeasonDegreeDays(actualYear);
 
                 for (int mo = 5; mo < 8; mo++)
                     this.JJAtemperature += this.MonthlyTemp[mo];
@@ -298,9 +298,9 @@ namespace  Landis.Library.Climate
             this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
             this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
 
-            this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-            this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
+            this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(year);
 
             for (int mo = 5; mo < 8; mo++)
                 this.JJAtemperature += this.MonthlyTemp[mo];
@@ -349,9 +349,9 @@ namespace  Landis.Library.Climate
             this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
             this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
 
-            this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-            this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
+            this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(year);
 
             for (int mo = 5; mo < 8; mo++)
                 this.JJAtemperature += this.MonthlyTemp[mo];
@@ -398,7 +398,6 @@ namespace  Landis.Library.Climate
 
                     dayOfYear++;
                     //dayOfYear += nDays;
-                    
                 }
 
 
@@ -410,12 +409,24 @@ namespace  Landis.Library.Climate
                 MonthlyVarTemp[mo] /= nDays;
                 MonthlyPptVarTemp[mo] /= nDays;
 
+
                 
             }
 
-            this.BeginGrowing = annDaily.BeginGrowing;
-            this.EndGrowing = annDaily.EndGrowing;
+
+
+            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
+            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
+            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
+
+            //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
+
+            //These two fucntions have been implemented in the AnnualClimate_Daily. Thks is why I am getting their value from the annDaily
+            this.beginGrowing = annDaily.BeginGrowing;
+            this.endGrowing = annDaily.EndGrowing;
             //  this.GrowingDegreeDays = annDaily.gro GrowSeasonDegreeDays(actualYear);
+            this.growingDegreeDays = annDaily.GrowingDegreeDays;
             //-----------------------------------------
             //this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
             //this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
@@ -495,6 +506,8 @@ namespace  Landis.Library.Climate
                 if (MonthlyTemp[i] > degDayBase)
                     Deg_Days += (MonthlyTemp[i] - degDayBase) * DaysInMonth(i, currentYear);
             }
+
+            this.growingDegreeDays = (int)Deg_Days;
             return (int)Deg_Days;
         }
 
@@ -522,7 +535,7 @@ namespace  Landis.Library.Climate
 
 
         //---------------------------------------------------------------------------
-        private static int CalculateBeginGrowingSeason(IClimateRecord[] yearClimate)
+        private int CalculateBeginGrowingSeason(IClimateRecord[] yearClimate)
         //Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C):
         {
 
@@ -553,11 +566,12 @@ namespace  Landis.Library.Climate
                 dayCnt += totalDays;  //new monthly mid-point
             }
             
+            this.beginGrowing = beginGrowingSeason;
             return beginGrowingSeason;
         }
 
         //---------------------------------------------------------------------------
-        private static int CalculateEndGrowingSeason(IClimateRecord[] annualClimate)//, Random autoRand)
+        private int CalculateEndGrowingSeason(IClimateRecord[] annualClimate)//, Random autoRand)
         //Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
         {
             //Climate.ModelCore.NormalDistribution.Mu = 0.0;

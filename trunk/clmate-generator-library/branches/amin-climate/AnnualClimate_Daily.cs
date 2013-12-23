@@ -215,9 +215,9 @@ namespace Landis.Library.Climate
                 }
             }
 
-            this.BeginGrowing = CalculateBeginGrowingDay_Daily(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
-            this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
+            this.beginGrowing = CalculateBeginGrowingDay_Daily(ecoClimate);
+            this.endGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(actualYear);
             if(Climate.TimestepData.GetLength(1) > 365 )
                 this.isLeapYear = true;
             
@@ -458,6 +458,8 @@ namespace Landis.Library.Climate
         //normally distributed around a specified mean with a specified standard
         //deviation.
         {
+           
+            
             //degDayBase is temperature (C) above which degree days (Degree_Day)
             //are counted
             double degDayBase = 5.56;      // 42F.
@@ -469,10 +471,13 @@ namespace Landis.Library.Climate
             //sum degree days for consecutve months.
             for (int i = 0; i < 12 ; i++) //12 months in year
             {
-                if (DailyTemp[i] > degDayBase)
+                //I talked to Melissa and Allec  and we decided to use the difference between Begin and End growing days for the GrowSeasonDegreeDays. 
+                //if (DailyTemp[i] > degDayBase)
                     Deg_Days += (DailyTemp[i] - degDayBase);
             }
+            this.growingDegreeDays = (int)Deg_Days;
             return (int)Deg_Days;
+            
         }
 
         //---------------------------------------------------------------------------
@@ -485,7 +490,7 @@ namespace Landis.Library.Climate
                 nightTemp = this.DailyMinTemp[i];
                 if (nightTemp > 0)
                 {
-                    this.BeginGrowing = i;
+                    this.beginGrowing = i;
                     return i;
                 }
             }
@@ -505,7 +510,7 @@ namespace Landis.Library.Climate
                 nightTemp = this.DailyMinTemp[i];
                 if (nightTemp > 0)
                 {
-                    this.EndGrowing = i;
+                    this.endGrowing = i;
                     endGrowingDay = i;
                     return i;
                 }
@@ -543,7 +548,7 @@ namespace Landis.Library.Climate
             //Console.Read();
             //this.EndGrowing = 
 
-            this.EndGrowing = endGrowingDay;
+            this.endGrowing = endGrowingDay;
             return endGrowingDay;
 
 

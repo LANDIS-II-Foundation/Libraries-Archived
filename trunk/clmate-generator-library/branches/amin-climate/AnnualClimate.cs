@@ -8,7 +8,7 @@ using System.IO;
 using System;
 using Landis.Core;
 //by Amin
-using Landis.Extension.Succession.Century;
+//using Landis.Extension.Succession.Century;
 
 namespace Landis.Library.Climate
 {
@@ -16,10 +16,14 @@ namespace Landis.Library.Climate
     public abstract class AnnualClimate
     {
         protected ClimatePhase climatePhase;
+        protected int beginGrowing;
+        protected int endGrowing;
+        protected int growingDegreeDays;
 
-        public int BeginGrowing;
-        public int EndGrowing;
-        public int GrowingDegreeDays;
+        public int BeginGrowing {get {return this.beginGrowing;}}
+        public int EndGrowing { get { return this.endGrowing; } }
+        public int GrowingDegreeDays { get { return this.growingDegreeDays; } }
+
         public double AnnualPrecip;
         public double JJAtemperature;
         public double AnnualN;
