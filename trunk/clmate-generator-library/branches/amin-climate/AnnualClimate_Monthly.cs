@@ -395,6 +395,9 @@ namespace  Landis.Library.Climate
                     MonthlyPAR[mo] += annDaily.DailyPAR[dayOfYear];
                     MonthlyVarTemp[mo] += annDaily.DailyVarTemp[dayOfYear];
                     MonthlyPptVarTemp[mo] += annDaily.DailyPptVarTemp[dayOfYear];
+
+                    dayOfYear++;
+                    //dayOfYear += nDays;
                     
                 }
 
@@ -407,8 +410,6 @@ namespace  Landis.Library.Climate
                 MonthlyVarTemp[mo] /= nDays;
                 MonthlyPptVarTemp[mo] /= nDays;
 
-                dayOfYear++;
-                //dayOfYear += nDays;
                 
             }
 
