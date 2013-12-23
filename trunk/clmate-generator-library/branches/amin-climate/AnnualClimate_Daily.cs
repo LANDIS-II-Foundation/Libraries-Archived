@@ -107,51 +107,53 @@ namespace Landis.Library.Climate
                     throw new ClimateDataOutOfRangeException("Exception: The requested Time-step or ecoregion is out of range of the provided " + this.climatePhase.ToString() + " input file. This might have happened because the number of provided climate data is not devisable to the number of specified time-steps or there is not enoght historic climate data to run the model for the specified duration in scenario file.", ex);
                 }
 
-                //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
+
                 Ecoregion = ecoregion;
-                IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
+                
 
-                this.Year = actualYear;
-                this.AnnualPrecip = 0.0;
-                this.AnnualN = 0.0;
+                //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
+                //---------------------------------
+                //---------------------------------
+                ////Ecoregion = ecoregion;
+                ////IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
 
-                for (int day = 0; day < MaxDayInYear; day++)
-                {
-                    //here
-                    try
-                    {
-                        ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
-                    }
-                    catch
-                    {
-                    }
-                    //ecoClimate[day] = Climate.TimestepData[TimeStep, day];
-                    if (ecoClimate[day] != null)
-                    {
-                        double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
+                ////this.Year = actualYear;
+                ////this.AnnualPrecip = 0.0;
+                ////this.AnnualN = 0.0;
 
-                        double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+                ////for (int day = 0; day < MaxDayInYear; day++)
+                ////{
+                    
+                ////        ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
+                    
+                ////    //ecoClimate[day] = Climate.TimestepData[TimeStep, day];
+                ////    if (ecoClimate[day] != null)
+                ////    {
+                ////        double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
 
-                        this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
-                        this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
-                        this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
-                        this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
-                        this.DailyPAR[day] = ecoClimate[day].PAR;
+                ////        double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
 
-                        this.AnnualPrecip += this.DailyPrecip[day];
+                ////        this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
+                ////        this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
+                ////        this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
+                ////        this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+                ////        this.DailyPAR[day] = ecoClimate[day].PAR;
 
-                        if (this.DailyPrecip[day] < 0)
-                            this.DailyPrecip[day] = 0;
+                ////        this.AnnualPrecip += this.DailyPrecip[day];
 
-                        double hr = CalculateDayNightLength(day, latitude);
-                        this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
-                        this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+                ////        if (this.DailyPrecip[day] < 0)
+                ////            this.DailyPrecip[day] = 0;
 
-                        //this.DOY[day] = DayOfYear(day);
-                    }
-                }
+                ////        double hr = CalculateDayNightLength(day, latitude);
+                ////        this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+                ////        this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
+                ////        //this.DOY[day] = DayOfYear(day);
+                ////    }
+                ////}
+                //-------------------------------------
 
+                
 //I don't think PET, VPD or GDD need to be converted to a daily time step since Fire doesn't need them (I double-checked this morning).  Can't they just stay as monthly values since Century is the only one using them?
 //But we do need to fix "CalculateBeginGrowingSeason" and "CalculateEndGrowingSeason", like Rob's screenshot.
 /*
@@ -162,19 +164,61 @@ namespace Landis.Library.Climate
                 this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
                 this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
                 this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
-
+                 this.BeginGrowing = CalculateBeginGrowingDay_Daily(ecoClimate);
+            this.EndGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
+            this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
                 for (int day = 5; day < 8; day++)
                     this.JJAtemperature += this.MonthlyTemp[day];
                 this.JJAtemperature /= 3.0;
  */
             }
+               
             else
             {
                 Climate.ModelCore.UI.WriteLine("Error in creating a new AnnualClimate: the There is an inconsistancy between the passed arguments and the parameters set up in the climate-input-file.");
                 throw new ApplicationException("Error in creating a new AnnualClimate: the There is an inconsistancy between the passed arguments and the parameters set up in the climate-input-file.");
             }
+            IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
 
-            if(Climate.TimestepData.GetLength(1) > 365)
+            this.Year = actualYear;
+            this.AnnualPrecip = 0.0;
+            this.AnnualN = 0.0;
+
+            for (int day = 0; day < MaxDayInYear; day++)
+            {
+
+                ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
+
+                //ecoClimate[day] = Climate.TimestepData[TimeStep, day];
+                if (ecoClimate[day] != null)
+                {
+                    double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
+
+                    double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+
+                    this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
+                    this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
+                    this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
+                    this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+                    this.DailyPAR[day] = ecoClimate[day].PAR;
+
+                    this.AnnualPrecip += this.DailyPrecip[day];
+
+                    if (this.DailyPrecip[day] < 0)
+                        this.DailyPrecip[day] = 0;
+
+                    double hr = CalculateDayNightLength(day, latitude);
+                    this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+                    this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+
+                    //this.DOY[day] = DayOfYear(day);
+                }
+            }
+
+            this.BeginGrowing = CalculateBeginGrowingDay_Daily(ecoClimate);
+            this.EndGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
+            this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
+            if(Climate.TimestepData.GetLength(1) > 365 )
                 this.isLeapYear = true;
             
         }
@@ -276,58 +320,62 @@ namespace Landis.Library.Climate
             //TimeStep = timeStep;
             //Climate.TimestepData = Climate.AllData[TimeStep];
             ////Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
-            Ecoregion = ecoregion;
-            IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
-            this.Year = year;
-            this.AnnualPrecip = 0.0;
-            this.AnnualN = 0.0;
+            //---------------------------------------
+            //---------------------------------------
+//            Ecoregion = ecoregion;
+//            IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
+//            this.Year = year;
+//            this.AnnualPrecip = 0.0;
+//            this.AnnualN = 0.0;
 
-             for (int day = 0; day < MaxDayInYear; day++)
-            {
-                try
-                {
-                    ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
-                }
-                catch
-                {
-                }
-                //ecoClimate[day] = Climate.TimestepData[TimeStep, day];
-                if (ecoClimate[day] != null)
-                {
-                    double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
+//             for (int day = 0; day < MaxDayInYear; day++)
+//            {
+//                try
+//                {
+//                    ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
+//                }
+//                catch
+//                {
+//                }
+//                //ecoClimate[day] = Climate.TimestepData[TimeStep, day];
+//                if (ecoClimate[day] != null)
+//                {
+//                    double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
 
-                    double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+//                    double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
 
-                    this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
-                    this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
-                    this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
+//                    this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
+//                    this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
+//                    this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
 
 
-                    this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
-                    this.DailyPAR[day] = ecoClimate[day].PAR;
+//                    this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+//                    this.DailyPAR[day] = ecoClimate[day].PAR;
 
-                    this.AnnualPrecip += this.DailyPrecip[day];
+//                    this.AnnualPrecip += this.DailyPrecip[day];
 
-                    if (this.DailyPrecip[day] < 0)
-                        this.DailyPrecip[day] = 0;
+//                    if (this.DailyPrecip[day] < 0)
+//                        this.DailyPrecip[day] = 0;
 
-                    double hr = CalculateDayNightLength(day, latitude);
-                    this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
-                    this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+//                    double hr = CalculateDayNightLength(day, latitude);
+//                    this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+//                    this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
-                    //this.DOY[day] = DayOfYear(day);
-                }
-            }
+//                    //this.DOY[day] = DayOfYear(day);
+//                }
+//            }
 
-/*
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
-*/
-            this.BeginGrowing = CalculateBeginGrowingDay_Daily(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
-            this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
+///*
+//            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
+//            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
+//            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
+//*/
+//             this.BeginGrowing = CalculateBeginGrowingDay_Daily(ecoClimate);
+//             this.EndGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
+//             this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
 
+            //---------------------------------------
+            //---------------------------------------
             /*
             for (int day = 5; day < 8; day++)
                 this.JJAtemperature += this.MonthlyTemp[day];
@@ -435,8 +483,11 @@ namespace Landis.Library.Climate
             for (int i = 1 ; i < MaxDayInYear; i++)  //Loop through all the days of the year from day 1 to day 162
             {
                 nightTemp = this.DailyMinTemp[i];
-                if(nightTemp > 0)
+                if (nightTemp > 0)
+                {
+                    this.BeginGrowing = i;
                     return i;
+                }
             }
             return MaxDayInYear; // For the time being if no night could be find with the Temp. > 0 then 0 is returned. A result of this could be that no growth would occure.
         }
@@ -448,22 +499,58 @@ namespace Landis.Library.Climate
             double nightTemp = 0.0;
             int beginGrowingDay = CalculateBeginGrowingDay_Daily(annualClimate);
             int endGrowingDay = MaxDayInYear;
-            for (int i = beginGrowingDay; i < MaxDayInYear; i++)  //Loop through all the days of the year from day 1 to day 162 NOTE: it cannot iterate from MaxDayInYear because it might not be the first day after begin day which has the nightTemp < 0. 
+            //int i = beginGrowingDay;
+            for (int i = MaxDayInYear; i > beginGrowingDay; i--)  //Loop through all the days of the year from day 1 to day 162
             {
                 nightTemp = this.DailyMinTemp[i];
-                if (nightTemp < 0)
+                if (nightTemp > 0)
                 {
+                    this.EndGrowing = i;
                     endGrowingDay = i;
-                    break;
+                    return i;
                 }
             }
-            if (endGrowingDay - beginGrowingDay < 30)
-            {
- //               Climate.ModelCore.UI.WriteLine("two few Growwing days: endGrowingDay - beginGrowingDay < 30.");
- //               throw new ApplicationException("two few Growwing days: endGrowingDay - beginGrowingDay < 30.");
+
+
+            //while ( i < MaxDayInYear  )  //Loop through all the days of the year from day 1 to day 162 NOTE: it cannot iterate from MaxDayInYear because it might not be the first day after begin day which has the nightTemp < 0. 
+            //{
                 
-            }
-            return endGrowingDay; // For the time being if no night could be find with the Temp. < 0 then 0 is returned. A result of this could be that no growth would occure.
+            //        //i = i + 1;
+            //        nightTemp = this.DailyMinTemp[i];
+            //        if (nightTemp < 0 && (endGrowingDay - beginGrowingDay) < 30)
+            //        {
+            //            endGrowingDay = i+1;
+            //            return endGrowingDay;
+            //            break;
+            //        }
+         
+                
+                
+                
+                
+                
+            //    i++;
+            //    }
+                
+            
+            //if ((endGrowingDay - beginGrowingDay) < 30)
+            //{
+            //    Climate.ModelCore.UI.WriteLine("two few Growwing days: endGrowingDay - beginGrowingDay < 30.");
+            //    throw new ApplicationException("two few Growwing days: endGrowingDay - beginGrowingDay < 30.");
+                
+            //}
+            //Console.Write(endGrowingDay - beginGrowingDay);
+            //Console.Read();
+            //this.EndGrowing = 
+
+            this.EndGrowing = endGrowingDay;
+            return endGrowingDay;
+
+
+
+
+
+            //return endGrowingDay; // For the time being if no night could be find with the Temp. < 0 then 0 is returned. A result of this could be that no growth would occure.
         }
 
     }

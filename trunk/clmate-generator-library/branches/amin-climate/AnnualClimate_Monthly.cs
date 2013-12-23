@@ -364,9 +364,10 @@ namespace  Landis.Library.Climate
             int nDays;
             int dayOfYear = 0;
             AnnualClimate_Daily annDaily = new AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep); //for the same timeStep
-
+            IClimateRecord[] ecoClimate = new IClimateRecord[12];
             for (int mo = 0; mo < 12; mo++)
             {
+                ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
                 /*
                 nDays = DaysInMonth(mo, actualYear);
                 int dayOfMo = Convert.ToInt32(Climate.ModelCore.GenerateUniform() * nDays);
@@ -410,8 +411,10 @@ namespace  Landis.Library.Climate
                 //dayOfYear += nDays;
                 
             }
-            
 
+            this.BeginGrowing = annDaily.BeginGrowing;
+            this.EndGrowing = annDaily.EndGrowing;
+            //  this.GrowingDegreeDays = annDaily.gro GrowSeasonDegreeDays(actualYear);
             //-----------------------------------------
             //this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
             //this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
@@ -548,6 +551,7 @@ namespace  Landis.Library.Climate
                 lastMonthMinTemp = MonthlyMinTemp;
                 dayCnt += totalDays;  //new monthly mid-point
             }
+            
             return beginGrowingSeason;
         }
 
