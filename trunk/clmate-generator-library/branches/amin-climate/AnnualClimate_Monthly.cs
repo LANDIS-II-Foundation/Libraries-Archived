@@ -168,6 +168,8 @@ namespace  Landis.Library.Climate
             }
 
         }
+
+        //Daily will not come to here. the average in daily is calculated in the AnnualClimate_Daily
         private void AnnualClimate_Avg(IEcoregion ecoregion, int year, double latitude)
         {
             // check average or random
@@ -408,11 +410,47 @@ namespace  Landis.Library.Climate
                 MonthlyPAR[mo] /= nDays;
                 MonthlyVarTemp[mo] /= nDays;
                 MonthlyPptVarTemp[mo] /= nDays;
-
-
-                
             }
 
+
+
+            //------------------------------------------------------------
+            //-----------------Now calculate monthly parameters-----------
+
+           
+
+            this.Year = actualYear;
+            this.AnnualPrecip = 0.0;
+            this.AnnualN = 0.0;
+            Ecoregion = ecoregion;
+           // IClimateRecord[] ecoClimate = new IClimateRecord[12];
+            for (int mo = 0; mo < 12; mo++)
+            {
+                //here
+                ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
+                //ecoClimate[mo] = Climate.TimestepData[TimeStep, mo];
+
+                //double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
+
+                //double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+
+                //this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
+                //this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
+                //this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp + standardDeviation;
+                //this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+                //this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
+
+                this.AnnualPrecip += this.MonthlyPrecip[mo];
+
+                if (this.MonthlyPrecip[mo] < 0)
+                    this.MonthlyPrecip[mo] = 0;
+
+                double hr = CalculateDayNightLength(mo, latitude);
+                this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+                this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+
+                //this.DOY[mo] = DayOfYear(mo);
+            }
 
 
             this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
@@ -421,13 +459,22 @@ namespace  Landis.Library.Climate
 
             //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
             //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-
+/*
             //These two fucntions have been implemented in the AnnualClimate_Daily. Thks is why I am getting their value from the annDaily
             this.beginGrowing = annDaily.BeginGrowing;
             this.endGrowing = annDaily.EndGrowing;
             //  this.GrowingDegreeDays = annDaily.gro GrowSeasonDegreeDays(actualYear);
             this.growingDegreeDays = annDaily.GrowingDegreeDays;
-            //-----------------------------------------
+*/
+            this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
+            this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(actualYear);
+
+
+            for (int mo = 5; mo < 8; mo++)
+                this.JJAtemperature += this.MonthlyTemp[mo];
+            this.JJAtemperature /= 3.0;
+
             //this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
             //this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
             //this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
@@ -566,7 +613,7 @@ namespace  Landis.Library.Climate
                 dayCnt += totalDays;  //new monthly mid-point
             }
             
-            this.beginGrowing = beginGrowingSeason;
+            //this.beginGrowing = beginGrowingSeason;
             return beginGrowingSeason;
         }
 
@@ -824,6 +871,11 @@ namespace  Landis.Library.Climate
             return TAP;
         }
 
+        //---------------------------------------------------------------------------
+        public void WriteToLogFile()
+        {
+            //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
+        }
 
     }
 }

@@ -224,7 +224,12 @@ namespace Landis.Library.Climate
             return ZCos;
         }
 
-
+        //---------------------------------------------------------------------------
+        //has to be implemented in subclasses
+        public virtual void WriteToLogFile() 
+        {
+            throw new NotImplementedException("Error in calling WriteToLogFile() in AnnualClimate: the WriteToLogFile() should not be called directly and it has to be implemented in subclasses");
+        }
 
 
 

@@ -73,6 +73,26 @@ namespace Landis.Library.Climate
 
             //if (timeStep == TimeStep.Daily)
             //{
+            //setIndexed(checkRHWindSpeed);
+            IndexMax_MeanT = 0;
+            IndexMax_Var = 1;
+            IndexMax_STD = 2;
+            IndexMin_MeanT = 3;
+            IndexMin_Var = 4;
+            IndexMin_STD = 5;
+            IndexPrcp_MeanT = 6;
+            IndexPrcp_Var = 7;
+            IndexPrcp_STD = 8;
+
+            IndexRH_Mean = 9;
+            IndexRH_Var = 10;
+            IndexRH_STD = 11;
+
+            IndexwindSpeed_Mean = 12;
+            IndexwindSpeed_Var = 13;
+            IndexwindSpeed_STD = 14;
+
+
                 for (int j = firstYear; j <= lastYear; j++)//for each year
                 {
                     currentYear = j.ToString();
@@ -88,9 +108,12 @@ namespace Landis.Library.Climate
                         foreach(KeyValuePair<string, double[]> row in climate_Dic_currentYear) // foreach day/month in a certain year-ecoregion
                         { 
                             
-                            //NOTE: The par and avgPptVarTep have been set to sero because I did not know how I should get them from the csv files
+                            //NOTE: The par and avgPptVarTep have been set to zero because I did not know how I should get them from the csv files
                             //icrList.Add(new ClimateRecord(row.Value[IndexMin_MeanT], row.Value[IndexMax_MeanT], (row.Value[IndexMin_STD] + row.Value[IndexMax_STD]) / 2, row.Value[IndexPrcp_MeanT], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMin_Var] + row.Value[IndexMax_Var]) / 2, 0));
                             //allDataRef.Add((currentYear, row.Key, icr}); 
+
+                           
+
                             IClimateRecord icr = new ClimateRecord(row.Value[IndexMin_MeanT], row.Value[IndexMax_MeanT], (row.Value[IndexMin_STD] + row.Value[IndexMax_STD]) / 2, row.Value[IndexPrcp_MeanT], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMin_Var] + row.Value[IndexMax_Var]) / 2, 0, row.Value[IndexRH_Mean], row.Value[IndexRH_Var], row.Value[IndexRH_STD], row.Value[IndexwindSpeed_Mean], row.Value[IndexwindSpeed_Var], row.Value[IndexwindSpeed_STD]);
                             //if(climateFileActiveEcoregions.ContainsKey(Climate.ModelCore.Ecoregions[i].Index) )
                             if(Climate.ModelCore.Ecoregions[i].Active)
@@ -120,8 +143,16 @@ namespace Landis.Library.Climate
             prcpTriggerWord = formatProvider.PrecipTrigerWord;
             rhTriggerWord = formatProvider.RhTrigerWord;
             windSpeedTriggerWord = formatProvider.WindSpeedTrigerWord;
+            bool checkRHWindSpeed = false;
 
-            string unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord + ", " + rhTriggerWord + ", " + windSpeedTriggerWord;
+
+            string unmatched_TriggerWords;
+
+            if (checkRHWindSpeed == false)
+                 unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;// +", " + rhTriggerWord + ", " + windSpeedTriggerWord;
+            else
+                unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord +", " + rhTriggerWord + ", " + windSpeedTriggerWord;
+
             int triggerWordsCheckingTime = 0;
             string path = climateFile;
             StreamReader sreader;
@@ -240,9 +271,14 @@ namespace Landis.Library.Climate
                         {
                             triggerWordsCheckingTime++;
                             if (triggerWordsCheckingTime > 1)
-                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord + ", " + rhTriggerWord + ", " + windSpeedTriggerWord)
+                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord + ", " + rhTriggerWord + ", " + windSpeedTriggerWord && checkRHWindSpeed == true)
                                 {
-                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords,  formatProvider.SelectedFormat);
+                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
+                                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
+                                }
+                                else if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord && checkRHWindSpeed == false)
+                                {
+                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
                                     throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
                                 }
 
@@ -524,26 +560,27 @@ namespace Landis.Library.Climate
                         //int AverageMinSTD = 3;
                         //int AveragePrec = 4;
                         //int AveragePrecSTD = 5;
-                        IndexMax_MeanT = 0;
-                        //IndexMax_MaxT = 1;
-                        IndexMax_Var = 1;
-                        IndexMax_STD = 2;
-                        IndexMin_MeanT = 3;
-                        //IndexMin_MaxT = 5;
-                        IndexMin_Var = 4;
-                        IndexMin_STD = 5;
-                        IndexPrcp_MeanT = 6;
-                        //IndexPrcp_MaxT = 9;
-                        IndexPrcp_Var = 7;
-                        IndexPrcp_STD = 8;
+                        setIndexed();
+                        //IndexMax_MeanT = 0;
+                        ////IndexMax_MaxT = 1;
+                        //IndexMax_Var = 1;
+                        //IndexMax_STD = 2;
+                        //IndexMin_MeanT = 3;
+                        ////IndexMin_MaxT = 5;
+                        //IndexMin_Var = 4;
+                        //IndexMin_STD = 5;
+                        //IndexPrcp_MeanT = 6;
+                        ////IndexPrcp_MaxT = 9;
+                        //IndexPrcp_Var = 7;
+                        //IndexPrcp_STD = 8;
 
-                        IndexRH_Mean = 9;
-                        IndexRH_Var = 10;
-                        IndexRH_STD = 11;
+                        //IndexRH_Mean = 9;
+                        //IndexRH_Var = 10;
+                        //IndexRH_STD = 11;
 
-                        IndexwindSpeed_Mean = 12;
-                        IndexwindSpeed_Var = 13;
-                        IndexwindSpeed_STD = 14;
+                        //IndexwindSpeed_Mean = 12;
+                        //IndexwindSpeed_Var = 13;
+                        //IndexwindSpeed_STD = 14;
 
                         //int AverageMaxT = 0;
                         //int AverageMaxSTD = 1;
@@ -608,7 +645,7 @@ namespace Landis.Library.Climate
                                                 //AverageMaxSTD += Math.Round(Convert.ToDouble(row.Value[2]), 2);
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10 , 2));  // /10 is for mm->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
@@ -635,7 +672,7 @@ namespace Landis.Library.Climate
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) /10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
                                                 
@@ -691,7 +728,7 @@ namespace Landis.Library.Climate
                                             numberOfDays = 0;
                                             AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                             AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
                                             AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                             SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
                                             //sums = 0;
@@ -800,12 +837,22 @@ namespace Landis.Library.Climate
             else if (sourceTemporalGranularity == TemporalGranularity.Monthly)
             {
 
-                unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;// +", " + rhTriggerWord + ", " + windSpeedTriggerWord;
+                //unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;// +", " + rhTriggerWord + ", " + windSpeedTriggerWord;
 
                 //string path = @"D:\PSU\Landis_II\amin-branch\USGS_Data\Hayhoe_Climate_Data1.csv";
                 sreader = new StreamReader(path);
                 string line;
                 string[] fields;
+                 checkRHWindSpeed = false;
+
+
+                
+
+                if (checkRHWindSpeed == false)
+                    unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;// +", " + rhTriggerWord + ", " + windSpeedTriggerWord;
+                else
+                    unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord + ", " + rhTriggerWord + ", " + windSpeedTriggerWord;
+
                 //string tempScenarioName = "";
                 DataTable _dataTableDataByTime = new DataTable();
                 int numberOfAllEcoregions = 0;
@@ -917,7 +964,12 @@ namespace Landis.Library.Climate
                             
                             triggerWordsCheckingTime++;
                             if (triggerWordsCheckingTime > 1)
-                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord+ ", " + rhTriggerWord + ", " + windSpeedTriggerWord)
+                                if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord + ", " + rhTriggerWord + ", " + windSpeedTriggerWord && checkRHWindSpeed == true)
+                                {
+                                    Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
+                                    throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
+                                }
+                                else if (unmatched_TriggerWords == maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord && checkRHWindSpeed == false)
                                 {
                                     Climate.ModelCore.UI.WriteLine("Error in ClimateDataConvertor: Converting {0} file into standard format; The following triggerWords did not match the triggerwords in the given file: {1}." + "selected format: \"{2}\"", climateFile, unmatched_TriggerWords, formatProvider.SelectedFormat);
                                     throw new ApplicationException("Error in ClimateDataConvertor: Converting " + climateFile + " file into standard format; The following triggerWords did not match the triggerwords in the given file: " + unmatched_TriggerWords + "." + "selected format: \"" + formatProvider.SelectedFormat + "\"");
@@ -1268,7 +1320,7 @@ namespace Landis.Library.Climate
                                             {
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10 , 2));  // /10 is for mm->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 numberOfDays++;
@@ -1294,7 +1346,7 @@ namespace Landis.Library.Climate
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2) / 10);  // /10 is for m->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
                                                 sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 //sums = 0;
@@ -1579,6 +1631,28 @@ namespace Landis.Library.Climate
 
             return centuryPath;
 
+        }
+
+        private static void setIndexed()
+        {
+            
+                IndexMax_MeanT = 0;
+                IndexMax_Var = 1;
+                IndexMax_STD = 2;
+                IndexMin_MeanT = 3;
+                IndexMin_Var = 4;
+                IndexMin_STD = 5;
+                IndexPrcp_MeanT = 6;
+                IndexPrcp_Var = 7;
+                IndexPrcp_STD = 8;
+                IndexRH_Mean = 9;
+                IndexRH_Var = 10;
+                IndexRH_STD = 11;
+
+                IndexwindSpeed_Mean = 12;
+                IndexwindSpeed_Var = 13;
+                IndexwindSpeed_STD = 14;
+            
         }
     }
 }
