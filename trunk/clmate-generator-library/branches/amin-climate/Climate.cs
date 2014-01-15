@@ -174,8 +174,8 @@ namespace Landis.Library.Climate
 
             ModelCore.UI.WriteLine("   Loading weather data from file \"{0}\" ...", configParameters.ClimateFile);
             //Climate.Convert_FileFormat(parameters.ClimateFileFormat, parameters.ClimateFile), Climate.Convert_FileFormat(parameters.SpinUpClimateFileFormat, parameters.SpinUpClimateFile)
-            ClimateParser parser = new ClimateParser();
-            ClimateParser spinup_parser = new ClimateParser();
+//            ClimateParser parser = new ClimateParser();
+//            ClimateParser spinup_parser = new ClimateParser();
             //"Century_Climate_Inputs_Monthly.txt";//
             Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
             Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
@@ -436,7 +436,7 @@ namespace Landis.Library.Climate
         /// Converts USGS Data to Standard Input climate Data and fill out the Future_AllData and/or Spinup_AllData
         /// </summary>
         /// 
-        public static string ConvertFileFormat_FillOutAllData(String timeSeries, string File, string fileFormat, ClimatePhase climatePhase)
+        public static string ConvertFileFormat_FillOutAllData(String timeSeries, string filePath, string fileFormat, ClimatePhase climatePhase)
         {
             if (climatePhase == ClimatePhase.Future_Climate && timeSeries.Contains("Daily"))
                 future_allData_granularity = TemporalGranularity.Daily;
@@ -448,22 +448,35 @@ namespace Landis.Library.Climate
 
             string readableFile = "";
             if (timeSeries.Contains("MonthlyStandard"))
-                return File;
+            {
+                ModelCore.UI.WriteLine("Loading from file with Monthly Standard format...\n"); 
+                if (future_allData_granularity == TemporalGranularity.Daily)
+                {
+                    ClimateParser parser = new ClimateParser();
+                    future_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(filePath, parser);
+                }
+                else if (future_allData_granularity == TemporalGranularity.Monthly)
+                {
+                    ClimateParser spinup_parser = new ClimateParser();
+                    spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(filePath, spinup_parser);
+                }
+                return filePath;
+            }
 
             else if (timeSeries.Contains("Average") || timeSeries.Contains("Random"))
             {
                 if (timeSeries.Contains("Daily"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, File, fileFormat, climatePhase);
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
                 else if (timeSeries.Contains("Monthly"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, File, fileFormat, climatePhase);
+                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
 
             }
-            
+
             else if (timeSeries.Contains("MonthlyAverage"))//AverageMonthly
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, File, fileFormat, climatePhase);
+                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
             }
-            
+
             //else if (timeSeries.Contains("Random"))
             //{
             //    if (timeSeries.Contains("Daily"))
@@ -471,12 +484,12 @@ namespace Landis.Library.Climate
             //    else if (timeSeries.Contains("Monthly"))
             //        return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, File, fileFormat, climatePhase);
             //}
-            
+
             else if (timeSeries.Contains("DailyGCM"))
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, File, fileFormat, climatePhase);
+                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
             }
-            
+
             else
             {
                 ModelCore.UI.WriteLine("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
