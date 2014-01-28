@@ -374,7 +374,7 @@ namespace Landis.Library.Climate
         /// <param name="annualClimate"></param>
         /// <param name="month"></param>
         /// <returns></returns>
-        public void CalculatePDSI(AnnualClimate_Monthly[] annualClimates, double[] historic_mon_Temp_Normal, double awc, double latitude, string outputFilePath, UnitSystem arsUnitSystem)
+        public void CalculatePDSI(AnnualClimate_Monthly[] annualClimates, double[] historic_mon_Temp_Normal, double awc, double latitude, /*string outputFilePath,*/ UnitSystem arsUnitSystem)
         {
             //double fieldCapacity = Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[_AnnualClimates[0].Ecoregion]; //- Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[_AnnualClimates[0].Ecoregion];
             _AnnualClimates = annualClimates;
@@ -474,8 +474,8 @@ namespace Landis.Library.Climate
             CalcOrigK();
 
             string s = "";
-            double annualPDSI = 0;
-            string annPDSI = "";
+            //double annualPDSI = 0;
+            //string annPDSI = "";
             //double ecoAverage = 0;
             //foreach(KeyValuePair<int,double[]> item in XDic)
             //{
@@ -486,100 +486,93 @@ namespace Landis.Library.Climate
             LinkedListNode<double> node = Xlist.Last;
             int j = 0;
             int stYear = _AnnualClimates[0].Year;
-            //string outputFilePathAnnualPDSI = @"AnnualPDSI.csv";
             if (Climate.AnnualPDSI.Columns.Count == 0)
             {
                 Climate.AnnualPDSI.Columns.Add("TimeStep", typeof(Int32));
                 Climate.AnnualPDSI.Columns.Add("Ecorigion", typeof(Int32));
                 Climate.AnnualPDSI.Columns.Add("AnnualPDSI", typeof(double));
             }
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputFilePath, true))
-            {
-                //using (System.IO.StreamWriter f = new System.IO.StreamWriter(outputFilePathAnnualPDSI, true))
-                //{
-                //f.WriteLine("Time-step, Ecoregion, AnnualPDSI");
-                if (Climate.Flag == false)
-                {
-                    file.WriteLine("Ecoregion, Time-step, Year, mo.1, mo.2, mo.3, mo.4, mo.5, mo.6, mo.7, mo.8, mo.9, mo.10, mo.11, mo.12, AnnualPDSI");
-                    Climate.Flag = true;
-                }
-                for (int i = 0; i < Xlist.Count(); i += 12)
-                {
-                    //if (i % 12 == 0)
-                    //{
-                    stYear = _AnnualClimates[j].Year;
-                    //s += "\r" + _AnnualClimates[j].Ecoregion.Name + ", " + _AnnualClimates[j].TimeStep + ", " + stYear.ToString() + ", " + "";
-                    s += _AnnualClimates[j].Ecoregion.Name + ", " + _AnnualClimates[j].TimeStep + ", " + stYear.ToString() + ", " + "";
-                    //Add s into file to save PDSI
-                    j++;
-                    //}
-                    //if (stYear == annualClimates[0].Year)
-                    //{
-                    //    s += annualClimates[0].Year.ToString() + "\t";
+            //using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputFilePath, true))
+            //{
+            //    //using (System.IO.StreamWriter f = new System.IO.StreamWriter(outputFilePathAnnualPDSI, true))
+            //    //{
+            //    //f.WriteLine("Time-step, Ecoregion, AnnualPDSI");
+            //    if (Climate.Flag == false)
+            //    {
+            //        file.WriteLine("Ecoregion, Time-step, Year, mo.1, mo.2, mo.3, mo.4, mo.5, mo.6, mo.7, mo.8, mo.9, mo.10, mo.11, mo.12, AnnualPDSI");
+            //        Climate.Flag = true;
+            //    }
+            //    for (int i = 0; i < Xlist.Count(); i += 12)
+            //    {
+            //        //if (i % 12 == 0)
+            //        //{
+            //        stYear = _AnnualClimates[j].Year;
+            //        //s += "\r" + _AnnualClimates[j].Ecoregion.Name + ", " + _AnnualClimates[j].TimeStep + ", " + stYear.ToString() + ", " + "";
+            //        s += _AnnualClimates[j].Ecoregion.Name + ", " + _AnnualClimates[j].TimeStep + ", " + stYear.ToString() + ", " + "";
+            //        //Add s into file to save PDSI
+            //        j++;
+            //        //}
+            //        //if (stYear == annualClimates[0].Year)
+            //        //{
+            //        //    s += annualClimates[0].Year.ToString() + "\t";
 
-                    //}
-                    for (int m = 0; m < 12; m++)
-                    {
-                        annualPDSI += Math.Round(node.Value, 2);
+            //        //}
+            //        for (int m = 0; m < 12; m++)
+            //        {
+            //            annualPDSI += Math.Round(node.Value, 2);
 
-                        s += Math.Round(node.Value, 2) + ", ";
-                        node = node.Previous;
-                        if (m == 11)
-                        {
+            //            s += Math.Round(node.Value, 2) + ", ";
+            //            node = node.Previous;
+            //            if (m == 11)
+            //            {
 
-                            annualPDSI = annualPDSI / 12;
-                            System.Data.DataRow pRow = Climate.AnnualPDSI.NewRow();
-                            pRow["TimeStep"] = _AnnualClimates[j - 1].TimeStep;
-                            pRow["Ecorigion"] = _AnnualClimates[j - 1].Ecoregion.Name.Substring(3);
-                            pRow["AnnualPDSI"] = Math.Round(annualPDSI, 2);
-                            Climate.AnnualPDSI.Rows.Add(pRow);
-                            //annPDSI = "\r" + _AnnualClimates[j - 1].TimeStep + "," + _AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(annualPDSI, 2) + ",";
-                            //f.WriteLine(annPDSI);
-                            //XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new string[2]{_AnnualClimates[j - 1].Ecoregion.Name, Math.Round(annualPDSI, 2).ToString()});
-                            //XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new {ecoregion = _AnnualClimates[j - 1].Ecoregion.Name, annPdsi = Math.Round(annualPDSI, 2)});
-                            s += Math.Round(annualPDSI, 2);
-                            annPDSI = "";
-                            annualPDSI = 0;
-                        }
-                    }
+            //                annualPDSI = annualPDSI / 12;
+            //                System.Data.DataRow pRow = Climate.AnnualPDSI.NewRow();
+            //                pRow["TimeStep"] = _AnnualClimates[j - 1].TimeStep;
+            //                pRow["Ecorigion"] = _AnnualClimates[j - 1].Ecoregion.Name.Substring(3);
+            //                pRow["AnnualPDSI"] = Math.Round(annualPDSI, 2);
+            //                Climate.AnnualPDSI.Rows.Add(pRow);
+            //                //annPDSI = "\r" + _AnnualClimates[j - 1].TimeStep + "," + _AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(annualPDSI, 2) + ",";
+            //                //f.WriteLine(annPDSI);
+            //                //XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new string[2]{_AnnualClimates[j - 1].Ecoregion.Name, Math.Round(annualPDSI, 2).ToString()});
+            //                //XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new {ecoregion = _AnnualClimates[j - 1].Ecoregion.Name, annPdsi = Math.Round(annualPDSI, 2)});
+            //                s += Math.Round(annualPDSI, 2);
+            //                annPDSI = "";
+            //                annualPDSI = 0;
+            //            }
+            //        }
 
-                    s += "";
-                    file.WriteLine(s);
-                    s = "";
-                    //if (j == _AnnualClimates.Length)
-                    //{
-                    //    //print average ecorigion for each ecorigion
-                    //    ecoAverage = ecoAverage / _AnnualClimates.Length;
-                    //    file.WriteLine("Ecoregion, Average");
-                    //    file.WriteLine(_AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(ecoAverage, 2));
-                    //    ecoAverage = 0;
+            //        s += "";
+            //        file.WriteLine(s);
+            //        s = "";
+            //        //if (j == _AnnualClimates.Length)
+            //        //{
+            //        //    //print average ecorigion for each ecorigion
+            //        //    ecoAverage = ecoAverage / _AnnualClimates.Length;
+            //        //    file.WriteLine("Ecoregion, Average");
+            //        //    file.WriteLine(_AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(ecoAverage, 2));
+            //        //    ecoAverage = 0;
 
-                    //}
-                }
-                //}
-            }
-
-
+            //        //}
+            //    }
+            //    //}
+            //}
 
 
-            //System.IO.File.WriteAllText(@"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\PDSI_BaseBDA.txt", s);
-            //if(month == 0)
-            //    XDic.Add(yearIndex,new double[12]);
-            //((double[])XDic[yearIndex])[month] = newX;
 
-            //return Xlist.ToArray()[month - 1];//Xlist[month-1].;
+
         }
 
         //Computes the sums for the 8 water balance variables
         private void PDSI_SumAll()
         {
             char[] Temp = new char[150], Precip = new char[150];
-            int actyear;
+            //int actyear;
             double DEP = 0;
             SD = 0;
             SD2 = 0;
             /* SG 6/5/06: add variable to support a calibration interval */
-            int nCalibrationPeriodsLeft = 0;//nCalibrationPeriods; /* init periods left */        //******** I assigned 0 because we dont need it *******
+            //int nCalibrationPeriodsLeft = 0;//nCalibrationPeriods; /* init periods left */        //******** I assigned 0 because we dont need it *******
 
             // Initializes the sums to 0;
             for (int i = 0; i < num_of_periods; i++)
