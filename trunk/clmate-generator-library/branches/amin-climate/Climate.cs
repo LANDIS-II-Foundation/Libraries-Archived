@@ -56,7 +56,7 @@ namespace Landis.Library.Climate
             }
         }
 
-        public static double[] LandscapAnnualPDSI
+        public static double[] LandscapeAnnualPDSI
         {
             get
             {
@@ -332,7 +332,7 @@ namespace Landis.Library.Climate
             //numberOfEcoregions = ecos.Max();
             numberOfEcoregions = Climate.AnnualPDSI.AsEnumerable().Select(a2 => a2.Field<int>("Ecorigion")).Distinct().ToList().Max();
             //numberOfEcoregions = Climate.ModelCore.Ecoregions.Count;
-            Climate.LandscapAnnualPDSI = new double[numberOftimeStaps];
+            Climate.LandscapeAnnualPDSI = new double[numberOftimeStaps];
 
             for (int timeStep = 1; timeStep <= numberOftimeStaps; timeStep++)
             {
@@ -346,7 +346,7 @@ namespace Landis.Library.Climate
                         if (eco == numberOfEcoregions)
                         {
                             ecoAverage = ecoAverage / numberOfEcoregions;
-                            Climate.LandscapAnnualPDSI[timeStep - 1] = ecoAverage;
+                            Climate.LandscapeAnnualPDSI[timeStep - 1] = ecoAverage;
                             //Can be printed
                             //file.WriteLine(timeStep + ", " + ecoAverage) ;
 
