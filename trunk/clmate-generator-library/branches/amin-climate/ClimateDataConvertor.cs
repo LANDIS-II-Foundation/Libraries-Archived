@@ -449,7 +449,7 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexPrcp_MeanT / 10); // 10 mm to cm conversion
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexPrcp_MeanT / 10); //  /10 is for mm to cm conversion
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
@@ -645,9 +645,9 @@ namespace Landis.Library.Climate
                                                 //AverageMaxSTD += Math.Round(Convert.ToDouble(row.Value[2]), 2);
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2)); 
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var] / 10);
+                                                SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
 
                                                 numberOfDays++;
@@ -672,9 +672,9 @@ namespace Landis.Library.Climate
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2)); 
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var] / 10);
+                                                SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
                                                 numberOfDays++;
                                             }
@@ -728,9 +728,9 @@ namespace Landis.Library.Climate
                                             numberOfDays = 0;
                                             AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                             AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
+                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2));
                                             AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                            SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var] / 10);
+                                            SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
                                             //sums = 0;
                                             //stdTemp = 0;
                                             //prpSums = 0;
@@ -1068,7 +1068,7 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexPrcp_MeanT / 10);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexPrcp_MeanT / 10); // /10 is for mm to cm conversion
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
@@ -1320,9 +1320,9 @@ namespace Landis.Library.Climate
                                             {
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2));
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD] / 10);
+                                                sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 numberOfDays++;
 
                                             }
@@ -1346,9 +1346,9 @@ namespace Landis.Library.Climate
                                                 numberOfDays = 0;
                                                 AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
                                                 AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT] / 10, 2));  // /10 is for mm->cm conversion
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2)); 
                                                 AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
-                                                sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD] / 10);
+                                                sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 //sums = 0;
                                                 //stdTemp = 0;
                                                 //prpSums = 0;
