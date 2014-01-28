@@ -32,7 +32,7 @@ namespace Landis.Library.Climate
         internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_spinup_cache;
 
         private static System.Data.DataTable annualPDSI;
-        private static double[] landscapAnnualPDSI;
+        private static double[] landscapeAnnualPDSI;
 
         public Climate()
         {
@@ -60,11 +60,11 @@ namespace Landis.Library.Climate
         {
             get
             {
-                return landscapAnnualPDSI;
+                return landscapeAnnualPDSI;
             }
             set
             {
-                landscapAnnualPDSI = value;
+                landscapeAnnualPDSI = value;
             }
 
         }
