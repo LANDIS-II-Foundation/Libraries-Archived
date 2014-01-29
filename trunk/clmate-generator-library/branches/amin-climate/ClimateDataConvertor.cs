@@ -449,13 +449,13 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexPrcp_MeanT / 10); //  /10 is for mm to cm conversion
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) / 10, IndexPrcp_MeanT); //  /10 is for mm to cm conversion
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_Var / 10);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) / 10, IndexPrcp_Var); 
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_STD / 10);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) / 10, IndexPrcp_STD); //NOTE: this might be a wrong conversion for converting IndexPrcp_STD from mm to cm because STD is calculate using root square.
 
 
                                 //climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
@@ -1068,13 +1068,13 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexPrcp_MeanT / 10); // /10 is for mm to cm conversion
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) / 10, IndexPrcp_MeanT); // /10 is for mm to cm conversion
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_Var / 10);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) / 10, IndexPrcp_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_STD / 10);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) / 10, IndexPrcp_STD);
 
 
                                 //climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
