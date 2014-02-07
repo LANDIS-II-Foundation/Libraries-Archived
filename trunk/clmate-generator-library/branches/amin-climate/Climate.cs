@@ -301,8 +301,10 @@ namespace Landis.Library.Climate
                             mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
                         }
 
+
                         foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
                         {
+                            Climate.ModelCore.UI.WriteLine("timestep = {0}.", timeStep.Key.ToString());
                             if (timeStep.Key != 0)
                             {
                                 acs[timestepIndex] = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude[ecoregion.Index], climatePhase, timeStep.Key); // Latitude should be given
