@@ -871,11 +871,11 @@ namespace  Landis.Library.Climate
             return TAP;
         }
 
-        //---------------------------------------------------------------------------
-        public void WriteToLogFile()
-        {
-            //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
-        }
+        ////---------------------------------------------------------------------------
+        //public void WriteToLogFile()
+        //{
+        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
+        //}
 
     }
 }

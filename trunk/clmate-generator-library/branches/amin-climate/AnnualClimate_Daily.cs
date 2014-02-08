@@ -178,11 +178,6 @@ namespace Landis.Library.Climate
                 throw new ApplicationException("Error in creating a new AnnualClimate: the There is an inconsistancy between the passed arguments and the parameters set up in the climate-input-file.");
             }
 
-
-
-
-
-
             Ecoregion = ecoregion;
             IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
 
@@ -571,10 +566,10 @@ namespace Landis.Library.Climate
         }
 
         //---------------------------------------------------------------------------
-        public void WriteToLogFile()
-        { 
-            //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
-        }
+        //public void WriteToLogFile()
+        //{ 
+        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
+        //}
 
     }
 }

@@ -17,7 +17,7 @@ namespace Landis.Library.Climate
          : IInputParameters
        
     {
-        private int timestep;
+        //private int timestep;
 //        private SeedingAlgorithms seedAlg;
 
         private string climateConfigFile;

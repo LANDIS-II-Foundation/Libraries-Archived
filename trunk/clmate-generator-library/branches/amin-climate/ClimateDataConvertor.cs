@@ -171,7 +171,7 @@ namespace Landis.Library.Climate
                 string[] fields;
                 //string tempScenarioName = "";
                 DataTable _dataTableDataByTime = new DataTable();
-                int numberOfAllEcoregions = 0;
+                //int numberOfAllEcoregions = 0;
                 line = sreader.ReadLine();
                 fields = line.Split(',');
                 //tempScenarioName = fields[0].Substring(1, fields[0].LastIndexOf("t") - 2);
@@ -855,7 +855,7 @@ namespace Landis.Library.Climate
 
                 //string tempScenarioName = "";
                 DataTable _dataTableDataByTime = new DataTable();
-                int numberOfAllEcoregions = 0;
+                //int numberOfAllEcoregions = 0;
                 line = sreader.ReadLine();
                 fields = line.Split(',');
                 //tempScenarioName = fields[0].Substring(1, fields[0].LastIndexOf("t") - 2);

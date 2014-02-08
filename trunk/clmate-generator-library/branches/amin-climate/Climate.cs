@@ -1,4 +1,4 @@
-//  Copyright 2009-2010 Portland State University, Conservation Biology Institute
+//  Copyright 2009-2010 Portland State University
 //  Authors:  Robert M. Scheller
 
 using Landis.Core;
@@ -7,9 +7,9 @@ using System.IO;
 using System;
 //using climate_generator;
 using System.Collections;
-using System.Data.OleDb;
-using System.Data;
-using System.Linq;
+//using System.Data.OleDb;
+//using System.Data;
+//using System.Linq;
 
 
 
@@ -28,10 +28,11 @@ namespace Landis.Library.Climate
         private static ICore modelCore;
         private static bool flag;
         private static IInputParameters configParameters;
-        internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_future_cache;
-        internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_spinup_cache;
+        //internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_future_cache;
+        //internal static Dictionary<int, IClimateRecord[,]> avgEcoClimate_spinup_cache;
 
-        private static System.Data.DataTable annualPDSI;
+        //private static System.Data.DataTable annualPDSI;
+        private static double[,] annualPDSI;
         private static double[] landscapeAnnualPDSI;
 
         public Climate()
@@ -48,11 +49,16 @@ namespace Landis.Library.Climate
             }
         }
 
-        public static System.Data.DataTable AnnualPDSI
+        //public static System.Data.DataTable AnnualPDSI
+        public static double[,] AnnualPDSI
         {
             get
             {
                 return annualPDSI;
+            }
+            set
+            {
+                annualPDSI = value;
             }
         }
 
@@ -163,8 +169,8 @@ namespace Landis.Library.Climate
         public static void Initialize(string climateConfigFilename, bool writeOutput, ICore mCore)
         {
             InputParametersParser inParamsParser = new InputParametersParser();
-            //inParamsParser.Parse();
             configParameters = Landis.Data.Load<IInputParameters>(climateConfigFilename, inParamsParser);
+            //inParamsParser.Parse();
             // call parser--- read climate-generator.txt
             //climate.ClimateFileFormat,...
             // call   Climate.Convert_FileFormat(climate.ClimateFileFormat,--)--- return string--> fill all data
@@ -173,13 +179,14 @@ namespace Landis.Library.Climate
             modelCore = mCore;
 
             ModelCore.UI.WriteLine("   Loading weather data from file \"{0}\" ...", configParameters.ClimateFile);
+            Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
+            Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
+            string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, ClimatePhase.Future_Climate);
+
             //Climate.Convert_FileFormat(parameters.ClimateFileFormat, parameters.ClimateFile), Climate.Convert_FileFormat(parameters.SpinUpClimateFileFormat, parameters.SpinUpClimateFile)
 //            ClimateParser parser = new ClimateParser();
 //            ClimateParser spinup_parser = new ClimateParser();
             //"Century_Climate_Inputs_Monthly.txt";//
-            Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
-            Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
-            string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, ClimatePhase.Future_Climate);
 //            future_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedClimateFileName, parser);
             //modelCore = mCore;
             if (configParameters.SpinUpClimateTimeSeries.ToLower() != "no")
@@ -196,12 +203,13 @@ namespace Landis.Library.Climate
                 for (int i = 0; i < Climate.future_allData.Count; i++)
                     Climate.randSelectedTimeSteps_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
 
-                int maxSpeciesAge = modelCore.Species.Max(sp => sp.Longevity);
-                //int maxSpeciesAge = 0;
-                //foreach (ISpecies sp in ModelCore.Species)
-                //{ 
-                //    if(sp. maxSpeciesAge 
-                //}
+                //int maxSpeciesAge = modelCore.Species.Max(sp => sp.Longevity);
+                int maxSpeciesAge = 0;
+                foreach (ISpecies sp in ModelCore.Species)
+                {
+                    if (sp.Longevity > maxSpeciesAge)
+                        maxSpeciesAge = sp.Longevity;
+                }
 
                 Climate.randSelectedTimeSteps_spinup = new int[maxSpeciesAge]; //new int[Climate.spinup_allData.Count];
                 for (int i = 0; i < maxSpeciesAge; i++)
@@ -224,107 +232,119 @@ namespace Landis.Library.Climate
                 Write(Climate.ModelCore.Ecoregions);
         }
 
-        public static void GenerateClimate_GetPDSI(int startYear, int endYear, int latitude, double fieldCapacity, double wiltingPoint)
+        //public static void GenerateClimate_GetPDSI(int startYear, int endYear, int latitude, double fieldCapacity, double wiltingPoint)
+        //{
+        //    string outputFilePath = @"PDSI_BaseBDA_Genrated_Climate.csv";
+        //    File.WriteAllText(outputFilePath, String.Empty);
+
+        //    foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
+        //    {
+        //        AnnualClimate_Monthly[] acs;
+        //        int numOfYears = endYear - startYear + 1;
+        //        acs = new AnnualClimate_Monthly[numOfYears];
+
+        //        //foreach time step it should be called
+
+        //        for (int i = startYear; i <= endYear; i++)
+        //        {
+        //            acs[i - startYear] = new AnnualClimate_Monthly(ecoregion, 0, latitude); // Latitude should be given
+        //            //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
+        //            //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
+        //        }
+
+
+
+        //        double[] mon_T_normal = new double[12];//new double[12] { 19.693, 23.849, 34.988, 49.082, 60.467, 70.074, 75.505, 73.478, 64.484, 52.634, 36.201, 24.267 };
+        //        IClimateRecord[] climateRecs = new ClimateRecord[12];
+
+        //        //If timestep is 0 then calculate otherwise get the mon_T_normal for timestep 0
+
+        //        Climate.TimestepData = future_allData[0];
+        //        for (int mo = 0; mo < 12; mo++)
+        //        {
+        //            climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
+
+        //            mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
+        //        }
+        //        double AWC = fieldCapacity - wiltingPoint;
+        //        //double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
+        //        new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, /*outputFilePath,*/ UnitSystem.metrics);
+        //    }
+        //}
+
+        public static void SetPDSI(int startYear, double[] latitudes, double[] fieldCapacities, double[] wiltingPoints, ClimatePhase climatePhase = ClimatePhase.Future_Climate)
         {
-            string outputFilePath = @"PDSI_BaseBDA_Genrated_Climate.csv";
-            File.WriteAllText(outputFilePath, String.Empty);
+            //Climate.Flag = false;
 
-            foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
-            {
-                AnnualClimate_Monthly[] acs;
-                int numOfYears = endYear - startYear + 1;
-                acs = new AnnualClimate_Monthly[numOfYears];
+            Climate.ModelCore.UI.WriteLine("   Calculating PDSI for {0} years of data.", future_allData.Count);
+            annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, Climate.ModelCore.EndTime - Climate.ModelCore.StartTime];
+            landscapeAnnualPDSI = new double[Climate.ModelCore.EndTime - Climate.ModelCore.StartTime];
+            
+            //foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
+            //    Climate.ModelCore.UI.WriteLine("future data YEAR = {0}.", timeStep.Key);
+            //Climate.annualPDSI = new System.Data.DataTable();  //final list of annual PDSI values
+            int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
 
-                //foreach time step it should be called
-
-                for (int i = startYear; i <= endYear; i++)
-                {
-                    acs[i - startYear] = new AnnualClimate_Monthly(ecoregion, 0, latitude); // Latitude should be given
-                    //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
-                    //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
-                }
-
-
-
-                double[] mon_T_normal = new double[12];//new double[12] { 19.693, 23.849, 34.988, 49.082, 60.467, 70.074, 75.505, 73.478, 64.484, 52.634, 36.201, 24.267 };
-                IClimateRecord[] climateRecs = new ClimateRecord[12];
-
-                //If timestep is 0 then calculate otherwise get the mon_T_normal for timestep 0
-
-                Climate.TimestepData = future_allData[0];
-                for (int mo = 0; mo < 12; mo++)
-                {
-                    climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
-
-                    mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
-                }
-                double AWC = fieldCapacity - wiltingPoint;
-                //double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
-                new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, /*outputFilePath,*/ UnitSystem.metrics);
-            }
-        }
-
-        public static void SetPDSI(int startYear, double[] latitude, double[] fieldCapacity, double[] wiltingPoint, ClimatePhase climatePhase = ClimatePhase.Future_Climate)
-        {
-            Climate.Flag = false;
-            //string outputFilePath = "";
-            //if (File.Exists("bda\\PDSI_BaseBDA.csv")) //("C:\\Program Files\\LANDIS-II\\v6\\examples\\base-BDA_1\\bda\\PDSI_BaseBDA.csv"))
-            //    outputFilePath = @"bda\PDSI_BaseBDA.csv";// @"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\bda\PDSI_BaseBDA.csv";
-            //else
-            //{
-            //    File.Create("bda\\PDSI_BaseBDA.csv");//("C:\\Program Files\\LANDIS-II\\v6\\examples\\base-BDA_1\\bda\\PDSI_BaseBDA.csv");
-            //    outputFilePath = @"bda\PDSI_BaseBDA.csv"; //@"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\bda\PDSI_BaseBDA.csv";
-            //}
-            //File.WriteAllText(outputFilePath, String.Empty);
-
-            Climate.annualPDSI = new System.Data.DataTable();  //final list of annual PDSI values
             foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
             {
                 if (ecoregion.Active)
                 {
-                    //if (true)//(ecoregion.Index == 0)
-                    //{
-                        AnnualClimate_Monthly[] acs;
-                        int numOfYears = future_allData.Count - 1; //-1 is because we dont want the timestep 0
-                        acs = new AnnualClimate_Monthly[numOfYears];
-                        int timestepIndex = 0;
+                    Climate.ModelCore.UI.WriteLine("CALCULATING PDSI for ECOREGION = {0}.", ecoregion.Name);
 
-                        double[] mon_T_normal = new double[12];
-                        IClimateRecord[] climateRecs = new ClimateRecord[12];
+                    //AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly();
+                    double latitude = latitudes[ecoregion.Index];
+                    double availableWaterCapacity = fieldCapacities[ecoregion.Index] - wiltingPoints[ecoregion.Index];
+                    
+                    Climate.ModelCore.UI.WriteLine("   Latitude = {0}, Available Water = {1}.", latitude, availableWaterCapacity);
 
-                        //If timestep is 0 then calculate otherwise get the mon_T_normal for timestep 0
+                    double[] month_Temp_normal = new double[12];
+                    IClimateRecord[] climateRecs = new ClimateRecord[12];
 
-                        Climate.TimestepData = future_allData[0];
+                     //Firt Calculate Climate Normals from Spin-up data
+                    foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
+                    {
+                        //Climate.ModelCore.UI.WriteLine("CALCULATING CLIMATE NORMALS from YEAR = {0}.", timeStep.Key);
+                        Climate.TimestepData = timeStep.Value;
                         for (int mo = 0; mo < 12; mo++)
                         {
                             climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
-                            mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
+                            month_Temp_normal[mo] += (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2.0;
                         }
+                    }
 
+                    for (int mo = 0; mo < 12; mo++)
+                        month_Temp_normal[mo] /= spinup_allData.Count;
 
-                        foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
-                        {
-                            Climate.ModelCore.UI.WriteLine("timestep = {0}.", timeStep.Key.ToString());
-                            if (timeStep.Key != 0)
-                            {
-                                acs[timestepIndex] = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude[ecoregion.Index], climatePhase, timeStep.Key); // Latitude should be given
-                                timestepIndex++;
-                            }
-                        }
-                        //double AWC = Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[ecoregion] - Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[ecoregion];
-                        //double latitude = Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
-                        double AWC = fieldCapacity[ecoregion.Index] - wiltingPoint[ecoregion.Index];
-                        new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude[ecoregion.Index], /*outputFilePath,*/ UnitSystem.metrics);
-                    //}
+                    int minimumTime = 5000;
+                    int timestepIndex = 0;
+                    // Next calculate PSDI for the future data
+                    foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
+                    {
+                        if (timeStep.Key < minimumTime)
+                            minimumTime = timeStep.Key;
+
+                        if (timestepIndex >= numberOftimeSteps)
+                            break;
+
+                        Climate.TimestepData = timeStep.Value;
+
+                        AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, climatePhase, timeStep.Key); // Latitude should be given
+                        
+                        Climate.AnnualPDSI[ecoregion.Index, timestepIndex] = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, month_Temp_normal, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
+                        Climate.ModelCore.UI.WriteLine("CALCULATED PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, Climate.AnnualPDSI[ecoregion.Index, timestepIndex]);
+                        timestepIndex++;
+                    }
+                    //new PDSI_Calculator().CalculatePDSI(annualClimateMonthly, month_Temp_normal, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
                 }
             }
 
+            Climate.ModelCore.UI.WriteLine("PDSI Calculated for all ecoregions and years.");
 
 
-            int numberOftimeStaps = 0;
-            int numberOfEcoregions = 0;
+            //int numberOftimeSteps = 0;
+            //int numberOfEcoregions = 0;
 
-            int index = 0;
+            //int index = 0;
             double ecoAverage = 0;
 
             //List<int> levels = Climate.AnnualPDSI.AsEnumerable().Select(al => al.Field<int>("TimeStep")).Distinct().ToList().Max();
@@ -334,103 +354,105 @@ namespace Landis.Library.Climate
             //numberOfEcoregions = ecos.Max();
             //numberOfEcoregions = Climate.ModelCore.Ecoregions.Count;
 
-            numberOftimeStaps = Climate.AnnualPDSI.AsEnumerable().Select(al => al.Field<int>("TimeStep")).Distinct().ToList().Max();
-            numberOfEcoregions = Climate.AnnualPDSI.AsEnumerable().Select(a2 => a2.Field<int>("Ecoregion")).Distinct().ToList().Max();
-            Climate.LandscapeAnnualPDSI = new double[numberOftimeStaps];
+            Climate.ModelCore.UI.WriteLine("Generating PDSI for {0} years.", numberOftimeSteps);
 
-            for (int timeStep = 1; timeStep <= numberOftimeStaps; timeStep++)
+                //Climate.AnnualPDSI.AsEnumerable().Select(al => al.Field<int>("TimeStep")).Distinct().ToList().Max();
+            //numberOfEcoregions = Climate.AnnualPDSI.AsEnumerable().Select(a2 => a2.Field<int>("Ecoregion")).Distinct().ToList().Max();
+            Climate.LandscapeAnnualPDSI = new double[numberOftimeSteps];
+
+            for (int timestep = 1; timestep <= numberOftimeSteps; timestep++)
             {
-                index = timeStep;
-                for (int eco = 1; eco <= numberOfEcoregions; eco++)
+                //index = timeStep;
+                foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
                 {
-                    if (index <= Climate.AnnualPDSI.Rows.Count && (Int32)Climate.AnnualPDSI.Rows[index - 1][0] == timeStep && (Int32)Climate.AnnualPDSI.Rows[index - 1][1] == eco)
+                    if (ecoregion.Active)
                     {
-                        ecoAverage += (double)Climate.AnnualPDSI.Rows[index - 1][2];// get the valuse of annualPDSI
+                        //if (timestep <= Climate.AnnualPDSI.Rows.Count && (Int32)Climate.AnnualPDSI.Rows[timestep - 1][0] == timestep && (Int32)Climate.AnnualPDSI.Rows[timestep - 1][1] == ecoregion.Index)
+                        ecoAverage += (double) Climate.AnnualPDSI[ecoregion.Index, timestep-1];// get the valuse of annualPDSI
 
-                        if (eco == numberOfEcoregions)
-                        {
-                            ecoAverage = ecoAverage / numberOfEcoregions;
-                            Climate.LandscapeAnnualPDSI[timeStep - 1] = ecoAverage;
-                            ecoAverage = 0;
-                        }
                     }
-                    index = index + numberOftimeStaps;
                 }
+                
+                ecoAverage = ecoAverage / Climate.ModelCore.Ecoregions.Count;
+                Climate.LandscapeAnnualPDSI[timestep - 1] = ecoAverage;
+                //Climate.ModelCore.UI.WriteLine("Timestep = {0}, PDSI = {1}.", timestep, ecoAverage);
+                ecoAverage = 0;
+
             }
 
         }
 
-        public static void GetPDSI_Test()
-        {
-            IEcoregion ecoregion = Climate.ModelCore.Ecoregions[0];
-            //here:
-            string outputFilePath = @"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\PDSI_BaseBDA_Test2.csv";
-            File.WriteAllText(outputFilePath, String.Empty);
-            int startYear = 1893, endYear = 1897;
-            AnnualClimate_Monthly[] acs;
-            if (endYear > startYear)
-            {
-                int numOfYears = endYear - startYear + 1;
-                acs = new AnnualClimate_Monthly[numOfYears];
+        //public static void GetPDSI_Test()
+        //{
+        //    IEcoregion ecoregion = Climate.ModelCore.Ecoregions[0];
+        //    //here:
+        //    string outputFilePath = @"C:\Program Files\LANDIS-II\v6\examples\base-BDA_1\PDSI_BaseBDA_Test2.csv";
+        //    File.WriteAllText(outputFilePath, String.Empty);
+        //    int startYear = 1893, endYear = 1897;
+        //    AnnualClimate_Monthly[] acs;
+        //    if (endYear > startYear)
+        //    {
+        //        int numOfYears = endYear - startYear + 1;
+        //        acs = new AnnualClimate_Monthly[numOfYears];
 
-                double[] mon_T_normal = new double[12] { 19.693, 23.849, 34.988, 49.082, 60.467, 70.074, 75.505, 73.478, 64.484, 52.634, 36.201, 24.267 };
-                IClimateRecord[] climateRecs = new ClimateRecord[12];
+        //        double[] mon_T_normal = new double[12] { 19.693, 23.849, 34.988, 49.082, 60.467, 70.074, 75.505, 73.478, 64.484, 52.634, 36.201, 24.267 };
+        //        IClimateRecord[] climateRecs = new ClimateRecord[12];
 
-                //Climate.TimestepData = allData[0];
-                //for (int mo = 0; mo < 12; mo++)
-                //{
-                //    climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
-                //    //mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
-                //}
+        //        //Climate.TimestepData = allData[0];
+        //        //for (int mo = 0; mo < 12; mo++)
+        //        //{
+        //        //    climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
+        //        //    //mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
+        //        //}
 
-                acs[0] = new AnnualClimate_Monthly(ecoregion, 1893, 0);
-                ((AnnualClimate_Monthly)acs[0]).MonthlyTemp = new double[] { 14.371, 14.000, 26.435, 44.250, 54.645, 70.683, 73.355, 69.323, 63.600, 48.806, 32.867, 19.161 };
-                //acs[0].MonthlyPrecip = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-                ((AnnualClimate_Monthly)acs[0]).MonthlyPrecip = new double[] { 0.610, 1.500, 1.730, 4.050, 1.950, 0.790, 3.020, 2.570, 1.430, 0.850, 1.260, 2.350 };
+        //        acs[0] = new AnnualClimate_Monthly(ecoregion, 1893, 0);
+        //        ((AnnualClimate_Monthly)acs[0]).MonthlyTemp = new double[] { 14.371, 14.000, 26.435, 44.250, 54.645, 70.683, 73.355, 69.323, 63.600, 48.806, 32.867, 19.161 };
+        //        //acs[0].MonthlyPrecip = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+        //        ((AnnualClimate_Monthly)acs[0]).MonthlyPrecip = new double[] { 0.610, 1.500, 1.730, 4.050, 1.950, 0.790, 3.020, 2.570, 1.430, 0.850, 1.260, 2.350 };
 
-                acs[1] = new AnnualClimate_Monthly(ecoregion, 1894, 0);
-                ((AnnualClimate_Monthly)acs[1]).MonthlyTemp = new double[] { 12.705, 14.979, 37.984, 49.700, 61.209, 71.463, 77.935, 74.312, 65.283, 51.516, 34.767, 29.548 };
-                ((AnnualClimate_Monthly)acs[1]).MonthlyPrecip = new double[] { 0.700, 0.550, 0.580, 4.240, 2.430, 1.150, 0.580, 1.480, 0.550, 1.760, 0.050, 1.000 };
+        //        acs[1] = new AnnualClimate_Monthly(ecoregion, 1894, 0);
+        //        ((AnnualClimate_Monthly)acs[1]).MonthlyTemp = new double[] { 12.705, 14.979, 37.984, 49.700, 61.209, 71.463, 77.935, 74.312, 65.283, 51.516, 34.767, 29.548 };
+        //        ((AnnualClimate_Monthly)acs[1]).MonthlyPrecip = new double[] { 0.700, 0.550, 0.580, 4.240, 2.430, 1.150, 0.580, 1.480, 0.550, 1.760, 0.050, 1.000 };
 
-                acs[2] = new AnnualClimate_Monthly(ecoregion, 1895, 0);
-                ((AnnualClimate_Monthly)acs[2]).MonthlyTemp = new double[] { 12.519, 17.964, 33.994, 54.506, 60.411, 66.172, 70.548, 69.622, 65.288, 44.795, 32.433, 23.333 };
-                ((AnnualClimate_Monthly)acs[2]).MonthlyPrecip = new double[] { 0.650, 0.540, 0.520, 3.980, 2.380, 6.240, 2.320, 3.920, 4.770, 0.060, 1.040, 0.000 };
+        //        acs[2] = new AnnualClimate_Monthly(ecoregion, 1895, 0);
+        //        ((AnnualClimate_Monthly)acs[2]).MonthlyTemp = new double[] { 12.519, 17.964, 33.994, 54.506, 60.411, 66.172, 70.548, 69.622, 65.288, 44.795, 32.433, 23.333 };
+        //        ((AnnualClimate_Monthly)acs[2]).MonthlyPrecip = new double[] { 0.650, 0.540, 0.520, 3.980, 2.380, 6.240, 2.320, 3.920, 4.770, 0.060, 1.040, 0.000 };
 
-                acs[3] = new AnnualClimate_Monthly(ecoregion, 1896, 0);
-                ((AnnualClimate_Monthly)acs[3]).MonthlyTemp = new double[] { 23.258, 27.397, 26.425, 48.833, 62.790, 68.054, 71.365, 70.677, 57.991, 46.355, 21.154, 28.597 };
-                ((AnnualClimate_Monthly)acs[3]).MonthlyPrecip = new double[] { 0.250, 0.270, 1.670, 5.680, 6.240, 7.740, 5.550, 1.660, 1.810, 3.230, 3.850, 0.230 };
+        //        acs[3] = new AnnualClimate_Monthly(ecoregion, 1896, 0);
+        //        ((AnnualClimate_Monthly)acs[3]).MonthlyTemp = new double[] { 23.258, 27.397, 26.425, 48.833, 62.790, 68.054, 71.365, 70.677, 57.991, 46.355, 21.154, 28.597 };
+        //        ((AnnualClimate_Monthly)acs[3]).MonthlyPrecip = new double[] { 0.250, 0.270, 1.670, 5.680, 6.240, 7.740, 5.550, 1.660, 1.810, 3.230, 3.850, 0.230 };
 
-                acs[4] = new AnnualClimate_Monthly(ecoregion, 1897, 0);
-                ((AnnualClimate_Monthly)acs[4]).MonthlyTemp = new double[] { 13.758, 20.179, 26.613, 46.700, 59.016, 66.533, 74.032, 67.928, 71.617, 54.613, 32.450, 18.686 };
-                ((AnnualClimate_Monthly)acs[4]).MonthlyPrecip = new double[] { 2.500, 0.540, 3.010, 4.480, 0.980, 5.820, 3.780, 1.600, 1.010, 1.940, 0.910, 2.950 };
-
-
-
-                //for (int i = startYear; i <= endYear; i++)
-                //{
-                //    acs[i - startYear] = new AnnualClimate(ecoregion, i, 0); // Latitude should be given
-                //    //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
-                //    //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
-                //}
+        //        acs[4] = new AnnualClimate_Monthly(ecoregion, 1897, 0);
+        //        ((AnnualClimate_Monthly)acs[4]).MonthlyTemp = new double[] { 13.758, 20.179, 26.613, 46.700, 59.016, 66.533, 74.032, 67.928, 71.617, 54.613, 32.450, 18.686 };
+        //        ((AnnualClimate_Monthly)acs[4]).MonthlyPrecip = new double[] { 2.500, 0.540, 3.010, 4.480, 0.980, 5.820, 3.780, 1.600, 1.010, 1.940, 0.910, 2.950 };
 
 
 
-                //for (int mo = 0; mo < 12; mo++)
-                //{
-                //    climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
-                //    mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
-                //}
-
-                double AWC = 0.3;//Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[ecoregion] - Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[ecoregion];
-                double latitude = 42.60;//Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
-                new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, /*outputFilePath,*/ UnitSystem.USCustomaryUnits);
-
-            }
+        //        //for (int i = startYear; i <= endYear; i++)
+        //        //{
+        //        //    acs[i - startYear] = new AnnualClimate(ecoregion, i, 0); // Latitude should be given
+        //        //    //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
+        //        //    //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
+        //        //}
 
 
 
+        //        //for (int mo = 0; mo < 12; mo++)
+        //        //{
+        //        //    climateRecs[mo] = Climate.TimestepData[ecoregion.Index, mo];
+        //        //    mon_T_normal[mo] = (climateRecs[mo].AvgMinTemp + climateRecs[mo].AvgMinTemp) / 2;
+        //        //}
 
-        }
+        //        double AWC = 0.3;//Landis.Extension.Succession.Century.EcoregionData.FieldCapacity[ecoregion] - Landis.Extension.Succession.Century.EcoregionData.WiltingPoint[ecoregion];
+        //        double latitude = 42.60;//Landis.Extension.Succession.Century.EcoregionData.Latitude[ecoregion];
+        //        new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, /*outputFilePath,*/ UnitSystem.USCustomaryUnits);
+
+        //    }
+
+
+
+
+        //}
 
 
         /// <summary>
