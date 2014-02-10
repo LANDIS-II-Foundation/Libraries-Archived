@@ -20,18 +20,7 @@ namespace Landis.Library.BiomassCohortsPnET
          private List<SpeciesCohorts> cohorts;
 
         //---------------------------------------------------------------------
-         public void Shuffle()
-         {
-             Random rng = new Random();
-             int n = cohorts.Count;
-             while (n > 1)
-             {
-                 int k = rng.Next(n--);
-                 SpeciesCohorts temp = cohorts[n];
-                 cohorts[n] = cohorts[k];
-                 cohorts[k] = temp;
-             }
-         }
+        
 
         public void Grow(ushort years, ActiveSite site, int? successionTimestep, ICore mCore)
         {
@@ -194,6 +183,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public void AddNewCohort(Cohort cohort)
         {
+            
             int index = SpeciesIndex(cohort.Species);
             if (index >= 0)
             {

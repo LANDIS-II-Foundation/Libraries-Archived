@@ -22,6 +22,19 @@ namespace Landis.Library.BiomassCohortsPnET
         float sep;
         float nsc;
         int year_of_birth;
+        int canopylayer;
+
+        public int CanopyLayer
+        {
+            get
+            {
+                return canopylayer;
+            }
+            set
+            {
+                canopylayer = value;
+            }
+        }
         public int YearOfBirth
         {
             get
@@ -29,6 +42,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 return year_of_birth;
             }
         }
+         
         public int ComputeNonWoodyBiomass(ActiveSite site)
         {
             return (int)(Fol + Root);
@@ -40,6 +54,8 @@ namespace Landis.Library.BiomassCohortsPnET
                 return species;
             }
         }
+
+        
         public bool Leaf_On
         {
             get
@@ -148,6 +164,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.fol = Fol;
             this.year_of_birth = year_of_birth;
             this.leaf_on = leaf_on;
+           
         }
 
         //---------------------------------------------------------------------

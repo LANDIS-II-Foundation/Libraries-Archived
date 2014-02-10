@@ -3,7 +3,6 @@
 
 using Landis.SpatialModeling;
 using Landis.Core;
-using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
 
 namespace Landis.Library.BiomassCohortsPnET
@@ -18,10 +17,16 @@ namespace Landis.Library.BiomassCohortsPnET
         /// The cohort's biomass (g m-2).
         /// </summary>
 
+        int CanopyLayer
+        {
+            get;
+            set;
+        }
         int YearOfBirth
         {
             get;
         }
+        
         bool Leaf_On
         {
             get;

@@ -14,7 +14,7 @@ namespace Landis.Library.BiomassCohortsPnET
         : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>
 
     {
-        void Shuffle();
+        
         void AddNewCohort(Cohort cohort);
         void IncrementCohortsAge();
         void UpdateMaturePresent();
