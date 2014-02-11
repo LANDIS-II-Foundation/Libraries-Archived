@@ -33,7 +33,7 @@ namespace Landis.Library.Climate
         //int extra;
         private static int metric = 0;
         private static bool south;//int south; //whethere the location is in Southern Hemisphere (If TLA is positive, we assume location is in Southern Hemisphere.
-        private static int nadss = 0;
+        //private static int nadss = 0;
 
         // Various constants used in calculations
         private static double TLA; // The negative tangent of latitude is used in calculating PE
@@ -128,7 +128,7 @@ namespace Landis.Library.Climate
 
         // linked lists to store X values for backtracking when computing X
         private static Dictionary<int, double[]> XDic = new Dictionary<int, double[]>();//final list of PDSI values
-        private static Dictionary<int, double[]> PDSI_Dic = new Dictionary<int, double[]>();//final list of PDSI values
+        //private static Dictionary<int, double[]> PDSI_Dic = new Dictionary<int, double[]>();//final list of PDSI values
         private static LinkedList<double> Xlist = new LinkedList<double>();//final list of PDSI values
         private static LinkedList<double> altX1 = new LinkedList<double>();//list of X1 values
         private static LinkedList<double> altX2 = new LinkedList<double>();//list of X2 values
@@ -434,7 +434,7 @@ namespace Landis.Library.Climate
             //string s = "";
             double annualPDSI = 0;
             //string annPDSI = "";
-            double ecoAverage = 0;
+            //double ecoAverage = 0;
             //foreach (KeyValuePair<int, double[]> item in XDic)
             //{
             //    for (int i = 0; i < 12; i++)
@@ -442,7 +442,7 @@ namespace Landis.Library.Climate
             //    s += "\n";
             //}
             LinkedListNode<double> node = Xlist.Last;
-            int j = 0;
+            //int j = 0;
 
             //int stYear = _AnnualClimates[0].Year;
             //if (Double.IsNaN(Z))
@@ -1313,6 +1313,8 @@ namespace Landis.Library.Climate
             }
             else
             {
+                throw new ApplicationException (String.Format("Z-Value not correctly calculated for month = ", month));
+                
                 //This month's data is missing, so output MISSING as PDSI.  
                 //All variables used in calculating the PDSI are kept from 
                 //the previous month.  Only the linked lists are changed to make
