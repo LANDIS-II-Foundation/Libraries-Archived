@@ -248,8 +248,8 @@ namespace Landis.Library.Climate
         //        for (int i = startYear; i <= endYear; i++)
         //        {
         //            acs[i - startYear] = new AnnualClimate_Monthly(ecoregion, 0, latitude); // Latitude should be given
-        //            //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
-        //            //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
+        //            //Climate.ModelCore.UI.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
+        //            //Climate.ModelCore.UI.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
         //        }
 
 
@@ -431,8 +431,8 @@ namespace Landis.Library.Climate
         //        //for (int i = startYear; i <= endYear; i++)
         //        //{
         //        //    acs[i - startYear] = new AnnualClimate(ecoregion, i, 0); // Latitude should be given
-        //        //    //Console.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
-        //        //    //Console.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
+        //        //    //Climate.ModelCore.UI.WriteLine(ac.MonthlyTemp[0].ToString() + "\n");
+        //        //    //Climate.ModelCore.UI.WriteLine(ac.MonthlyPrecip[0].ToString() + "\n");
         //        //}
 
 

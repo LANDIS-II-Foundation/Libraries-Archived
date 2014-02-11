@@ -647,7 +647,7 @@ namespace  Landis.Library.Climate
                         return (dayCnt + day);
                     Tnight -= degreeIncrement;  //work forwards to find first frost day.
                     TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-                    //Console.WriteLine("Tnight = {0}.", TnightRandom);
+                    //Climate.ModelCore.UI.WriteLine("Tnight = {0}.", TnightRandom);
                 }
 
                 lastMonthTemp = MonthlyMinTemp;
