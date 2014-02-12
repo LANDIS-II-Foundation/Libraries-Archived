@@ -1,4 +1,7 @@
-﻿using System;
+﻿//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,17 +28,15 @@ namespace  Landis.Library.Climate
         public int[] MonthlyGDD = new int[12];
 
 
-
-
-
-        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
+        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
         {
             this.climatePhase = spinupOrfuture;
+            this.Latitude = latitude;
 
 
-            if (Climate.AllData_granularity == TemporalGranularity.Daily && spinupOrfuture == ClimatePhase.Future_Climate)
+            if (Climate.AllData_granularity == TemporalGranularity.Daily && spinupOrfuture == Climate.Phase.Future_Climate)
             {
-                this.AnnualCliamte_From_AnnualCliamte_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  timeStep);
+                this.AnnualClimate_From_AnnualClimate_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  timeStep);
                 return;
             }
 
@@ -49,14 +50,14 @@ namespace  Landis.Library.Climate
             //if(imeStep == Int32.MinValue && (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average")))
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
             {
-                if (this.climatePhase == ClimatePhase.Future_Climate)
+                if (this.climatePhase == Climate.Phase.Future_Climate)
                 {
                     //if (avgEcoClimate_future == null || avgEcoClimate_future[ecoregion.Index, 0] == null)
                         AnnualClimate_Avg(ecoregion, actualYear, latitude);
                     //else
                         Climate.TimestepData = avgEcoClimate_future;
                 }
-                else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                 {
                     //if (avgEcoClimate_spinUp == null || avgEcoClimate_spinUp[ecoregion.Index, 0] == null)
                         AnnualClimate_Avg(ecoregion, actualYear, latitude);
@@ -72,7 +73,7 @@ namespace  Landis.Library.Climate
                 try
                 {
                     //Presumption: The RandSelectedTimeSteps_future has been filled out in Climate.Initialize()
-                    if (this.climatePhase == ClimatePhase.Future_Climate)
+                    if (this.climatePhase == Climate.Phase.Future_Climate)
                     {
                         if (Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("random"))// || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random")) // a specific timeStep is provided but it points to an item in the preprocessed-randomly-selected-timesteps for returning the climate
                         {
@@ -89,7 +90,7 @@ namespace  Landis.Library.Climate
                         }
 
                     }
-                    else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                    else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     {
                         if (Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
                         {
@@ -149,13 +150,13 @@ namespace  Landis.Library.Climate
                 }
 
 
-                this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-                this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-                this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
+                this.MonthlyPET = CalculatePotentialEvapotranspiration(); //ecoClimate);
+                this.MonthlyVPD = CalculateVaporPressureDeficit();//ecoClimate);
+                this.MonthlyGDD = CalculatePnETGDD(); //this.MonthlyTemp, actualYear);
 
-                this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-                this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
-                this.growingDegreeDays = GrowSeasonDegreeDays(actualYear);
+                this.beginGrowing = CalculateBeginGrowingSeason(); //ecoClimate);
+                this.endGrowing = CalculateEndGrowingSeason(); //ecoClimate);
+                this.growingDegreeDays = GrowSeasonDegreeDays();//actualYear);
 
                 for (int mo = 5; mo < 8; mo++)
                     this.JJAtemperature += this.MonthlyTemp[mo];
@@ -194,9 +195,9 @@ namespace  Landis.Library.Climate
                 }
 
                 int allDataCount = 0;
-                if (this.climatePhase == ClimatePhase.Future_Climate)
+                if (this.climatePhase == Climate.Phase.Future_Climate)
                     allDataCount = Climate.AllData.Count;
-                else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     allDataCount = Climate.Spinup_AllData.Count;
 
                 for (int mo = 0; mo < 12; mo++)
@@ -205,9 +206,9 @@ namespace  Landis.Library.Climate
                     for (int stp = 0; stp < allDataCount; stp++)
                     {
 
-                        if (this.climatePhase == ClimatePhase.Future_Climate)
+                        if (this.climatePhase == Climate.Phase.Future_Climate)
                             Climate.TimestepData = Climate.AllData.ElementAt(stp).Value;
-                        else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
 
                         ecoClimateT[ecoregion.Index, mo] = Climate.TimestepData[ecoregion.Index, mo];
@@ -243,19 +244,14 @@ namespace  Landis.Library.Climate
                 }
 
 
-                if (this.climatePhase == ClimatePhase.Future_Climate)
+                if (this.climatePhase == Climate.Phase.Future_Climate)
                     avgEcoClimate_future = avgEcoClimate;
-                else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     avgEcoClimate_spinUp = avgEcoClimate;
 
                 Climate.TimestepData = avgEcoClimate;
 
             }
-
-
-
-
-
 
             //TimeStep = timeStep;
             //Climate.TimestepData = Climate.AllData[TimeStep];
@@ -296,13 +292,13 @@ namespace  Landis.Library.Climate
             }
 
 
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
+            this.MonthlyPET = CalculatePotentialEvapotranspiration(); //ecoClimate);
+            this.MonthlyVPD = CalculateVaporPressureDeficit(); //ecoClimate);
+            this.MonthlyGDD = CalculatePnETGDD(); //this.MonthlyTemp, year);
 
-            this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
-            this.growingDegreeDays = GrowSeasonDegreeDays(year);
+            this.beginGrowing = CalculateBeginGrowingSeason(); //ecoClimate);
+            this.endGrowing = CalculateEndGrowingSeason(); //ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(); //year);
 
             for (int mo = 5; mo < 8; mo++)
                 this.JJAtemperature += this.MonthlyTemp[mo];
@@ -319,6 +315,7 @@ namespace  Landis.Library.Climate
             this.Year = year;
             this.AnnualPrecip = 0.0;
             this.AnnualN = 0.0;
+            this.Latitude = latitude;
 
             for (int mo = 0; mo < 12; mo++)
             {
@@ -347,13 +344,13 @@ namespace  Landis.Library.Climate
             }
 
 
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
+            this.MonthlyPET = CalculatePotentialEvapotranspiration(); //ecoClimate);
+            this.MonthlyVPD = CalculateVaporPressureDeficit(); //ecoClimate);
+            this.MonthlyGDD = CalculatePnETGDD(); //this.MonthlyTemp, year);
 
-            this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
-            this.growingDegreeDays = GrowSeasonDegreeDays(year);
+            this.beginGrowing = CalculateBeginGrowingSeason(); //ecoClimate);
+            this.endGrowing = CalculateEndGrowingSeason(); //ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(); //year);
 
             for (int mo = 5; mo < 8; mo++)
                 this.JJAtemperature += this.MonthlyTemp[mo];
@@ -361,29 +358,18 @@ namespace  Landis.Library.Climate
 
 
         }
-        private void AnnualCliamte_From_AnnualCliamte_Daily(IEcoregion ecoregion,  int actualYear, double latitude, ClimatePhase spinupOrfuture,  int timeStep)
+        private void AnnualClimate_From_AnnualClimate_Daily(IEcoregion ecoregion,  int actualYear, double latitude, Climate.Phase spinupOrfuture,  int timeStep)
         {
             int nDays;
             int dayOfYear = 0;
             AnnualClimate_Daily annDaily = new AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep); //for the same timeStep
             IClimateRecord[] ecoClimate = new IClimateRecord[12];
+
+            //----------------------------------------
+            // Calculate precipitation and temperature 
             for (int mo = 0; mo < 12; mo++)
             {
                 ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
-                /*
-                nDays = DaysInMonth(mo, actualYear);
-                int dayOfMo = Convert.ToInt32(Climate.ModelCore.GenerateUniform() * nDays);
-
-                MonthlyTemp[mo] = annDaily.DailyTemp[dayOfYear + dayOfMo];
-                MonthlyMinTemp[mo] = annDaily.DailyMinTemp[dayOfYear + dayOfMo];
-                MonthlyMaxTemp[mo] = annDaily.DailyMaxTemp[dayOfYear + dayOfMo];
-                MonthlyPrecip[mo] = annDaily.DailyPrecip[dayOfYear + dayOfMo];
-                MonthlyPAR[mo] = annDaily.DailyPAR[dayOfYear + dayOfMo];
-                MonthlyVarTemp[mo] = annDaily.DailyVarTemp[dayOfYear + dayOfMo];
-                MonthlyPptVarTemp[mo] = annDaily.DailyPptVarTemp[dayOfYear + dayOfMo];
-                */
-                
-
                 
                 nDays = DaysInMonth(mo, actualYear);
                 for (int d=1; d <= nDays; d++)
@@ -412,91 +398,44 @@ namespace  Landis.Library.Climate
                 MonthlyPptVarTemp[mo] /= nDays;
             }
 
-
-
             //------------------------------------------------------------
-            //-----------------Now calculate monthly parameters-----------
-
-           
+            // Calculate monthly data derived from precipitation and temperature
 
             this.Year = actualYear;
             this.AnnualPrecip = 0.0;
-            this.AnnualN = 0.0;
-            Ecoregion = ecoregion;
-           // IClimateRecord[] ecoClimate = new IClimateRecord[12];
+            //this.AnnualN = 0.0;
+            //Ecoregion = ecoregion;
             for (int mo = 0; mo < 12; mo++)
             {
-                //here
                 ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
-                //ecoClimate[mo] = Climate.TimestepData[TimeStep, mo];
-
-                //double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
-
-                //double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
-
-                //this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
-                //this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
-                //this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp + standardDeviation;
-                //this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
-                //this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
 
                 this.AnnualPrecip += this.MonthlyPrecip[mo];
 
                 if (this.MonthlyPrecip[mo] < 0)
-                    this.MonthlyPrecip[mo] = 0;
+                    throw new System.ApplicationException(String.Format("Error: Precipitation < 0.  Year={0}, Month={1}, Ppt={2}", this.Year, mo, this.MonthlyPrecip[mo]));
 
                 double hr = CalculateDayNightLength(mo, latitude);
                 this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
                 this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
-                //this.DOY[mo] = DayOfYear(mo);
             }
 
 
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
+            this.MonthlyPET = CalculatePotentialEvapotranspiration(); //ecoClimate);
+            this.MonthlyVPD = CalculateVaporPressureDeficit(); //ecoClimate);
+            this.MonthlyGDD = CalculatePnETGDD(); //this.MonthlyTemp, actualYear);
 
-            //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-/*
-            //These two fucntions have been implemented in the AnnualClimate_Daily. Thks is why I am getting their value from the annDaily
-            this.beginGrowing = annDaily.BeginGrowing;
-            this.endGrowing = annDaily.EndGrowing;
-            //  this.GrowingDegreeDays = annDaily.gro GrowSeasonDegreeDays(actualYear);
-            this.growingDegreeDays = annDaily.GrowingDegreeDays;
-*/
-            this.beginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.endGrowing = CalculateEndGrowingSeason(ecoClimate);
-            this.growingDegreeDays = GrowSeasonDegreeDays(actualYear);
+            this.beginGrowing = CalculateBeginGrowingSeason(); //ecoClimate);
+            this.endGrowing = CalculateEndGrowingSeason(); //ecoClimate);
+            this.growingDegreeDays = GrowSeasonDegreeDays(); //actualYear);
 
 
             for (int mo = 5; mo < 8; mo++)
                 this.JJAtemperature += this.MonthlyTemp[mo];
             this.JJAtemperature /= 3.0;
 
-            //this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-            //this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-            //this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, actualYear);
-
-            //this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            //this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-            //this.GrowingDegreeDays = GrowSeasonDegreeDays(actualYear);
-
-            //for (int mo = 5; mo < 8; mo++)
-            //    this.JJAtemperature += this.MonthlyTemp[mo];
-            //this.JJAtemperature /= 3.0;
-            //------------------------------------------
             
         }
-
-
-
-
-
-
-
-
 
         //---------------------------------------------------------------------------
         public override string Write()
@@ -534,33 +473,32 @@ namespace  Landis.Library.Climate
 
 
         //---------------------------------------------------------------------------
-        public int GrowSeasonDegreeDays(int currentYear)
-        //Calc growing season degree days (Degree_Day) based on monthly temperatures
-        //normally distributed around a specified mean with a specified standard
-        //deviation.
+        // Calc growing season degree days (Degree_Day) based on monthly temperatures
+        // normally distributed around a specified mean with a specified standard
+        // deviation.
+        public int GrowSeasonDegreeDays()//int currentYear)
         {
             //degDayBase is temperature (C) above which degree days (Degree_Day)
             //are counted
             double degDayBase = 5.56;      // 42F.
-
             double Deg_Days = 0.0;
 
             //Calc monthly temperatures (mean +/- normally distributed
             //random number times standard deviation) and
             //sum degree days for consecutve months.
-            for (int i = 0; i < 12; i++) //12 months in year
+            for (int month = 0; month < 12; month++) //12 months in year
             {
-                if (MonthlyTemp[i] > degDayBase)
-                    Deg_Days += (MonthlyTemp[i] - degDayBase) * DaysInMonth(i, currentYear);
+                if (this.MonthlyTemp[month] > degDayBase)
+                    Deg_Days += (MonthlyTemp[month] - degDayBase) * DaysInMonth(month, this.Year);
             }
 
             this.growingDegreeDays = (int)Deg_Days;
-            return (int)Deg_Days;
+            return (int) Deg_Days;
         }
 
 
         //---------------------------------------------------------------------------
-        public static int[] CalculatePnETGDD(double[] monthlyTemp, int currentYear)
+        private int[] CalculatePnETGDD() //double[] monthlyTemp, int currentYear)
         {
             //************************************************
             //  Heat Sum Routine
@@ -568,12 +506,13 @@ namespace  Landis.Library.Climate
 
             int[] MonthlyGDD = new int[12];
 
-            for (int i = 0; i < 12; i++) //12 months in year
+            for (int month = 0; month < 12; month++) //12 months in year
             {
-                double GDD = monthlyTemp[i] * DaysInMonth(i, currentYear);
+                //double GDD = monthlyTemp[i] * DaysInMonth(i, currentYear);
+                double GDD = this.MonthlyTemp[month] * DaysInMonth(month, this.Year); //currentYear);
                 if (GDD < 0)
                     GDD = 0;
-                MonthlyGDD[i] = (int)GDD;
+                MonthlyGDD[month] = (int)GDD;
                 //GDDTot = GDDTot + GDD;
             }
 
@@ -582,31 +521,32 @@ namespace  Landis.Library.Climate
 
 
         //---------------------------------------------------------------------------
-        private int CalculateBeginGrowingSeason(IClimateRecord[] yearClimate)
-        //Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C):
+        // Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C):
+        // This method assumes you do not have daily data, which would be far more accurate.
+        private int CalculateBeginGrowingSeason() 
         {
 
-            double lastMonthMinTemp = yearClimate[0].AvgMinTemp;
+            double lastMonthMinTemp = this.MonthlyMinTemp[11]; // yearClimate[0].AvgMinTemp;
             int dayCnt = 15;  //the middle of February
-            int beginGrowingSeason = -1;
+            int beginGrowingSeason = 0;
 
-            for (int i = 1; i < 7; i++)  //Begin looking in February (1).  Should be safe for at least 100 years.
+            for (int month = 0; month < 7; month++)  //Begin looking in February (1).  Should be safe for at least 100 years.
             {
 
-                int totalDays = (DaysInMonth(i, 3) + DaysInMonth(i - 1, 3)) / 2;
-                double MonthlyMinTemp = yearClimate[i].AvgMinTemp;// + (monthlyTempSD[i] * randVar.GenerateNumber());
+                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, 3)) / 2;
+                double MonthlyMinTemp = this.MonthlyMinTemp[month]; // yearClimate[i].AvgMinTemp;// + (monthlyTempSD[i] * randVar.GenerateNumber());
 
                 //Now interpolate between days:
                 double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;
                 double Tnight = MonthlyMinTemp;  //start from warmer month
-                double TnightRandom = Tnight + (yearClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+                double TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
 
                 for (int day = 1; day <= totalDays; day++)
                 {
                     if (TnightRandom <= 0)
                         beginGrowingSeason = (dayCnt + day);
                     Tnight += degreeIncrement;  //work backwards to find last frost day.
-                    TnightRandom = Tnight + (yearClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+                    TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
                 }
 
                 lastMonthMinTemp = MonthlyMinTemp;
@@ -618,35 +558,33 @@ namespace  Landis.Library.Climate
         }
 
         //---------------------------------------------------------------------------
-        private int CalculateEndGrowingSeason(IClimateRecord[] annualClimate)//, Random autoRand)
-        //Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
+        // Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
+        // This method assumes you do not have daily data, which would be far more accurate.
+        private int CalculateEndGrowingSeason() //IClimateRecord[] annualClimate)//, Random autoRand)
         {
-            //Climate.ModelCore.NormalDistribution.Mu = 0.0;
-            //Climate.ModelCore.NormalDistribution.Sigma = 1.0;
-            //NormalRandomVar randVar = new NormalRandomVar(0, 1);
 
             //Defaults for the middle of July:
-            double lastMonthTemp = annualClimate[6].AvgMinTemp;
+            double lastMonthTemp = this.MonthlyMinTemp[6]; // annualClimate[6].AvgMinTemp;
             int dayCnt = 198;
             //int endGrowingSeason = 198;
 
-            for (int i = 7; i < 12; i++)  //Begin looking in August.  Should be safe for at least 100 years.
+            for (int month = 7; month < 12; month++)  //Begin looking in August.  Should be safe for at least 100 years.
             {
-                int totalDays = (DaysInMonth(i, 3) + DaysInMonth(i - 1, 3)) / 2;
-                double MonthlyMinTemp = annualClimate[i].AvgMinTemp;
+                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;
+                double MonthlyMinTemp = this.MonthlyMinTemp[month]; // annualClimate[i].AvgMinTemp;
 
                 //Now interpolate between days:
                 double degreeIncrement = System.Math.Abs(lastMonthTemp - MonthlyMinTemp) / (double)totalDays;
                 double Tnight = lastMonthTemp;  //start from warmer month
 
-                double TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+                double TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
 
                 for (int day = 1; day <= totalDays; day++)
                 {
                     if (TnightRandom <= 0)
                         return (dayCnt + day);
                     Tnight -= degreeIncrement;  //work forwards to find first frost day.
-                    TnightRandom = Tnight + (annualClimate[i].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+                    TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
                     //Climate.ModelCore.UI.WriteLine("Tnight = {0}.", TnightRandom);
                 }
 
@@ -658,35 +596,27 @@ namespace  Landis.Library.Climate
 
 
         //---------------------------------------------------------------------------
-        private static double[] CalculateVaporPressureDeficit(IClimateRecord[] annualClimate)
+        private double[] CalculateVaporPressureDeficit()//IClimateRecord[] annualClimate)
         {
-            // From PnET
-            //Estimation of saturated vapor pressure from daily average temperature.
-
-            //   calculates saturated vp and delta from temp
-            //   from Murray J Applied Meteorol 6:203
-            //   ?? are the < 0 equations from there also
+            // From PnET:
+            // Estimation of saturated vapor pressure from daily average temperature.
+            // Calculates saturated vp and delta from temperature, from Murray J Applied Meteorol 6:203
             //   Tday    average air temperature, degC
             //   ES  saturated vapor pressure at Tday, kPa
             //   DELTA dES/dTA at TA, kPa/K which is the slope of the sat. vapor pressure curve
             //   Saturation equations are from:
             //       Murry, (1967). Journal of Applied Meteorology. 6:203.
-            //
-            //
-            //
             double[] monthlyVPD = new double[12];
 
             for (int month = 0; month < 12; month++)
             {
-                double Tmin = annualClimate[month].AvgMinTemp;
-                double Tday = (annualClimate[month].AvgMinTemp + annualClimate[month].AvgMaxTemp) / 2.0;
+                double Tmin = this.MonthlyMinTemp[month]; // annualClimate[month].AvgMinTemp;
+                double Tday = this.MonthlyTemp[month]; // (annualClimate[month].AvgMinTemp + annualClimate[month].AvgMaxTemp) / 2.0;
 
                 double es = 0.61078 * Math.Exp(17.26939 * Tday / (Tday + 237.3)); //kPa
-                //double delta = 4098 * es / (Tday + 237.3) ^ 2.0;
                 if (Tday < 0)
                 {
                     es = 0.61078 * Math.Exp(21.87456 * Tday / (Tday + 265.5)); //kPa
-                    //delta = 5808 * es / (Tday + 265.5) ^ 2
                 }
 
                 //Calculation of mean daily vapor pressure from minimum daily temperature.
@@ -702,15 +632,13 @@ namespace  Landis.Library.Climate
                     emean = 0.61078 * Math.Exp(21.87456 * Tmin / (Tmin + 265.5));
 
                 double VPD = es - emean;
-                //if (VPD = 0)
-                //  VPD = VPD;
                 monthlyVPD[month] = VPD;
             }
 
             return monthlyVPD;
         }
         //---------------------------------------------------------------------------
-        private static double[] CalculatePotentialEvapotranspiration(IClimateRecord[] annualClimate)
+        private double[] CalculatePotentialEvapotranspiration()//IClimateRecord[] annualClimate)
         {
             //Calculate potential evapotranspiration (pevap)
             //...Originally from pevap.f
@@ -718,16 +646,15 @@ namespace  Landis.Library.Climate
             double waterLossFactor4 = 0.9;  //from Century v4.5
 
 
-            // FINISH - from ecoregion data???
-            double elev = 1.0;       //Definition?? Set elevation = 0???
-            double sitlat = 0.0; // Site latitude???
+            double elev = 1.0;       
+            double sitlat = this.Latitude; 
 
             double highest = -40.0;
             double lowest = 100.0;
 
             for (int i = 0; i < 12; i++)
             {
-                double avgTemp = (annualClimate[i].AvgMinTemp + annualClimate[i].AvgMaxTemp) / 2.0;
+                double avgTemp = this.MonthlyTemp[i]; // (annualClimate[i].AvgMinTemp + annualClimate[i].AvgMaxTemp) / 2.0;
                 highest = System.Math.Max(highest, avgTemp);
                 lowest = System.Math.Min(lowest, avgTemp);
             }
@@ -744,19 +671,22 @@ namespace  Landis.Library.Climate
             {
 
                 //...Temperature range calculation
-                double tr = annualClimate[month].AvgMaxTemp - System.Math.Max(-10.0, annualClimate[month].AvgMinTemp);
+                //double tr = annualClimate[month].AvgMaxTemp - System.Math.Max(-10.0, annualClimate[month].AvgMinTemp);
+                double tr = this.MonthlyMaxTemp[month] - System.Math.Max(-10.0, this.MonthlyMinTemp[month]);
 
-                double t = tr / 2.0 + annualClimate[month].AvgMinTemp;
+                //double t = tr / 2.0 + annualClimate[month].AvgMinTemp;
+                double t = tr / 2.0 + this.MonthlyMinTemp[month];
                 double tm = t + 0.006 * elev;
                 double td = (0.0023 * elev) + (0.37 * t) + (0.53 * tr) + (0.35 * avgTempRange) - 10.9;
                 double e = ((700.0 * tm / (100.0 - System.Math.Abs(sitlat))) + 15.0 * td) / (80.0 - t);
-                double monpet = (e * 30.0) / 10.0;
+                double monthPET = (e * 30.0) / 10.0;
 
-                if (monpet < 0.5)
-                    monpet = 0.5;
+                //if (monthPET < 0.05)
+                //    monthPET = 0.05;
 
                 //...fwloss(4) is a modifier for PET loss.   vek may90
-                monthlyPET[month] = monpet * waterLossFactor4;
+                monthlyPET[month] = monthPET * waterLossFactor4;
+                //Climate.ModelCore.UI.WriteLine("Year={0}, Month={1}, PET={2:0.00}.", this.Year, month, monthlyPET[month]);
 
             }
 
@@ -874,7 +804,7 @@ namespace  Landis.Library.Climate
         ////---------------------------------------------------------------------------
         //public void WriteToLogFile()
         //{
-        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
+        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue)
         //}
 
     }

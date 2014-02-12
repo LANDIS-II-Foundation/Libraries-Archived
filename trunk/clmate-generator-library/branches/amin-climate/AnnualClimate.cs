@@ -1,21 +1,17 @@
-//  Copyright 2009-2010 Portland State University, Conservation Biology Institute
-//  Authors:  Robert M. Scheller
-
-//  Creates monthly weather for one year based on averages and standard deviations, other info.
+//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
 
 using System.Collections.Generic;
 using System.IO;
 using System;
 using Landis.Core;
-//by Amin
-//using Landis.Extension.Succession.Century;
 
 namespace Landis.Library.Climate
 {
 
     public abstract class AnnualClimate
     {
-        protected ClimatePhase climatePhase;
+        protected Climate.Phase climatePhase;
         protected int beginGrowing;
         protected int endGrowing;
         protected int growingDegreeDays;
@@ -34,6 +30,7 @@ namespace Landis.Library.Climate
         public static double stdDevPptGenerator;
         public static IClimateRecord[,] avgEcoClimate_future;
         public static IClimateRecord[,] avgEcoClimate_spinUp;
+        public double Latitude { get; set; }
 
         //by Amin
         public IEcoregion Ecoregion { get; set; }
@@ -231,18 +228,6 @@ namespace Landis.Library.Climate
         {
             throw new NotImplementedException("Error in calling WriteToLogFile() in AnnualClimate: the WriteToLogFile() should not be called directly and it has to be implemented in subclasses");
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

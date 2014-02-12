@@ -1,12 +1,7 @@
-//  Copyright 2007-2010 Portland State University, University of Wisconsin-Madison
-//  Author: Robert Scheller, Ben Sulman
+//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
 
-using Landis.Core;
-using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
-//using Landis.Library.Succession;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Landis.Library.Climate
 {
@@ -17,8 +12,6 @@ namespace Landis.Library.Climate
          : IInputParameters
        
     {
-        //private int timestep;
-//        private SeedingAlgorithms seedAlg;
 
         private string climateConfigFile;
         private string climateTimeSeries;
@@ -28,25 +21,6 @@ namespace Landis.Library.Climate
         private string spinUpClimateFile;
         private string spinUpClimateTimeSeries;
 
-
-
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// Timestep (years)
-        /// </summary>
-        //public int Timestep
-        //{
-        //    get {
-        //        return timestep;
-        //    }
-        //    set {
-        //        if (value < 0)
-        //            throw new InputValueException(value.ToString(), "Timestep must be > or = 0");
-        //        timestep = value;
-        //    }
-        //}
-
- 
 
         //---------------------------------------------------------------------
         public string ClimateConfigFile

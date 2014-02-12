@@ -1,4 +1,7 @@
-﻿using System;
+﻿//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,17 +25,11 @@ namespace Landis.Library.Climate
         private static int period_length = 1;        //set to 1 for monthly, otherwise, length of period
         private static int num_of_periods = 12;       
 
-
-
         // The variables used as flags to the pdsi class
         private static int bug = 0;
-        //int output_mode;
-        //int Verbose;
-        //private static int s_year;
         public static int e_year;
-        //int extra;
         private static int metric = 0;
-        private static bool south;//int south; //whethere the location is in Southern Hemisphere (If TLA is positive, we assume location is in Southern Hemisphere.
+        private static bool south; //whethere the location is in Southern Hemisphere (If TLA is positive, we assume location is in NORTHERN Hemisphere.
         //private static int nadss = 0;
 
         // Various constants used in calculations
@@ -127,7 +124,7 @@ namespace Landis.Library.Climate
         private static double SD2;
 
         // linked lists to store X values for backtracking when computing X
-        private static Dictionary<int, double[]> XDic = new Dictionary<int, double[]>();//final list of PDSI values
+        //private static Dictionary<int, double[]> XDic = new Dictionary<int, double[]>();//final list of PDSI values
         //private static Dictionary<int, double[]> PDSI_Dic = new Dictionary<int, double[]>();//final list of PDSI values
         private static LinkedList<double> Xlist = new LinkedList<double>();//final list of PDSI values
         private static LinkedList<double> altX1 = new LinkedList<double>();//list of X1 values
@@ -431,116 +428,36 @@ namespace Landis.Library.Climate
             // within CalcK.
             CalcOrigK();
 
-            //string s = "";
             double annualPDSI = 0;
-            //string annPDSI = "";
             //double ecoAverage = 0;
-            //foreach (KeyValuePair<int, double[]> item in XDic)
-            //{
-            //    for (int i = 0; i < 12; i++)
-            //        s += Math.Round(((double[])item.Value)[i], 2) + "\t";
-            //    s += "\n";
-            //}
-            LinkedListNode<double> node = Xlist.Last;
-            //int j = 0;
+            //LinkedListNode<double> node = Xlist.Last;
 
             //int stYear = _AnnualClimates[0].Year;
-            //if (Double.IsNaN(Z))
-            //    return 999;
-
-            //return Z;
-
             //if (Climate.AnnualPDSI.Columns.Count == 0)
             //{
             //    Climate.AnnualPDSI.Columns.Add("TimeStep", typeof(Int32));
             //    Climate.AnnualPDSI.Columns.Add("Ecorigion", typeof(Int32));
             //    Climate.AnnualPDSI.Columns.Add("AnnualPDSI", typeof(double));
             //}
-            //using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputFilePath, true))
-            //{
-            //    //using (System.IO.StreamWriter f = new System.IO.StreamWriter(outputFilePathAnnualPDSI, true))
-            //    //{
-            //    //f.WriteLine("Time-step, Ecoregion, AnnualPDSI");
-            //    if (Climate.Flag == false)
-            //    {
-            //        file.WriteLine("Ecoregion, Time-step, Year, mo.1, mo.2, mo.3, mo.4, mo.5, mo.6, mo.7, mo.8, mo.9, mo.10, mo.11, mo.12, AnnualPDSI");
-            //        Climate.Flag = true;
-            //    }
-            //    for (int i = 0; i < Xlist.Count(); i += 12)
-            //    {
-            //        //if (i % 12 == 0)
-            //        //{
-            //        stYear = _AnnualClimates[j].Year;
-            //        //s += "\r" + _AnnualClimates[j].Ecoregion.Name + ", " + _AnnualClimates[j].TimeStep + ", " + stYear.ToString() + ", " + "";
-            //        s += _AnnualClimates[j].Ecoregion.Name + ", " + _AnnualClimates[j].TimeStep + ", " + stYear.ToString() + ", " + "";
-            //        //Add s into file to save PDSI
-            //        j++;
-            //        //}
-            //        //if (stYear == annualClimates[0].Year)
-            //        //{
-            //        //    s += annualClimates[0].Year.ToString() + "\t";
-
-            //        //}
             for (int m = 0; m < 12; m++)
             {
                 annualPDSI += PDSI_Monthly[m]; //Math.Round(node.Value, 2);
 
-                //s += Math.Round(node.Value, 2) + ", ";
-                //node = node.Previous;
-                //if (m == 11)
-                //{
-
-                //    annualPDSI = annualPDSI / 12;
-                //    //System.Data.DataRow pRow = Climate.AnnualPDSI.NewRow();
-                //    //pRow["TimeStep"] = _AnnualClimates[j - 1].TimeStep;
-                //    //pRow["Ecorigion"] = _AnnualClimates[j - 1].Ecoregion.Name.Substring(3);
-                //    //pRow["AnnualPDSI"] = Math.Round(annualPDSI, 2);
-                //    //Climate.AnnualPDSI.Rows.Add(pRow);
-                //    ////annPDSI = "\r" + _AnnualClimates[j - 1].TimeStep + "," + _AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(annualPDSI, 2) + ",";
-                //    ////f.WriteLine(annPDSI);
-                //    ////XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new string[2]{_AnnualClimates[j - 1].Ecoregion.Name, Math.Round(annualPDSI, 2).ToString()});
-                //    ////XDicAveragePDSI.Add(_AnnualClimates[j - 1].TimeStep,new {ecoregion = _AnnualClimates[j - 1].Ecoregion.Name, annPdsi = Math.Round(annualPDSI, 2)});
-                //    //s += Math.Round(annualPDSI, 2);
-                //    //annPDSI = "";
-                //    //annualPDSI = 0;
-                //}
             }
 
             annualPDSI /= 12.0; 
 
             return annualPDSI;
-
-            //        s += "";
-            //        file.WriteLine(s);
-            //        s = "";
-            //        //if (j == _AnnualClimates.Length)
-            //        //{
-            //        //    //print average ecorigion for each ecorigion
-            //        //    ecoAverage = ecoAverage / _AnnualClimates.Length;
-            //        //    file.WriteLine("Ecoregion, Average");
-            //        //    file.WriteLine(_AnnualClimates[j - 1].Ecoregion.Name + "," + Math.Round(ecoAverage, 2));
-            //        //    ecoAverage = 0;
-
-            //        //}
-            //    }
-            //    //}
-            //}
-
-
-
-
         }
 
         //Computes the sums for the 8 water balance variables
         private static void PDSI_SumAll()
         {
-            char[] Temp = new char[150], Precip = new char[150];
+            //char[] Temp = new char[150], Precip = new char[150];
             //int actyear;
             double DEP = 0;
             SD = 0;
             SD2 = 0;
-            /* SG 6/5/06: add variable to support a calibration interval */
-            //int nCalibrationPeriodsLeft = 0;//nCalibrationPeriods; /* init periods left */        //******** I assigned 0 because we dont need it *******
 
             // Initializes the sums to 0;
             for (int i = 0; i < num_of_periods; i++)
@@ -578,11 +495,11 @@ namespace Landis.Library.Climate
                 //    T[i] = _AnnualClimates[year].MonthlyTemp[i];  //calculate T[i] from historic, not target climate
                 //    P[i] = _AnnualClimates[year].MonthlyPrecip[i];  //calculate P[i] from historic, not target climate
                 //}
-                GetTemp(ref T, 12);//actyear = GetTemp(input_temp, T, 12);
-                GetPrecip(ref P, 12);//GetPrecip(input_prec, P, 12);
+             GetTemp(ref T, 12);//actyear = GetTemp(input_temp, T, 12);
+             GetPrecip(ref P, 12);//GetPrecip(input_prec, P, 12);
                 //}
 
-                Potential pot = new Potential();
+            Potential pot = new Potential();
 
                 // This loop runs for each per in the year
                 for (int per = 0; per < num_of_periods; per++)
@@ -619,10 +536,6 @@ namespace Landis.Library.Climate
                         **            years before the calibration interval or after the end of the calibration
                         **            interval.  
                         */
-                        //if (nCalibrationPeriodsLeft > 0)
-                        //{ /* Within the calibration interval, so update Sums */
-                        // Reduce number of calibration years left by one for each year actually summed 
-                        //nCalibrationPeriodsLeft--;
 
                         // Update the sums by adding the current water balance values
                         ETSum[per] += ET;
@@ -634,14 +547,7 @@ namespace Landis.Library.Climate
                         PRSum[per] += PR;
                         PROSum[per] += PRO;
                         PLSum[per] += PL;
-                        //}
 
-                        ////P, PE, PR, PRO, and PL will be used later, so 
-                        ////these variables need to be stored to an outside file
-                        ////where they can be accessed at a later time
-                        //fprintf(fout, "%5d %5d %10.6f ", actyear, (period_length * per) + 1, P[per]);
-                        //fprintf(fout, "%10.6f %10.6f %10.6f %10.6f ", PE, PR, PRO, PL);
-                        //fprintf(fout, "%10.6f\n", P[per] - PE);
                         pot.Year = 2012; // Placeholder! _AnnualClimates[y - 1].Year;
                         pot.Period[per] = (period_length * per) + 1;
                         pot.P[per] = P[per];
@@ -651,12 +557,9 @@ namespace Landis.Library.Climate
                         pot.PL[per] = PL;
                         pot.P_PE[per] = P[per] - PE;
                         //_Potential[year] = new Potential()  { Year = _AnnualClimates[year].Year, Period[per] = (period_length * per) + 1, P[per] = P[per], PE[per] = PE, PR[per] = PR, PRO[per] = PRO, PL[per] = PL, P_PE[per] = P[per] - PE };
-                    }//matches if(P[per]>= 0 && T[per] != MISSING)
+                    }
                     else
                     {
-                        //fprintf(fout, "%5d %5d %f ", actyear, (period_length * per) + 1, MISSING);
-                        //fprintf(fout, "%10.6f %10.6f %10.6f ", MISSING, MISSING, MISSING);
-                        //fprintf(fout, "%10.6f %10.6f\n", MISSING, MISSING);
                         pot.Year = 2012; // Placeholder! _AnnualClimates[y - 1].Year;
                         pot.Period[per] = (period_length * per) + 1;
                         pot.P[per] = MISSING;
@@ -667,11 +570,7 @@ namespace Landis.Library.Climate
                         pot.P_PE[per] = MISSING;
                         //_Potential[year] = new Potential() { Year = _AnnualClimates[year].Year, Period = (period_length * per) + 1, P = MISSING, PE = MISSING, PR = MISSING, PRO = MISSING, PL = MISSING, P_PE = MISSING };
                     }
-                //}//end of period loop
-                //_Potential[y - 1] = pot;
                     potential = pot;
-
-
             }
 
         }
@@ -765,26 +664,12 @@ namespace Landis.Library.Climate
                     south = true;//1;
                     TLA = -TLA;
                 }
-            //}
-            //if(Weekly)
-            //  I=CalcWkThornI(); 
-            //else if(Monthly || SCMonthly)
-            //I = CalcMonThornI();
-            ////else{
-            ////  if(verbose){
-            ////    printf("Error.  Invalid type of PDSI calculation\n");
-            ////    printf("Either the 'Weekly', 'Monthly', ");
-            ////    printf("or 'SCMonthly' flags must be set.\n");
-            ////  }
-            ////  exit(1);
-            ////}
 
-            //A = CalcThornA(I);
-            //if (Verbose > 1)
-            //{
-            //    Climate.ModelCore.UI.WriteLine("AWC = {0}  TLA = {1}", AWC, TLA);
-            //    Climate.ModelCore.UI.WriteLine("HEAT INDEX, THORNTHWAITE A: {0} {1}", I, A);
-            //}
+                if (Verbose > 1)
+                {
+                    Climate.ModelCore.UI.WriteLine("AWC = {0}  TLA = {1}", AWC, TLA);
+                    Climate.ModelCore.UI.WriteLine("HEAT INDEX, THORNTHWAITE A: {0} {1}", I, A);
+                }
         }
 
 
@@ -806,36 +691,15 @@ namespace Landis.Library.Climate
             for (i = 0; i < 12; i++)
                 A[i] = 0;
 
-            //  fgets(line,4096,In);
-            //  read=sscanf(line, "%d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",&year,&t[0],&t[1],&t[2],&t[3],&t[4],&t[5],&t[6],&t[7],&t[8],&t[9],&t[10],&t[11],&t[12],&t[13],&t[14],&t[15],&t[16],&t[17],&t[18],&t[19],&t[20],&t[21],&t[22],&t[23],&t[24],&t[25],&t[26],&t[27],&t[28],&t[29],&t[30],&t[31],&t[32],&t[33],&t[34],&t[35],&t[36],&t[37],&t[38],&t[39],&t[40],&t[41],&t[42],&t[43],&t[44],&t[45],&t[46],&t[47],&t[48],&t[49],&t[50],&t[51]);
             for (i = 0; i < max; i++)
                 t[i] = annClimate.MonthlyTemp[i];
+
             //place values read into array t2 to be summarized
             //  if(read == max+1){
             //a full year's worth of data was read
             for (i = 0; i < max; i++)
                 t2[i] = t[i];
 
-            //  else{
-            //check to see if it is the end of file
-            //    if( (letter = fgetc(In)) != EOF ) {
-            //    //it's not the end of the file
-            //    //so place partial year's data at end of array
-            //    for(i = 0 ; i < max - (read-1); i++)
-            //      t2[i] = MISSING;
-            //    for(i; i < max; i++)
-            //      t2[i] = t[i - (max-read+1)];
-            //    ungetc(letter, In);
-            //  }
-            //  else {
-            //    //it's the end of the file, place partial year's data
-            //    //at beginning on array
-            //    for(i = 0; i < read - 1; i++)
-            //      t2[i] = t[i];
-            //    for(i; i < max; i++)
-            //      t2[i] = MISSING;
-            //  }
-            //}
             for (i = 0; i < num_of_periods; i++)
             {
                 bad_weeks = 0;
@@ -885,38 +749,6 @@ namespace Landis.Library.Climate
             for (i = 0; i < max; i++)
                 t2[i] = t[i];
 
-            /*
-              fgets(line,4096,In);
-              read=sscanf(line, "%d %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",&year,&t[0],&t[1],&t[2],&t[3],&t[4],&t[5],&t[6],&t[7],&t[8],&t[9],&t[10],&t[11],&t[12],&t[13],&t[14],&t[15],&t[16],&t[17],&t[18],&t[19],&t[20],&t[21],&t[22],&t[23],&t[24],&t[25],&t[26],&t[27],&t[28],&t[29],&t[30],&t[31],&t[32],&t[33],&t[34],&t[35],&t[36],&t[37],&t[38],&t[39],&t[40],&t[41],&t[42],&t[43],&t[44],&t[45],&t[46],&t[47],&t[48],&t[49],&t[50],&t[51]);
-
-             * 
-             * 
-              //place values read into array t2 to be summarized
-              if(read == max+1){
-                //a full year's worth of data was read
-                for(i = 0; i < max; i++)
-                  t2[i] = t[i];
-              }
-              else{
-                //check to see if it is the end of file
-                if( (letter = fgetc(In)) != EOF ) {
-                  //it's not the end of the file
-                  //so place partial year's data at end of array
-                  for(i = 0 ; i < max - (read-1); i++)
-                    t2[i] = MISSING;
-                  for(i; i < max; i++)
-                    t2[i] = t[i - (max-read+1)];
-                  ungetc(letter, In);
-                }
-                else {
-                  //it's the end of the file, place partial year's data
-                  //at beginning on array
-                  for(i = 0; i < read - 1; i++)
-                    t2[i] = t[i];
-                  for(i; i < max; i++)
-                    t2[i] = MISSING;
-                }
-              }*/
             //now summaraize data in t2 into A
             for (i = 0; i < num_of_periods; i++)
             {
@@ -947,14 +779,10 @@ namespace Landis.Library.Climate
             //return year;
         }
 
-
-
-
-        //Calculates alpha, beta, gamma, and delta
+        // ------------------------------------------------
+        // Calculates alpha, beta, gamma, and delta
         private static void CalcWBCoef()
         {
-            //FILE* wb;
-
             // The coefficients are calculated by per
             for (int per = 0; per < num_of_periods; per++)
             {
@@ -989,34 +817,16 @@ namespace Landis.Library.Climate
                     Delta[per] = 0.0;
             }
 
-            //if (extra == 1 || extra == 9)
-            //{
-            //    //output water balance coefficients
-            //    wb = fopen("WB.tbl", "w");
-            //    fprintf(wb, "PERIOD   ALPHA     BETA    GAMMA    DELTA\n");
-            //    if (Verbose > 1)
-            //        printf("\nPERIOD   ALPHA     BETA    GAMMA    DELTA\n");
-            //    for (int i = 0; i < num_of_periods; i++)
-            //    {
-            //        fprintf(wb, "%3d %10.4f %8.4f %8.4f %8.4f \n", (period_length * i) + 1, Alpha[i], Beta[i], Gamma[i], Delta[i]);
-            //        if (Verbose > 1)
-            //            printf("%3d %10.4f %8.4f %8.4f %8.4f \n", (period_length * i) + 1, Alpha[i], Beta[i], Gamma[i], Delta[i]);
-            //    }
-            //    fclose(wb);
-            //}
         }
 
         // Calculates the monthly departures from normal
         private static void CalcMonthlyDepartures()
         {
-            //FILE *fin;        // File pointer for the temp. input file potentials
-            //FILE *fout;       // File pointer for the temp. output file dvalue
             int per;           // The period in question
             //int yr;           // The year in question
             double p;         // The precip for that period
-            //float scn1, scn2, scn3, scn4, scn5, scn6; // Temp. variables for fscanf
-            //char letter = ' ';
             int i = 0;
+            
             // These variables are used in calculating terminal outputs and are not 
             // important to the final PDSI
             double[] D_sum = new double[12];
@@ -1030,26 +840,6 @@ namespace Landis.Library.Climate
                 SPhat[i] = 0.0;
             }
 
-            // The potentials file is opened for reading in the previously stored values
-            //if((fin=fopen("potentials","r"))==NULL) {
-            //  if(Verbose>0)
-            //    printf ("Error opening temp file with all the potential values.\n");
-            //  exit(1);
-            //}
-
-            //if((fout=fopen("dvalue","w")) == NULL) { 
-            //  if(Verbose>0)
-            //    printf ("Error opening temp file for d values.\n");
-            //  exit(1);
-            //}
-
-            // This reads in the first line, which contains column headers.
-            //while(letter != '\n')
-            //  letter = fgetc(fin);
-            // This reads in the values previously stored in "potentials"
-            //while(fscanf(fin,"%d %d %f %f %f %f %f %f", &yr, &per, &scn1, &scn2, &scn3, &scn4, &scn5, &scn6) != EOF) 
-            //{
-            //per = (per - 1) / period_length;   //adjust the period # for use in arrays.
 
             //for (int y = 0; y < _AnnualClimates.Length; y++)
             //{
@@ -1068,8 +858,6 @@ namespace Landis.Library.Climate
                         Phat = (Alpha[per] * PE) + (Beta[per] * PR) + (Gamma[per] * PRO) - (Delta[per] * PL);
                         potential.d[per] = p - Phat;//d=p - Phat;
 
-                        // The values of d are output to a temp file for later use.
-                        //fprintf (fout, "%d %d %f\n", yr, (period_length*per)+1, d);
 
                         /* SG 6/5/06: Need to only update statistical values when in 
                         **            user defined calibration interval. When not used
@@ -1095,7 +883,6 @@ namespace Landis.Library.Climate
                     else
                     {
                         potential.d[per] = MISSING;//d = MISSING;
-                        //    //fprintf (fout, "%d %d %f\n", yr, (period_length*per)+1, d);
                     }
                 }
 
@@ -1103,17 +890,17 @@ namespace Landis.Library.Climate
             // If the user specifies, the various sums are output to the screen
             if (Verbose > 1)
             {
-                Console.Write("\n{0} CHECK SUMS OF ESTIMATED VARIABLES\n\n", ' ');
-                Console.Write("{0} {1} {2} {3}", "PER", "SCET", "SCR", "SCRO");
-                Console.Write("{0} {1} {2}\n\n", "SCL", "SCP", "SCD");
+                Climate.ModelCore.UI.WriteLine("\n{0} CHECK SUMS OF ESTIMATED VARIABLES\n\n", ' ');
+                Climate.ModelCore.UI.WriteLine("{0} {1} {2} {3}", "PER", "SCET", "SCR", "SCRO");
+                Climate.ModelCore.UI.WriteLine("{0} {1} {2}\n\n", "SCL", "SCP", "SCD");
             }
             for (i = 0; i < num_of_periods; i++)
             {
                 if (Verbose > 1)
                 {
-                    Console.Write("{0}{1}{2}", (period_length * i) + 1, Alpha[i] * PESum[i], Beta[i] * PRSum[i]);
-                    Console.Write("{0}{1}", Gamma[i] * PROSum[i], Delta[i] * PLSum[i]);
-                    Console.Write("{0}{1}\n", SPhat[i], DSAct[i]);
+                    Climate.ModelCore.UI.WriteLine("{0}{1}{2}", (period_length * i) + 1, Alpha[i] * PESum[i], Beta[i] * PRSum[i]);
+                    Climate.ModelCore.UI.WriteLine("{0}{1}", Gamma[i] * PROSum[i], Delta[i] * PLSum[i]);
+                    Climate.ModelCore.UI.WriteLine("{0}{1}\n", SPhat[i], DSAct[i]);
                 }
                 // D becomes the mean of D_sum
                 /* SG 6/5/06: changed totalyears to nCalibrationYears to support
@@ -1123,9 +910,6 @@ namespace Landis.Library.Climate
 
                 D[i] = D_sum[i] / 1; // totalyears;//111// nCalibrationYears;
             }
-            // The files are closed 
-            //fclose(fin);
-            //fclose(fout);
         }
 
 
@@ -1321,15 +1105,6 @@ namespace Landis.Library.Climate
                 //sure that if backtracking occurs, a MISSING value is kept 
                 //as the PDSI for this month.
 
-                /*
-                                if (table != NULL)
-                                {
-                                    //output stuff to a table
-                                    //year, period, z, newProb, newX1, newX2, newX3
-                                    fprintf(table, "%5d %5d %7.2f %7.2f ", year, period_number, Z, MISSING);
-                                    fprintf(table, "%7.2f %7.2f %7.2f\n", MISSING, MISSING, MISSING);
-                                }
-                */
                 //if (month == 0)
                 //    XDic.Add(yearIndex, new double[12]);
                 //((double[])XDic[yearIndex])[month] = MISSING;
@@ -1369,7 +1144,7 @@ namespace Landis.Library.Climate
                 newX1 = 0;
             newX2 = X2;
 
-            if (bug == 0)
+            if (bug == 0) // bug is always 0
             {
                 newX2 = (dryc * X2 + Z / (drym + dryb));
                 if (newX2 > 0)

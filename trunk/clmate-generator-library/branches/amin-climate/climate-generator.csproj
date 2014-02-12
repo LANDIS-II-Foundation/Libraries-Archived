@@ -57,7 +57,6 @@
     <Compile Include="ClimateDataConvertor.cs" />
     <Compile Include="ClimateFileFormatProvider.cs" />
     <Compile Include="ClimateParser.cs" />
-    <Compile Include="ClimatePhase.cs" />
     <Compile Include="ClimateRecord.cs" />
     <Compile Include="NoClimateChangeMode.cs" />
     <Compile Include="PDSI_Calculator.cs" />

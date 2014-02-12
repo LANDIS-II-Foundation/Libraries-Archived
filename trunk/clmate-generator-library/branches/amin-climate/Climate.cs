@@ -1,23 +1,25 @@
-//  Copyright 2009-2010 Portland State University
-//  Authors:  Robert M. Scheller
+//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
 
 using Landis.Core;
 using System.Collections.Generic;
 using System.IO;
 using System;
-//using climate_generator;
 using System.Collections;
-//using System.Data.OleDb;
-//using System.Data;
-//using System.Linq;
-
 
 
 namespace Landis.Library.Climate
 {
+    //public enum ClimatePhase
+    //{
+    //    SpinUp_Climate = 0,
+    //    Future_Climate = 1,
+    //}
 
     public class Climate
     {
+
+
         private static TemporalGranularity future_allData_granularity;
         private static TemporalGranularity spinup_allData_granularity;
         private static Dictionary<int, IClimateRecord[,]> future_allData;
@@ -34,6 +36,8 @@ namespace Landis.Library.Climate
         //private static System.Data.DataTable annualPDSI;
         private static double[,] annualPDSI;
         private static double[] landscapeAnnualPDSI;
+
+        public enum Phase {SpinUp_Climate = 0, Future_Climate = 1 }
 
         public Climate()
         {
@@ -181,7 +185,7 @@ namespace Landis.Library.Climate
             ModelCore.UI.WriteLine("   Loading weather data from file \"{0}\" ...", configParameters.ClimateFile);
             Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
             Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
-            string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, ClimatePhase.Future_Climate);
+            string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, Climate.Phase.Future_Climate);
 
             //Climate.Convert_FileFormat(parameters.ClimateFileFormat, parameters.ClimateFile), Climate.Convert_FileFormat(parameters.SpinUpClimateFileFormat, parameters.SpinUpClimateFile)
 //            ClimateParser parser = new ClimateParser();
@@ -193,7 +197,7 @@ namespace Landis.Library.Climate
             {
                 ModelCore.UI.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
                 //"Century_Climate_Inputs_PRISM_Monthly.txt";//
-                string convertedSpinupClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat, ClimatePhase.SpinUp_Climate);
+                string convertedSpinupClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat, Climate.Phase.SpinUp_Climate);
  //               spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
             }
 
@@ -217,9 +221,9 @@ namespace Landis.Library.Climate
             }
 
             // Have to ask
-            //if (Climate. ClimatePhase.Future_Climate)
+            //if (Climate. Climate.Phase.Future_Climate)
                // timestepData = Climate.future_allData.ElementAt(0).Value;
-            //else if(ClimatePhase.SpinUp_Climate)
+            //else if(Climate.Phase.SpinUp_Climate)
             //    timestepData = Climate.spinup_allData.ElementAt(0).Value;
 
             //timestepData = future_allData.ElementAt(0).Value;
@@ -272,7 +276,7 @@ namespace Landis.Library.Climate
         //    }
         //}
 
-        public static void SetPDSI(int startYear, double[] latitudes, double[] fieldCapacities, double[] wiltingPoints, ClimatePhase climatePhase = ClimatePhase.Future_Climate)
+        public static void SetPDSI(int startYear, double[] latitudes, double[] fieldCapacities, double[] wiltingPoints, Climate.Phase climatePhase = Climate.Phase.Future_Climate)
         {
             //Climate.Flag = false;
 
@@ -459,12 +463,12 @@ namespace Landis.Library.Climate
         /// Converts USGS Data to Standard Input climate Data and fill out the Future_AllData and/or Spinup_AllData
         /// </summary>
         /// 
-        public static string ConvertFileFormat_FillOutAllData(String timeSeries, string filePath, string fileFormat, ClimatePhase climatePhase)
+        public static string ConvertFileFormat_FillOutAllData(String timeSeries, string filePath, string fileFormat, Climate.Phase climatePhase)
         {
-            if (climatePhase == ClimatePhase.Future_Climate && timeSeries.Contains("Daily"))
+            if (climatePhase == Climate.Phase.Future_Climate && timeSeries.Contains("Daily"))
                 future_allData_granularity = TemporalGranularity.Daily;
                 
-            else if (climatePhase == ClimatePhase.Future_Climate && timeSeries.Contains("Monthly"))
+            else if (climatePhase == Climate.Phase.Future_Climate && timeSeries.Contains("Monthly"))
                 future_allData_granularity = TemporalGranularity.Monthly;
 
                 spinup_allData_granularity = TemporalGranularity.Monthly;

@@ -1,7 +1,5 @@
-//  Copyright 2009 Conservation Biology Institute
-//  Authors:  Robert M. Scheller
-//  License:  Available at  
-//  http://www.landis-ii.org/developers/LANDIS-IISourceCodeLicenseAgreement.pdf
+//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
 
 using System.Collections.Generic;
 

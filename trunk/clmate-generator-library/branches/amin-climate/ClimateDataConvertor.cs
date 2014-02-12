@@ -1,6 +1,8 @@
-﻿
+﻿//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
+
 using System;
-using System.Collections;
+//using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -53,16 +55,18 @@ namespace Landis.Library.Climate
         public static Dictionary<string, double[]> Climate_Dic { get { return climate_Dic; } }
         private static Dictionary<int, int> yearsdays = new Dictionary<int, int>();
         public static int alldays = 0;
+
+        //--------------------------------------------------------------------
         /// <summary>
-        /// This fucntion converts Monthly to Monthly and Daily to Monthly
+        /// This function converts Monthly to Monthly and Daily to Monthly
         /// </summary>
         /// <returns>string: file name of the converted monthly file </returns>
-        public static string Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity timeStep, string climateFile, string climateFileFormat, ClimatePhase climatePhase)
+        public static string Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity timeStep, string climateFile, string climateFileFormat, Climate.Phase climatePhase)
         {
             Dictionary<int, IClimateRecord[,]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
-            if (climatePhase == ClimatePhase.Future_Climate)
+            if (climatePhase == Climate.Phase.Future_Climate)
                 allDataRef = Climate.AllData;
-            if (climatePhase == ClimatePhase.SpinUp_Climate)
+            if (climatePhase == Climate.Phase.SpinUp_Climate)
                 allDataRef = Climate.Spinup_AllData;
 
             //The Convert conversts the csv file data to a dictionary (of either daily or monthly data)
@@ -126,11 +130,6 @@ namespace Landis.Library.Climate
                 allDataRef.Add(j, icrs);
             }
 
-            //}
-            //else if (timeStep == TimeStep.Monthly)
-            //{ 
-
-            //}
             return resultingFileName;
         }
 
@@ -165,29 +164,18 @@ namespace Landis.Library.Climate
             if (sourceTemporalGranularity == TemporalGranularity.Daily)
             {
                 exportToTxtFormatFile = false;
-                //string path = @"D:\PSU\Landis_II\amin-branch\USGS_Data\Hayhoe_Climate_Data1.csv";
                 sreader = new StreamReader(path);
                 string line;
                 string[] fields;
-                //string tempScenarioName = "";
                 DataTable _dataTableDataByTime = new DataTable();
-                //int numberOfAllEcoregions = 0;
                 line = sreader.ReadLine();
                 fields = line.Split(',');
-                //tempScenarioName = fields[0].Substring(1, fields[0].LastIndexOf("t") - 2);
                 line = sreader.ReadLine();
                 fields = line.Split(',');
-                //int totalRows = 0;
-                //string[,] wholedata;
-                //string CurrentScenarioName = "";
 
                 string CurrentScenarioType = "";
                 climate_Dic = new Dictionary<string, double[]>();
 
-                //string currentT;
-                //string currentSTD;
-                //string currentPart = "";
-                //int totalRow = 0;
 
                 string key = "";
                 //int IndexMax_MeanT = 0;
@@ -257,7 +245,7 @@ namespace Landis.Library.Climate
 
 
                 //12 beacuse for each ecoriogn we need Max_MinT,Max_MaxT,Max_Var Max_Std, Min_MinT,Min_MaxT,Min_Var Min_Std, Prcp_MinT,Prcp_MaxT,Prcp_Var Prcp_Std
-                int dicSize = climateFileActiveEcoregions.Count * 15; //climatefileActiveEcoregions.Count * 9; //Climate.ModelCore.Ecoregions.Count * 9;
+                int dicSize = climateFileActiveEcoregions.Count * 15; 
                 sreader.Close();
                 StreamReader reader = new StreamReader(path);
 
@@ -313,16 +301,6 @@ namespace Landis.Library.Climate
                                 unmatched_TriggerWords = unmatched_TriggerWords.Replace(", " + windSpeedTriggerWord, "");
                             }
 
-                            //if (tempScenarioName != CurrentScenarioName)// firstFlag == false)
-                            //{
-                            //    tempScenarioName = CurrentScenarioName;
-                            //    //firstFlag = true;
-                            //}
-
-
-
-                            //line = reader.ReadLine();
-                            //fields = line.Split(',');
 
                         }
 

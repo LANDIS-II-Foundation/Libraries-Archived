@@ -1,4 +1,7 @@
-﻿using Landis.Core;
+﻿//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
+
+using Landis.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +32,7 @@ namespace Landis.Library.Climate
         public int[] DailyGDD = new int[366];
 
 
-        public AnnualClimate_Daily(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
+        public AnnualClimate_Daily(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
         {
 
             this.climatePhase = spinupOrfuture;
@@ -43,14 +46,14 @@ namespace Landis.Library.Climate
             //if(imeStep == Int32.MinValue && (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average")))
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
             {
-                if (this.climatePhase == ClimatePhase.Future_Climate)
+                if (this.climatePhase == Climate.Phase.Future_Climate)
                 {
                     //if (avgEcoClimate_future == null || avgEcoClimate_future[ecoregion.Index, 0] == null)
                         AnnualClimate_Avg(ecoregion, actualYear, latitude);
                     //else
                         Climate.TimestepData = avgEcoClimate_future;
                 }
-                else if (this.climatePhase == ClimatePhase.SpinUp_Climate && !Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("monthly"))
+                else if (this.climatePhase == Climate.Phase.SpinUp_Climate && !Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("monthly"))
                 {
                     //if (avgEcoClimate_spinUp == null || avgEcoClimate_spinUp[ecoregion.Index, 0] == null)
                         AnnualClimate_Avg(ecoregion, actualYear, latitude);
@@ -66,7 +69,7 @@ namespace Landis.Library.Climate
                 try
                 {
                     //Presumption: The RandSelectedTimeSteps_future has been filled out in Climate.Initialize()
-                    if (this.climatePhase == ClimatePhase.Future_Climate)
+                    if (this.climatePhase == Climate.Phase.Future_Climate)
                     {
                         if (Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("random"))// || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random")) // a specific timeStep is provided but it points to an item in the preprocessed-randomly-selected-timesteps for returning the climate
                         {
@@ -84,7 +87,7 @@ namespace Landis.Library.Climate
                         }
 
                     }
-                    else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                    else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     {
                         if (Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
                         {
@@ -222,7 +225,7 @@ namespace Landis.Library.Climate
             if (Climate.TimestepData.GetLength(1) > 365)
                 this.isLeapYear = true;
             
-                    }
+        }
 
 
 
@@ -251,9 +254,9 @@ namespace Landis.Library.Climate
                 }
 
                 int allDataCount = 0;
-                if (this.climatePhase == ClimatePhase.Future_Climate)
+                if (this.climatePhase == Climate.Phase.Future_Climate)
                     allDataCount = Climate.AllData.Count;
-                else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     allDataCount = Climate.Spinup_AllData.Count;
 
                 for (int day = 0; day < MaxDayInYear; day++)
@@ -261,19 +264,13 @@ namespace Landis.Library.Climate
 
                     for (int stp = 0; stp < allDataCount; stp++)
                     {
-                        if (this.climatePhase == ClimatePhase.Future_Climate)
+                        if (this.climatePhase == Climate.Phase.Future_Climate)
                             Climate.TimestepData = Climate.AllData.ElementAt(stp).Value;
-                        else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
-                        //try
-                        //{
-                            ecoClimateT[ecoregion.Index, day] = Climate.TimestepData[ecoregion.Index, day];
-                        //}
-                        //catch (IndexOutOfRangeException e)
-                        //{
-                            
-                        //}
-                            //avgEcoClimate = ecoClimateT;
+
+                        ecoClimateT[ecoregion.Index, day] = Climate.TimestepData[ecoregion.Index, day];
+                        
                         if (ecoClimateT[ecoregion.Index, day] != null)
                         {
                             this.DailyMinTemp[day] += ecoClimateT[ecoregion.Index, day].AvgMinTemp;
@@ -303,9 +300,9 @@ namespace Landis.Library.Climate
                     avgEcoClimate[ecoregion.Index, day].PAR = this.DailyPAR[day];
                 }
 
-                if (this.climatePhase == ClimatePhase.Future_Climate)
+                if (this.climatePhase == Climate.Phase.Future_Climate)
                     avgEcoClimate_future = avgEcoClimate;
-                else if (this.climatePhase == ClimatePhase.SpinUp_Climate)
+                else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     avgEcoClimate_spinUp = avgEcoClimate;
 
                 Climate.TimestepData = avgEcoClimate;
@@ -428,19 +425,6 @@ namespace Landis.Library.Climate
                 }
             }
             
-/*
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(ecoClimate);
-            this.MonthlyVPD = CalculateVaporPressureDeficit(ecoClimate);
-            this.MonthlyGDD = CalculatePnETGDD(this.MonthlyTemp, year);
-
-            this.BeginGrowing = CalculateBeginGrowingSeason(ecoClimate);
-            this.EndGrowing = CalculateEndGrowingSeason(ecoClimate);
-            this.GrowingDegreeDays = GrowSeasonDegreeDays(year);
-
-            for (int day = 5; day < 8; day++)
-                this.JJAtemperature += this.MonthlyTemp[day];
-            this.JJAtemperature /= 3.0;
-*/
 
         }
         
@@ -481,58 +465,18 @@ namespace Landis.Library.Climate
             int beginGrowingDay = CalculateBeginGrowingDay_Daily(annualClimate);
             int endGrowingDay = MaxDayInYear;
             //int i = beginGrowingDay;
-            for (int i = MaxDayInYear; i > beginGrowingDay; i--)  //Loop through all the days of the year from day 1 to day 162
+            for (int day = MaxDayInYear; day > beginGrowingDay; day--)  //Loop through all the days of the year from day 1 to day 162
             {
-                nightTemp = this.DailyMinTemp[i];
+                nightTemp = this.DailyMinTemp[day];
                 if (nightTemp > 0)
                 {
                     //this.endGrowing = i;
                     //endGrowingDay = i;
-                    return i;
+                    return day;
                 }
             }
-
-
-            //while ( i < MaxDayInYear  )  //Loop through all the days of the year from day 1 to day 162 NOTE: it cannot iterate from MaxDayInYear because it might not be the first day after begin day which has the nightTemp < 0. 
-            //{
-                
-            //        //i = i + 1;
-            //        nightTemp = this.DailyMinTemp[i];
-            //        if (nightTemp < 0 && (endGrowingDay - beginGrowingDay) < 30)
-            //        {
-            //            endGrowingDay = i+1;
-            //            return endGrowingDay;
-            //            break;
-            //        }
-         
-                
-                
-                
-                
-                
-            //    i++;
-            //    }
-                
-            
-            //if ((endGrowingDay - beginGrowingDay) < 30)
-            //{
-            //    Climate.ModelCore.UI.WriteLine("two few Growwing days: endGrowingDay - beginGrowingDay < 30.");
-            //    throw new ApplicationException("two few Growwing days: endGrowingDay - beginGrowingDay < 30.");
-                
-            //}
-            //Console.Write(endGrowingDay - beginGrowingDay);
-            //Console.Read();
-            //this.EndGrowing = 
-
-            //this.endGrowing = endGrowingDay;
+             
             return 0;
-            //return endGrowingDay;
-
-
-
-
-
-            //return endGrowingDay; // For the time being if no night could be find with the Temp. < 0 then 0 is returned. A result of this could be that no growth would occure.
         }
 
        
@@ -568,7 +512,7 @@ namespace Landis.Library.Climate
         //---------------------------------------------------------------------------
         //public void WriteToLogFile()
         //{ 
-        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = ClimatePhase.Future_Climate, int timeStep = Int32.MinValue)
+        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue)
         //}
 
     }
