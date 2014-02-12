@@ -374,7 +374,7 @@ namespace Landis.Library.Climate
             //--------------------------------------------------
 
             //Set fieldCapacity and TLA
-            SetSoilMoisture(awc);
+            SetSoilMoisture(awc);  //awc = available water content
             SetTLA();
 
             I = CalcMonThornI();
@@ -424,28 +424,31 @@ namespace Landis.Library.Climate
             // Next Calcd is called to calculate the monthly departures from normal
             CalcMonthlyDepartures();
             
-            // Finally CalcK is called to compute the K and Z values.  CalcX is called
-            // within CalcK.
+            // Finally CalcK is called to compute the K and Z values.  CalcX is called within CalcK.
             CalcOrigK();
 
             double annualPDSI = 0;
             //double ecoAverage = 0;
             //LinkedListNode<double> node = Xlist.Last;
 
-            //int stYear = _AnnualClimates[0].Year;
-            //if (Climate.AnnualPDSI.Columns.Count == 0)
-            //{
-            //    Climate.AnnualPDSI.Columns.Add("TimeStep", typeof(Int32));
-            //    Climate.AnnualPDSI.Columns.Add("Ecorigion", typeof(Int32));
-            //    Climate.AnnualPDSI.Columns.Add("AnnualPDSI", typeof(double));
-            //}
             for (int m = 0; m < 12; m++)
             {
                 annualPDSI += PDSI_Monthly[m]; //Math.Round(node.Value, 2);
 
             }
 
-            annualPDSI /= 12.0; 
+            annualPDSI /= 12.0;
+
+            Climate.PdsiLog.Clear();
+            PDSI_Log pl = new PDSI_Log();
+
+            pl.Time = oneClimate.Year;
+            pl.EcoregionName = ecoregion.Name;
+            pl.EcoregionIndex = ecoregion.Index;
+            pl.PDSI = annualPDSI;
+
+            Climate.PdsiLog.AddObject(pl);
+            Climate.PdsiLog.WriteToFile();
 
             return annualPDSI;
         }
