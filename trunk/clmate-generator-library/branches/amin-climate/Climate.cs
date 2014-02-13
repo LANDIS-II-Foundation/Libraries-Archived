@@ -157,29 +157,32 @@ namespace Landis.Library.Climate
             //spinup_allData.
             foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
             {
-                for (int month = 0; month < 12; month++)
+                if (ecoregion.Active)
                 {
+                    for (int month = 0; month < 12; month++)
+                    {
 
-                    MonthlyLog.Clear();
-                    MonthlyLog ml = new MonthlyLog();
+                        MonthlyLog.Clear();
+                        MonthlyLog ml = new MonthlyLog();
 
-                    ml.SimulationPeriod = period;
-                    ml.Time = year;
-                    ml.Month = month+1;
-                    ml.EcoregionName = ecoregion.Name;
-                    ml.EcoregionIndex = ecoregion.Index;
+                        ml.SimulationPeriod = period;
+                        ml.Time = year;
+                        ml.Month = month + 1;
+                        ml.EcoregionName = ecoregion.Name;
+                        ml.EcoregionIndex = ecoregion.Index;
 
-                    //ModelCore.UI.WriteLine("Eco={0}, Month={1}, AvgMinTemp={2:0.0}, AvgMaxTemp={3:0.0}, StdDevTemp={4:0.0}, AvgPpt={5:0.0}, StdDevPpt={6:0.0}.",
-                    //    ecoregion.Index, i + 1,
-                    ml.min_airtemp = TimestepData[ecoregion.Index, month].AvgMinTemp;
-                    ml.max_airtemp = TimestepData[ecoregion.Index, month].AvgMaxTemp;
-                    ml.std_temp = TimestepData[ecoregion.Index, month].StdDevTemp;
-                    ml.ppt = TimestepData[ecoregion.Index, month].AvgPpt;
-                    ml.std_ppt = TimestepData[ecoregion.Index, month].StdDevPpt;
+                        //ModelCore.UI.WriteLine("Eco={0}, Month={1}, AvgMinTemp={2:0.0}, AvgMaxTemp={3:0.0}, StdDevTemp={4:0.0}, AvgPpt={5:0.0}, StdDevPpt={6:0.0}.",
+                        //    ecoregion.Index, i + 1,
+                        ml.min_airtemp = TimestepData[ecoregion.Index, month].AvgMinTemp;
+                        ml.max_airtemp = TimestepData[ecoregion.Index, month].AvgMaxTemp;
+                        ml.std_temp = TimestepData[ecoregion.Index, month].StdDevTemp;
+                        ml.ppt = TimestepData[ecoregion.Index, month].AvgPpt;
+                        ml.std_ppt = TimestepData[ecoregion.Index, month].StdDevPpt;
 
-                    MonthlyLog.AddObject(ml);
-                    MonthlyLog.WriteToFile();
+                        MonthlyLog.AddObject(ml);
+                        MonthlyLog.WriteToFile();
 
+                    }
                 }
             }
 
