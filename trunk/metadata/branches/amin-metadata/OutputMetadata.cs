@@ -19,6 +19,7 @@ namespace Landis.Library.Metadata
         public List<FieldMetadata> Fields { get; set; }
         public MapDataType? Map_DataType { get; set; } //set null for table type
         public string Map_Unit { get; set; } //set null for table type
+        public bool Visualize { get; set; }  // should be visualized?
 
 
         public OutputMetadata()
@@ -84,7 +85,11 @@ namespace Landis.Library.Metadata
             fileAtt.Value = this.FilePath;
             node.Attributes.Append(fileAtt);
 
-            if(this.Type == OutputType.Table)
+            XmlAttribute vizAtt = doc.CreateAttribute("visualize"); //the output file path
+            vizAtt.Value = this.Visualize.ToString();
+            node.Attributes.Append(vizAtt);
+
+            if (this.Type == OutputType.Table)
             {
                 XmlAttribute MetadataFileAtt = doc.CreateAttribute("MetadataFilePath");
                 MetadataFileAtt.Value = this.metadataFilePath;
