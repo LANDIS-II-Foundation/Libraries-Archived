@@ -26,7 +26,7 @@ namespace Landis.Library.Climate
 
         public double[] DailyPET = new double[366];  // Potential Evapotranspiration
         public double[] DailyVPD = new double[366];  // Vapor Pressure Deficit
-        public double[] DailyNdeposition = new double[366];
+        //public double[] DailyNdeposition = new double[366];
         public double[] DailyDayLength = new double[366];
         public double[] DailyNightLength = new double[366];
         public int[] DailyGDD = new int[366];
@@ -78,12 +78,12 @@ namespace Landis.Library.Climate
                                 Climate.ModelCore.UI.WriteLine("Error in creating new AnnualClimate: Climate library has not been initialized.");
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
-                            Climate.TimestepData = Climate.AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
+                            Climate.TimestepData = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
                             //Climate.TimestepData = Climate.AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
                         }
                         else //Historic
                         {
-                            Climate.TimestepData = Climate.AllData.ElementAt(TimeStep).Value;
+                            Climate.TimestepData = Climate.Future_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -186,7 +186,7 @@ namespace Landis.Library.Climate
 
             this.Year = actualYear;
             this.AnnualPrecip = 0.0;
-            this.AnnualN = 0.0;
+            //this.AnnualN = 0.0;
 
             for (int day = 0; day < MaxDayInYear; day++)
             {
@@ -255,7 +255,7 @@ namespace Landis.Library.Climate
 
                 int allDataCount = 0;
                 if (this.climatePhase == Climate.Phase.Future_Climate)
-                    allDataCount = Climate.AllData.Count;
+                    allDataCount = Climate.Future_AllData.Count;
                 else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     allDataCount = Climate.Spinup_AllData.Count;
 
@@ -265,7 +265,7 @@ namespace Landis.Library.Climate
                     for (int stp = 0; stp < allDataCount; stp++)
                     {
                         if (this.climatePhase == Climate.Phase.Future_Climate)
-                            Climate.TimestepData = Climate.AllData.ElementAt(stp).Value;
+                            Climate.TimestepData = Climate.Future_AllData.ElementAt(stp).Value;
                         else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
 
@@ -389,7 +389,7 @@ namespace Landis.Library.Climate
 
             this.Year = year;
             this.AnnualPrecip = 0.0;
-            this.AnnualN = 0.0;
+            //this.AnnualN = 0.0;
 
              for (int day = 0; day < MaxDayInYear; day++)
             {

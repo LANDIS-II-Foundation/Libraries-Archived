@@ -8,7 +8,7 @@ namespace Landis.Library.Climate
 {
     public class PDSI_Log
     {
-        [DataFieldAttribute(Unit = FiledUnits.Year, Desc = "Simulation Year")]
+        [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Time {set; get;}
 
         [DataFieldAttribute(Desc = "Ecoregion Name")]

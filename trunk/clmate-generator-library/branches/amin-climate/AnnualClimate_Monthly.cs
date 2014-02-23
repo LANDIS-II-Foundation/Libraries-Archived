@@ -22,13 +22,13 @@ namespace  Landis.Library.Climate
 
         public double[] MonthlyPET = new double[12];  // Potential Evapotranspiration
         public double[] MonthlyVPD = new double[12];  // Vapor Pressure Deficit
-        public double[] MonthlyNdeposition = new double[12];
+        //public double[] MonthlyNdeposition = new double[12];
         public double[] MonthlyDayLength = new double[12];
         public double[] MonthlyNightLength = new double[12];
         public int[] MonthlyGDD = new int[12];
 
 
-        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
+        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int historicTimeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
         {
             this.climatePhase = spinupOrfuture;
             this.Latitude = latitude;
@@ -36,7 +36,7 @@ namespace  Landis.Library.Climate
 
             if (Climate.AllData_granularity == TemporalGranularity.Daily && spinupOrfuture == Climate.Phase.Future_Climate)
             {
-                this.AnnualClimate_From_AnnualClimate_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  timeStep);
+                this.AnnualClimate_From_AnnualClimate_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  historicTimeStep);
                 return;
             }
 
@@ -67,9 +67,9 @@ namespace  Landis.Library.Climate
                 //Climate.TimestepData = avgEcoClimate;
             }
             //}
-            else if (timeStep != Int32.MinValue) //it is Random or Historic
+            else if (historicTimeStep != Int32.MinValue) //It is Historic data if this integer has a value, otherwise Random
             {
-                TimeStep = timeStep;
+                TimeStep = historicTimeStep;
                 try
                 {
                     //Presumption: The RandSelectedTimeSteps_future has been filled out in Climate.Initialize()
@@ -82,11 +82,11 @@ namespace  Landis.Library.Climate
                                 Climate.ModelCore.UI.WriteLine("Error in creating new AnnualClimate: Climate library has not been initialized.");
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
-                            Climate.TimestepData = Climate.AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
+                            Climate.TimestepData = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
                         }
                         else //Historic
                         {
-                            Climate.TimestepData = Climate.AllData.ElementAt(TimeStep).Value;
+                            Climate.TimestepData = Climate.Future_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -119,7 +119,7 @@ namespace  Landis.Library.Climate
 
                 this.Year = actualYear;
                 this.AnnualPrecip = 0.0;
-                this.AnnualN = 0.0;
+                //this.AnnualN = 0.0;
 
                 for (int mo = 0; mo < 12; mo++)
                 {
@@ -196,7 +196,7 @@ namespace  Landis.Library.Climate
 
                 int allDataCount = 0;
                 if (this.climatePhase == Climate.Phase.Future_Climate)
-                    allDataCount = Climate.AllData.Count;
+                    allDataCount = Climate.Future_AllData.Count;
                 else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                     allDataCount = Climate.Spinup_AllData.Count;
 
@@ -207,7 +207,7 @@ namespace  Landis.Library.Climate
                     {
 
                         if (this.climatePhase == Climate.Phase.Future_Climate)
-                            Climate.TimestepData = Climate.AllData.ElementAt(stp).Value;
+                            Climate.TimestepData = Climate.Future_AllData.ElementAt(stp).Value;
                         else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
 
@@ -260,7 +260,7 @@ namespace  Landis.Library.Climate
             IClimateRecord[] ecoClimate = new IClimateRecord[12];
             this.Year = year;
             this.AnnualPrecip = 0.0;
-            this.AnnualN = 0.0;
+            //this.AnnualN = 0.0;
 
             for (int mo = 0; mo < 12; mo++)
             {
@@ -314,7 +314,7 @@ namespace  Landis.Library.Climate
 
             this.Year = year;
             this.AnnualPrecip = 0.0;
-            this.AnnualN = 0.0;
+            //this.AnnualN = 0.0;
             this.Latitude = latitude;
 
             for (int mo = 0; mo < 12; mo++)
@@ -451,13 +451,13 @@ namespace  Landis.Library.Climate
             return s;
         }
         //---------------------------------------------------------------------------
-        public void SetAnnualN(double Nslope, double Nintercept)
-        {
-            AnnualN = CalculateAnnualN(AnnualPrecip, Nslope, Nintercept);
-            for (int mo = 0; mo < 12; mo++)
-                MonthlyNdeposition[mo] = AnnualN * MonthlyPrecip[mo] / AnnualPrecip;
+        //public void SetAnnualN(double Nslope, double Nintercept)
+        //{
+        //    AnnualN = CalculateAnnualN(AnnualPrecip, Nslope, Nintercept);
+        //    for (int mo = 0; mo < 12; mo++)
+        //        MonthlyNdeposition[mo] = AnnualN * MonthlyPrecip[mo] / AnnualPrecip;
 
-        }
+        //}
         //---------------------------------------------------------------------------
         private static double CalculateAnnualN(double annualPrecip, double Nslope, double Nintercept)
         {

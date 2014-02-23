@@ -39,7 +39,7 @@ namespace Landis.Library.Climate
                 Type = OutputType.Table,
                 Name = "MonthlyLog",
                 FilePath = Climate.MonthlyLog.FilePath,
-                //MetadataFilePath = @"Century-Succession\MonthlyLog.xml" //this is set automatically and it's not required to be set
+                Visualize = true,
             };
             tblOut_monthly.RetriveFields(typeof(MonthlyLog));
             Extension.OutputMetadatas.Add(tblOut_monthly);
@@ -49,6 +49,7 @@ namespace Landis.Library.Climate
                 Type = OutputType.Table,
                 Name = "PDSILog",
                 FilePath = Climate.PdsiLog.FilePath,
+                Visualize = false,
             };
             tblOut_pdsi.RetriveFields(typeof(PDSI_Log));
             Extension.OutputMetadatas.Add(tblOut_pdsi);

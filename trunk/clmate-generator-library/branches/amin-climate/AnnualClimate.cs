@@ -22,7 +22,7 @@ namespace Landis.Library.Climate
 
         public double AnnualPrecip;
         public double JJAtemperature;
-        public double AnnualN;
+        //public double AnnualN;
         public double AnnualAET;  // Actual Evapotranspiration
         public double Snow;
         public int Year;

@@ -65,7 +65,7 @@ namespace Landis.Library.Climate
         {
             Dictionary<int, IClimateRecord[,]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
             if (climatePhase == Climate.Phase.Future_Climate)
-                allDataRef = Climate.AllData;
+                allDataRef = Climate.Future_AllData;
             if (climatePhase == Climate.Phase.SpinUp_Climate)
                 allDataRef = Climate.Spinup_AllData;
 

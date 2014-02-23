@@ -52,8 +52,7 @@ namespace Landis.Library.Climate
             }
         }
 
-        //public static System.Data.DataTable AnnualPDSI
-        public static double[,] AnnualPDSI
+        public static double[,] AnnualPDSI  //ecoregion.Index, Year
         {
             get
             {
@@ -92,7 +91,7 @@ namespace Landis.Library.Climate
                 return spinup_allData_granularity;
             }
         }
-        public static Dictionary<int, IClimateRecord[,]> AllData //This could not be renamed to Future_AllData because AllData is used in other extensions like century-succession
+        public static Dictionary<int, IClimateRecord[,]> Future_AllData 
         {
             get
             {
