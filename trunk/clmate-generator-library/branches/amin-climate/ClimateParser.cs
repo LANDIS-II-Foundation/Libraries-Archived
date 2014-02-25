@@ -21,7 +21,12 @@ namespace Landis.Library.Climate
         //---------------------------------------------------------------------
         private string _LandisDataValue = "Climate Data";
 
-        public override string LandisDataValue { get { return _LandisDataValue; } }
+        public override string LandisDataValue 
+        { 
+            get { 
+                return _LandisDataValue; 
+            } 
+        }
         //---------------------------------------------------------------------
 
         public ClimateParser()

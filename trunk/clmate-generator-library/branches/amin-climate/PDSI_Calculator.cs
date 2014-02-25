@@ -12,11 +12,11 @@ namespace Landis.Library.Climate
 {
     public static class PDSI_Calculator
     {
-        private static AnnualClimate_Monthly annualClimate;
-        private static double[] mon_T_normal;
+        //private static AnnualClimate_Monthly annualClimate;
+        //public static double[] mon_T_normal;
         private static Potential potential;// = new Potential[12];
-        public static int Verbose; // { get; set; }
-        private static AnnualClimate_Monthly annClimate;
+        public static int Verbose; 
+        //private static AnnualClimate_Monthly annClimate;
 
         //===========================================PDSI Attributes=====================================================
         public const double MISSING = -99.00;
@@ -41,7 +41,7 @@ namespace Landis.Library.Climate
 
         // The arrays used to read in the normal temp data, a years worth of 
         // actual temp data, and a years worth of precipitation data
-        private static double[] TNorm = new double[12];
+        //private static double[] TNorm = new double[12];
         private static double[] T = new double[12];
         private static double[] P = new double[12];
         private static double[] PDSI_Monthly = new double[12];
@@ -330,16 +330,15 @@ namespace Landis.Library.Climate
         /// <param name="annualClimate"></param>
         /// <param name="month"></param>
         /// <returns></returns>
-        public static double CalculatePDSI(AnnualClimate_Monthly oneClimate, double[] historic_mon_Temp_Normal, double awc, double latitude, UnitSystem arsUnitSystem, IEcoregion ecoregion)
+        public static double CalculatePDSI(AnnualClimate_Monthly oneClimate, double[] mon_T_normal, double awc, double latitude, UnitSystem arsUnitSystem, IEcoregion ecoregion)
         {
-            annualClimate = oneClimate;
-            //s_year = _AnnualClimates[0].Year;
-            //e_year = _AnnualClimates[_AnnualClimates.Count() - 1].Year;
-            //AWC = awc;
             TLA = latitude;
 
-            mon_T_normal = historic_mon_Temp_Normal;
-
+            // Print AVERAGE T normal.
+            for (int mo = 0; mo < 12; mo++)
+            {
+                //Climate.ModelCore.UI.WriteLine("Month = {0}, Input Monthly T normal = {1}", mo, mon_T_normal[mo]);
+            }
 
             // -------------------------------------------------------------------
             //Converting Celcius temps to Fahrenheit by  Tf = (9/5)*Tc+32; formula
@@ -355,8 +354,8 @@ namespace Landis.Library.Climate
                 //{
                 for (int month = 0; month < 12; month++)
                 {
-                        annualClimate.MonthlyTemp[month] = (9.0 / 5.0) * annualClimate.MonthlyTemp[month] + 32.0;
-                        annualClimate.MonthlyPrecip[month] = annualClimate.MonthlyPrecip[month] * 0.39370;
+                        T[month] = (9.0 / 5.0) * oneClimate.MonthlyTemp[month] + 32.0;
+                        P[month] = oneClimate.MonthlyPrecip[month] * 0.39370;
                 }
 
                 //awt is passed and used in GetParam(awt)
@@ -377,7 +376,7 @@ namespace Landis.Library.Climate
             SetSoilMoisture(awc);  //awc = available water content
             SetTLA();
 
-            I = CalcMonThornI();
+            I = CalcMonThornI(mon_T_normal);
 
             A = CalcThornA(I);
             if (Verbose > 1)
@@ -434,7 +433,7 @@ namespace Landis.Library.Climate
             for (int m = 0; m < 12; m++)
             {
                 annualPDSI += PDSI_Monthly[m]; //Math.Round(node.Value, 2);
-
+                //Climate.ModelCore.UI.WriteLine("Month = {0}, Output Monthly T normal = {1:0.00}, PDSI = {2:0.000}", m, mon_T_normal[m], PDSI_Monthly[m]);
             }
 
             annualPDSI /= 12.0;
@@ -486,7 +485,7 @@ namespace Landis.Library.Climate
             //{
                 // Get a year's worth of temperature and precipitation data
                 // Also, get the current year from the temperature file.
-            annClimate = annualClimate; // s[y - 1];
+            //annClimate = annualClimate; // s[y - 1];
                 //annClimateIndex = y - 1;
                 //if(Weekly){
                 //  actyear=GetTemp(input_temp, T, 52);
@@ -498,8 +497,8 @@ namespace Landis.Library.Climate
                 //    T[i] = _AnnualClimates[year].MonthlyTemp[i];  //calculate T[i] from historic, not target climate
                 //    P[i] = _AnnualClimates[year].MonthlyPrecip[i];  //calculate P[i] from historic, not target climate
                 //}
-             GetTemp(ref T, 12);//actyear = GetTemp(input_temp, T, 12);
-             GetPrecip(ref P, 12);//GetPrecip(input_prec, P, 12);
+             //GetTemp(ref T, 12);//actyear = GetTemp(input_temp, T, 12);
+             //GetPrecip(ref P, 12);//GetPrecip(input_prec, P, 12);
                 //}
 
             Potential pot = new Potential();
@@ -507,8 +506,8 @@ namespace Landis.Library.Climate
                 // This loop runs for each per in the year
                 for (int per = 0; per < num_of_periods; per++)
                 {
-                    if (P[per] >= 0 && T[per] != MISSING)
-                    {
+                    //if (P[per] >= 0 && T[per] != MISSING)
+                    //{
                         // calculate the Potential Evapotranspiration first
                         // because it's needed in later calculations
                         CalcMonPE(per, 2012); // The year 2012 is a placeholder!
@@ -560,39 +559,40 @@ namespace Landis.Library.Climate
                         pot.PL[per] = PL;
                         pot.P_PE[per] = P[per] - PE;
                         //_Potential[year] = new Potential()  { Year = _AnnualClimates[year].Year, Period[per] = (period_length * per) + 1, P[per] = P[per], PE[per] = PE, PR[per] = PR, PRO[per] = PRO, PL[per] = PL, P_PE[per] = P[per] - PE };
-                    }
-                    else
-                    {
-                        pot.Year = 2012; // Placeholder! _AnnualClimates[y - 1].Year;
-                        pot.Period[per] = (period_length * per) + 1;
-                        pot.P[per] = MISSING;
-                        pot.PE[per] = MISSING;
-                        pot.PR[per] = MISSING;
-                        pot.PRO[per] = MISSING;
-                        pot.PL[per] = MISSING;
-                        pot.P_PE[per] = MISSING;
-                        //_Potential[year] = new Potential() { Year = _AnnualClimates[year].Year, Period = (period_length * per) + 1, P = MISSING, PE = MISSING, PR = MISSING, PRO = MISSING, PL = MISSING, P_PE = MISSING };
-                    }
+                    //}
+                    //else
+                    //{
+                    //    pot.Year = 2012; // Placeholder! _AnnualClimates[y - 1].Year;
+                    //    pot.Period[per] = (period_length * per) + 1;
+                    //    pot.P[per] = MISSING;
+                    //    pot.PE[per] = MISSING;
+                    //    pot.PR[per] = MISSING;
+                    //    pot.PRO[per] = MISSING;
+                    //    pot.PL[per] = MISSING;
+                    //    pot.P_PE[per] = MISSING;
+                    //    //_Potential[year] = new Potential() { Year = _AnnualClimates[year].Year, Period = (period_length * per) + 1, P = MISSING, PE = MISSING, PR = MISSING, PRO = MISSING, PL = MISSING, P_PE = MISSING };
+                    //}
                     potential = pot;
             }
 
         }
 
         //-----------------------------------------------------------------------------
-        //This function calculates the Thornthwaite heat index I for montly PDSI's.
+        //This function calculates the Thornthwaite heat index I for monthly PDSI's.
         //-----------------------------------------------------------------------------
-        private static double CalcMonThornI()
+        private static double CalcMonThornI(double[] mon_T_normal)
         {
             double I = 0;
             int i = 0; //, j = 0;
+            double[] TNorm = new double[12];
             
             // Then we move the temperatures to the TNorm array and calclulate I
             for (i = 0; i < 12; i++)
             {
-                if (metric == 1)
-                    TNorm[i] = mon_T_normal[i] * (9.0 / 5.0) + 32;//TNorm[i] = t[i]*(9.0/5.0)+32;
-                else
-                    TNorm[i] = mon_T_normal[i];//TNorm[i]=t[i];
+                //if (metric == 1)
+                //    TNorm[i] = mon_T_normal[i] * (9.0 / 5.0) + 32;//TNorm[i] = t[i]*(9.0/5.0)+32;
+                //else
+                TNorm[i] = mon_T_normal[i];//TNorm[i]=t[i];
                 // Prints the normal temperatures to the screen
                 if (Verbose > 1)
                     Climate.ModelCore.UI.WriteLine("{0}", TNorm[i]);
@@ -600,10 +600,7 @@ namespace Landis.Library.Climate
                 if (TNorm[i] > 32)
                     I = I + Math.Pow((TNorm[i] - 32) / 9, 1.514);
             }
-            // Prints a newline to the screen and closes the input file
-            if (Verbose > 1)
-                Climate.ModelCore.UI.WriteLine("\n");
-            //  fclose(fin);
+            
             return I;
         }
 
@@ -694,8 +691,8 @@ namespace Landis.Library.Climate
             for (i = 0; i < 12; i++)
                 A[i] = 0;
 
-            for (i = 0; i < max; i++)
-                t[i] = annClimate.MonthlyTemp[i];
+            //for (i = 0; i < max; i++)
+            //    t[i] = annClimate.MonthlyTemp[i];
 
             //place values read into array t2 to be summarized
             //  if(read == max+1){
@@ -719,14 +716,14 @@ namespace Landis.Library.Climate
                 else
                     A[i] = MISSING;
             }
-            if (metric == 1)
-            {
-                for (i = 0; i < num_of_periods; i++)
-                {
-                    if (A[i] != MISSING)
-                        A[i] = A[i] * (9.0 / 5.0) + 32;
-                }
-            }
+            //if (metric == 1)
+            //{
+            //    for (i = 0; i < num_of_periods; i++)
+            //    {
+            //        if (A[i] != MISSING)
+            //            A[i] = A[i] * (9.0 / 5.0) + 32;
+            //    }
+            //}
 
             //return year;
 
@@ -734,7 +731,7 @@ namespace Landis.Library.Climate
         //-----------------------------------------------------------------------------
         // This function is a modified version of GetTemp() function for precip only.
         //-----------------------------------------------------------------------------
-        private static void GetPrecip(ref double[] A, int max) //int GetPrecip(FILE *In, number *A, int max) 
+        private static void GetPrecip(ref double[] A, int max) 
         {
             double[] t = new double[12], t2 = new double[12];
             double temp;
@@ -745,8 +742,8 @@ namespace Landis.Library.Climate
             for (i = 0; i < 12; i++)
                 A[i] = 0;
 
-            for (i = 0; i < max; i++)
-                t[i] = annClimate.MonthlyPrecip[i];
+            //for (i = 0; i < max; i++)
+            //    t[i] = annClimate.MonthlyPrecip[i];
 
 
             for (i = 0; i < max; i++)

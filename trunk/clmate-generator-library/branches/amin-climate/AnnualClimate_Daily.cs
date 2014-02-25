@@ -48,21 +48,17 @@ namespace Landis.Library.Climate
             {
                 if (this.climatePhase == Climate.Phase.Future_Climate)
                 {
-                    //if (avgEcoClimate_future == null || avgEcoClimate_future[ecoregion.Index, 0] == null)
-                        AnnualClimate_Avg(ecoregion, actualYear, latitude);
-                    //else
-                        Climate.TimestepData = avgEcoClimate_future;
+                    AnnualClimate_Avg(ecoregion, actualYear, latitude);
+                    Climate.TimestepData = avgEcoClimate_future;
+                    //Climate.Future_DailyData[actualYear] = avgEcoClimate_future;
                 }
                 else if (this.climatePhase == Climate.Phase.SpinUp_Climate && !Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("monthly"))
                 {
-                    //if (avgEcoClimate_spinUp == null || avgEcoClimate_spinUp[ecoregion.Index, 0] == null)
-                        AnnualClimate_Avg(ecoregion, actualYear, latitude);
-                    //else
-                        Climate.TimestepData = avgEcoClimate_spinUp;
+                    AnnualClimate_Avg(ecoregion, actualYear, latitude);
+                    Climate.TimestepData = avgEcoClimate_spinUp;
+                    //Climate.Spinup_DailyData[actualYear] = avgEcoClimate_spinUp;
                 }
-                //Climate.TimestepData = avgEcoClimate;
             }
-            //}
             else if (timeStep != Int32.MinValue) //it is Random or Historic
             {
                 TimeStep = timeStep;
@@ -79,11 +75,12 @@ namespace Landis.Library.Climate
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
                             Climate.TimestepData = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
-                            //Climate.TimestepData = Climate.AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
+                            //Climate.Future_DailyData[actualYear] = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
                         }
                         else //Historic
                         {
                             Climate.TimestepData = Climate.Future_AllData.ElementAt(TimeStep).Value;
+                            //Climate.Future_DailyData[actualYear] = Climate.Future_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -97,10 +94,12 @@ namespace Landis.Library.Climate
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(Climate.RandSelectedTimeSteps_spinup[TimeStep]).Value;
+                            //Climate.Spinup_DailyData[actualYear] = Climate.Spinup_AllData.ElementAt(Climate.RandSelectedTimeSteps_spinup[TimeStep]).Value;
                         }
                         else //Historic
                         {
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(TimeStep).Value;
+                            //Climate.Spinup_DailyData[actualYear] = Climate.Spinup_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -181,7 +180,7 @@ namespace Landis.Library.Climate
                 throw new ApplicationException("Error in creating a new AnnualClimate: the There is an inconsistancy between the passed arguments and the parameters set up in the climate-input-file.");
             }
 
-            Ecoregion = ecoregion;
+            //Ecoregion = ecoregion;
             IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
 
             this.Year = actualYear;
@@ -198,12 +197,12 @@ namespace Landis.Library.Climate
                 {
                     double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
 
-                    double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+                    //double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
 
-                    this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
-                    this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
-                    this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
-                    this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+                    this.DailyTemp[day] = DailyAvgTemp; // +standardDeviation;
+                    this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp; // +standardDeviation;
+                    this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp; // +standardDeviation;
+                    this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt); // + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
                     this.DailyPAR[day] = ecoClimate[day].PAR;
 
                     this.AnnualPrecip += this.DailyPrecip[day];
@@ -236,9 +235,6 @@ namespace Landis.Library.Climate
             if (ecoregion.Index != tempEcoIndex)
             {
                 tempEcoIndex = ecoregion.Index;
-                //get average data and assign
-                // get the average of altimesteps of current ecoregion
-                //Climate.TimestepData = Climate.AllData[ecoregion.Index];
                 IClimateRecord[,] avgEcoClimate = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, MaxDayInYear]; //Climate.AllData[0].Length returns ecoregions' count
                 IClimateRecord[,] ecoClimateT = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, MaxDayInYear];
 
@@ -381,52 +377,52 @@ namespace Landis.Library.Climate
             */
 
         }
-        private void AnnualClimate_Base(IEcoregion ecoregion, int year, double latitude)
-        {
-            //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
-            Ecoregion = ecoregion;
-            IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
+        //private void AnnualClimate_Base(IEcoregion ecoregion, int year, double latitude)
+        //{
+        //    //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
+        //    Ecoregion = ecoregion;
+        //    IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
 
-            this.Year = year;
-            this.AnnualPrecip = 0.0;
-            //this.AnnualN = 0.0;
+        //    this.Year = year;
+        //    this.AnnualPrecip = 0.0;
+        //    //this.AnnualN = 0.0;
 
-             for (int day = 0; day < MaxDayInYear; day++)
-            {
-                try
-                {
-                    ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
-                }
-                catch
-                {
-                }
-                if (ecoClimate[day] != null)
-                {
-                    double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
+        //     for (int day = 0; day < MaxDayInYear; day++)
+        //    {
+        //        try
+        //        {
+        //            ecoClimate[day] = Climate.TimestepData[ecoregion.Index, day];
+        //        }
+        //        catch
+        //        {
+        //        }
+        //        if (ecoClimate[day] != null)
+        //        {
+        //            double DailyAvgTemp = (ecoClimate[day].AvgMinTemp + ecoClimate[day].AvgMaxTemp) / 2.0;
 
-                    double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+        //            double standardDeviation = ecoClimate[day].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
 
-                    this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
-                    this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
-                    this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
-                    this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
-                    this.DailyPAR[day] = ecoClimate[day].PAR;
+        //            this.DailyTemp[day] = DailyAvgTemp + standardDeviation;
+        //            this.DailyMinTemp[day] = ecoClimate[day].AvgMinTemp + standardDeviation;
+        //            this.DailyMaxTemp[day] = ecoClimate[day].AvgMaxTemp + standardDeviation;
+        //            this.DailyPrecip[day] = Math.Max(0.0, ecoClimate[day].AvgPpt + (ecoClimate[day].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+        //            this.DailyPAR[day] = ecoClimate[day].PAR;
 
-                    this.AnnualPrecip += this.DailyPrecip[day];
+        //            this.AnnualPrecip += this.DailyPrecip[day];
 
-                    if (this.DailyPrecip[day] < 0)
-                        this.DailyPrecip[day] = 0;
+        //            if (this.DailyPrecip[day] < 0)
+        //                this.DailyPrecip[day] = 0;
 
-                    double hr = CalculateDayNightLength(day, latitude);
-                    this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
-                    this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+        //            double hr = CalculateDayNightLength(day, latitude);
+        //            this.DailyDayLength[day] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+        //            this.DailyNightLength[day] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
-                    //this.DOY[day] = DayOfYear(day);
-                }
-            }
+        //            //this.DOY[day] = DayOfYear(day);
+        //        }
+        //    }
             
 
-        }
+        //}
         
         private int GetJulianMonthFromJulianDay(int yr, int mo, int d)
         {

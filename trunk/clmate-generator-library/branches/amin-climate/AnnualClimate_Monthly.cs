@@ -28,7 +28,11 @@ namespace  Landis.Library.Climate
         public int[] MonthlyGDD = new int[12];
 
 
-        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int historicTimeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
+        //public AnnualClimate_Monthly() 
+        //{
+        //}
+
+        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
         {
             this.climatePhase = spinupOrfuture;
             this.Latitude = latitude;
@@ -36,40 +40,35 @@ namespace  Landis.Library.Climate
 
             if (Climate.AllData_granularity == TemporalGranularity.Daily && spinupOrfuture == Climate.Phase.Future_Climate)
             {
-                this.AnnualClimate_From_AnnualClimate_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  historicTimeStep);
+                this.AnnualClimate_From_AnnualClimate_Daily(ecoregion,  actualYear, latitude, spinupOrfuture,  timeStep);
                 return;
             }
 
  
             //if (timeStep == Int32.MinValue && !Climate.ConfigParameters.ClimateFileFormat.Contains("Average"))
-            //{
             //    AnnualClimate_Base(ecoregion, actualYear, latitude); //The ordinary old AnnualClimate function. This has been left here so that there lagacy uses of AnnualClimate are still supported.
-            //}
             //else if(Climate.ConfigParameters.ClimateFileFormat.Contains("Hist"))
-            //{
             //if(imeStep == Int32.MinValue && (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average")))
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
             {
                 if (this.climatePhase == Climate.Phase.Future_Climate)
                 {
                     //if (avgEcoClimate_future == null || avgEcoClimate_future[ecoregion.Index, 0] == null)
-                        AnnualClimate_Avg(ecoregion, actualYear, latitude);
-                    //else
-                        Climate.TimestepData = avgEcoClimate_future;
+                    AnnualClimate_Avg(ecoregion, actualYear, latitude);
+                    Climate.TimestepData = avgEcoClimate_future;
+                    //Climate.Future_MonthlyData[actualYear] = avgEcoClimate_future;
                 }
                 else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                 {
                     //if (avgEcoClimate_spinUp == null || avgEcoClimate_spinUp[ecoregion.Index, 0] == null)
-                        AnnualClimate_Avg(ecoregion, actualYear, latitude);
-                    //else
-                        Climate.TimestepData = avgEcoClimate_spinUp;
+                    AnnualClimate_Avg(ecoregion, actualYear, latitude);
+                    Climate.TimestepData = avgEcoClimate_spinUp;
+                    //Climate.Spinup_MonthlyData[actualYear] = avgEcoClimate_spinUp;
                 }
-                //Climate.TimestepData = avgEcoClimate;
             }
-            //}
-            else if (historicTimeStep != Int32.MinValue) //It is Historic data if this integer has a value, otherwise Random
+            else if (timeStep != Int32.MinValue) //It is Historic or Random data (if average data, timestep = int.minvalue)
             {
-                TimeStep = historicTimeStep;
+                TimeStep = timeStep;
                 try
                 {
                     //Presumption: The RandSelectedTimeSteps_future has been filled out in Climate.Initialize()
@@ -83,10 +82,12 @@ namespace  Landis.Library.Climate
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
                             Climate.TimestepData = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
+                            //Climate.Future_MonthlyData[actualYear] = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
                         }
                         else //Historic
                         {
                             Climate.TimestepData = Climate.Future_AllData.ElementAt(TimeStep).Value;
+                            //Climate.Future_MonthlyData[actualYear] = Climate.Future_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -100,10 +101,12 @@ namespace  Landis.Library.Climate
                                 throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                             }
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(Climate.RandSelectedTimeSteps_spinup[TimeStep]).Value;
+                            //Climate.Spinup_MonthlyData[actualYear] = Climate.Spinup_AllData.ElementAt(Climate.RandSelectedTimeSteps_spinup[TimeStep]).Value;
                         }
                         else //Historic
                         {
                             Climate.TimestepData = Climate.Spinup_AllData.ElementAt(TimeStep).Value;
+                            //Climate.Spinup_MonthlyData[actualYear] = Climate.Spinup_AllData.ElementAt(TimeStep).Value;
                         }
 
                     }
@@ -363,6 +366,12 @@ namespace  Landis.Library.Climate
             int nDays;
             int dayOfYear = 0;
             AnnualClimate_Daily annDaily = new AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep); //for the same timeStep
+            
+            if (spinupOrfuture == Climate.Phase.Future_Climate)
+                Climate.Future_DailyData[actualYear][ecoregion.Index] = annDaily;
+            else
+                Climate.Spinup_DailyData[actualYear][ecoregion.Index] = annDaily;
+
             IClimateRecord[] ecoClimate = new IClimateRecord[12];
 
             //----------------------------------------
@@ -437,19 +446,19 @@ namespace  Landis.Library.Climate
             
         }
 
-        //---------------------------------------------------------------------------
-        public override string Write()
-        {
-            string s = String.Format(
-                " Climate:  Year={0}, Number GDD={1}." +
-                " AnnualPpt={2:000.0}," +
-                " JanMinTemp={3:0.0}," +
-                " JanMaxTemp={4:0.0}," +
-                " JanPpt={5:0.0}",
-                this.Year, this.GrowingDegreeDays,
-                TotalAnnualPrecip(), this.MonthlyMinTemp[0], this.MonthlyMaxTemp[0], this.MonthlyPrecip[0]);
-            return s;
-        }
+        ////---------------------------------------------------------------------------
+        //public override string Write()
+        //{
+        //    string s = String.Format(
+        //        " Climate:  Year={0}, Number GDD={1}." +
+        //        " AnnualPpt={2:000.0}," +
+        //        " JanMinTemp={3:0.0}," +
+        //        " JanMaxTemp={4:0.0}," +
+        //        " JanPpt={5:0.0}",
+        //        this.Year, this.GrowingDegreeDays,
+        //        TotalAnnualPrecip(), this.MonthlyMinTemp[0], this.MonthlyMaxTemp[0], this.MonthlyPrecip[0]);
+        //    return s;
+        //}
         //---------------------------------------------------------------------------
         //public void SetAnnualN(double Nslope, double Nintercept)
         //{
@@ -459,17 +468,17 @@ namespace  Landis.Library.Climate
 
         //}
         //---------------------------------------------------------------------------
-        private static double CalculateAnnualN(double annualPrecip, double Nslope, double Nintercept)
-        {
-            //wet fixation , rain in cm, not mm
-            //dry fixation , rain in cm, not mm
+        //private static double CalculateAnnualN(double annualPrecip, double Nslope, double Nintercept)
+        //{
+        //    //wet fixation , rain in cm, not mm
+        //    //dry fixation , rain in cm, not mm
 
-            double annualN = 0.0;
+        //    double annualN = 0.0;
 
-            annualN = Nintercept + Nslope * annualPrecip;
+        //    annualN = Nintercept + Nslope * annualPrecip;
 
-            return annualN;
-        }
+        //    return annualN;
+        //}
 
 
         //---------------------------------------------------------------------------
