@@ -10,7 +10,7 @@ using Landis.Core;
 
 namespace Landis.Library.Climate
 {
-    public static class PDSI_Calculator
+    public class PDSI_Calculator
     {
         //private static AnnualClimate_Monthly annualClimate;
         //public static double[] mon_T_normal;
@@ -335,19 +335,21 @@ namespace Landis.Library.Climate
             TLA = latitude;
 
             // Print AVERAGE T normal.
-            for (int mo = 0; mo < 12; mo++)
-            {
-                //Climate.ModelCore.UI.WriteLine("Month = {0}, Input Monthly T normal = {1}", mo, mon_T_normal[mo]);
-            }
+            //for (int mo = 0; mo < 12; mo++)
+            //{
+            //    Climate.ModelCore.UI.WriteLine("Month = {0}, Input Monthly T normal = {1}", mo, mon_T_normal[mo]);
+            //}
+
+            double[] corrected_mon_T_normal = new double[12];
 
             // -------------------------------------------------------------------
             //Converting Celcius temps to Fahrenheit by  Tf = (9/5)*Tc+32; formula
             //Converting precepitation from cm to inches by  in = cm * 0.39370 formula
             if (arsUnitSystem == UnitSystem.metrics)
             {
-                for (int i = 0; i < mon_T_normal.Length; i++)
+                for (int i = 0; i < 12; i++)
                 {
-                    mon_T_normal[i] = (9.0 / 5.0) * mon_T_normal[i] + 32.0;
+                    corrected_mon_T_normal[i] = (9.0 / 5.0) * mon_T_normal[i] + 32.0;
                 }
 
                 //for (int i = 0; i < _AnnualClimates.Length; i++)
@@ -376,7 +378,7 @@ namespace Landis.Library.Climate
             SetSoilMoisture(awc);  //awc = available water content
             SetTLA();
 
-            I = CalcMonThornI(mon_T_normal);
+            I = CalcMonThornI(corrected_mon_T_normal);
 
             A = CalcThornA(I);
             if (Verbose > 1)

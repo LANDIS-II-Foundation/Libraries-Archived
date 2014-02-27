@@ -243,7 +243,7 @@ namespace Landis.Library.Climate
                 //Climate.TimestepData = timeStep.Value;
                 IClimateRecord[,] timestepData = timeStep.Value;
                 int year = timeStep.Key;
-                Write(timestepData, year, "SpinUp");
+                //Write(timestepData, year, "SpinUp");
                 
                 Spinup_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
                 Spinup_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);  
@@ -253,7 +253,7 @@ namespace Landis.Library.Climate
                 //Climate.TimestepData = timeStep.Value;
                 IClimateRecord[,] timestepData = timeStep.Value;
                 int year = timeStep.Key;
-                Write(timestepData, year, "Future");
+                //Write(timestepData, year, "Future");
                 
                 Future_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
                 Future_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);  
@@ -304,57 +304,52 @@ namespace Landis.Library.Climate
         //{
         //}
 
-        public static void GenerateEcoregionClimateData(IEcoregion ecoregion, int startYear, double latitude, double fieldCapacity, double wiltingPoint /*Climate.Phase climatePhase = Climate.Phase.Future_Climate*/)
+        public static void GenerateEcoregionClimateData(IEcoregion ecoregion, int startYear, double latitude, double fieldCapacity, double wiltingPoint)
         {
-            //Climate.ModelCore.UI.WriteLine("   Calculating Ecoregion Climate Data for {0} years of data.", future_allData.Count);
 
+            Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}, Year = {1}.", ecoregion.Name, startYear);
+            
             int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
             annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, future_allData.Count]; //numberOftimeSteps + 1];
             landscapeAnnualPDSI = new double[future_allData.Count]; //numberOftimeSteps+1];
+            double[] temperature_normals = new double[12];
             
             double availableWaterCapacity = fieldCapacity - wiltingPoint;
 
-            Climate.ModelCore.UI.WriteLine("Calculating PDSI for ECOREGION = {0}.", ecoregion.Name);
 
             //Climate.ModelCore.UI.WriteLine("   Latitude = {0}, Available Water = {1}.", latitude, availableWaterCapacity);
 
-            double[] month_Temp_normal = new double[12];
-            IClimateRecord[] climateRecs = new ClimateRecord[12];
-
+            //IClimateRecord[] climateRecs = new ClimateRecord[12];
             //int minimumTime = 5000;
-            int timestepIndex = 0;
             
             
             //Firt Calculate Climate Normals from Spin-up data
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
             {
-                //Climate.ModelCore.UI.WriteLine("CALCULATING CLIMATE NORMALS from YEAR = {0}.", timeStep.Key);
 
-                //if (timeStep.Key < minimumTime)
-                //    minimumTime = timeStep.Key;
-
-                //Climate.TimestepData = timeStep.Value;
-                
+                Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP Year = {0}.", timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.SpinUp_Climate, timeStep.Key); 
                 Spinup_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
                 for (int mo = 0; mo < 12; mo++)
                 {
-                    //climateRecs[mo] = timeStep.Value[ecoregion.Index, mo];
-                    month_Temp_normal[mo] += annualClimateMonthly.MonthlyTemp[mo]; 
+                    temperature_normals[mo] += annualClimateMonthly.MonthlyTemp[mo]; 
                 }
             }
 
             // Calculate AVERAGE T normal.
             for (int mo = 0; mo < 12; mo++)
             {
-                month_Temp_normal[mo] /= (double)spinup_allData.Count;
+                temperature_normals[mo] /= (double)spinup_allData.Count;
                 //Climate.ModelCore.UI.WriteLine("Month = {0}, Original Monthly T normal = {1}", mo, month_Temp_normal[mo]);
 
             }
+            
+            int timestepIndex = 0;
 
             // Next calculate PSDI for the future data
-            foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
+            foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Future_MonthlyData)
+            //foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
             {
                 //if (timeStep.Key < minimumTime)
                 //    minimumTime = timeStep.Key;
@@ -362,21 +357,36 @@ namespace Landis.Library.Climate
                 //if (timestepIndex > numberOftimeSteps)
                 //    break;
 
-                //Climate.TimestepData = timeStep.Value;
-
-                Climate.ModelCore.UI.WriteLine("Calculating Weather for Year = {0}.", timeStep.Key);
+                Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE Year = {0}.", timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.Future_Climate, timeStep.Key);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
                 //Climate.ModelCore.UI.WriteLine("Calculating PDSI for Year = {0}.", timeStep.Key);
-                Climate.AnnualPDSI[ecoregion.Index, timestepIndex] = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, month_Temp_normal, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
-                Climate.LandscapeAnnualPDSI[timestepIndex] += (Climate.AnnualPDSI[ecoregion.Index, timestepIndex] / Climate.ModelCore.Ecoregions.Count);
-                
-                //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, Climate.AnnualPDSI[ecoregion.Index, timestepIndex]);
+                //Climate.AnnualPDSI[ecoregion.Index, timestepIndex] = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, month_Temp_normal, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
+                Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
+                //double PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
+                Climate.LandscapeAnnualPDSI[timestepIndex] += (Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI / Climate.ModelCore.Ecoregions.Count);
+
+                //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, PDSI);
                 timestepIndex++;
             }
+
+            //foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Spinup_MonthlyData)
+            //{
+            //    AnnualClimate_Monthly[] timestepData = timeStep.Value;
+            //    int year = timeStep.Key;
+            //    timestepData[ecoregion.Index].WriteToLandisLogFile();
+
+            //}
+            //foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Future_MonthlyData)
+            //{
+            //    AnnualClimate_Monthly[] timestepData = timeStep.Value;
+            //    int year = timeStep.Key;
+            //    timestepData[ecoregion.Index].WriteToLandisLogFile();
+
+            //}
                     
-            Climate.ModelCore.UI.WriteLine("   PDSI Calculated for all ecoregions and years.");
+            //Climate.ModelCore.UI.WriteLine("   PDSI Calculated for all ecoregions and years.");
             //Climate.LandscapeAnnualPDSI[timestepIndex] /= Climate.ModelCore.Ecoregions.Count;
 
         }

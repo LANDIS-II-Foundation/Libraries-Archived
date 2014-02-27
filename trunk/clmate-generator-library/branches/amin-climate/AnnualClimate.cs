@@ -35,7 +35,7 @@ namespace Landis.Library.Climate
         //by Amin
         public IEcoregion Ecoregion { get; set; }
         public int TimeStep { get; set; }
-        //public double PDSI { get; set; }
+        public double PDSI { get; set; }
 
         //---------------------------------------------------------------------
 

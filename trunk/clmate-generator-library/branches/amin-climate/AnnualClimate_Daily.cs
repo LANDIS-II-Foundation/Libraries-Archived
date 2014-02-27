@@ -53,7 +53,6 @@ namespace Landis.Library.Climate
                         Climate.ModelCore.UI.WriteLine("Error in creating new AnnualClimate: Climate library has not been initialized.");
                         throw new ApplicationException("Error in creating new AnnualClimate: Climate library has not been initialized.");
                     }
-                    //Climate.TimestepData = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
 
                     //Climate.ModelCore.UI.WriteLine("  Using random daily data ...  Ecoregion = {0}, Year = {1}, Timestep = {2}.", ecoregion.Name, actualYear, timeStep);
                     //timestepData = Climate.Future_AllData.ElementAt(Climate.RandSelectedTimeSteps_future[TimeStep]).Value;
@@ -61,8 +60,6 @@ namespace Landis.Library.Climate
                 }
                 else //Sequenced
                 {
-                    //Climate.TimestepData = Climate.Future_AllData.ElementAt(TimeStep).Value;
-
                     //Climate.ModelCore.UI.WriteLine("  Using SEQUENCED daily data ...  Ecoregion = {0}, Year = {1}, Timestep = {2}.", ecoregion.Name, actualYear, timeStep);
                     //timestepData = Climate.Future_AllData.ElementAt(TimeStep).Value;
                     timestepData = Climate.Future_AllData[actualYear];
