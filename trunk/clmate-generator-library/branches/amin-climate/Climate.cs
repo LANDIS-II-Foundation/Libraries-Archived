@@ -22,7 +22,7 @@ namespace Landis.Library.Climate
         private static Dictionary<int, IClimateRecord[,]> spinup_allData;
         private static int[] randSelectedTimeSteps_future;
         private static int[] randSelectedTimeSteps_spinup;
-        private static IClimateRecord[,] timestepData;
+        //private static IClimateRecord[,] timestepData;
         private static ICore modelCore;
         //private static bool flag;
         private static IInputParameters configParameters;
@@ -116,17 +116,17 @@ namespace Landis.Library.Climate
         public static int[] RandSelectedTimeSteps_spinup { get { return randSelectedTimeSteps_spinup; } }
 
         //---------------------------------------------------------------------
-        public static IClimateRecord[,] TimestepData
-        {
-            get
-            {
-                return timestepData;
-            }
-            set
-            {
-                timestepData = value;
-            }
-        }
+        //public static IClimateRecord[,] TimestepData
+        //{
+        //    get
+        //    {
+        //        return timestepData;
+        //    }
+        //    set
+        //    {
+        //        timestepData = value;
+        //    }
+        //}
         //---------------------------------------------------------------------
         //public static bool Flag
         //{
@@ -200,11 +200,12 @@ namespace Landis.Library.Climate
             ModelCore.UI.WriteLine("   Loading weather data from file \"{0}\" ...", configParameters.ClimateFile);
             Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
             Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
-            Climate.Future_MonthlyData = new Dictionary<int, AnnualClimate_Monthly[]>();
-            Climate.Spinup_MonthlyData = new Dictionary<int, AnnualClimate_Monthly[]>();
-            Climate.Future_DailyData = new Dictionary<int, AnnualClimate_Daily[]>();
-            Climate.Spinup_DailyData = new Dictionary<int, AnnualClimate_Daily[]>();
-            Climate.LandscapeAnnualPDSI = new double[Climate.ModelCore.EndTime - Climate.ModelCore.StartTime + 1];
+
+            Future_MonthlyData = new Dictionary<int, AnnualClimate_Monthly[]>();
+            Spinup_MonthlyData = new Dictionary<int, AnnualClimate_Monthly[]>();
+            Future_DailyData = new Dictionary<int, AnnualClimate_Daily[]>();
+            Spinup_DailyData = new Dictionary<int, AnnualClimate_Daily[]>();
+            LandscapeAnnualPDSI = new double[Climate.ModelCore.EndTime - Climate.ModelCore.StartTime + 1];
 
 
             string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, Climate.Phase.Future_Climate);
@@ -239,19 +240,23 @@ namespace Landis.Library.Climate
 
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
             {
-                Climate.TimestepData = timeStep.Value;
+                //Climate.TimestepData = timeStep.Value;
+                IClimateRecord[,] timestepData = timeStep.Value;
                 int year = timeStep.Key;
+                Write(timestepData, year, "SpinUp");
+                
                 Spinup_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
                 Spinup_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);  
-                Write(Climate.TimestepData, year, "SpinUp");
             }
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
             {
-                Climate.TimestepData = timeStep.Value;
+                //Climate.TimestepData = timeStep.Value;
+                IClimateRecord[,] timestepData = timeStep.Value;
                 int year = timeStep.Key;
+                Write(timestepData, year, "Future");
+                
                 Future_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
                 Future_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);  
-                Write(Climate.TimestepData, year, "Future");
             }
 
         }
@@ -359,13 +364,15 @@ namespace Landis.Library.Climate
 
                 //Climate.TimestepData = timeStep.Value;
 
+                Climate.ModelCore.UI.WriteLine("Calculating Weather for Year = {0}.", timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.Future_Climate, timeStep.Key);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
                 //Climate.ModelCore.UI.WriteLine("Calculating PDSI for Year = {0}.", timeStep.Key);
                 Climate.AnnualPDSI[ecoregion.Index, timestepIndex] = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, month_Temp_normal, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
                 Climate.LandscapeAnnualPDSI[timestepIndex] += (Climate.AnnualPDSI[ecoregion.Index, timestepIndex] / Climate.ModelCore.Ecoregions.Count);
-                Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, Climate.AnnualPDSI[ecoregion.Index, timestepIndex]);
+                
+                //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, Climate.AnnualPDSI[ecoregion.Index, timestepIndex]);
                 timestepIndex++;
             }
                     

@@ -28,17 +28,14 @@ namespace Landis.Library.Climate
         private static SortedList<int, Core.IEcoregion> climateFileActiveEcoregions;
         private static bool exportToTxtFormatFile = true;
 
-        //-------Indeces--------
-        private static int IndexMax_MeanT = 0;
-        //int IndexMax_MaxT = 1;
-        private static int IndexMax_Var = 1;
-        private static int IndexMax_STD = 2;
-        private static int IndexMin_MeanT = 3;
-        //int IndexMin_MaxT = 5;
-        private static int IndexMin_Var = 4;
-        private static int IndexMin_STD = 5;
-        private static int IndexPrcp_MeanT = 6;
-        //int IndexPrcp_MaxT = 9;
+        //-------Indices--------
+        private static int IndexMaxT_Mean = 0;
+        private static int IndexMaxT_Var = 1;
+        private static int IndexMaxT_STD = 2;
+        private static int IndexMinT_Mean = 3;
+        private static int IndexMinT_Var = 4;
+        private static int IndexMinT_STD = 5;
+        private static int IndexPrcp_Mean = 6;
         private static int IndexPrcp_Var = 7;
         private static int IndexPrcp_STD = 8;
 
@@ -78,13 +75,13 @@ namespace Landis.Library.Climate
             //if (timeStep == TimeStep.Daily)
             //{
             //setIndexed(checkRHWindSpeed);
-            IndexMax_MeanT = 0;
-            IndexMax_Var = 1;
-            IndexMax_STD = 2;
-            IndexMin_MeanT = 3;
-            IndexMin_Var = 4;
-            IndexMin_STD = 5;
-            IndexPrcp_MeanT = 6;
+            IndexMaxT_Mean = 0;
+            IndexMaxT_Var = 1;
+            IndexMaxT_STD = 2;
+            IndexMinT_Mean = 3;
+            IndexMinT_Var = 4;
+            IndexMinT_STD = 5;
+            IndexPrcp_Mean = 6;
             IndexPrcp_Var = 7;
             IndexPrcp_STD = 8;
 
@@ -113,12 +110,12 @@ namespace Landis.Library.Climate
                     {
 
                         //NOTE: The par and avgPptVarTep have been set to zero because I did not know how I should get them from the csv files
-                        //icrList.Add(new ClimateRecord(row.Value[IndexMin_MeanT], row.Value[IndexMax_MeanT], (row.Value[IndexMin_STD] + row.Value[IndexMax_STD]) / 2, row.Value[IndexPrcp_MeanT], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMin_Var] + row.Value[IndexMax_Var]) / 2, 0));
+                        //icrList.Add(new ClimateRecord(row.Value[IndexMinT_Mean], row.Value[IndexMaxT_Mean], (row.Value[IndexMinT_STD] + row.Value[IndexMaxT_STD]) / 2, row.Value[IndexPrcp_Mean], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMinT_Var] + row.Value[IndexMaxT_Var]) / 2, 0));
                         //allDataRef.Add((currentYear, row.Key, icr}); 
 
 
 
-                        IClimateRecord icr = new ClimateRecord(row.Value[IndexMin_MeanT], row.Value[IndexMax_MeanT], (row.Value[IndexMin_STD] + row.Value[IndexMax_STD]) / 2, row.Value[IndexPrcp_MeanT], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMin_Var] + row.Value[IndexMax_Var]) / 2, 0, row.Value[IndexRH_Mean], row.Value[IndexRH_Var], row.Value[IndexRH_STD], row.Value[IndexwindSpeed_Mean], row.Value[IndexwindSpeed_Var], row.Value[IndexwindSpeed_STD]);
+                        IClimateRecord icr = new ClimateRecord(row.Value[IndexMinT_Mean], row.Value[IndexMaxT_Mean], (row.Value[IndexMinT_STD] + row.Value[IndexMaxT_STD]) / 2, row.Value[IndexPrcp_Mean], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMinT_Var] + row.Value[IndexMaxT_Var]) / 2, 0, row.Value[IndexRH_Mean], row.Value[IndexRH_Var], row.Value[IndexRH_STD], row.Value[IndexwindSpeed_Mean], row.Value[IndexwindSpeed_Var], row.Value[IndexwindSpeed_STD]);
                         //if(climateFileActiveEcoregions.ContainsKey(Climate.ModelCore.Ecoregions[i].Index) )
                         if (Climate.ModelCore.Ecoregions[i].Active)
                             icrs[i, icrCount++] = icr;//new KeyValuePair<int, IClimateRecord>(i, icr);
@@ -178,15 +175,15 @@ namespace Landis.Library.Climate
 
 
                 string key = "";
-                //int IndexMax_MeanT = 0;
+                //int IndexMaxT_Mean = 0;
                 ////int IndexMax_MaxT = 1;
-                //int IndexMax_Var = 1;
-                //int IndexMax_STD = 2;
-                //int IndexMin_MeanT = 3;
+                //int IndexMaxT_Var = 1;
+                //int IndexMaxT_STD = 2;
+                //int IndexMinT_Mean = 3;
                 ////int IndexMin_MaxT = 5;
-                //int IndexMin_Var = 4;
-                //int IndexMin_STD = 5;
-                //int IndexPrcp_MeanT = 6;
+                //int IndexMinT_Var = 4;
+                //int IndexMinT_STD = 5;
+                //int IndexPrcp_Mean = 6;
                 ////int IndexPrcp_MaxT = 9;
                 //int IndexPrcp_Var = 7;
                 //int IndexPrcp_STD = 8;
@@ -332,10 +329,10 @@ namespace Landis.Library.Climate
                         key = fields[0].ToString();
                         if (CurrentScenarioType.ToLower().Contains(maxTriggerWord.ToLower()))
                         {
-                            IndexMax_MeanT = 0;
+                            IndexMaxT_Mean = 0;
                             //IndexMax_MaxT = 1;
-                            IndexMax_Var = 1;
-                            IndexMax_STD = 2;
+                            IndexMaxT_Var = 1;
+                            IndexMaxT_STD = 2;
                             //int indexofSTD = 0;
                             //indexofSTD = fields.Length - (numberOfAllEcoregions);
                             if (!climate_Dic.Keys.Contains(key))
@@ -348,17 +345,17 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
 
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMax_MeanT);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMaxT_Mean);
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_MaxT);
                                 //updatedIndex +=  numberOfAllEcoregions;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_Var);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMaxT_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_STD);
-                                IndexMax_MeanT = IndexMax_MeanT + 9;
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMaxT_STD);
+                                IndexMaxT_Mean = IndexMaxT_Mean + 9;
                                 //IndexMax_MaxT = IndexMax_MaxT + 12;
-                                IndexMax_Var = IndexMax_Var + 9;
-                                IndexMax_STD = IndexMax_STD + 9;
+                                IndexMaxT_Var = IndexMaxT_Var + 9;
+                                IndexMaxT_STD = IndexMaxT_STD + 9;
                                 updatedIndex = 0;
 
                                 //indexofSTD++;
@@ -368,10 +365,10 @@ namespace Landis.Library.Climate
                         }
                         else if (CurrentScenarioType.ToLower().Contains(minTriggerWord.ToLower()))
                         {
-                            IndexMin_MeanT = 3;
+                            IndexMinT_Mean = 3;
                             //IndexMin_MaxT = 5;
-                            IndexMin_Var = 4;
-                            IndexMin_STD = 5;
+                            IndexMinT_Var = 4;
+                            IndexMinT_STD = 5;
                             //int indexofSTD = 0;
                             //indexofSTD = fields.Length - (numberOfAllEcoregions);
 
@@ -385,20 +382,20 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMin_MeanT);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMinT_Mean);
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_Var);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMinT_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_STD);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMinT_STD);
 
 
                                 //climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
-                                IndexMin_MeanT = IndexMin_MeanT + 9;
+                                IndexMinT_Mean = IndexMinT_Mean + 9;
                                 //IndexMin_MaxT = IndexMin_MaxT + 12;
-                                IndexMin_Var = IndexMin_Var + 9;
-                                IndexMin_STD = IndexMin_STD + 9;
+                                IndexMinT_Var = IndexMinT_Var + 9;
+                                IndexMinT_STD = IndexMinT_STD + 9;
                                 updatedIndex = 0;
                                 //    IndexSTD = IndexSTD + 6;
                                 //    indexofSTD++;
@@ -408,7 +405,7 @@ namespace Landis.Library.Climate
                         }
                         else if (CurrentScenarioType.ToLower().Contains(prcpTriggerWord.ToLower()))
                         {
-                            IndexPrcp_MeanT = 6;
+                            IndexPrcp_Mean = 6;
                             //IndexPrcp_MaxT = 9;
                             IndexPrcp_Var = 7;
                             IndexPrcp_STD = 8;
@@ -420,14 +417,15 @@ namespace Landis.Library.Climate
                             // climate_Dic.Add(key, new double[dicSize]);//{ currentT, currentSTD, 0, 0, 0, 0 });
                             if (!climate_Dic.Keys.Contains(key))
                                 climate_Dic.Add(key, new double[dicSize]);
-                            //set index of max and maxSTD for each ecorigion
+                            
+                            //set index of Precipitation and STD for each ecoregion
                             for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
                             {
                                 //currentT = fields[i+1];
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) / 10, IndexPrcp_MeanT); //  /10 is for mm to cm conversion
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) / 10, IndexPrcp_Mean); //  /10 is for mm to cm conversion
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
@@ -437,7 +435,7 @@ namespace Landis.Library.Climate
 
 
                                 //climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
-                                IndexPrcp_MeanT = IndexPrcp_MeanT + 9;
+                                IndexPrcp_Mean = IndexPrcp_Mean + 9;
                                 //IndexPrcp_MaxT = IndexPrcp_MaxT + 12;
                                 IndexPrcp_Var = IndexPrcp_Var + 9;
                                 IndexPrcp_STD = IndexPrcp_STD + 9;
@@ -539,15 +537,15 @@ namespace Landis.Library.Climate
                         //int AveragePrec = 4;
                         //int AveragePrecSTD = 5;
                         setIndexed();
-                        //IndexMax_MeanT = 0;
+                        //IndexMaxT_Mean = 0;
                         ////IndexMax_MaxT = 1;
-                        //IndexMax_Var = 1;
-                        //IndexMax_STD = 2;
-                        //IndexMin_MeanT = 3;
+                        //IndexMaxT_Var = 1;
+                        //IndexMaxT_STD = 2;
+                        //IndexMinT_Mean = 3;
                         ////IndexMin_MaxT = 5;
-                        //IndexMin_Var = 4;
-                        //IndexMin_STD = 5;
-                        //IndexPrcp_MeanT = 6;
+                        //IndexMinT_Var = 4;
+                        //IndexMinT_STD = 5;
+                        //IndexPrcp_Mean = 6;
                         ////IndexPrcp_MaxT = 9;
                         //IndexPrcp_Var = 7;
                         //IndexPrcp_STD = 8;
@@ -618,16 +616,16 @@ namespace Landis.Library.Climate
                                             if (currentMonth == Convert.ToInt16(row.Key.Substring(5, 2)))
                                             {
 
-                                                //(row.Value[IndexMax_MaxT] + row.Value[IndexMax_MeanT])/2
-                                                //AverageMin += (row.Value[IndexMin_MaxT] + row.Value[IndexMin_MeanT]) / 2;
-                                                //AverageMax += (row.Value[IndexMax_MaxT] + row.Value[IndexMax_MeanT]) / 2;
-                                                //AveragePrecp += (row.Value[IndexPrcp_MaxT] + row.Value[IndexPrcp_MeanT]) / 2;
-                                                //AverageSTDT += (row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2;
+                                                //(row.Value[IndexMax_MaxT] + row.Value[IndexMaxT_Mean])/2
+                                                //AverageMin += (row.Value[IndexMin_MaxT] + row.Value[IndexMinT_Mean]) / 2;
+                                                //AverageMax += (row.Value[IndexMax_MaxT] + row.Value[IndexMaxT_Mean]) / 2;
+                                                //AveragePrecp += (row.Value[IndexPrcp_MaxT] + row.Value[IndexPrcp_Mean]) / 2;
+                                                //AverageSTDT += (row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2;
                                                 //AverageMaxSTD += Math.Round(Convert.ToDouble(row.Value[2]), 2);
-                                                AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                                                AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2)); 
-                                                AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                                                AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                                                AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_Mean], 2)); 
+                                                AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                                                 SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
 
@@ -651,10 +649,10 @@ namespace Landis.Library.Climate
                                                 SumVarPpt = 0;
 
                                                 numberOfDays = 0;
-                                                AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                                                AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2)); 
-                                                AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                                                AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                                                AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_Mean], 2)); 
+                                                AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                                                 SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
 
                                                 numberOfDays++;
@@ -707,10 +705,10 @@ namespace Landis.Library.Climate
                                             SumVarPpt = 0;
 
                                             numberOfDays = 0;
-                                            AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                                            AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2));
-                                            AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                                            AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                                            AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                                            SumPrecp += (Math.Round(row.Value[IndexPrcp_Mean], 2));
+                                            AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                                             SumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_Var]);
                                             //sums = 0;
                                             //stdTemp = 0;
@@ -734,15 +732,15 @@ namespace Landis.Library.Climate
                                     AverageSTDT = 0;
                                     SumVarPpt = 0;
 
-                                    IndexMax_MeanT = IndexMax_MeanT + 9;
+                                    IndexMaxT_Mean = IndexMaxT_Mean + 9;
                                     //IndexMax_MaxT = IndexMax_MaxT + 12;
-                                    IndexMax_Var = IndexMax_Var + 9;
-                                    IndexMax_STD = IndexMax_STD + 9;
-                                    IndexMin_MeanT = IndexMin_MeanT + 9;
+                                    IndexMaxT_Var = IndexMaxT_Var + 9;
+                                    IndexMaxT_STD = IndexMaxT_STD + 9;
+                                    IndexMinT_Mean = IndexMinT_Mean + 9;
                                     //IndexMin_MaxT = IndexMin_MaxT + 12;
-                                    IndexMin_Var = IndexMin_Var + 9;
-                                    IndexMin_STD = IndexMin_STD + 9;
-                                    IndexPrcp_MeanT = IndexPrcp_MeanT + 9;
+                                    IndexMinT_Var = IndexMinT_Var + 9;
+                                    IndexMinT_STD = IndexMinT_STD + 9;
+                                    IndexPrcp_Mean = IndexPrcp_Mean + 9;
                                     //IndexPrcp_MaxT = IndexPrcp_MaxT + 12;
                                     IndexPrcp_Var = IndexPrcp_Var + 9;
                                     IndexPrcp_STD = IndexPrcp_STD + 9;
@@ -761,15 +759,15 @@ namespace Landis.Library.Climate
 
                                 tempEco = 1;
                                 currentTimeS = currentTimeS + 1;
-                                IndexMax_MeanT = 0;
+                                IndexMaxT_Mean = 0;
                                 //IndexMax_MaxT = 1;
-                                IndexMax_Var = 1;
-                                IndexMax_STD = 2;
-                                IndexMin_MeanT = 3;
+                                IndexMaxT_Var = 1;
+                                IndexMaxT_STD = 2;
+                                IndexMinT_Mean = 3;
                                 //IndexMin_MaxT = 5;
-                                IndexMin_Var = 4;
-                                IndexMin_STD = 5;
-                                IndexPrcp_MeanT = 6;
+                                IndexMinT_Var = 4;
+                                IndexMinT_STD = 5;
+                                IndexPrcp_Mean = 6;
                                 //IndexPrcp_MaxT = 9;
                                 IndexPrcp_Var = 7;
                                 IndexPrcp_STD = 8;
@@ -856,15 +854,15 @@ namespace Landis.Library.Climate
                 //string currentPart = "";
                 //int totalRow = 0;
                 string key = "";
-                int IndexMax_MeanT = 0;
+                int IndexMaxT_Mean = 0;
                 //int IndexMax_MaxT = 1;
-                int IndexMax_Var = 1;
-                int IndexMax_STD = 2;
-                int IndexMin_MeanT = 3;
+                int IndexMaxT_Var = 1;
+                int IndexMaxT_STD = 2;
+                int IndexMinT_Mean = 3;
                 //int IndexMin_MaxT = 5;
-                int IndexMin_Var = 4;
-                int IndexMin_STD = 5;
-                int IndexPrcp_MeanT = 6;
+                int IndexMinT_Var = 4;
+                int IndexMinT_STD = 5;
+                int IndexPrcp_Mean = 6;
                 //int IndexPrcp_MaxT = 9;
                 int IndexPrcp_Var = 7;
                 int IndexPrcp_STD = 8;
@@ -1031,7 +1029,7 @@ namespace Landis.Library.Climate
                         key = fields[0].ToString();
                         if (CurrentScenarioType.ToLower().Contains(prcpTriggerWord.ToLower()))
                         {
-                            IndexPrcp_MeanT = 6;
+                            IndexPrcp_Mean = 6;
                             //IndexPrcp_MaxT = 9;
                             IndexPrcp_Var = 7;
                             IndexPrcp_STD = 8;
@@ -1050,7 +1048,7 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) / 10, IndexPrcp_MeanT); // /10 is for mm to cm conversion
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) / 10, IndexPrcp_Mean); // /10 is for mm to cm conversion
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexPrcp_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
@@ -1060,7 +1058,7 @@ namespace Landis.Library.Climate
 
 
                                 //climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
-                                IndexPrcp_MeanT = IndexPrcp_MeanT + 9;
+                                IndexPrcp_Mean = IndexPrcp_Mean + 9;
                                 //IndexPrcp_MaxT = IndexPrcp_MaxT + 12;
                                 IndexPrcp_Var = IndexPrcp_Var + 9;
                                 IndexPrcp_STD = IndexPrcp_STD + 9;
@@ -1073,10 +1071,10 @@ namespace Landis.Library.Climate
 
                         else if (CurrentScenarioType.ToLower().Contains(maxTriggerWord.ToLower()))
                         {
-                            IndexMax_MeanT = 0;
+                            IndexMaxT_Mean = 0;
                             //IndexMax_MaxT = 1;
-                            IndexMax_Var = 1;
-                            IndexMax_STD = 2;
+                            IndexMaxT_Var = 1;
+                            IndexMaxT_STD = 2;
                             //int indexofSTD = 0;
                             //indexofSTD = fields.Length - (numberOfAllEcoregions);
                             if (!climate_Dic.Keys.Contains(key))
@@ -1089,17 +1087,17 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
 
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMax_MeanT);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMaxT_Mean);
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_MaxT);
                                 //updatedIndex +=  numberOfAllEcoregions;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_Var);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMaxT_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMax_STD);
-                                IndexMax_MeanT = IndexMax_MeanT + 9;
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMaxT_STD);
+                                IndexMaxT_Mean = IndexMaxT_Mean + 9;
                                 //IndexMax_MaxT = IndexMax_MaxT + 12;
-                                IndexMax_Var = IndexMax_Var + 9;
-                                IndexMax_STD = IndexMax_STD + 9;
+                                IndexMaxT_Var = IndexMaxT_Var + 9;
+                                IndexMaxT_STD = IndexMaxT_STD + 9;
                                 updatedIndex = 0;
 
                                 //indexofSTD++;
@@ -1109,10 +1107,10 @@ namespace Landis.Library.Climate
                         }
                         else if (CurrentScenarioType.ToLower().Contains(minTriggerWord.ToLower()))
                         {
-                            IndexMin_MeanT = 3;
+                            IndexMinT_Mean = 3;
                             //IndexMin_MaxT = 5;
-                            IndexMin_Var = 4;
-                            IndexMin_STD = 5;
+                            IndexMinT_Var = 4;
+                            IndexMinT_STD = 5;
                             //int indexofSTD = 0;
                             //indexofSTD = fields.Length - (numberOfAllEcoregions);
 
@@ -1128,20 +1126,20 @@ namespace Landis.Library.Climate
                                 //if (indexofSTD < 26)
                                 //{
                                 //currentSTD = fields[indexofSTD];
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMin_MeanT);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]), IndexMinT_Mean);
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
                                 //climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_MaxT);
                                 //updatedIndex += numberOfAllEcoregions;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_Var);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMinT_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMin_STD);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]), IndexMinT_STD);
 
 
                                 //climate_Dic[key].SetValue(Convert.ToDouble(currentSTD), IndexSTD);
-                                IndexMin_MeanT = IndexMin_MeanT + 9;
+                                IndexMinT_Mean = IndexMinT_Mean + 9;
                                 //IndexMin_MaxT = IndexMin_MaxT + 12;
-                                IndexMin_Var = IndexMin_Var + 9;
-                                IndexMin_STD = IndexMin_STD + 9;
+                                IndexMinT_Var = IndexMinT_Var + 9;
+                                IndexMinT_STD = IndexMinT_STD + 9;
                                 updatedIndex = 0;
                                 //    IndexSTD = IndexSTD + 6;
                                 //    indexofSTD++;
@@ -1236,15 +1234,15 @@ namespace Landis.Library.Climate
                         //int AverageMinSTD = 3;
                         //int AveragePrec = 4;
                         //int AveragePrecSTD = 5;
-                        IndexMax_MeanT = 0;
+                        IndexMaxT_Mean = 0;
                         //IndexMax_MaxT = 1;
-                        IndexMax_Var = 1;
-                        IndexMax_STD = 2;
-                        IndexMin_MeanT = 3;
+                        IndexMaxT_Var = 1;
+                        IndexMaxT_STD = 2;
+                        IndexMinT_Mean = 3;
                         //IndexMin_MaxT = 5;
-                        IndexMin_Var = 4;
-                        IndexMin_STD = 5;
-                        IndexPrcp_MeanT = 6;
+                        IndexMinT_Var = 4;
+                        IndexMinT_STD = 5;
+                        IndexPrcp_Mean = 6;
                         //IndexPrcp_MaxT = 9;
                         IndexPrcp_Var = 7;
                         IndexPrcp_STD = 8;
@@ -1300,10 +1298,10 @@ namespace Landis.Library.Climate
                                         {
                                             if (currentMonth == Convert.ToInt16(row.Key.Substring(5, 2)))
                                             {
-                                                AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                                                AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2));
-                                                AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                                                AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                                                AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_Mean], 2));
+                                                AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                                                 sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 numberOfDays++;
 
@@ -1326,10 +1324,10 @@ namespace Landis.Library.Climate
                                                 AverageSTDT = 0;
                                                 sumVarPpt = 0;
                                                 numberOfDays = 0;
-                                                AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                                                AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_MeanT], 2)); 
-                                                AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                                                AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                                                AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                                                SumPrecp += (Math.Round(row.Value[IndexPrcp_Mean], 2)); 
+                                                AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                                                 sumVarPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                                                 //sums = 0;
                                                 //stdTemp = 0;
@@ -1382,15 +1380,15 @@ namespace Landis.Library.Climate
 
                                     AverageSTDT = 0;
                                     sumVarPpt = 0;
-                                    IndexMax_MeanT = IndexMax_MeanT + 9;
+                                    IndexMaxT_Mean = IndexMaxT_Mean + 9;
                                     //IndexMax_MaxT = IndexMax_MaxT + 12;
-                                    IndexMax_Var = IndexMax_Var + 9;
-                                    IndexMax_STD = IndexMax_STD + 9;
-                                    IndexMin_MeanT = IndexMin_MeanT + 9;
+                                    IndexMaxT_Var = IndexMaxT_Var + 9;
+                                    IndexMaxT_STD = IndexMaxT_STD + 9;
+                                    IndexMinT_Mean = IndexMinT_Mean + 9;
                                     //IndexMin_MaxT = IndexMin_MaxT + 12;
-                                    IndexMin_Var = IndexMin_Var + 9;
-                                    IndexMin_STD = IndexMin_STD + 9;
-                                    IndexPrcp_MeanT = IndexPrcp_MeanT + 9;
+                                    IndexMinT_Var = IndexMinT_Var + 9;
+                                    IndexMinT_STD = IndexMinT_STD + 9;
+                                    IndexPrcp_Mean = IndexPrcp_Mean + 9;
                                     //IndexPrcp_MaxT = IndexPrcp_MaxT + 12;
                                     IndexPrcp_Var = IndexPrcp_Var + 9;
                                     IndexPrcp_STD = IndexPrcp_STD + 9;
@@ -1407,15 +1405,15 @@ namespace Landis.Library.Climate
 
                                 tempEco = 1;
                                 currentTimeS = currentTimeS + 1;
-                                IndexMax_MeanT = 0;
+                                IndexMaxT_Mean = 0;
                                 //IndexMax_MaxT = 1;
-                                IndexMax_Var = 1;
-                                IndexMax_STD = 2;
-                                IndexMin_MeanT = 3;
+                                IndexMaxT_Var = 1;
+                                IndexMaxT_STD = 2;
+                                IndexMinT_Mean = 3;
                                 //IndexMin_MaxT = 5;
-                                IndexMin_Var = 4;
-                                IndexMin_STD = 5;
-                                IndexPrcp_MeanT = 6;
+                                IndexMinT_Var = 4;
+                                IndexMinT_STD = 5;
+                                IndexPrcp_Mean = 6;
                                 //IndexPrcp_MaxT = 9;
                                 IndexPrcp_Var = 7;
                                 IndexPrcp_STD = 8;
@@ -1456,16 +1454,16 @@ namespace Landis.Library.Climate
                             //                    if (currentMonth == Convert.ToInt16(row.Key.Substring(5, 2)))
                             //                    {
 
-                            //                        //(row.Value[IndexMax_MaxT] + row.Value[IndexMax_MeanT])/2
-                            //                        //AverageMin += (row.Value[IndexMin_MaxT] + row.Value[IndexMin_MeanT]) / 2;
-                            //                        //AverageMax += (row.Value[IndexMax_MaxT] + row.Value[IndexMax_MeanT]) / 2;
-                            //                        //AveragePrecp += (row.Value[IndexPrcp_MaxT] + row.Value[IndexPrcp_MeanT]) / 2;
-                            //                        //AverageSTDT += (row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2;
+                            //                        //(row.Value[IndexMax_MaxT] + row.Value[IndexMaxT_Mean])/2
+                            //                        //AverageMin += (row.Value[IndexMin_MaxT] + row.Value[IndexMinT_Mean]) / 2;
+                            //                        //AverageMax += (row.Value[IndexMax_MaxT] + row.Value[IndexMaxT_Mean]) / 2;
+                            //                        //AveragePrecp += (row.Value[IndexPrcp_MaxT] + row.Value[IndexPrcp_Mean]) / 2;
+                            //                        //AverageSTDT += (row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2;
                             //                        //AverageMaxSTD += Math.Round(Convert.ToDouble(row.Value[2]), 2);
-                            //                        AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                            //                        AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                            //                        AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
-                            //                        AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                            //                        AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                            //                        AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                            //                        AveragePrecp += Math.Round(row.Value[IndexPrcp_Mean], 2);
+                            //                        AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                             //                        StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
 
                             //                        //AverageMinSTD += Math.Round(Convert.ToDouble(row.Value[4]), 2);
@@ -1512,10 +1510,10 @@ namespace Landis.Library.Climate
                             //                        StdDevPpt = 0;
 
                             //                        numberOfDays = 0;
-                            //                        AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                            //                        AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                            //                        AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
-                            //                        AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                            //                        AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                            //                        AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                            //                        AveragePrecp += Math.Round(row.Value[IndexPrcp_Mean], 2);
+                            //                        AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                             //                        StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                             //                        //sums = 0;
                             //                        //stdTemp = 0;
@@ -1558,10 +1556,10 @@ namespace Landis.Library.Climate
                             //                    StdDevPpt = 0;
 
                             //                    numberOfDays = 0;
-                            //                    AverageMin += Math.Round(row.Value[IndexMin_MeanT], 2);
-                            //                    AverageMax += Math.Round(row.Value[IndexMax_MeanT], 2);
-                            //                    AveragePrecp += Math.Round(row.Value[IndexPrcp_MeanT], 2);
-                            //                    AverageSTDT += Math.Round((row.Value[IndexMax_Var] + row.Value[IndexMin_Var]) / 2, 2);
+                            //                    AverageMin += Math.Round(row.Value[IndexMinT_Mean], 2);
+                            //                    AverageMax += Math.Round(row.Value[IndexMaxT_Mean], 2);
+                            //                    AveragePrecp += Math.Round(row.Value[IndexPrcp_Mean], 2);
+                            //                    AverageSTDT += Math.Round((row.Value[IndexMaxT_Var] + row.Value[IndexMinT_Var]) / 2, 2);
                             //                    StdDevPpt += Convert.ToDouble(row.Value[IndexPrcp_STD]);
                             //                    //sums = 0;
                             //                    //stdTemp = 0;
@@ -1573,15 +1571,15 @@ namespace Landis.Library.Climate
 
                             //        }
 
-                            //        IndexMax_MeanT = IndexMax_MeanT + 9;
+                            //        IndexMaxT_Mean = IndexMaxT_Mean + 9;
                             //        //IndexMax_MaxT = IndexMax_MaxT + 12;
-                            //        IndexMax_Var = IndexMax_Var + 9;
-                            //        IndexMax_STD = IndexMax_STD + 9;
-                            //        IndexMin_MeanT = IndexMin_MeanT + 9;
+                            //        IndexMaxT_Var = IndexMaxT_Var + 9;
+                            //        IndexMaxT_STD = IndexMaxT_STD + 9;
+                            //        IndexMinT_Mean = IndexMinT_Mean + 9;
                             //        //IndexMin_MaxT = IndexMin_MaxT + 12;
-                            //        IndexMin_Var = IndexMin_Var + 9;
-                            //        IndexMin_STD = IndexMin_STD + 9;
-                            //        IndexPrcp_MeanT = IndexPrcp_MeanT + 9;
+                            //        IndexMinT_Var = IndexMinT_Var + 9;
+                            //        IndexMinT_STD = IndexMinT_STD + 9;
+                            //        IndexPrcp_Mean = IndexPrcp_Mean + 9;
                             //        //IndexPrcp_MaxT = IndexPrcp_MaxT + 12;
                             //        IndexPrcp_Var = IndexPrcp_Var + 9;
                             //        IndexPrcp_STD = IndexPrcp_STD + 9;
@@ -1618,13 +1616,13 @@ namespace Landis.Library.Climate
         private static void setIndexed()
         {
 
-            IndexMax_MeanT = 0;
-            IndexMax_Var = 1;
-            IndexMax_STD = 2;
-            IndexMin_MeanT = 3;
-            IndexMin_Var = 4;
-            IndexMin_STD = 5;
-            IndexPrcp_MeanT = 6;
+            IndexMaxT_Mean = 0;
+            IndexMaxT_Var = 1;
+            IndexMaxT_STD = 2;
+            IndexMinT_Mean = 3;
+            IndexMinT_Var = 4;
+            IndexMinT_STD = 5;
+            IndexPrcp_Mean = 6;
             IndexPrcp_Var = 7;
             IndexPrcp_STD = 8;
             IndexRH_Mean = 9;

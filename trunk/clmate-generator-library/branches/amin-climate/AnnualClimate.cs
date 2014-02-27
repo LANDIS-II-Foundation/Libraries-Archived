@@ -28,14 +28,14 @@ namespace Landis.Library.Climate
         public int Year;
         public static double stdDevTempGenerator;
         public static double stdDevPptGenerator;
-        public static IClimateRecord[,] avgEcoClimate_future;
-        public static IClimateRecord[,] avgEcoClimate_spinUp;
+        //public static IClimateRecord[,] avgEcoClimate_future;
+        //public static IClimateRecord[,] avgEcoClimate_spinUp;
         public double Latitude { get; set; }
 
         //by Amin
         public IEcoregion Ecoregion { get; set; }
         public int TimeStep { get; set; }
-        public double PDSI { get; set; }
+        //public double PDSI { get; set; }
 
         //---------------------------------------------------------------------
 

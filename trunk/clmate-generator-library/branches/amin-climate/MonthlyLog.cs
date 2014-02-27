@@ -23,7 +23,7 @@ namespace Landis.Library.Climate
         [DataFieldAttribute(Desc = "Ecoregion Index")]
         public int EcoregionIndex { set; get; }
 
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Average Precipitation", Format = "0.00")]
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Monthly Precipitation", Format = "0.00")]
         public double ppt {get; set;}
 
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Average Minimum Air Temperature", Format = "0.00")]
