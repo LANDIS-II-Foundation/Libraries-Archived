@@ -69,7 +69,7 @@ namespace Landis.Library.Climate
                         TimeStep = timeStep;
                         if (this.climatePhase == Climate.Phase.Future_Climate)
                             timestepData = Climate.Future_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
-                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) // && Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
+                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) 
                             timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
                         break;
                     }

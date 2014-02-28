@@ -90,8 +90,8 @@ namespace  Landis.Library.Climate
                     }
                 case "DailyHistAverage":
                     {
-                        TimeStep = timeStep;
-                        break;
+                        this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
+                        return;
                     }
                 case "MonthlyStandard":
                     {
