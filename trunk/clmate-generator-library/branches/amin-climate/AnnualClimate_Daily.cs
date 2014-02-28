@@ -45,14 +45,14 @@ namespace Landis.Library.Climate
             //Climate.ModelCore.UI.WriteLine("  Calculating daily data ...  Ecoregion = {0}, Year = {1}, timestep = {2}.", ecoregion.Name, actualYear, timeStep);
             switch (climateOption)
             {
-                case "MonthlyAverage":
-                    {
-                        if (this.climatePhase == Climate.Phase.Future_Climate)
-                            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); //avgEcoClimate_future;
-                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) // && Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
-                            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); //avgEcoClimate_spinUp;
-                        break;
-                    }
+                //case "MonthlyAverage":
+                //    {
+                //        if (this.climatePhase == Climate.Phase.Future_Climate)
+                //            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); //avgEcoClimate_future;
+                //        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) // && Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
+                //            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); //avgEcoClimate_spinUp;
+                //        break;
+                //    }
                 //case "MonthlyRandom":
                 //    {
                 //        TimeStep = timeStep;
@@ -90,7 +90,7 @@ namespace Landis.Library.Climate
                         }
                         catch (System.Collections.Generic.KeyNotFoundException ex)
                         {
-                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step or ecoregion is out of range of the provided " + this.climatePhase.ToString() + " input file. This might happened because the number of provided climate data is not devisable to the number of specified time-steps or there is not enough historic climate data to run the model for the specified duration in scenario file.", ex);
+                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step or ecoregion is out of range of the provided " + this.climatePhase.ToString() + " input file. This may be because the number of input climate data is not devisable to the number of specified time-steps or there is not enough historic climate data to run the model for the specified duration.", ex);
                         }
                         break;
                     }

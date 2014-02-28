@@ -61,20 +61,26 @@ namespace  Landis.Library.Climate
                 case "MonthlyAverage":
                     {
                         if (this.climatePhase == Climate.Phase.Future_Climate) 
-                            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); //avgEcoClimate_future;
-                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) // && Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
-                            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); //avgEcoClimate_spinUp;
+                            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); 
+                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) 
+                            timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); 
                         break;
                     }
                 case "MonthlyRandom":
                     {
                         TimeStep = timeStep;
-                        if (this.climatePhase == Climate.Phase.Future_Climate) // && Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("average"))
-                            timestepData = Climate.Future_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
-                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) // && Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("average"))
-                            timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_spinup[TimeStep]];
-                        
-                        CalculateMonthlyData(ecoregion, timestepData, actualYear, latitude);
+                        try {
+                            if (this.climatePhase == Climate.Phase.Future_Climate)
+                                timestepData = Climate.Future_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
+                            else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
+                                timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_spinup[TimeStep]];
+
+                            CalculateMonthlyData(ecoregion, timestepData, actualYear, latitude);
+                        }
+                        catch (System.Collections.Generic.KeyNotFoundException ex)
+                        {
+                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file. This may be because the number of input climate data is not devisable to the number of specified time-steps or there is not enough historic climate data to run the model for the specified duration.", ex);
+                        }
                         break;
                     }
                 case "DailyHistRandom":
@@ -90,12 +96,19 @@ namespace  Landis.Library.Climate
                 case "MonthlyStandard":
                     {
                         TimeStep = timeStep;
-                        if (this.climatePhase == Climate.Phase.Future_Climate)
-                            timestepData = Climate.Future_AllData[TimeStep];
-                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-                            timestepData = Climate.Spinup_AllData[TimeStep];
-                        
-                        CalculateMonthlyData(ecoregion, timestepData, actualYear, latitude);
+                        try
+                        {
+                            if (this.climatePhase == Climate.Phase.Future_Climate)
+                                timestepData = Climate.Future_AllData[TimeStep];
+                            else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
+                                timestepData = Climate.Spinup_AllData[TimeStep];
+
+                            CalculateMonthlyData(ecoregion, timestepData, actualYear, latitude);
+                        }
+                        catch (System.Collections.Generic.KeyNotFoundException ex)
+                        {
+                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file. This may be because the number of input climate data is not devisable to the number of specified time-steps or there is not enough historic climate data to run the model for the specified duration.", ex);
+                        }
                         break;
                     }
                 case "DailyGCM":
@@ -103,20 +116,18 @@ namespace  Landis.Library.Climate
                         this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
                         return;
                     }
-                    //TimeStep = timeStep;
-                    //break;
                 default:
                     throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
 
             }
 
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(); //ecoClimate);
-            this.MonthlyVPD = CalculateVaporPressureDeficit();//ecoClimate);
-            this.MonthlyGDD = CalculatePnETGDD(); //this.MonthlyTemp, actualYear);
+            this.MonthlyPET = CalculatePotentialEvapotranspiration(); 
+            this.MonthlyVPD = CalculateVaporPressureDeficit();
+            this.MonthlyGDD = CalculatePnETGDD(); 
 
-            this.beginGrowing = CalculateBeginGrowingSeason(); //ecoClimate);
-            this.endGrowing = CalculateEndGrowingSeason(); //ecoClimate);
-            this.growingDegreeDays = GrowSeasonDegreeDays();//actualYear);
+            this.beginGrowing = CalculateBeginGrowingSeason(); 
+            this.endGrowing = CalculateEndGrowingSeason(); 
+            this.growingDegreeDays = GrowSeasonDegreeDays();
 
             for (int mo = 5; mo < 8; mo++)
                 this.JJAtemperature += this.MonthlyTemp[mo];
