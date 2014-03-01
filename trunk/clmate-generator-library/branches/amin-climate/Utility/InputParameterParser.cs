@@ -84,25 +84,12 @@ namespace Landis.Library.Climate
         {
             InputVar<string> landisData = new InputVar<string>("LandisData");
             ReadVar(landisData);
-            //if (landisData.Value.Actual != PlugIn.ExtensionName)
-            //    throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", PlugIn.ExtensionName);
             if (landisData.Value.Actual != "Climate Config")
                 throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", "Climate Config");
 
-//            ReadLandisDataVar();
-
-//            int numLitterTypes = 4;
-//            int numFunctionalTypes = 25;
-
-            //Parameters parameters = new Parameters(ecoregionDataset, speciesDataset, numLitterTypes, numFunctionalTypes);
             InputParameters parameters = new InputParameters();
 
-            //InputVar<int> timestep = new InputVar<int>(Names.Timestep);
-            //ReadVar(timestep);
-            //parameters.Timestep = timestep.Value;
-
-            //HashSet<string> climateTimeSeries_PossibleValues = new HashSet<string>(new string[] { "MothlyHistRandom", "DailyHistRandom", "MonthlyHistAverage", "DailyHistAverage", "MonthlyStandard", "DailyGCM" });
-            string climateTimeSeries_PossibleValues = "MonthlyRandom, MonthlyAverage, DailyHistRandom, DailyHistAverage, MonthlyStandard, DailyGCM";
+            string climateTimeSeries_PossibleValues = "MonthlyRandom, MonthlyAverage, DailyHistRandom, DailyHistAverage, MonthlyStandard, DailyGCM, MonthlyGCM";
 
             //InputVar<string> climateConfigFile = new InputVar<string>(Names.ClimateConfigFile);
             //ReadVar(climateConfigFile);
@@ -150,7 +137,7 @@ namespace Landis.Library.Climate
                 throw new ApplicationException("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values are: " + climateTimeSeries_PossibleValues);
             }
             
-            return parameters; //.GetComplete();
+            return parameters; 
 
 
         }

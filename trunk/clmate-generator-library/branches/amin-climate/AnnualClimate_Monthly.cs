@@ -75,11 +75,11 @@ namespace  Landis.Library.Climate
                             else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                                 timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_spinup[TimeStep]];
 
-                            CalculateMonthlyData(ecoregion, timestepData, actualYear, latitude);
+                            CalculateMonthlyData_NoVariance(ecoregion, timestepData, actualYear, latitude);
                         }
                         catch (System.Collections.Generic.KeyNotFoundException ex)
                         {
-                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file. This may be because the number of input climate data is not devisable to the number of specified time-steps or there is not enough historic climate data to run the model for the specified duration.", ex);
+                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex);
                         }
                         break;
                     }
@@ -93,7 +93,7 @@ namespace  Landis.Library.Climate
                         this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
                         return;
                     }
-                case "MonthlyStandard":
+                case "MonthlyStandard":  
                     {
                         TimeStep = timeStep;
                         try
@@ -103,11 +103,11 @@ namespace  Landis.Library.Climate
                             else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                                 timestepData = Climate.Spinup_AllData[TimeStep];
 
-                            CalculateMonthlyData(ecoregion, timestepData, actualYear, latitude);
+                            CalculateMonthlyData_AddVariance(ecoregion, timestepData, actualYear, latitude);
                         }
                         catch (System.Collections.Generic.KeyNotFoundException ex)
                         {
-                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file. This may be because the number of input climate data is not devisable to the number of specified time-steps or there is not enough historic climate data to run the model for the specified duration.", ex);
+                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex); 
                         }
                         break;
                     }
@@ -115,6 +115,24 @@ namespace  Landis.Library.Climate
                     {
                         this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
                         return;
+                    }
+                case "MonthlyGCM":
+                    {
+                        TimeStep = timeStep;
+                        try
+                        {
+                            if (this.climatePhase == Climate.Phase.Future_Climate)
+                                timestepData = Climate.Future_AllData[TimeStep];
+                            else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
+                                timestepData = Climate.Spinup_AllData[TimeStep];
+
+                            CalculateMonthlyData_NoVariance(ecoregion, timestepData, actualYear, latitude);
+                        }
+                        catch (System.Collections.Generic.KeyNotFoundException ex)
+                        {
+                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex);
+                        }
+                        break;
                     }
                 default:
                     throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
@@ -217,7 +235,7 @@ namespace  Landis.Library.Climate
 
         }
 
-        private void CalculateMonthlyData(IEcoregion ecoregion, IClimateRecord[,] timestepData, int actualYear, double latitude)
+        private void CalculateMonthlyData_AddVariance(IEcoregion ecoregion, IClimateRecord[,] timestepData, int actualYear, double latitude)
         {
             IClimateRecord[] ecoClimate = new IClimateRecord[12];
 
@@ -251,6 +269,39 @@ namespace  Landis.Library.Climate
             }
         }
 
+        private void CalculateMonthlyData_NoVariance(IEcoregion ecoregion, IClimateRecord[,] timestepData, int actualYear, double latitude)
+        {
+            IClimateRecord[] ecoClimate = new IClimateRecord[12];
+
+            this.Year = actualYear;
+            this.AnnualPrecip = 0.0;
+
+            for (int mo = 0; mo < 12; mo++)
+            {
+                ecoClimate[mo] = timestepData[ecoregion.Index, mo]; //Climate.TimestepData[ecoregion.Index, mo];
+
+                double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
+
+                //double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+
+                this.MonthlyTemp[mo] = MonthlyAvgTemp;
+                this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp;
+                this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp;
+                this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt); 
+                this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
+
+                this.AnnualPrecip += this.MonthlyPrecip[mo];
+
+                if (this.MonthlyPrecip[mo] < 0)
+                    this.MonthlyPrecip[mo] = 0;
+
+                double hr = CalculateDayNightLength(mo, latitude);
+                this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
+                this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
+
+                //this.DOY[mo] = DayOfYear(mo);
+            }
+        }
         //Daily will not come to here. the average in daily is calculated in the AnnualClimate_Daily
         private IClimateRecord[,] AnnualClimate_Avg(IEcoregion ecoregion, int year, double latitude)
         {
