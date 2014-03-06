@@ -23,6 +23,18 @@ namespace Landis.Library.BiomassCohortsPnET
         float nsc;
         int year_of_birth;
         int canopylayer;
+        float folshed;
+        public float FolShed
+        {
+            get
+            {
+                return folshed;
+            }
+            set
+            {
+                folshed = value;
+            }
+        }
 
         public int CanopyLayer
         {
@@ -149,6 +161,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public Cohort(ISpecies species,
                       ushort   age,
                       float Fol,
+                      float folshed,
                       float Wood, 
                       float NSC,
                       float Root,
@@ -164,7 +177,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.fol = Fol;
             this.year_of_birth = year_of_birth;
             this.leaf_on = leaf_on;
-           
+            this.folshed = folshed;
         }
 
         //---------------------------------------------------------------------
@@ -180,6 +193,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.fol = cohort.fol;
             this.year_of_birth = cohort.year_of_birth;//
             this.leaf_on = cohort.leaf_on;
+            this.folshed = cohort.folshed;
         }
          
         //---------------------------------------------------------------------

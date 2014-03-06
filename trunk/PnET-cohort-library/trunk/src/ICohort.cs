@@ -17,6 +17,12 @@ namespace Landis.Library.BiomassCohortsPnET
         /// The cohort's biomass (g m-2).
         /// </summary>
 
+
+        float FolShed
+        {
+            get;
+            set;
+        }
         int CanopyLayer
         {
             get;

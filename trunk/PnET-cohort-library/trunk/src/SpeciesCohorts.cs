@@ -142,7 +142,8 @@ namespace Landis.Library.BiomassCohortsPnET
             float totalFolC = 0;
             float totalRootC = 0;
             float totalNSC = 0;
-            
+            float totalfolshead = 0;
+
             bool leaf_on = false;
             for (int i = cohorts.Count - 1; i >= 0; i--) {
                 Cohort c = cohorts[i];
@@ -154,7 +155,7 @@ namespace Landis.Library.BiomassCohortsPnET
                     totalNSC += c.NSC;
                     totalRootC += c.Root;
                      leaf_on=c.Leaf_On;
-                
+                     totalfolshead += c.FolShed;
                  }
                 else
                     break;
@@ -163,7 +164,7 @@ namespace Landis.Library.BiomassCohortsPnET
             if (youngCount > 1) {
                 cohorts.RemoveRange(cohorts.Count - youngCount, youngCount);
 
-                cohorts.Add(new Cohort(this.species, (ushort)(BiomassCohorts.Cohorts.SuccessionTimeStep - 1), totalFolC, totalWoodC, totalNSC, totalRootC,  Year, leaf_on));
+                cohorts.Add(new Cohort(this.species, (ushort)(BiomassCohorts.Cohorts.SuccessionTimeStep - 1), totalFolC, totalfolshead,totalWoodC, totalNSC, totalRootC,  Year, leaf_on));
                 
                 return true;
             }
