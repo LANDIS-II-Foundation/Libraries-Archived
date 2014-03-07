@@ -26,13 +26,6 @@ namespace  Landis.Library.Climate
         public double[] MonthlyNightLength = new double[12];
         public int[] MonthlyGDD = new int[12];
 
-        //private static IClimateRecord[,] timestepData;
-
-
-        //public AnnualClimate_Monthly() 
-        //{
-        //}
-
         public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
         {
             this.climatePhase = spinupOrfuture;
@@ -242,6 +235,8 @@ namespace  Landis.Library.Climate
             this.Year = actualYear;
             this.AnnualPrecip = 0.0;
 
+            //if(timestepData[ecoregion.Index].  ADD MONTH CHECK HERE.
+
             for (int mo = 0; mo < 12; mo++)
             {
                 ecoClimate[mo] = timestepData[ecoregion.Index, mo]; //Climate.TimestepData[ecoregion.Index, mo];
@@ -276,9 +271,13 @@ namespace  Landis.Library.Climate
             this.Year = actualYear;
             this.AnnualPrecip = 0.0;
 
+            //if(timestepData[ecoregion.Index].  ADD MONTH CHECK HERE.
+
+
             for (int mo = 0; mo < 12; mo++)
             {
-                ecoClimate[mo] = timestepData[ecoregion.Index, mo]; //Climate.TimestepData[ecoregion.Index, mo];
+                //Climate.ModelCore.UI.WriteLine("  Calculating Monthly Climate (No Variance):  Yr={0}, month={1}, Eco={2}, Phase={3}.", actualYear, mo, ecoregion.Name, this.climatePhase);
+                ecoClimate[mo] = timestepData[ecoregion.Index, mo]; 
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
 
@@ -337,6 +336,9 @@ namespace  Landis.Library.Climate
                         timestepData = Climate.Future_AllData.ElementAt(stp).Value;
                     else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                         timestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
+                    //Climate.Spinup_AllData[TimeStep]
+
+                    //Climate.ModelCore.UI.WriteLine("  Calculating annual average climate:  Yr={0}, month={1}, Eco={2}, Phase={3}.", Climate.Future_AllData.ElementAt(stp).Key, mo, ecoregion.Name, this.climatePhase);
 
                     //ecoClimateT[ecoregion.Index, mo] = timestepData[ecoregion.Index, mo]; //Climate.TimestepData[ecoregion.Index, mo];
                     //avgEcoClimate = ecoClimateT;
@@ -380,14 +382,14 @@ namespace  Landis.Library.Climate
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
 
-                double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
+                //double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
 
-                this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
-                this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
-                this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp + standardDeviation;
+                this.MonthlyTemp[mo] = MonthlyAvgTemp;// + standardDeviation;
+                this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp; // + standardDeviation;
+                this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp; // + standardDeviation;
 
 
-                this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
+                this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt); // + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
                 this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
 
                 this.AnnualPrecip += this.MonthlyPrecip[mo];

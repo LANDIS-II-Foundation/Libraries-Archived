@@ -21,7 +21,7 @@ namespace Landis.Library.Climate
         
             
         //------
-        public TemporalGranularity TimeStep { get { return this.timeStep; } }
+        public TemporalGranularity InputTimeStep { get { return this.timeStep; } }
         public string MaxTempTrigerWord { get { return this.maxTempTrigerWord; } }
         public string MinTempTrigerWord { get { return this.minTempTrigerWord; } }
         public string PrecipTrigerWord { get { return this.precipTrigerWord; } }
@@ -33,11 +33,22 @@ namespace Landis.Library.Climate
         public ClimateFileFormatProvider(string format)
         {
             this.format = format;
-            this.timeStep = ((this.format == "PRISM") ? TemporalGranularity.Monthly : TemporalGranularity.Daily);
+            //this.timeStep = ((this.format == "PRISM") ? TemporalGranularity.Monthly : TemporalGranularity.Daily);
             switch (this.format.ToLower())
             {
                 case "gfdl_a1fi":
                 {
+                    this.timeStep = TemporalGranularity.Daily;
+                    this.maxTempTrigerWord = "maxtemp";
+                    this.minTempTrigerWord = "mintemp";
+                    this.precipTrigerWord = "ppt";
+                    this.rhTrigerWord = "rh";
+                    this.windSpeedTrigerWord = "windSpeed";
+                    break;
+                }
+                case "ipcc5_monthly":
+                {
+                    this.timeStep = TemporalGranularity.Monthly;
                     this.maxTempTrigerWord = "maxtemp";
                     this.minTempTrigerWord = "mintemp";
                     this.precipTrigerWord = "ppt";
@@ -47,8 +58,9 @@ namespace Landis.Library.Climate
                 }
                 case "prism":
                 {
-                    this.maxTempTrigerWord = "maxtemp";
-                    this.minTempTrigerWord = "mintemp";
+                    this.timeStep = TemporalGranularity.Monthly;
+                    this.maxTempTrigerWord = "tmx";
+                    this.minTempTrigerWord = "tmn";
                     this.precipTrigerWord = "ppt";
                     this.rhTrigerWord = "rh";
                     this.windSpeedTrigerWord = "windSpeed";
@@ -56,6 +68,7 @@ namespace Landis.Library.Climate
                 }
                 case "griddedobserv":
                 {
+                    this.timeStep = TemporalGranularity.Daily;
                     this.maxTempTrigerWord = "TMax";
                     this.minTempTrigerWord = "TMin";
                     this.precipTrigerWord = "Prcp";

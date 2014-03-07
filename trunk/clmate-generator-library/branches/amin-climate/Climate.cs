@@ -207,23 +207,64 @@ namespace Landis.Library.Climate
             Spinup_DailyData = new Dictionary<int, AnnualClimate_Daily[]>();
             LandscapeAnnualPDSI = new double[Climate.ModelCore.EndTime - Climate.ModelCore.StartTime + 1];
 
+            ModelCore.UI.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
+            Climate.ConvertFileFormat_FillOutAllData(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat, Climate.Phase.SpinUp_Climate);
 
-            string convertedClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, Climate.Phase.Future_Climate);
+            ModelCore.UI.WriteLine("   Loading future weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
+            Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, Climate.Phase.Future_Climate);
+            
 
-            if (configParameters.SpinUpClimateTimeSeries.ToLower() != "no")
-            {
-                ModelCore.UI.WriteLine("   Loading spin-up weather data from file \"{0}\" ...", configParameters.SpinUpClimateFile);
-                string convertedSpinupClimateFileName = Climate.ConvertFileFormat_FillOutAllData(configParameters.SpinUpClimateTimeSeries, configParameters.SpinUpClimateFile, configParameters.SpinUpClimateFileFormat, Climate.Phase.SpinUp_Climate);
- //               spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(convertedSpinupClimateFileName, spinup_parser);
-            }
+                //string climateOption = Climate.ConfigParameters.ClimateTimeSeries;
+                //if (this.climatePhase == Climate.Phase.SpinUp_Climate)
+                //    climateOption = Climate.ConfigParameters.SpinUpClimateTimeSeries;
 
-            if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random") || Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
+                //switch (climateOption)
+                //{
+                //    case "MonthlyAverage":
+                //        {
+                //            break;
+                //        }
+                //    case "MonthlyRandom":
+                //        {
+                //            break;
+                //        }
+                //    case "DailyHistRandom":
+                //        {
+                //            break;
+                //        }
+                //    case "DailyHistAverage":
+                //        {
+                //            return;
+                //        }
+                //    case "MonthlyStandard":
+                //        {
+                //            break;
+                //        }
+                //    case "DailyGCM":
+                //        {
+                //        }
+                //    case "MonthlyGCM":
+                //        {
+                //            break;
+                //        }
+                //    default:
+                //        throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
+
+                //}
+
+
+            if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random")) 
             {
                 Climate.randSelectedTimeSteps_future = new int[Climate.future_allData.Count];//should be future_allData.Count or it needs to be different?
                 for (int i = 0; i < Climate.future_allData.Count; i++)
                 {
                     Climate.randSelectedTimeSteps_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
                 }
+
+            }
+
+            if (Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
+            {
 
                 //int maxSpeciesAge = modelCore.Species.Max(sp => sp.Longevity);
                 int maxSpeciesAge = 0;
@@ -236,8 +277,8 @@ namespace Landis.Library.Climate
                 Climate.randSelectedTimeSteps_spinup = new int[maxSpeciesAge]; 
                 for (int i = 0; i < maxSpeciesAge; i++)
                     Climate.randSelectedTimeSteps_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
-            }
 
+            }
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
             {
                 //Climate.TimestepData = timeStep.Value;
@@ -246,7 +287,8 @@ namespace Landis.Library.Climate
                 //Write(timestepData, year, "SpinUp");
                 
                 Spinup_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
-                Spinup_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);  
+                Spinup_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);
+                Climate.Write(timestepData, timeStep.Key, Climate.Phase.SpinUp_Climate.ToString()); 
             }
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
             {
@@ -256,7 +298,8 @@ namespace Landis.Library.Climate
                 //Write(timestepData, year, "Future");
                 
                 Future_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
-                Future_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);  
+                Future_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);
+                Climate.Write(timestepData, timeStep.Key, Climate.Phase.Future_Climate.ToString());
             }
 
         }
@@ -307,7 +350,7 @@ namespace Landis.Library.Climate
         public static void GenerateEcoregionClimateData(IEcoregion ecoregion, int startYear, double latitude, double fieldCapacity, double wiltingPoint)
         {
 
-            Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}, Year = {1}.", ecoregion.Name, startYear);
+            Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}.", ecoregion.Name);
             
             int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
             annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, future_allData.Count]; //numberOftimeSteps + 1];
@@ -327,7 +370,7 @@ namespace Landis.Library.Climate
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
             {
 
-                Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP Year = {0}.", timeStep.Key);
+                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP Year = {0}.", timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.SpinUp_Climate, timeStep.Key); 
                 Spinup_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
@@ -357,37 +400,16 @@ namespace Landis.Library.Climate
                 //if (timestepIndex > numberOftimeSteps)
                 //    break;
 
-                Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE Year = {0}.", timeStep.Key);
+                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE Year = {0}.", timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.Future_Climate, timeStep.Key);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
-                //Climate.ModelCore.UI.WriteLine("Calculating PDSI for Year = {0}.", timeStep.Key);
-                //Climate.AnnualPDSI[ecoregion.Index, timestepIndex] = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, month_Temp_normal, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
-                //double PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
                 Climate.LandscapeAnnualPDSI[timestepIndex] += (Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI / Climate.ModelCore.Ecoregions.Count);
 
                 //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, PDSI);
                 timestepIndex++;
             }
-
-            //foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Spinup_MonthlyData)
-            //{
-            //    AnnualClimate_Monthly[] timestepData = timeStep.Value;
-            //    int year = timeStep.Key;
-            //    timestepData[ecoregion.Index].WriteToLandisLogFile();
-
-            //}
-            //foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Future_MonthlyData)
-            //{
-            //    AnnualClimate_Monthly[] timestepData = timeStep.Value;
-            //    int year = timeStep.Key;
-            //    timestepData[ecoregion.Index].WriteToLandisLogFile();
-
-            //}
-                    
-            //Climate.ModelCore.UI.WriteLine("   PDSI Calculated for all ecoregions and years.");
-            //Climate.LandscapeAnnualPDSI[timestepIndex] /= Climate.ModelCore.Ecoregions.Count;
 
         }
 
@@ -459,16 +481,11 @@ namespace Landis.Library.Climate
         //    }
 
 
-
-
-        //}
-
-
         /// <summary>
         /// Converts USGS Data to Standard Input climate Data and fill out the Future_AllData and/or Spinup_AllData
         /// </summary>
         /// 
-        public static string ConvertFileFormat_FillOutAllData(String timeSeries, string filePath, string fileFormat, Climate.Phase climatePhase)
+        public static void ConvertFileFormat_FillOutAllData(String timeSeries, string filePath, string fileFormat, Climate.Phase climatePhase)
         {
             if (climatePhase == Climate.Phase.Future_Climate && timeSeries.Contains("Daily"))
                 future_allData_granularity = TemporalGranularity.Daily;
@@ -476,9 +493,9 @@ namespace Landis.Library.Climate
             else if (climatePhase == Climate.Phase.Future_Climate && timeSeries.Contains("Monthly"))
                 future_allData_granularity = TemporalGranularity.Monthly;
 
-                spinup_allData_granularity = TemporalGranularity.Monthly;
+            spinup_allData_granularity = TemporalGranularity.Monthly;
 
-            string readableFile = "";
+            //string readableFile = "";
             if (timeSeries.Contains("MonthlyStandard"))
             {
                 ModelCore.UI.WriteLine("Loading from file with Monthly Standard format...\n"); 
@@ -492,21 +509,24 @@ namespace Landis.Library.Climate
                     ClimateParser spinup_parser = new ClimateParser();
                     spinup_allData = Landis.Data.Load<Dictionary<int, IClimateRecord[,]>>(filePath, spinup_parser);
                 }
-                return filePath;
+                return; // filePath;
             }
 
             else if (timeSeries.Contains("Average") || timeSeries.Contains("Random"))
             {
                 if (timeSeries.Contains("Daily"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
+                    //return readableFile = 
+                    ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
                 else if (timeSeries.Contains("Monthly"))
-                    return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
+                    //return readableFile = 
+                    ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
 
             }
 
             else if (timeSeries.Contains("MonthlyAverage"))//AverageMonthly
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
+                //return readableFile = 
+                    ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
             }
 
             //else if (timeSeries.Contains("Random"))
@@ -519,7 +539,14 @@ namespace Landis.Library.Climate
 
             else if (timeSeries.Contains("DailyGCM"))
             {
-                return readableFile = Landis.Library.Climate.ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
+                //return readableFile = 
+                    ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
+            }
+
+            else if (timeSeries.Contains("MonthlyGCM"))
+            {
+                //return readableFile = 
+                    ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
             }
 
             else
@@ -527,7 +554,7 @@ namespace Landis.Library.Climate
                 ModelCore.UI.WriteLine("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
                 throw new Exception("Error in converting input-climate-file format: invalid ClimateTimeSeries value provided in cliamte-generator input file.");
             }
-            return readableFile;
+            return;// readableFile;
 
         }
 
