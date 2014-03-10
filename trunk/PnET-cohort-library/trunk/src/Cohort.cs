@@ -35,7 +35,13 @@ namespace Landis.Library.BiomassCohortsPnET
                 folshed = value;
             }
         }
-
+        public int Biomass
+        {
+            get
+            {
+                return (int)(wood + fol);
+            }
+        }
         public int CanopyLayer
         {
             get
@@ -89,13 +95,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 age = value;
             }
         }
-        public int Biomass
-        {
-            get
-            {
-                return (int)(Wood + Fol);
-            }
-        }
+         
         public float Fol
         {
             get
