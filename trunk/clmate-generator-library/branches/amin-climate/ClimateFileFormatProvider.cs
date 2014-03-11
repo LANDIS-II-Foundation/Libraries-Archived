@@ -33,47 +33,43 @@ namespace Landis.Library.Climate
         public ClimateFileFormatProvider(string format)
         {
             this.format = format;
+            this.maxTempTrigerWord = "maxtemp";
+            this.minTempTrigerWord = "mintemp";
+            this.precipTrigerWord = "ppt";
+            this.rhTrigerWord = "rh";
+            this.windSpeedTrigerWord = "windSpeed";
+
             //this.timeStep = ((this.format == "PRISM") ? TemporalGranularity.Monthly : TemporalGranularity.Daily);
             switch (this.format.ToLower())
             {
-                case "gfdl_a1fi":
+                case "ipcc3_daily":  //was 'gfdl_a1fi'
                 {
                     this.timeStep = TemporalGranularity.Daily;
-                    this.maxTempTrigerWord = "maxtemp";
-                    this.minTempTrigerWord = "mintemp";
-                    this.precipTrigerWord = "ppt";
-                    this.rhTrigerWord = "rh";
-                    this.windSpeedTrigerWord = "windSpeed";
+                    break;
+                }
+                case "ipcc3_monthly":  //ADD
+                {
+                    this.timeStep = TemporalGranularity.Monthly;
                     break;
                 }
                 case "ipcc5_monthly":
                 {
                     this.timeStep = TemporalGranularity.Monthly;
-                    this.maxTempTrigerWord = "maxtemp";
-                    this.minTempTrigerWord = "mintemp";
-                    this.precipTrigerWord = "ppt";
-                    this.rhTrigerWord = "rh";
-                    this.windSpeedTrigerWord = "windSpeed";
                     break;
                 }
-                case "prism":
-                {
-                    this.timeStep = TemporalGranularity.Monthly;
-                    this.maxTempTrigerWord = "tmx";
-                    this.minTempTrigerWord = "tmn";
-                    this.precipTrigerWord = "ppt";
-                    this.rhTrigerWord = "rh";
-                    this.windSpeedTrigerWord = "windSpeed";
-                    break;
-                }
-                case "griddedobserv":
+                case "ipcc5_daily":  //ADD
                 {
                     this.timeStep = TemporalGranularity.Daily;
-                    this.maxTempTrigerWord = "TMax";
-                    this.minTempTrigerWord = "TMin";
-                    this.precipTrigerWord = "Prcp";
-                    this.rhTrigerWord = "rh";
-                    this.windSpeedTrigerWord = "windSpeed";
+                    break;
+                }
+                case "prism_monthly":  //was 'prism'
+                {
+                    this.timeStep = TemporalGranularity.Monthly;
+                    break;
+                }
+                case "Mauer_daily":  //was griddedobserved
+                {
+                    this.timeStep = TemporalGranularity.Daily;
                     break;
                 }
                 default:

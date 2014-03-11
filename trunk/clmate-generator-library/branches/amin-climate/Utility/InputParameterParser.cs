@@ -89,7 +89,7 @@ namespace Landis.Library.Climate
 
             InputParameters parameters = new InputParameters();
 
-            string climateTimeSeries_PossibleValues = "MonthlyRandom, MonthlyAverage, DailyHistRandom, DailyHistAverage, MonthlyStandard, DailyGCM, MonthlyGCM";
+            string climateTimeSeries_PossibleValues = "Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYear, Daily_RandomYear, Daily_AverageAllYears, Daily_SequencedYears, Monthly_SequencedYears";
 
             //InputVar<string> climateConfigFile = new InputVar<string>(Names.ClimateConfigFile);
             //ReadVar(climateConfigFile);
@@ -108,34 +108,38 @@ namespace Landis.Library.Climate
             ReadVar(climateFileFormat);
             parameters.ClimateFileFormat = climateFileFormat.Value;
 
-
-            
-
             InputVar<string> spinUpClimateTimeSeries = new InputVar<string>(Names.SpinUpClimateTimeSeries);
             ReadVar(spinUpClimateTimeSeries);
             parameters.SpinUpClimateTimeSeries = spinUpClimateTimeSeries.Value;
 
             InputVar<string> spinUpClimateFile = new InputVar<string>(Names.SpinUpClimateFile);
             InputVar<string> spinUpClimateFileFormat = new InputVar<string>(Names.SpinUpClimateFileFormat);
-            if (spinUpClimateTimeSeries.Value != "no")
-            {
+
+            //if (spinUpClimateTimeSeries.Value != "no")
+            //{
                 ReadVar(spinUpClimateFile);
                 parameters.SpinUpClimateFile = spinUpClimateFile.Value;
 
                 ReadVar(spinUpClimateFileFormat);
                 parameters.SpinUpClimateFileFormat = spinUpClimateFileFormat.Value;
-            }
-            else
-            {
-                GetNextLine();
-                GetNextLine();
-            }
+            //}
+            //else
+            //{
+            //    GetNextLine();
+            //    GetNextLine();
+            //}
 
             if (!climateTimeSeries_PossibleValues.ToLower().Contains(parameters.ClimateTimeSeries.ToLower()) || !climateTimeSeries_PossibleValues.ToLower().Contains(parameters.SpinUpClimateTimeSeries.ToLower()))
             {
                 //Climate.ModelCore.UI.WriteLine("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values dould be: " + climateTimeSeries_PossibleValues);
                 throw new ApplicationException("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values are: " + climateTimeSeries_PossibleValues);
             }
+
+            // ADD DAILY INPUT/OUTPUT VERIFICATION: IF THE USER REQUESTS DAILY OUTPUTS, MUST HAVE DAILY INPUTS
+            // IF (CASE)
+            // {
+            // throw new ApplicationException("X must be Y")
+            // }
             
             return parameters; 
 

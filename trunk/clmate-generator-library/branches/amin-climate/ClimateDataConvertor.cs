@@ -64,6 +64,7 @@ namespace Landis.Library.Climate
             Dictionary<int, IClimateRecord[,]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
             if (climatePhase == Climate.Phase.Future_Climate)
                 allDataRef = Climate.Future_AllData;
+            
             if (climatePhase == Climate.Phase.SpinUp_Climate)
                 allDataRef = Climate.Spinup_AllData;
 
@@ -102,8 +103,10 @@ namespace Landis.Library.Climate
 
                 //Dictionary<string, double[]> climate_Dic_currentYear = (Dictionary<string, double[]>)climate_Dic.Where(r => r.Key.Substring(0, 4).ToString() == currentYear);
                 IEnumerable<KeyValuePair<string, double[]>> climate_Dic_currentYear = climate_Dic.Where(r => r.Key.Substring(0, 4).ToString() == currentYear);
+
                 IClimateRecord[,] icrs = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, climate_Dic_currentYear.Count()]; // climate_Dic_currentYear.Count: number of days/months in a year
-                for (int i = 0; i < Climate.ModelCore.Ecoregions.Count; i++) //for each ecoregion eaither active or inactive
+                
+                for (int i = 0; i < Climate.ModelCore.Ecoregions.Count; i++) //for each ecoregion either active or inactive
                 {
                     //IClimateRecord icr;
                     List<IClimateRecord> icrList = new List<IClimateRecord>();
@@ -158,7 +161,7 @@ namespace Landis.Library.Climate
 
 
             #region IPCC4 Daily Input file 
-            if (climateFileFormat == "gfdl_a1fi") //(sourceTemporalGranularity == TemporalGranularity.Daily)
+            if (climateFileFormat == "ipcc3_daily") //(sourceTemporalGranularity == TemporalGranularity.Daily)
             {
                 exportToTxtFormatFile = false;
                 sreader = new StreamReader(path);
@@ -935,11 +938,11 @@ namespace Landis.Library.Climate
                             //set index of Precipitation and STD for each ecoregion
                             for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
                             {
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) * 100000, IndexPrcp_Mean); //  /10 is for mm to cm conversion
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[i + 1]) * 315360, IndexPrcp_Mean); 
                                 updatedIndex += i + climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) * 100000, IndexPrcp_Var);
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) * 315360, IndexPrcp_Var);
                                 updatedIndex += climateFileActiveEcoregions.Count;
-                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) * 100000, IndexPrcp_STD); //NOTE: this might be a wrong conversion for converting IndexPrcp_STD from mm to cm because STD is calculate using root square.
+                                climate_Dic[key].SetValue(Convert.ToDouble(fields[updatedIndex + 1]) * 315360, IndexPrcp_STD); //NOTE: this might be a wrong conversion for converting IndexPrcp_STD from mm to cm because STD is calculate using root square.
 
                                 IndexPrcp_Mean = IndexPrcp_Mean + 9;
                                 IndexPrcp_Var = IndexPrcp_Var + 9;
@@ -1221,7 +1224,7 @@ namespace Landis.Library.Climate
 
             #region PRISM Monthly Data
             //else if (sourceTemporalGranularity == TemporalGranularity.Monthly)
-            else if (climateFileFormat == "prism") 
+            else if (climateFileFormat == "prism_monthly") 
             {
 
                 //unmatched_TriggerWords = maxTriggerWord + ", " + minTriggerWord + ", " + prcpTriggerWord;// +", " + rhTriggerWord + ", " + windSpeedTriggerWord;

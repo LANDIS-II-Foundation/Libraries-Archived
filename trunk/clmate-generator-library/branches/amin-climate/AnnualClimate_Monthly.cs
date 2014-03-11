@@ -51,7 +51,7 @@ namespace  Landis.Library.Climate
 
             switch (climateOption)
             {
-                case "MonthlyAverage":
+                case "Monthly_AverageAllYears":
                     {
                         if (this.climatePhase == Climate.Phase.Future_Climate) 
                             timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); 
@@ -59,7 +59,11 @@ namespace  Landis.Library.Climate
                             timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude); 
                         break;
                     }
-                case "MonthlyRandom":
+                case "Monthly_AverageWithVariation":
+                    {
+                        break;
+                    }
+                case "Monthly_RandomYear":
                     {
                         TimeStep = timeStep;
                         try {
@@ -76,40 +80,40 @@ namespace  Landis.Library.Climate
                         }
                         break;
                     }
-                case "DailyHistRandom":
+                case "Daily_RandomYear":
                     {
                         TimeStep = timeStep;
                         break;
                     }
-                case "DailyHistAverage":
+                case "Daily_AverageAllYears":
                     {
                         this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
                         return;
                     }
-                case "MonthlyStandard":  
-                    {
-                        TimeStep = timeStep;
-                        try
-                        {
-                            if (this.climatePhase == Climate.Phase.Future_Climate)
-                                timestepData = Climate.Future_AllData[TimeStep];
-                            else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-                                timestepData = Climate.Spinup_AllData[TimeStep];
+                //case "MonthlyStandard":  
+                //    {
+                //        TimeStep = timeStep;
+                //        try
+                //        {
+                //            if (this.climatePhase == Climate.Phase.Future_Climate)
+                //                timestepData = Climate.Future_AllData[TimeStep];
+                //            else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
+                //                timestepData = Climate.Spinup_AllData[TimeStep];
 
-                            CalculateMonthlyData_AddVariance(ecoregion, timestepData, actualYear, latitude);
-                        }
-                        catch (System.Collections.Generic.KeyNotFoundException ex)
-                        {
-                            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex); 
-                        }
-                        break;
-                    }
-                case "DailyGCM":
+                //            CalculateMonthlyData_AddVariance(ecoregion, timestepData, actualYear, latitude);
+                //        }
+                //        catch (System.Collections.Generic.KeyNotFoundException ex)
+                //        {
+                //            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex); 
+                //        }
+                //        break;
+                //    }
+                case "Daily_SequencedYears":
                     {
                         this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
                         return;
                     }
-                case "MonthlyGCM":
+                case "Monthly_SequencedYears":
                     {
                         TimeStep = timeStep;
                         try
