@@ -18,6 +18,6 @@ namespace Landis.Library.BiomassCohortsPnET
         void AddNewCohort(Cohort cohort);
         void IncrementCohortsAge();
         void UpdateMaturePresent();
-        void CombineCohorts(ActiveSite site, int SuccessionTimeStep, int Year);
+        int CombineCohorts(ActiveSite site, ISpecies spc, int SuccessionTimeStep, int Year);
     }
 }

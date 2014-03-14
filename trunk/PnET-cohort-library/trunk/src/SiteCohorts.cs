@@ -127,14 +127,16 @@ namespace Landis.Library.BiomassCohortsPnET
         }
 
 
-        public void CombineCohorts(ActiveSite site, int SuccessionTimeStep, int Year)
+        public int CombineCohorts(ActiveSite site, ISpecies spc, int SuccessionTimeStep, int Year)
         {
-            List<Cohort> combined_cohorts = new List<Cohort>();
             foreach (SpeciesCohorts speciesCohorts in cohorts)
             {
-                //Cohort combined_cohort;
-                speciesCohorts.CombineYoungCohorts(SuccessionTimeStep, Year);
+                if (speciesCohorts.Species == spc)
+                {
+                    return speciesCohorts.CombineYoungCohorts(SuccessionTimeStep, Year);
+                }
             }
+            return 0;
         }
         
         //---------------------------------------------------------------------

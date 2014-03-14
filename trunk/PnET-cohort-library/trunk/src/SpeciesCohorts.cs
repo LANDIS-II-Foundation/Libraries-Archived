@@ -100,6 +100,7 @@ namespace Landis.Library.BiomassCohortsPnET
         //---------------------------------------------------------------------
         public void AddNewCohort2(Cohort c)
         {
+           
             this.cohorts.Add(c);
         }
         
@@ -132,9 +133,9 @@ namespace Landis.Library.BiomassCohortsPnET
         /// is equal to the timestep because such a cohort is generated when
         /// reproduction occurs during a succession timestep.
         /// </remarks>
-        public bool CombineYoungCohorts(int SuccessionTimeStep, int Year)
+        public int CombineYoungCohorts(int SuccessionTimeStep, int Year)
         {
-           
+            
             //  Work from the end of cohort data since the array is in old-to-
             //  young order.
             int youngCount = 0;
@@ -165,10 +166,10 @@ namespace Landis.Library.BiomassCohortsPnET
                 cohorts.RemoveRange(cohorts.Count - youngCount, youngCount);
 
                 cohorts.Add(new Cohort(this.species, (ushort)(BiomassCohorts.Cohorts.SuccessionTimeStep - 1), totalFolC, totalfolshead,totalWoodC, totalNSC, totalRootC,  Year, leaf_on));
-                
-                return true;
+
+                return youngCount;
             }
-            return false;
+            return youngCount;
         }
 
         //---------------------------------------------------------------------
@@ -231,6 +232,7 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 if (cohorts[i].Age >= species.Maturity)
                 {
+                    
                     isMaturePresent = true;
                     break;
                 }
@@ -263,7 +265,10 @@ namespace Landis.Library.BiomassCohortsPnET
                     }
                 }
                 if (cohort != null && cohort.Age >= species.Maturity)
+                {
+                   
                     isMaturePresent = true;
+                }
             }
             return totalReduction;
         }
@@ -296,7 +301,10 @@ namespace Landis.Library.BiomassCohortsPnET
                     cohort = null;
                 }
                 else if (cohorts[i].Age >= species.Maturity)
+                {
+                   
                     isMaturePresent = true;
+                }
             }
             return totalReduction;
         }
