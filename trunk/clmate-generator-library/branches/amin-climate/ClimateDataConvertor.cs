@@ -133,11 +133,11 @@ namespace Landis.Library.Climate
         {
 
             ClimateFileFormatProvider formatProvider = new ClimateFileFormatProvider(climateFileFormat);
-            maxTriggerWord = formatProvider.MaxTempTrigerWord;
-            minTriggerWord = formatProvider.MinTempTrigerWord;
-            prcpTriggerWord = formatProvider.PrecipTrigerWord;
-            rhTriggerWord = formatProvider.RhTrigerWord;
-            windSpeedTriggerWord = formatProvider.WindSpeedTrigerWord;
+            maxTriggerWord = formatProvider.MaxTempTriggerWord;
+            minTriggerWord = formatProvider.MinTempTriggerWord;
+            prcpTriggerWord = formatProvider.PrecipTriggerWord;
+            rhTriggerWord = formatProvider.RhTriggerWord;
+            windSpeedTriggerWord = formatProvider.WindSpeedTriggerWord;
             bool checkRHWindSpeed = false;
 
 

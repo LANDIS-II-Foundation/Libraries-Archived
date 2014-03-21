@@ -12,32 +12,32 @@ namespace Landis.Library.Climate
     {
         private string format;
         private TemporalGranularity timeStep;
-        private string maxTempTrigerWord;
-        private string minTempTrigerWord;
-        private string precipTrigerWord;
-        private string rhTrigerWord;
-        private string windSpeedTrigerWord;
+        private string maxTempTriggerWord;
+        private string minTempTriggerWord;
+        private string precipTriggerWord;
+        private string rhTriggerWord;
+        private string windSpeedTriggerWord;
 
         
             
         //------
         public TemporalGranularity InputTimeStep { get { return this.timeStep; } }
-        public string MaxTempTrigerWord { get { return this.maxTempTrigerWord; } }
-        public string MinTempTrigerWord { get { return this.minTempTrigerWord; } }
-        public string PrecipTrigerWord { get { return this.precipTrigerWord; } }
-        public string RhTrigerWord { get { return this.rhTrigerWord; } }
-        public string WindSpeedTrigerWord { get { return this.windSpeedTrigerWord; } }
+        public string MaxTempTriggerWord { get { return this.maxTempTriggerWord; } }
+        public string MinTempTriggerWord { get { return this.minTempTriggerWord; } }
+        public string PrecipTriggerWord { get { return this.precipTriggerWord; } }
+        public string RhTriggerWord { get { return this.rhTriggerWord; } }
+        public string WindSpeedTriggerWord { get { return this.windSpeedTriggerWord; } }
         public string SelectedFormat { get { return format; } }
   
         //------
         public ClimateFileFormatProvider(string format)
         {
             this.format = format;
-            this.maxTempTrigerWord = "maxtemp";
-            this.minTempTrigerWord = "mintemp";
-            this.precipTrigerWord = "ppt";
-            this.rhTrigerWord = "rh";
-            this.windSpeedTrigerWord = "windSpeed";
+            this.maxTempTriggerWord = "maxtemp";
+            this.minTempTriggerWord = "mintemp";
+            this.precipTriggerWord = "ppt";
+            this.rhTriggerWord = "rh";
+            this.windSpeedTriggerWord = "windSpeed";
 
             //this.timeStep = ((this.format == "PRISM") ? TemporalGranularity.Monthly : TemporalGranularity.Daily);
             switch (this.format.ToLower())
