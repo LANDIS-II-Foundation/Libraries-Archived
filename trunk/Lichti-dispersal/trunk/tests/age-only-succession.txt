@@ -3,7 +3,7 @@ LandisData  "Age-only Succession"
 
 Timestep  10
 
-SeedingAlgorithm  WardSeedDispersal
+SeedingAlgorithm  LichtiSeedDispersal  dispersal_input.txt
 
 InitialCommunities      "./initial-communities.txt"
 InitialCommunitiesMap   "./initial-communities.gis"
