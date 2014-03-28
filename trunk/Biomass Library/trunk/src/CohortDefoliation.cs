@@ -20,7 +20,8 @@ namespace Landis.Library.Biomass
             /// site.
             /// </summary>
             public delegate double Compute(ActiveSite site,
-                                           ISpecies species);
+                                           ISpecies species,
+                                           int cohortBiomass);
         }
 
         //---------------------------------------------------------------------
@@ -38,7 +39,8 @@ namespace Landis.Library.Biomass
             /// 0%
             /// </returns>
             public static double Compute( ActiveSite site,
-                                         ISpecies species)
+                                         ISpecies species,
+                                         int cohortBiomass)
                                          
             {
                 return 0.0;
