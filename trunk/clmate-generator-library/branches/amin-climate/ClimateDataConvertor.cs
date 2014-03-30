@@ -160,8 +160,8 @@ namespace Landis.Library.Climate
             Climate.ModelCore.UI.WriteLine("   Converting raw data from text file: {0}, Format={1}, Temporal={2}.", climateFile, climateFileFormat, sourceTemporalGranularity);
 
 
-            #region IPCC4 Daily Input file 
-            if (climateFileFormat == "ipcc3_daily") //(sourceTemporalGranularity == TemporalGranularity.Daily)
+            #region IPCC3 Input file 
+            if (climateFileFormat == "ipcc3_daily" || climateFileFormat == "ipcc3_monthly") 
             {
                 exportToTxtFormatFile = false;
                 sreader = new StreamReader(path);
@@ -735,8 +735,8 @@ namespace Landis.Library.Climate
             }
             #endregion
 
-            #region IPCC5 Monthly Input file
-            else if (climateFileFormat == "ipcc5_monthly") 
+            #region IPCC5 Input file
+            else if (climateFileFormat == "ipcc5_monthly" || climateFileFormat == "ipcc5_daily") 
             {
                 exportToTxtFormatFile = false;
                 sreader = new StreamReader(path);

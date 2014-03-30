@@ -7,6 +7,9 @@ using System.Collections.Generic;
 
 namespace Landis.Library.Climate
 {
+
+    //public enum TimeSeriesNames { Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYear, Monthly_SequencedYears, Daily_RandomYear, Daily_AverageAllYears, Daily_SequencedYears };
+
     /// <summary>
     /// The parameters for biomass succession.
     /// </summary>

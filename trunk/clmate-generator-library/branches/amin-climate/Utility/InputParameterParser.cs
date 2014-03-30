@@ -47,20 +47,8 @@ namespace Landis.Library.Climate
 
         //---------------------------------------------------------------------
 
-        //private IEcoregionDataset ecoregionDataset;
-        //private ISpeciesDataset speciesDataset;
-        //private Dictionary<string, int> speciesLineNums;
-        //private InputVar<string> speciesName;
-
-        //---------------------------------------------------------------------
-
         static InputParametersParser()
         {
-            //InputParametersParser.Names.LandisData = "Climate Config";
-             //LandisDataValue = "Climate Config";
-            //SeedingAlgorithmsUtil.RegisterForInputValues();
-            //RegisterForInputValues();
-
         }
 
         //---------------------------------------------------------------------
@@ -68,14 +56,6 @@ namespace Landis.Library.Climate
         public InputParametersParser()
         {
             this.landisDataValue = "Climate Config";
-
-           
-            //this.ecoregionDataset = PlugIn.ModelCore.Ecoregions;
-            //this.speciesDataset = PlugIn.ModelCore.Species;
-            //this.speciesLineNums = new Dictionary<string, int>();
-            //this.speciesName = new InputVar<string>("Species");
-
-            //Dynamic.InputValidation.Initialize();
         }
 
         //---------------------------------------------------------------------
@@ -90,6 +70,7 @@ namespace Landis.Library.Climate
             InputParameters parameters = new InputParameters();
 
             string climateTimeSeries_PossibleValues = "Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYear, Daily_RandomYear, Daily_AverageAllYears, Daily_SequencedYears, Monthly_SequencedYears";
+            string climateFileFormat_PossibleValues = "ipcc3_daily, ipcc3_monthly, ipcc5_daily, ipcc5_monthly, prism_monthly, Mauer_daily";
 
             //InputVar<string> climateConfigFile = new InputVar<string>(Names.ClimateConfigFile);
             //ReadVar(climateConfigFile);
@@ -98,7 +79,6 @@ namespace Landis.Library.Climate
             InputVar<string> climateTimeSeries = new InputVar<string>(Names.ClimateTimeSeries);
             ReadVar(climateTimeSeries);
             parameters.ClimateTimeSeries = climateTimeSeries.Value;
-
 
             InputVar<string> climateFile = new InputVar<string>(Names.ClimateFile);
             ReadVar(climateFile);
@@ -115,26 +95,21 @@ namespace Landis.Library.Climate
             InputVar<string> spinUpClimateFile = new InputVar<string>(Names.SpinUpClimateFile);
             InputVar<string> spinUpClimateFileFormat = new InputVar<string>(Names.SpinUpClimateFileFormat);
 
-            //if (spinUpClimateTimeSeries.Value != "no")
-            //{
-                ReadVar(spinUpClimateFile);
-                parameters.SpinUpClimateFile = spinUpClimateFile.Value;
+            ReadVar(spinUpClimateFile);
+            parameters.SpinUpClimateFile = spinUpClimateFile.Value;
 
-                ReadVar(spinUpClimateFileFormat);
-                parameters.SpinUpClimateFileFormat = spinUpClimateFileFormat.Value;
-            //}
-            //else
-            //{
-            //    GetNextLine();
-            //    GetNextLine();
-            //}
+            ReadVar(spinUpClimateFileFormat);
+            parameters.SpinUpClimateFileFormat = spinUpClimateFileFormat.Value;
 
             if (!climateTimeSeries_PossibleValues.ToLower().Contains(parameters.ClimateTimeSeries.ToLower()) || !climateTimeSeries_PossibleValues.ToLower().Contains(parameters.SpinUpClimateTimeSeries.ToLower()))
             {
-                //Climate.ModelCore.UI.WriteLine("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values dould be: " + climateTimeSeries_PossibleValues);
                 throw new ApplicationException("Error in parsing climate-generator input file: invalid value for ClimateTimeSeries provided. Possible values are: " + climateTimeSeries_PossibleValues);
             }
 
+            if (!climateFileFormat_PossibleValues.ToLower().Contains(parameters.ClimateFileFormat.ToLower()) || !climateFileFormat_PossibleValues.ToLower().Contains(parameters.SpinUpClimateFileFormat.ToLower()))
+            {
+                throw new ApplicationException("Error in parsing climate-generator input file: invalid value for File Format provided. Possible values are: " + climateTimeSeries_PossibleValues);
+            }
             // ADD DAILY INPUT/OUTPUT VERIFICATION: IF THE USER REQUESTS DAILY OUTPUTS, MUST HAVE DAILY INPUTS
             // IF (CASE)
             // {
@@ -145,7 +120,24 @@ namespace Landis.Library.Climate
 
 
         }
+         //---------------------------------------------------------------------
+
+//        public static TimeSeriesNames TimeSeriesParse(string word)
+//        {
+//Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYear, Monthly_SequencedYears, Daily_RandomYear, Daily_AverageAllYears, Daily_SequencedYears
+            
+//            if (word == "gamma")
+//                return Distribution.gamma;
+//            else if (word == "lognormal")
+//                return Distribution.lognormal;
+//            else if (word == "normal")
+//                return Distribution.normal;
+//            else if (word == "Weibull")
+//                return Distribution.Weibull;
+//            throw new System.FormatException("Valid Distributions: gamma, lognormal, normal, Weibull");
+//        }   
     }
+
 
 
 
