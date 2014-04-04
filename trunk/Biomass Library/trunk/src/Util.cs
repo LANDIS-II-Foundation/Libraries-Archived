@@ -4,6 +4,10 @@
 using Landis.SpatialModeling;
 using Landis.Core;
 using Edu.Wisc.Forest.Flel.Util;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Landis.Library.Biomass
 {
@@ -12,7 +16,14 @@ namespace Landis.Library.Biomass
     /// </summary>
     public static class Util
     {
-
+        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        {
+            if (string.IsNullOrEmpty(toCheck) || string.IsNullOrEmpty(source))
+            {
+                return true;
+            }
+            return source.IndexOf(toCheck, comp) >= 0;
+        } 
         //---------------------------------------------------------------------
 
         public static Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> CreateSpeciesEcoregionParm<T>(ISpeciesDataset speciesDataset, IEcoregionDataset ecoregionDataset)
