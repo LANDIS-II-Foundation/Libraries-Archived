@@ -14,10 +14,10 @@ namespace Landis.Library.BiomassCohortsPnET
         : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>
 
     {
-        
-        void AddNewCohort(Cohort cohort);
+
+        void AddNewCohort(Cohort cohort, int SuccessionTimeStep);
         void IncrementCohortsAge();
         void UpdateMaturePresent();
-        int CombineCohorts(ActiveSite site, ISpecies spc, int SuccessionTimeStep, int Year);
+     
     }
 }

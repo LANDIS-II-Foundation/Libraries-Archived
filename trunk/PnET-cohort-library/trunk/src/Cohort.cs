@@ -11,7 +11,7 @@ namespace Landis.Library.BiomassCohortsPnET
     /// A species cohort with biomass information.
     /// </summary>
     public class Cohort
-        : ICohort , Landis.Library.BiomassCohorts.ICohort
+        : ICohort, Landis.Library.BiomassCohorts.ICohort, Landis.Library.AgeOnlyCohorts.ICohort
     {
         private ISpecies species;
         ushort age;
@@ -182,10 +182,9 @@ namespace Landis.Library.BiomassCohortsPnET
 
         //---------------------------------------------------------------------
          
-        public Cohort(ISpecies   species,
-                      Cohort cohort)
+        public Cohort(Cohort cohort)
         {
-            this.species = species;
+            this.species = cohort.Species;
             this.Age = cohort.age;
             this.Wood = cohort.wood;
             this.nsc = cohort.nsc;
@@ -204,7 +203,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public void IncrementAge()
         {
             age += 1;
-            //System.Console.WriteLine(age);
+           //System.Console.WriteLine(year_of_birth + "\t" + species.Name + "\t" + age);
         }
 
         

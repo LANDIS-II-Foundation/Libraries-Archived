@@ -14,11 +14,13 @@ namespace Landis.Library.BiomassCohortsPnET
              : Landis.Library.Cohorts.ISpeciesCohorts<Landis.Library.BiomassCohortsPnET.ICohort>
         {
 
-            void RemoveCohort(int index,
-                                  ICohort cohort,
-                                  ActiveSite site,
-                                  ExtensionType disturbanceType);
-            ICohort Get(int index);
+            void RemoveCohort(Cohort cohort,
+                              ActiveSite site,
+                              ExtensionType disturbanceType);
+
+            
+
+            Cohort Get(int index);
         }
     
 }

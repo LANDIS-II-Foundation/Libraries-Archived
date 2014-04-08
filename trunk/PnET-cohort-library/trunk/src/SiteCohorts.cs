@@ -29,10 +29,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             throw new System.Exception("Cannot implement write");
         }
-        public void AddNewCohort(ISpecies species, ushort age, int initialBiomass)
-        {
-            throw new System.Exception("Incompatibility issue");
-        }
+       
         public void Grow(ActiveSite site, bool isSuccessionTimestep)
         {
             throw new System.Exception("Incompatibility issue");
@@ -126,19 +123,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
-
-        public int CombineCohorts(ActiveSite site, ISpecies spc, int SuccessionTimeStep, int Year)
-        {
-            foreach (SpeciesCohorts speciesCohorts in cohorts)
-            {
-                if (speciesCohorts.Species == spc)
-                {
-                    return speciesCohorts.CombineYoungCohorts(SuccessionTimeStep, Year);
-                }
-            }
-            return 0;
-        }
-        
+ 
         //---------------------------------------------------------------------
         void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ICohortDisturbance disturbance)
         {
@@ -183,12 +168,35 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return -1;
         }
-        public void AddNewCohort(Cohort cohort)
+        public void AddNewCohort(ISpecies species, ushort age, int initialBiomass)
         {
-            
+            throw new System.Exception("Incompatibility issue");
+        }
+        /// <summary>
+        /// Add new age-only cohort.  Only used to maintain interface.  .DO NOT USE.
+        /// </summary>
+        public void AddNewCohort(ISpecies species)
+        {
+            throw new System.Exception("Incompatibility issue");
+        }
+        public void AddNewCohort(Cohort cohort, int SuccessionTimeStep)
+        {
             int index = SpeciesIndex(cohort.Species);
             if (index >= 0)
             {
+                for (int i = 0; i < cohorts[index].Count ; i++)
+                {
+                    ICohort c = cohorts[index][i];
+                    if (c.Age <= SuccessionTimeStep)
+                    {
+                        c.Wood += cohort.Wood;
+                        c.Fol += cohort.Fol;
+                        c.Root += cohort.Root;
+                        c.FolShed += cohort.FolShed;
+                         
+                        return;
+                    }
+                }
                 cohorts[index].AddNewCohort2(cohort);//
             }
             else
@@ -196,8 +204,9 @@ namespace Landis.Library.BiomassCohortsPnET
                 cohorts.Add(new SpeciesCohorts(cohort.Species));
                 cohorts[cohorts.Count - 1].AddNewCohort2(cohort);
             }
-            AssertUniqueSpecies();
+           
         }
+        
 
         void AssertUniqueSpecies()
         {
@@ -216,13 +225,7 @@ namespace Landis.Library.BiomassCohortsPnET
         
         //---------------------------------------------------------------------
 
-        /// <summary>
-        /// Add new age-only cohort.  Only used to maintain interface.  .DO NOT USE.
-        /// </summary>
-        public void AddNewCohort(ISpecies species)
-        {
-        }
-
+       
         //---------------------------------------------------------------------
 
 
@@ -241,28 +244,20 @@ namespace Landis.Library.BiomassCohortsPnET
 
 
         //---------------------------------------------------------------------
-
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
         public IEnumerator<ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
         }
-
-        //---------------------------------------------------------------------
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        //---------------------------------------------------------------------
-
         IEnumerator<AgeCohort.ISpeciesCohorts> IEnumerable<AgeCohort.ISpeciesCohorts>.GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
         }
-
         IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.BiomassCohorts.ISpeciesCohorts>.GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)

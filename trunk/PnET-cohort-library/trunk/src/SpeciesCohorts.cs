@@ -68,7 +68,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public ICohort this[int index]
         {
             get {
-                return new Cohort(species, cohorts[index]);
+                return new Cohort(cohorts[index]);
             }
              
         }
@@ -100,7 +100,7 @@ namespace Landis.Library.BiomassCohortsPnET
         //---------------------------------------------------------------------
         public void AddNewCohort2(Cohort c)
         {
-           
+            //System.Console.WriteLine("AddNewCohort2\t" + c.Species.Name);
             this.cohorts.Add(c);
         }
         
@@ -116,62 +116,7 @@ namespace Landis.Library.BiomassCohortsPnET
             return cohorts[index].Age;
         }
 
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Combines all young cohorts into a single cohort whose age is the
-        /// succession timestep - 1 and whose biomass is the sum of all the
-        /// biomasses of the young cohorts.
-        /// </summary>
-        /// <remarks>
-        /// The age of the combined cohort is set to the succession timestep -
-        /// 1 so that when the combined cohort undergoes annual growth, its
-        /// age will end up at the succession timestep.
-        /// <p>
-        /// For this method, young cohorts are those whose age is less than or
-        /// equal to the succession timestep.  We include the cohort whose age
-        /// is equal to the timestep because such a cohort is generated when
-        /// reproduction occurs during a succession timestep.
-        /// </remarks>
-        public int CombineYoungCohorts(int SuccessionTimeStep, int Year)
-        {
-            
-            //  Work from the end of cohort data since the array is in old-to-
-            //  young order.
-            int youngCount = 0;
-            float totalWoodC = 0;
-            float totalFolC = 0;
-            float totalRootC = 0;
-            float totalNSC = 0;
-            float totalfolshead = 0;
-
-            bool leaf_on = false;
-            for (int i = cohorts.Count - 1; i >= 0; i--) {
-                Cohort c = cohorts[i];
-                if (c.Age <= SuccessionTimeStep)
-                {
-                    youngCount++;
-                    totalWoodC += c.Wood;
-                    totalFolC += c.Fol;
-                    totalNSC += c.NSC;
-                    totalRootC += c.Root;
-                     leaf_on=c.Leaf_On;
-                     totalfolshead += c.FolShed;
-                 }
-                else
-                    break;
-            }
-            
-            if (youngCount > 1) {
-                cohorts.RemoveRange(cohorts.Count - youngCount, youngCount);
-
-                cohorts.Add(new Cohort(this.species, (ushort)(BiomassCohorts.Cohorts.SuccessionTimeStep - 1), totalFolC, totalfolshead,totalWoodC, totalNSC, totalRootC,  Year, leaf_on));
-
-                return youngCount;
-            }
-            return youngCount;
-        }
-
+         
         //---------------------------------------------------------------------
         public void IncrementCohortsAge()
         {
@@ -182,18 +127,18 @@ namespace Landis.Library.BiomassCohortsPnET
             
         }
         //---------------------------------------------------------------------
-        public void RemoveCohort(int        index,
-                                  ICohort    cohort,
+        public void RemoveCohort( Cohort    cohort,
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
-            cohorts.RemoveAt(index);
+            cohorts.Remove(cohort); //.RemoveAt(index);
             Cohort.Died(this, cohort, site, disturbanceType);
         }
+         
         //----------------------------------------------------------------------
         // MarkCohorts
         //---------------------------------------------------------------------
-        public ICohort Get(int index)
+        public Cohort Get(int index)
         {
             try
             {
@@ -211,7 +156,7 @@ namespace Landis.Library.BiomassCohortsPnET
             isMaturePresent = false;
             for (int i = cohorts.Count - 1; i >= 0; i--)
             {
-                Cohort cohort = new Cohort(species, cohorts[i]);
+                Cohort cohort = new Cohort(cohorts[i]);
                 disturbance.ReduceOrKillMarkedCohort(cohort);
                 double defoliation = disturbance.CumulativeDefoliation();
                 cohort.Fol *= 1 - (float)defoliation;
@@ -259,8 +204,7 @@ namespace Landis.Library.BiomassCohortsPnET
                     }
                     else
                     {
-                        RemoveCohort(i, cohort, disturbance.CurrentSite,
-                                     disturbance.Type);
+                        RemoveCohort(cohort, disturbance.CurrentSite, disturbance.Type);
                         cohort = null;
                     }
                 }
@@ -291,11 +235,10 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 if (isSpeciesCohortDamaged[i])
                 {
-                    Cohort cohort = new Cohort(species, cohorts[i]);
+                    Cohort cohort = new Cohort(cohorts[i]);
                     totalReduction += cohort.Wood;
 
-                    RemoveCohort(i, cohort, disturbance.CurrentSite,
-                                 disturbance.Type);
+                    RemoveCohort(cohort, disturbance.CurrentSite, disturbance.Type);
                     Cohort.KilledByAgeOnlyDisturbance(this, cohort, disturbance.CurrentSite, disturbance.Type);
 
                     cohort = null;
@@ -322,7 +265,8 @@ namespace Landis.Library.BiomassCohortsPnET
         IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)
-                yield return new Cohort(species, data);
+                yield return data;
+            //yield return new Cohort(data);
         }
         IEnumerator IEnumerable.GetEnumerator()
         {

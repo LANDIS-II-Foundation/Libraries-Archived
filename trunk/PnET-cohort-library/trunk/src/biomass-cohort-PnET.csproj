@@ -44,7 +44,8 @@
     <Reference Include="Landis.Library.AgeOnlyCohorts">
       <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.AgeOnlyCohorts.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Biomass">
+    <Reference Include="Landis.Library.Biomass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Biomass.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.BiomassCohorts">
