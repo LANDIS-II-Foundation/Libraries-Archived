@@ -110,11 +110,12 @@ namespace Landis.Library.Climate
             {
                 throw new ApplicationException("Error in parsing climate-generator input file: invalid value for File Format provided. Possible values are: " + climateTimeSeries_PossibleValues);
             }
-            // ADD DAILY INPUT/OUTPUT VERIFICATION: IF THE USER REQUESTS DAILY OUTPUTS, MUST HAVE DAILY INPUTS
-            // IF (CASE)
-            // {
-            // throw new ApplicationException("X must be Y")
-            // }
+
+            if (parameters.ClimateTimeSeries.ToLower().Contains("daily") && !parameters.ClimateFileFormat.ToLower().Contains("daily"))
+            {
+                throw new ApplicationException("You are requesting a Daily Time Step but not inputting daily data:" + parameters.ClimateTimeSeries + " and " + parameters.ClimateFileFormat);
+            }
+
             
             return parameters; 
 

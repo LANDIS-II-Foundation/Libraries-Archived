@@ -33,10 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
-      <HintPath>..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Core">
-      <HintPath>..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Core.dll</HintPath>
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Metadata">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Metadata.dll</HintPath>
