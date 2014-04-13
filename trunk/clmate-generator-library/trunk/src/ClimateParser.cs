@@ -18,16 +18,17 @@ namespace Landis.Library.Climate
     {
 
         //private IEcoregionDataset ecoregionDataset;
-        
         //---------------------------------------------------------------------
-        public override string LandisDataValue
-        {
-            get
-            {
-                return "Climate Data";
-            }
+        private string _LandisDataValue = "Climate Data";
+
+        public override string LandisDataValue 
+        { 
+            get { 
+                return _LandisDataValue; 
+            } 
         }
         //---------------------------------------------------------------------
+
         public ClimateParser()
         {
             //this.ecoregionDataset = ecoregionDataset;
@@ -62,7 +63,9 @@ namespace Landis.Library.Climate
             InputVar<double> stdDevTemp = new InputVar<double>("Monthly Std Deviation Temperature Value");
             InputVar<double> avgPpt     = new InputVar<double>("Monthly Precipitation Value");
             InputVar<double> stdDevPpt  = new InputVar<double>("Monthly Std Deviation Precipitation Value");
-            InputVar<double> par        = new InputVar<double>("Monthly Photosynthetically Active Radiation Value");
+            InputVar<double> par = new InputVar<double>("Monthly Photosynthetically Active Radiation Value");
+            InputVar<double> avgVarTemp = new InputVar<double>("Monthly Variance Temperature Value");
+            InputVar<double> avgPptVarTemp = new InputVar<double>("Monthly Precipitation Variance Temperature Value");
             
             while (! AtEndOfInput)
             {
@@ -105,11 +108,58 @@ namespace Landis.Library.Climate
                 
                 ReadValue(par, currentLine);
                 climateRecord.PAR = par.Value;
-                
-                allData[yr][ecoregion.Index, mo-1] = climateRecord;
-                
-                CheckNoDataAfter("the " + par.Name + " column",
-                                 currentLine);
+
+                //if (currentLine.ToString().ToLower().Contains("avgvartemp"))
+                //{
+                //if(!Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("standard"))
+                //{
+                try
+                {
+                    ReadValue(avgVarTemp, currentLine);
+                    climateRecord.AvgVarTemp = avgVarTemp.Value;
+
+                    ReadValue(avgPptVarTemp, currentLine);
+                    climateRecord.AvgPptVarTemp = avgPptVarTemp.Value;
+
+                    allData[yr][ecoregion.Index, mo - 1] = climateRecord;
+
+                    CheckNoDataAfter("the " + avgPptVarTemp.Name + " column",
+                                     currentLine);
+                }
+                catch (InputVariableException ex)
+                {
+
+
+                    if (ex is InputVariableException) // This we know how to handle.
+                    {
+                        allData[yr][ecoregion.Index, mo - 1] = climateRecord;
+
+                        CheckNoDataAfter("the " + par.Name + " column",
+                            currentLine);
+                    }
+                }
+
+                //if(!Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("standard"))
+                ////{
+                //    ReadValue(avgVarTemp, currentLine);
+                //    climateRecord.AvgVarTemp = avgVarTemp.Value;
+
+                //    ReadValue(avgPptVarTemp, currentLine);
+                //    climateRecord.AvgPptVarTemp = avgPptVarTemp.Value;
+
+                //    allData[yr][ecoregion.Index, mo - 1] = climateRecord;
+                    
+                //    CheckNoDataAfter("the " + avgPptVarTemp.Name + " column",
+                //                     currentLine);
+                //}
+
+                //else
+                //{
+                //    allData[yr][ecoregion.Index, mo - 1] = climateRecord;
+
+                //    CheckNoDataAfter("the " + par.Name + " column",
+                //                     currentLine);
+                //}
 
                 GetNextLine();
                 

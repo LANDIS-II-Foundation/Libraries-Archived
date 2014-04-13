@@ -1,14 +1,12 @@
-//  Copyright 2009 Conservation Biology Institute
-//  Authors:  Robert M. Scheller
-//  License:  Available at  
-//  http://www.landis-ii.org/developers/LANDIS-IISourceCodeLicenseAgreement.pdf
+//  Copyright: Portland State University 2009-2014
+//  Authors:  Robert M. Scheller, Amin Almassian
 
 using System.Collections.Generic;
 
 namespace Landis.Library.Climate
 {
     /// <summary>
-    /// Weather parameters for each month.
+    /// Weather parameters for each month/day
     /// </summary>
     public interface IClimateRecord
     {
@@ -19,6 +17,16 @@ namespace Landis.Library.Climate
         double AvgPpt{get;set;}
         double StdDevPpt{get;set;}
         double PAR{get;set;}
+        double AvgVarTemp { get; set; }
+        double AvgPptVarTemp { get; set; }
+        double RHMean { get; set; }
+        double RHVar { get; set; }
+        double RHSTD { get; set; }
+        double WindSpeedMean { get; set; }
+        double WindSpeedVar { get; set; }
+        double WindSpeedSTD { get; set; }
+
+        
         
     }
 
@@ -32,7 +40,16 @@ namespace Landis.Library.Climate
         private double avgPpt;
         private double stdDevPpt;
         private double par;
+        private double avgVarTemp;
+        private double avgPptVarTemp;
+        private double rhMean;
+        private double rhVar;
+        private double rhSTD;
+        private double windSpeedMean;
+        private double windSpeedVar;
+        private double windSpeedSTD;
 
+        
         public double AvgMinTemp
         {
             get {
@@ -89,13 +106,115 @@ namespace Landis.Library.Climate
             }
         }
 
+        public double AvgVarTemp
+        {
+            get
+            {
+                return avgVarTemp;
+            }
+            set
+            {
+                avgVarTemp = value;
+            }
+        }
+        public double AvgPptVarTemp
+        {
+            get
+            {
+                return avgPptVarTemp;
+            }
+            set
+            {
+                avgPptVarTemp = value;
+            }
+        }
+
+        public double RHMean
+        {
+            get
+            {
+                return rhMean;
+            }
+            set
+            {
+                rhMean = value;
+            }
+        }
+        public double RHVar
+        {
+            get
+            {
+                return rhVar;
+            }
+            set
+            {
+                rhVar = value;
+            }
+        }
+        public double RHSTD
+        {
+            get
+            {
+                return rhSTD;
+            }
+            set
+            {
+                rhSTD = value;
+            }
+        }
+
+        public double WindSpeedMean
+        {
+            get
+            {
+                return windSpeedMean;
+            }
+            set
+            {
+                windSpeedMean = value;
+            }
+        }
+        public double WindSpeedVar
+        {
+            get
+            {
+                return windSpeedVar;
+            }
+            set
+            {
+                windSpeedVar = value;
+            }
+        }
+        public double WindSpeedSTD
+        {
+            get
+            {
+                return windSpeedSTD;
+            }
+            set
+            {
+                windSpeedSTD = value;
+            }
+        }
+        
+      
+
         public ClimateRecord(
                             double avgMinTemp,
                             double avgMaxTemp,
                             double stdDevTemp,
                             double avgPpt,
                             double stdDevPpt,
-                            double par
+                            double par,
+                            double avgVarTemp,
+                            double avgPptVarTemp,
+                            double rhMean,
+                            double rhVar,
+                            double rhSTD,
+                            double windSpeedMean,
+                            double windSpeedVar,
+                            double windSpeedSTD 
+                            
                             )
         {
             this.avgMinTemp = avgMinTemp;
@@ -104,6 +223,18 @@ namespace Landis.Library.Climate
             this.avgPpt = avgPpt;
             this.stdDevPpt = stdDevPpt;
             this.par = par;
+            this.avgVarTemp = avgVarTemp;
+            this.avgPptVarTemp = avgPptVarTemp;
+            this.rhMean = rhMean;
+            this.rhVar = rhVar;
+            this.rhSTD = rhSTD;
+            this.windSpeedMean = windSpeedMean;
+            this.windSpeedVar = windSpeedVar;
+            this.windSpeedSTD = windSpeedSTD;
+
+
+                          
+
         }
         
         public ClimateRecord()
@@ -114,7 +245,20 @@ namespace Landis.Library.Climate
             this.avgPpt = -99.0;
             this.stdDevPpt = -99.0;
             this.par = -99.0;
+            this.avgVarTemp = -99.0;
+            this.avgPptVarTemp = -99.0;
+            this.rhMean = -99.0;
+            this.rhVar = -99.0;
+            this.rhSTD = -99.0;
+            this.windSpeedMean = -99.0;
+            this.windSpeedVar = -99.0;
+            this.windSpeedSTD = -99.0;
+
+
         }
-        
+
+
+
+     
     }
 }
