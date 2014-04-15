@@ -131,7 +131,7 @@ namespace Landis.Library.BiomassCohortsPnET
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
-            cohorts.Remove(cohort); //.RemoveAt(index);
+            cohorts.Remove(cohort);  
             Cohort.Died(this, cohort, site, disturbanceType);
         }
          

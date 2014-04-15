@@ -129,6 +129,7 @@ namespace Landis.Library.Succession
                     {
                         throw new ApplicationException(string.Format("Unknown map code for initial community: {0}", mapCode));
                     }
+
                     InitializeSite(activeSite, community);
                 }
             }

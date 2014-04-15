@@ -18,7 +18,7 @@ namespace Landis.Library.BiomassCohortsPnET
          BiomassCohorts.ISiteCohorts
     {
          private List<SpeciesCohorts> cohorts;
-
+         private Landis.Library.Biomass.Species.AuxParm<int> establishments;
         //---------------------------------------------------------------------
         
 
@@ -34,6 +34,15 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             throw new System.Exception("Incompatibility issue");
         }
+        
+        public Landis.Library.Biomass.Species.AuxParm<int> Establishments
+        {
+            get
+            {
+                return establishments;
+            }
+        }
+
         public int ReduceOrKillBiomassCohorts(IDisturbance disturbance)
         {
             float totalReduction = 0;
@@ -221,14 +230,6 @@ namespace Landis.Library.BiomassCohortsPnET
                 }
             }
         }
-        
-        
-        //---------------------------------------------------------------------
-
-       
-        //---------------------------------------------------------------------
-
-
         public bool IsMaturePresent(ISpecies species)
         {
             for (int i = 0; i < cohorts.Count; i++)

@@ -35,6 +35,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 folshed = value;
             }
         }
+       
         public int Biomass
         {
             get

@@ -46,9 +46,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public int ReduceOrKillMarkedCohort(Landis.Library.BiomassCohorts.ICohort cohort)
         {
          
-            return (int)cohort.Biomass;
-            
-            //throw new System.Exception("Incompatibitlity");
+            return cohort.Biomass;
         }
         
         public int ReduceOrKillMarkedCohort(ICohort cohort)
