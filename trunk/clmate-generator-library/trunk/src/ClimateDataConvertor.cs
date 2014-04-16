@@ -1619,7 +1619,7 @@ namespace Landis.Library.Climate
 
                         for (int j = firstYear; j <= lastYear; j++)
                         {
-                            int numberOfMonths = 0;
+                            int numberOfMonths = 1;
 
                             for (int i = 0; i < climateFileActiveEcoregions.Count; i++)
                             {
