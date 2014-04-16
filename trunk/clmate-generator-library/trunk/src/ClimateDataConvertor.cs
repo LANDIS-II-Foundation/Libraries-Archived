@@ -584,17 +584,17 @@ namespace Landis.Library.Climate
                                                 if (!yearsdays.Keys.Contains(j))
                                                 {
                                                     yearsdays.Add(j, daysInYear);
-                                                    daysInYear = 0;
+                                                    daysInYear = 1;
                                                 }
 
                                                 if (climateFileFormat.ToLower().Contains("daily") && daysInYear < 365)
                                                 {
-                                                    throw new ApplicationException("Daily input data for year " + currentYear + " does not have at least 365 days");
+                                                    throw new ApplicationException("Daily input data for year " + currentYear + " does not have at least 365 days.  It has " + daysInYear + " days.");
                                                 }
                                             }
                                             
 
-                                            daysInYear = 0;
+                                            daysInYear = 1;
                                             tempEco = i;
                                             currentMonth = 1;
                                             AverageMax = 0;
@@ -1081,19 +1081,19 @@ namespace Landis.Library.Climate
                                             if (!yearsdays.Keys.Contains(j))
                                             {
                                                 yearsdays.Add(j, daysInYear);
-                                                daysInYear = 0;
+                                                daysInYear = 1;
                                             }
                                             
                                             if (climateFileFormat.ToLower().Contains("daily") && daysInYear < 365)
                                             {
-                                                throw new ApplicationException("Daily input data for year " + currentYear + " does not have at least 365 days");
+                                                throw new ApplicationException("Daily input data for year " + currentYear + " does not have at least 365 days.  It has " + daysInYear + " days.");
                                             }
 
                                         }
 
 
 
-                                        daysInYear = 0;
+                                        daysInYear = 1;
                                         tempEco = i;
                                         currentMonth = 1;
                                         AverageMax = 0;
