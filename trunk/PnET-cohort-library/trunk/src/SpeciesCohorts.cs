@@ -126,12 +126,21 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             
         }
+        private void CohortsToConsole(string msg)
+        {
+            System.Console.WriteLine(msg);
+            foreach (Cohort c in cohorts)
+            {
+                System.Console.WriteLine(c.Species.Name);
+            }
+        }
         //---------------------------------------------------------------------
         public void RemoveCohort( Cohort    cohort,
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
-            cohorts.Remove(cohort);  
+            
+            cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, disturbanceType);
         }
          
@@ -235,13 +244,14 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 if (isSpeciesCohortDamaged[i])
                 {
-                    Cohort cohort = new Cohort(cohorts[i]);
-                    totalReduction += cohort.Wood;
+                    //Cohort cohort = new Cohort(cohorts[i]);
+                    totalReduction += cohorts[i].Wood;
 
-                    RemoveCohort(cohort, disturbance.CurrentSite, disturbance.Type);
-                    Cohort.KilledByAgeOnlyDisturbance(this, cohort, disturbance.CurrentSite, disturbance.Type);
+                    Cohort.KilledByAgeOnlyDisturbance(this, cohorts[i], disturbance.CurrentSite, disturbance.Type);
+                    RemoveCohort(cohorts[i], disturbance.CurrentSite, disturbance.Type);
+                    
 
-                    cohort = null;
+                    //cohort = null;
                 }
                 else if (cohorts[i].Age >= species.Maturity)
                 {
