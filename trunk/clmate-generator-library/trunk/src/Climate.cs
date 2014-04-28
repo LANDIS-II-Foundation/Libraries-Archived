@@ -277,7 +277,7 @@ namespace Landis.Library.Climate
                 Climate.randSelectedTimeSteps_spinup = new int[maxSpeciesAge]; 
                 for (int i = 0; i < maxSpeciesAge; i++)
                     Climate.randSelectedTimeSteps_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
-
+                
             }
             foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
             {
@@ -500,10 +500,10 @@ namespace Landis.Library.Climate
                 spinup_allData_granularity = TemporalGranularity.Monthly;
 
             if (timeSeries.Contains("Daily"))
-                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
+                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata_JM(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
             
             else if (timeSeries.Contains("Monthly"))
-                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
+                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata_JM(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
 
                 //string readableFile = "";
             //if (timeSeries.Contains("MonthlyStandard"))

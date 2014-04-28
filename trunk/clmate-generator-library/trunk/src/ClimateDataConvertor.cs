@@ -54,6 +54,246 @@ namespace Landis.Library.Climate
         private static Dictionary<int, int> yearsdays = new Dictionary<int, int>();
         public static int daysInYear = 0;
 
+        // JM: private enum used in parsing
+        private enum FileSection
+        {
+            Precipitation = 1,
+            MaxTemperature = 2,
+            MinTemperature = 3,
+            RH = 4,
+            Windspeed = 5
+        }
+
+        public static void Convert_USGS_to_ClimateData_FillAlldata_JM(TemporalGranularity timeStep, string climateFile, string climateFileFormat, Climate.Phase climatePhase)
+        {
+            Dictionary<int, IClimateRecord[,]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
+            if (climatePhase == Climate.Phase.Future_Climate)
+                allDataRef = Climate.Future_AllData;
+
+            if (climatePhase == Climate.Phase.SpinUp_Climate)
+                allDataRef = Climate.Spinup_AllData;
+
+            // parse the input file into lists of timestamps and corresponding climate records arrays
+            List<string> timeStamps;
+            List<ClimateRecord[]> climateRecords;
+            Convert_USGS_to_ClimateData_JM(timeStep, climateFile, climateFileFormat, out timeStamps, out climateRecords);
+
+            // break up the lists by year and ecoregion to help shoe-horn into the final data structure - would be better and faster if this were not a rectangular array
+            var yearDictionary = new Dictionary<int, List<ClimateRecord>[]>();
+
+            for (var j = 0; j < timeStamps.Count; ++j)
+            {
+                var year = int.Parse(timeStamps[j].Substring(0, 4));
+
+                // grab the lists for the year, or make a new list if this is a new year
+                // yearRecords contain the ClimateRecords for each ecoregion for this year
+                List<ClimateRecord>[] yearRecords;
+                if (!yearDictionary.TryGetValue(year, out yearRecords))
+                {
+                    yearDictionary[year] = yearRecords = new List<ClimateRecord>[Climate.ModelCore.Ecoregions.Count];
+                    for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
+                        yearRecords[i] = new List<ClimateRecord>();
+                }
+
+                // transfer the climate records into the year records
+                for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
+                    yearRecords[i].Add(climateRecords[j][i]);
+            }
+
+
+            // generate the final data structure
+            allDataRef.Clear();
+            foreach (var key in yearDictionary.Keys
+                )
+            {
+                var yearRecords = yearDictionary[key];
+                
+                // every ecoregion item in yearRecords will have a list of the same length, so just use the first to dimension the rectangular array below
+                allDataRef[key] = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, yearRecords[0].Count];
+                
+                // transfer climate records to the final data structure
+                for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
+                    for (var j = 0; j < yearRecords[0].Count; ++j)
+                        allDataRef[key][i, j] = yearRecords[i][j];
+            }
+        }
+
+        private static void Convert_USGS_to_ClimateData_JM(TemporalGranularity sourceTemporalGranularity, string climateFile, string climateFileFormat, out List<string> timeStamps, out List<ClimateRecord[]> climateRecords)
+        {
+            // each item it timeStamps is the timeStamp 'key' for the data
+            // each item in climateRecords is of length Climate.ModelCore.Ecoregions.Count, and is filled in with data from the input file, indexed by Ecoregion.Index.
+
+            timeStamps = new List<string>();
+            climateRecords = new List<ClimateRecord[]>();
+
+            // get trigger words for parsing based on file format
+            ClimateFileFormatProvider format = new ClimateFileFormatProvider(climateFileFormat);
+
+            StreamReader sreader;
+
+            try
+            {
+                sreader = new StreamReader(climateFile);
+            }
+            catch
+            {
+                throw new ApplicationException("Error in ClimateDataConvertor: Cannot open climate file" + climateFile);
+            }
+
+            Climate.ModelCore.UI.WriteLine("   Converting raw data from text file: {0}, Format={1}, Temporal={2}.", climateFile, climateFileFormat.ToLower(), sourceTemporalGranularity);
+
+            // maps from ecoregion column index in the input file to the ecoregion.index for the region
+            int[] ecoRegionIndexMap = null;
+            var ecoRegionCount = 0;
+
+            var rowIndex = -1;
+            var sectionIndex = -1;
+            FileSection section = 0;
+
+            while (sreader.Peek() >= 0)
+            {
+                var fields = sreader.ReadLine().Replace(" ", "").Split(',').ToList();    // JM: don't know if stripping blanks is needed, but just in case
+
+                // check for trigger word
+                if (fields[0].StartsWith("#"))
+                {
+                    sectionIndex++;
+
+                    // determine which section we're in
+                    var triggerWord = fields[0].TrimStart('#');   // remove the leading "#"
+
+                    if (triggerWord.Equals(format.PrecipTriggerWord, StringComparison.OrdinalIgnoreCase))
+                        section = FileSection.Precipitation;
+                    else if (triggerWord.Equals(format.MaxTempTriggerWord, StringComparison.OrdinalIgnoreCase))
+                        section = FileSection.MaxTemperature;
+                    else if (triggerWord.Equals(format.MinTempTriggerWord, StringComparison.OrdinalIgnoreCase))
+                        section = FileSection.MinTemperature;
+                    else if (triggerWord.Equals(format.RhTriggerWord, StringComparison.OrdinalIgnoreCase))
+                        section = FileSection.RH;
+                    else if (triggerWord.Equals(format.WindSpeedTriggerWord, StringComparison.OrdinalIgnoreCase))
+                        section = FileSection.Windspeed;
+                    else
+                        throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Unrecognized trigger word '{0}' in climate file '{1}'.", triggerWord, climateFile));
+
+                    // if this is the first section then parse the ecoregions, etc.
+                    if (sectionIndex == 0)
+                    {
+                        // read next line to get ecoregion headers
+                        var ecoRegionHeaders = sreader.ReadLine().Replace(" ", "").Split(',').ToList();
+                        ecoRegionHeaders.RemoveAt(0);   // remove blank cell at the beginning of ecoregion header row
+
+                        // JM: the next line assumes all input files have exactly three groups of columns: Mean, Variance, Std_dev
+                        ecoRegionCount = ecoRegionHeaders.Count / 3;
+
+                        if (ecoRegionCount == 0)
+                            throw new ApplicationException(string.Format("Error in ClimateDataConvertor: climate file '{0}' contains no ecoregion data.", climateFile));
+
+                        // determine the map from ecoregions in this file to ecoregion indicies in ModelCore
+                        ecoRegionIndexMap = new int[ecoRegionCount];
+                        for (var i = 0; i < ecoRegionCount; ++i)
+                        {
+                            IEcoregion eco = Climate.ModelCore.Ecoregions[ecoRegionHeaders[i]];     // JM:  Ecoregions appear to be indexed by string name, but I don't know if it is case-sensitive.
+                            if (eco != null && eco.Active)
+                                ecoRegionIndexMap[i] = eco.Index;
+                            else
+                                throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Ecoregion name '{0}' in climate file '{1}' is not recognized or is inactive", ecoRegionHeaders[i], climateFile));
+                        }
+                    }
+                    else
+                        // skip ecoregion header line
+                        sreader.ReadLine();
+
+                    // skip data headers
+                    sreader.ReadLine();
+
+                    // get next line as first line of data
+                    fields = sreader.ReadLine().Replace(" ", "").Split(',').ToList();
+
+                    // reset row index
+                    rowIndex = -1;
+                }
+
+
+                // **
+                // process line of data
+                
+                ++rowIndex;
+
+                // grab the key as the first field and remove it from the data
+                var key = fields[0];
+                fields.RemoveAt(0);
+
+                // if this is the first section then add key to timestamps and initialize the climate records array
+                //  otherwise, grab the records for this line
+                ClimateRecord[] records;
+                if (sectionIndex == 0)
+                {
+                    timeStamps.Add(key);
+                    records = new ClimateRecord[Climate.ModelCore.Ecoregions.Count];
+                    for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
+                        records[i] = new ClimateRecord();
+
+                    climateRecords.Add(records);                   
+                }
+                else
+                {
+                    records = climateRecords[rowIndex];
+
+                    // check that the timestamp key order matches
+                    if (key != timeStamps[rowIndex])
+                        throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Timestamp order mismatch in section '{0}' timestamp '{1}' in climate file '{2}'.", section, key, climateFile));
+                }
+
+                for (var i = 0; i < ecoRegionCount; ++i)
+                {
+                    var index = ecoRegionIndexMap[i];
+
+                    // JM: the next line assumes all input files have exactly three groups of columns: Mean, Variance, Std_dev
+                    var mean = double.Parse(fields[i]);
+                    var variance = double.Parse(fields[ecoRegionCount + i]);
+                    var stdev = double.Parse(fields[2 * ecoRegionCount + i]);
+
+                    switch (section)
+                    {
+                        case FileSection.Precipitation:
+                            records[index].AvgPpt = mean * format.PrecipTransformation;
+                            records[index].StdDevPpt = stdev * format.PrecipTransformation;
+                            break;
+
+                        case FileSection.MaxTemperature:
+                        case FileSection.MinTemperature:
+
+                            if (section == FileSection.MaxTemperature)
+                                records[index].AvgMaxTemp = mean;
+                            else
+                                records[index].AvgMinTemp = mean;
+
+                            // for temperature variance wait until both min and max have been set to get the final value
+                            if (records[index].AvgVarTemp == -99.0)
+                                records[index].AvgVarTemp = variance;        // set AvgVarTemp to the first value we have (min or max)
+                            else
+                                // have both min and max, so average the variance
+                                records[index].AvgVarTemp = (records[index].AvgVarTemp + variance) / 2.0;
+
+                            records[index].StdDevTemp = System.Math.Sqrt(records[index].AvgVarTemp);      // this will set the st dev even if the data file only has one temperature section
+                            break;
+
+                        case FileSection.RH:
+                            records[index].RHMean = mean;
+                            records[index].RHVar = variance;
+                            records[index].RHSTD = stdev;
+                            break;
+
+                        case FileSection.Windspeed:
+                            records[index].WindSpeedMean = mean;
+                            records[index].WindSpeedVar = variance;
+                            records[index].WindSpeedSTD = stdev;
+                            break;
+                    }
+                }                
+            }
+        }
+
         //--------------------------------------------------------------------
         /// <summary>
         /// This function converts Monthly to Monthly and Daily to Monthly
