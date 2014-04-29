@@ -158,7 +158,6 @@ namespace Landis.Library.Climate
         //---------------------------------------------------------------------
         private static void Write(IClimateRecord[,] TimestepData, int year, string period)
         {
-
             //spinup_allData.
             foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
             {
@@ -285,6 +284,8 @@ namespace Landis.Library.Climate
                 IClimateRecord[,] timestepData = timeStep.Value;
                 int year = timeStep.Key;
                 //Write(timestepData, year, "SpinUp");
+
+                //Climate.ModelCore.UI.WriteLine("Spinup: key: " + year + ", Ecoregion Count: " + Climate.ModelCore.Ecoregions.Count);
                 
                 Spinup_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
                 Spinup_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);
@@ -296,7 +297,9 @@ namespace Landis.Library.Climate
                 IClimateRecord[,] timestepData = timeStep.Value;
                 int year = timeStep.Key;
                 //Write(timestepData, year, "Future");
-                
+
+                //Climate.ModelCore.UI.WriteLine("Future: key: " + year + ", Ecoregion Count: " + Climate.ModelCore.Ecoregions.Count);
+
                 Future_MonthlyData.Add(timeStep.Key, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);  
                 Future_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);
                 Climate.Write(timestepData, timeStep.Key, Climate.Phase.Future_Climate.ToString());

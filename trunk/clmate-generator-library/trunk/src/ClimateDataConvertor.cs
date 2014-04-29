@@ -103,8 +103,7 @@ namespace Landis.Library.Climate
 
             // generate the final data structure
             allDataRef.Clear();
-            foreach (var key in yearDictionary.Keys
-                )
+            foreach (var key in yearDictionary.Keys)
             {
                 var yearRecords = yearDictionary[key];
                 
