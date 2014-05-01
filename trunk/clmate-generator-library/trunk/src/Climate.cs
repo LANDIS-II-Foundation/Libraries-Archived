@@ -18,8 +18,8 @@ namespace Landis.Library.Climate
 
         private static TemporalGranularity future_allData_granularity;
         private static TemporalGranularity spinup_allData_granularity;
-        private static Dictionary<int, IClimateRecord[,]> future_allData;
-        private static Dictionary<int, IClimateRecord[,]> spinup_allData;
+        private static Dictionary<int, IClimateRecord[][]> future_allData;
+        private static Dictionary<int, IClimateRecord[][]> spinup_allData;
         private static int[] randSelectedTimeSteps_future;
         private static int[] randSelectedTimeSteps_spinup;
         //private static IClimateRecord[,] timestepData;
@@ -97,14 +97,14 @@ namespace Landis.Library.Climate
                 return spinup_allData_granularity;
             }
         }
-        public static Dictionary<int, IClimateRecord[,]> Future_AllData 
+        public static Dictionary<int, IClimateRecord[][]> Future_AllData 
         {
             get
             {
                 return future_allData;
             }
         }
-        public static Dictionary<int, IClimateRecord[,]> Spinup_AllData
+        public static Dictionary<int, IClimateRecord[][]> Spinup_AllData
         {
             get
             {
@@ -156,7 +156,7 @@ namespace Landis.Library.Climate
 
 
         //---------------------------------------------------------------------
-        private static void Write(IClimateRecord[,] TimestepData, int year, string period)
+        private static void Write(IClimateRecord[][] TimestepData, int year, string period)
         {
             //spinup_allData.
             foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
@@ -173,11 +173,11 @@ namespace Landis.Library.Climate
                         ml.Month = month + 1;
                         ml.EcoregionName = ecoregion.Name;
                         ml.EcoregionIndex = ecoregion.Index;
-                        ml.min_airtemp = TimestepData[ecoregion.Index, month].AvgMinTemp;
-                        ml.max_airtemp = TimestepData[ecoregion.Index, month].AvgMaxTemp;
-                        ml.std_temp = TimestepData[ecoregion.Index, month].StdDevTemp;
-                        ml.ppt = TimestepData[ecoregion.Index, month].AvgPpt;
-                        ml.std_ppt = TimestepData[ecoregion.Index, month].StdDevPpt;
+                        ml.min_airtemp = TimestepData[ecoregion.Index][month].AvgMinTemp;
+                        ml.max_airtemp = TimestepData[ecoregion.Index][month].AvgMaxTemp;
+                        ml.std_temp = TimestepData[ecoregion.Index][month].StdDevTemp;
+                        ml.ppt = TimestepData[ecoregion.Index][month].AvgPpt;
+                        ml.std_ppt = TimestepData[ecoregion.Index][month].StdDevPpt;
 
                         MonthlyLog.AddObject(ml);
                         MonthlyLog.WriteToFile();
@@ -197,8 +197,8 @@ namespace Landis.Library.Climate
             MetadataHandler.InitializeMetadata(1, modelCore);
 
             ModelCore.UI.WriteLine("   Loading weather data ...");
-            Climate.future_allData = new Dictionary<int, IClimateRecord[,]>();
-            Climate.spinup_allData = new Dictionary<int, IClimateRecord[,]>();
+            Climate.future_allData = new Dictionary<int, IClimateRecord[][]>();
+            Climate.spinup_allData = new Dictionary<int, IClimateRecord[][]>();
 
             Future_MonthlyData = new Dictionary<int, AnnualClimate_Monthly[]>();
             Spinup_MonthlyData = new Dictionary<int, AnnualClimate_Monthly[]>();
@@ -278,10 +278,10 @@ namespace Landis.Library.Climate
                     Climate.randSelectedTimeSteps_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
                 
             }
-            foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
+            foreach (KeyValuePair<int, IClimateRecord[][]> timeStep in spinup_allData)
             {
                 //Climate.TimestepData = timeStep.Value;
-                IClimateRecord[,] timestepData = timeStep.Value;
+                IClimateRecord[][] timestepData = timeStep.Value;
                 int year = timeStep.Key;
                 //Write(timestepData, year, "SpinUp");
 
@@ -291,10 +291,10 @@ namespace Landis.Library.Climate
                 Spinup_DailyData.Add(timeStep.Key, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);
                 Climate.Write(timestepData, timeStep.Key, Climate.Phase.SpinUp_Climate.ToString()); 
             }
-            foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in future_allData)
+            foreach (KeyValuePair<int, IClimateRecord[][]> timeStep in future_allData)
             {
                 //Climate.TimestepData = timeStep.Value;
-                IClimateRecord[,] timestepData = timeStep.Value;
+                IClimateRecord[][] timestepData = timeStep.Value;
                 int year = timeStep.Key;
                 //Write(timestepData, year, "Future");
 
@@ -370,7 +370,7 @@ namespace Landis.Library.Climate
             
             
             //Firt Calculate Climate Normals from Spin-up data
-            foreach (KeyValuePair<int, IClimateRecord[,]> timeStep in spinup_allData)
+            foreach (KeyValuePair<int, IClimateRecord[][]> timeStep in spinup_allData)
             {
 
                 //Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP Year = {0}.", timeStep.Key);

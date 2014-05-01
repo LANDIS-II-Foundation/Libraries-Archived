@@ -35,7 +35,9 @@ namespace Landis.Library.Climate
         {
 
             this.climatePhase = spinupOrfuture;
-            IClimateRecord[,] timestepData = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, 366];
+            IClimateRecord[][] timestepData = new IClimateRecord[Climate.ModelCore.Ecoregions.Count][];
+            for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
+                timestepData[i] = new IClimateRecord[366];
 
             string climateOption = Climate.ConfigParameters.ClimateTimeSeries;
             if (this.climatePhase == Climate.Phase.SpinUp_Climate)
@@ -80,7 +82,9 @@ namespace Landis.Library.Climate
             }
 
 
-            IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
+            //IClimateRecord[] ecoClimate = new IClimateRecord[MaxDayInYear];
+
+            var ecoClimate = timestepData[ecoregion.Index];
 
             this.Year = actualYear;
             this.AnnualPrecip = 0.0;
@@ -88,7 +92,7 @@ namespace Landis.Library.Climate
             for (int day = 0; day < MaxDayInYear; day++)
             {
 
-                ecoClimate[day] = timestepData[ecoregion.Index, day];
+                //ecoClimate[day] = timestepData[ecoregion.Index, day];
 
                 if (ecoClimate[day] != null)
                 {
@@ -131,12 +135,20 @@ namespace Landis.Library.Climate
         }
 
 
-        private IClimateRecord[,] AnnualClimate_AvgDaily(IEcoregion ecoregion, int year, double latitude)
+        private IClimateRecord[][] AnnualClimate_AvgDaily(IEcoregion ecoregion, int year, double latitude)
         {
-            IClimateRecord[,] timestepData = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, 366];
+            //what is 'year' used for?
+            var timestepData = new IClimateRecord[Climate.ModelCore.Ecoregions.Count][];
+            var avgEcoClimate = new IClimateRecord[Climate.ModelCore.Ecoregions.Count][];
+            var ecoClimateT = new IClimateRecord[Climate.ModelCore.Ecoregions.Count][];
 
-            IClimateRecord[,] avgEcoClimate = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, MaxDayInYear];
-            IClimateRecord[,] ecoClimateT = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, MaxDayInYear];
+            for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
+            {
+                timestepData[i] = new IClimateRecord[366];
+                avgEcoClimate[i] = new IClimateRecord[MaxDayInYear];
+                ecoClimateT[i] = new IClimateRecord[MaxDayInYear];
+            }
+
 
             for (int i = 0; i < MaxDayInYear; i++)
             {
@@ -165,16 +177,16 @@ namespace Landis.Library.Climate
                     else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                         timestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
 
-                    ecoClimateT[ecoregion.Index, day] = timestepData[ecoregion.Index, day]; //Climate.TimestepData[ecoregion.Index, day];
+                    ecoClimateT[ecoregion.Index][day] = timestepData[ecoregion.Index][day]; //Climate.TimestepData[ecoregion.Index, day];
 
-                    if (ecoClimateT[ecoregion.Index, day] != null)
+                    if (ecoClimateT[ecoregion.Index][day] != null)
                     {
-                        this.DailyMinTemp[day] += ecoClimateT[ecoregion.Index, day].AvgMinTemp;
-                        this.DailyMaxTemp[day] += ecoClimateT[ecoregion.Index, day].AvgMaxTemp;
-                        this.DailyVarTemp[day] += ecoClimateT[ecoregion.Index, day].AvgVarTemp;
-                        this.DailyPptVarTemp[day] += ecoClimateT[ecoregion.Index, day].AvgPptVarTemp;
-                        this.DailyPrecip[day] += ecoClimateT[ecoregion.Index, day].AvgPpt;
-                        this.DailyPAR[day] += ecoClimateT[ecoregion.Index, day].PAR;
+                        this.DailyMinTemp[day] += ecoClimateT[ecoregion.Index][day].AvgMinTemp;
+                        this.DailyMaxTemp[day] += ecoClimateT[ecoregion.Index][day].AvgMaxTemp;
+                        this.DailyVarTemp[day] += ecoClimateT[ecoregion.Index][day].AvgVarTemp;
+                        this.DailyPptVarTemp[day] += ecoClimateT[ecoregion.Index][day].AvgPptVarTemp;
+                        this.DailyPrecip[day] += ecoClimateT[ecoregion.Index][day].AvgPpt;
+                        this.DailyPAR[day] += ecoClimateT[ecoregion.Index][day].PAR;
                     }
                 }
                 this.DailyMinTemp[day] = this.DailyMinTemp[day] / allDataCount;
@@ -183,17 +195,17 @@ namespace Landis.Library.Climate
                 this.DailyPptVarTemp[day] = this.DailyPptVarTemp[day] / allDataCount;
                 this.DailyPrecip[day] = this.DailyPrecip[day] / allDataCount; //This DailyPrecip avg is the historic average so the average should be taken as opposed to summing that up.
                 this.DailyPAR[day] = this.DailyPAR[day] / allDataCount;
-                avgEcoClimate[ecoregion.Index, day] = new ClimateRecord();
-                avgEcoClimate[ecoregion.Index, day].AvgMinTemp = this.DailyMinTemp[day];
-                avgEcoClimate[ecoregion.Index, day].AvgMaxTemp = this.DailyMaxTemp[day];
-                avgEcoClimate[ecoregion.Index, day].AvgVarTemp = this.DailyVarTemp[day];
+                avgEcoClimate[ecoregion.Index][day] = new ClimateRecord();
+                avgEcoClimate[ecoregion.Index][day].AvgMinTemp = this.DailyMinTemp[day];
+                avgEcoClimate[ecoregion.Index][day].AvgMaxTemp = this.DailyMaxTemp[day];
+                avgEcoClimate[ecoregion.Index][day].AvgVarTemp = this.DailyVarTemp[day];
 
-                avgEcoClimate[ecoregion.Index, day].StdDevTemp = Math.Sqrt(DailyVarTemp[day]);
+                avgEcoClimate[ecoregion.Index][day].StdDevTemp = Math.Sqrt(DailyVarTemp[day]);
 
-                avgEcoClimate[ecoregion.Index, day].AvgPptVarTemp = this.DailyPptVarTemp[day];
-                avgEcoClimate[ecoregion.Index, day].AvgPpt = this.DailyPrecip[day];
-                avgEcoClimate[ecoregion.Index, day].StdDevPpt = Math.Sqrt(this.DailyPrecip[day]);
-                avgEcoClimate[ecoregion.Index, day].PAR = this.DailyPAR[day];
+                avgEcoClimate[ecoregion.Index][day].AvgPptVarTemp = this.DailyPptVarTemp[day];
+                avgEcoClimate[ecoregion.Index][day].AvgPpt = this.DailyPrecip[day];
+                avgEcoClimate[ecoregion.Index][day].StdDevPpt = Math.Sqrt(this.DailyPrecip[day]);
+                avgEcoClimate[ecoregion.Index][day].PAR = this.DailyPAR[day];
 
             }
             return avgEcoClimate;
