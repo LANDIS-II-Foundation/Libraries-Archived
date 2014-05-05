@@ -8,30 +8,7 @@ namespace Landis.Library.Climate
     /// <summary>
     /// Weather parameters for each month/day
     /// </summary>
-    public interface IClimateRecord
-    {
-
-        double AvgMinTemp{get;set;}
-        double AvgMaxTemp{get;set;}
-        double StdDevTemp{get;set;}
-        double AvgPpt{get;set;}
-        double StdDevPpt{get;set;}
-        double PAR{get;set;}
-        double AvgVarTemp { get; set; }
-        double AvgPptVarTemp { get; set; }
-        double RHMean { get; set; }
-        double RHVar { get; set; }
-        double RHSTD { get; set; }
-        double WindSpeedMean { get; set; }
-        double WindSpeedVar { get; set; }
-        double WindSpeedSTD { get; set; }
-
-        
-        
-    }
-
     public class ClimateRecord
-    : IClimateRecord
     {
 
         private double avgMinTemp;
@@ -199,23 +176,8 @@ namespace Landis.Library.Climate
         
       
 
-        public ClimateRecord(
-                            double avgMinTemp,
-                            double avgMaxTemp,
-                            double stdDevTemp,
-                            double avgPpt,
-                            double stdDevPpt,
-                            double par,
-                            double avgVarTemp,
-                            double avgPptVarTemp,
-                            double rhMean,
-                            double rhVar,
-                            double rhSTD,
-                            double windSpeedMean,
-                            double windSpeedVar,
-                            double windSpeedSTD 
-                            
-                            )
+        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double par, double avgVarTemp, double avgPptVarTemp, double rhMean,
+                            double rhVar, double rhSTD, double windSpeedMean, double windSpeedVar, double windSpeedSTD)
         {
             this.avgMinTemp = avgMinTemp;
             this.avgMaxTemp = avgMaxTemp;
@@ -231,10 +193,6 @@ namespace Landis.Library.Climate
             this.windSpeedMean = windSpeedMean;
             this.windSpeedVar = windSpeedVar;
             this.windSpeedSTD = windSpeedSTD;
-
-
-                          
-
         }
         
         public ClimateRecord()
@@ -253,12 +211,6 @@ namespace Landis.Library.Climate
             this.windSpeedMean = -99.0;
             this.windSpeedVar = -99.0;
             this.windSpeedSTD = -99.0;
-
-
         }
-
-
-
-     
     }
 }

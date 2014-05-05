@@ -14,7 +14,7 @@ namespace Landis.Library.Climate
     /// A parser that reads the tool parameters from text input.
     /// </summary>
     public class ClimateParser
-        : TextParser<Dictionary<int, IClimateRecord[,]>>
+        : TextParser<Dictionary<int, ClimateRecord[,]>>
     {
 
         //private IEcoregionDataset ecoregionDataset;
@@ -36,7 +36,7 @@ namespace Landis.Library.Climate
 
         //---------------------------------------------------------------------
 
-        protected override Dictionary<int, IClimateRecord[,]> Parse()
+        protected override Dictionary<int, ClimateRecord[,]> Parse()
         {
 
             InputVar<string> landisData = new InputVar<string>("LandisData");
@@ -44,7 +44,7 @@ namespace Landis.Library.Climate
             if (landisData.Value.Actual != LandisDataValue)
                 throw new InputValueException(landisData.Value.String, "The value is not \"{0}\"", LandisDataValue);
             
-            Dictionary<int, IClimateRecord[,]> allData = new Dictionary<int, IClimateRecord[,]>();
+            Dictionary<int, ClimateRecord[,]> allData = new Dictionary<int, ClimateRecord[,]>();
 
             const string nextTableName = "ClimateTable";
 
@@ -81,7 +81,7 @@ namespace Landis.Library.Climate
                 
                 if(!allData.ContainsKey(yr))
                 {
-                    IClimateRecord[,] climateTable = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, 12];
+                    ClimateRecord[,] climateTable = new ClimateRecord[Climate.ModelCore.Ecoregions.Count, 12];
                     allData.Add(yr, climateTable);
                     //UI.WriteLine("  Climate Parser:  Add new year = {0}.", yr);
                 }
@@ -89,7 +89,7 @@ namespace Landis.Library.Climate
                 ReadValue(month, currentLine);
                 int mo = month.Value.Actual;
 
-                IClimateRecord climateRecord = new ClimateRecord();
+                ClimateRecord climateRecord = new ClimateRecord();
                 
                 ReadValue(avgMinTemp, currentLine);
                 climateRecord.AvgMinTemp = avgMinTemp.Value;

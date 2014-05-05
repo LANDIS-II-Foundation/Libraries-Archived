@@ -30,7 +30,7 @@ namespace Landis.Library.Climate
         public string WindSpeedTriggerWord { get { return this.windSpeedTriggerWord; } }
         public string SelectedFormat { get { return format; } }
   
-        // JM: add properties for transformations
+        // JM: properties for transformations
         public double PrecipTransformation { get; private set; }
         public double TemperatureTransformation { get; private set; }
 

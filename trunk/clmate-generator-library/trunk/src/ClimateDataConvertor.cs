@@ -15,44 +15,46 @@ namespace Landis.Library.Climate
     public class ClimateDataConvertor
     {
 
-        private static string maxTriggerWord; //= "Tmax";// "maxtemp";//
-        private static string minTriggerWord; //= "Tmin";// "mintemp";//
-        private static string prcpTriggerWord; //= "Prcp";// "ppt";//
-        private static string rhTriggerWord;
-        private static string windSpeedTriggerWord;
+        #region old code
+        //private static string maxTriggerWord; //= "Tmax";// "maxtemp";//
+        //private static string minTriggerWord; //= "Tmin";// "mintemp";//
+        //private static string prcpTriggerWord; //= "Prcp";// "ppt";//
+        //private static string rhTriggerWord;
+        //private static string windSpeedTriggerWord;
 
-        private static Dictionary<string, double[]> climate_Dic;
-        private static int firstYear;
-        private static int lastYear;
-        private static string currentYear;
-        private static int currentMonth;
-        private static SortedList<int, Core.IEcoregion> climateFileActiveEcoregions;
-        //private static bool exportToTxtFormatFile = true;
+        //private static Dictionary<string, double[]> climate_Dic;
+        //private static int firstYear;
+        //private static int lastYear;
+        //private static string currentYear;
+        //private static int currentMonth;
+        //private static SortedList<int, Core.IEcoregion> climateFileActiveEcoregions;
+        ////private static bool exportToTxtFormatFile = true;
 
-        //-------Indices--------
-        private static int IndexMaxT_Mean = 0;
-        private static int IndexMaxT_Var = 1;
-        private static int IndexMaxT_STD = 2;
-        private static int IndexMinT_Mean = 3;
-        private static int IndexMinT_Var = 4;
-        private static int IndexMinT_STD = 5;
-        private static int IndexPrcp_Mean = 6;
-        private static int IndexPrcp_Var = 7;
-        private static int IndexPrcp_STD = 8;
+        ////-------Indices--------
+        //private static int IndexMaxT_Mean = 0;
+        //private static int IndexMaxT_Var = 1;
+        //private static int IndexMaxT_STD = 2;
+        //private static int IndexMinT_Mean = 3;
+        //private static int IndexMinT_Var = 4;
+        //private static int IndexMinT_STD = 5;
+        //private static int IndexPrcp_Mean = 6;
+        //private static int IndexPrcp_Var = 7;
+        //private static int IndexPrcp_STD = 8;
 
-        private static int IndexRH_Mean = 9;
-        private static int IndexRH_Var = 10;
-        private static int IndexRH_STD = 11;
+        //private static int IndexRH_Mean = 9;
+        //private static int IndexRH_Var = 10;
+        //private static int IndexRH_STD = 11;
 
 
-        private static int IndexwindSpeed_Mean = 12;
-        private static int IndexwindSpeed_Var = 13;
-        private static int IndexwindSpeed_STD = 14;
-        //----------------------
+        //private static int IndexwindSpeed_Mean = 12;
+        //private static int IndexwindSpeed_Var = 13;
+        //private static int IndexwindSpeed_STD = 14;
+        ////----------------------
 
-        public static Dictionary<string, double[]> Climate_Dic { get { return climate_Dic; } }
-        private static Dictionary<int, int> yearsdays = new Dictionary<int, int>();
-        public static int daysInYear = 0;
+        //public static Dictionary<string, double[]> Climate_Dic { get { return climate_Dic; } }
+        //private static Dictionary<int, int> yearsdays = new Dictionary<int, int>();
+        //public static int daysInYear = 0;
+        #endregion
 
         // JM: private enum used in parsing
         private enum FileSection
@@ -66,7 +68,7 @@ namespace Landis.Library.Climate
 
         public static void Convert_USGS_to_ClimateData_FillAlldata_JM(TemporalGranularity timeStep, string climateFile, string climateFileFormat, Climate.Phase climatePhase)
         {
-            Dictionary<int, IClimateRecord[][]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
+            Dictionary<int, ClimateRecord[][]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
             if (climatePhase == Climate.Phase.Future_Climate)
                 allDataRef = Climate.Future_AllData;
 
@@ -75,7 +77,7 @@ namespace Landis.Library.Climate
 
             // parse the input file into lists of timestamps and corresponding climate records arrays
             List<string> timeStamps;
-            List<ClimateRecord>[] climateRecords;
+            List<ClimateRecord>[] climateRecords;       // indexing: [ecoregion.Count][i]
             Convert_USGS_to_ClimateData_JM(timeStep, climateFile, climateFileFormat, out timeStamps, out climateRecords);
             
             // break up the ecoregion lists into a dictionary by year based on timeStamp keys
@@ -88,15 +90,17 @@ namespace Landis.Library.Climate
             {
                 var year = int.Parse(timeStamps[j].Substring(0, 4));
 
+                // timestamps are grouped by year in the input files
                 if (year != currentYear)
                 {
+                    // make yearRecords instance for the new year
                     currentYear = year;
                     yearData[year] = yearRecords = new List<ClimateRecord>[Climate.ModelCore.Ecoregions.Count];
                     for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
                         yearRecords[i] = new List<ClimateRecord>();
                 }
 
-                // transfer the climate records into the year records
+                // add the climate records onto the year records
                 for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
                     yearRecords[i].Add(climateRecords[i][j]);
             }
@@ -105,7 +109,7 @@ namespace Landis.Library.Climate
             // do some basic error checking
 
             if (allDataRef == null)
-                allDataRef = new Dictionary<int, IClimateRecord[][]>();
+                allDataRef = new Dictionary<int, ClimateRecord[][]>();
             else
                 allDataRef.Clear();
 
@@ -115,20 +119,21 @@ namespace Landis.Library.Climate
 
                 for (var i = 0; i < Climate.ModelCore.Ecoregions.Count; ++i)
                 {
+                    if (timeStep == TemporalGranularity.Monthly && yearData[key][i].Count != 12)
+                        throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Monthly data for year {0} in climate file '{1}' does not have 12 records.  It has {2} records.", key, climateFile, yearData[key][i].Count));
+
+                    if (timeStep == TemporalGranularity.Daily && allDataRef[key][i].Length != 365 && yearData[key][i].Count != 366)
+                        throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Daily data for year {0} in climate file '{1}' does not have 365 or 366 records.  It has {2} records.", key, climateFile, yearData[key][i].Count));
+
+                    // convert the yearRecords from List<ClimateRecord>[] to ClimateRecord[][]
                     allDataRef[key][i] = yearData[key][i].ToArray();
-
-                    if (timeStep == TemporalGranularity.Monthly && allDataRef[key][i].Length != 12)
-                        throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Monthly data for year {0} in climate file '{1}' does not have 12 records.  It has {2} records.", key, climateFile, allDataRef[key][i].Length));
-
-                    if (timeStep == TemporalGranularity.Daily && allDataRef[key][i].Length != 365 && allDataRef[key][i].Length != 366)
-                        throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Daily data for year {0} in climate file '{1}' does not have 365 or 366 records.  It has {2} records.", key, climateFile, allDataRef[key][i].Length));
                 }
             }
         }
 
         private static void Convert_USGS_to_ClimateData_JM(TemporalGranularity sourceTemporalGranularity, string climateFile, string climateFileFormat, out List<string> timeStamps, out List<ClimateRecord>[] climateRecords)
         {
-            // each item it timeStamps is the timeStamp 'key' for the data
+            // each item in timeStamps is the timeStamp 'key' for the data
             // each item in climateRecords is of length Climate.ModelCore.Ecoregions.Count, and is filled in with data from the input file, indexed by Ecoregion.Index.
 
             timeStamps = new List<string>();
@@ -167,8 +172,6 @@ namespace Landis.Library.Climate
                 // check for trigger word
                 if (fields[0].StartsWith("#"))
                 {
-                    sectionIndex++;
-
                     // determine which section we're in
                     var triggerWord = fields[0].TrimStart('#');   // remove the leading "#"
 
@@ -184,6 +187,8 @@ namespace Landis.Library.Climate
                         section = FileSection.Windspeed;
                     else
                         throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Unrecognized trigger word '{0}' in climate file '{1}'.", triggerWord, climateFile));
+
+                    sectionIndex++;
 
                     // if this is the first section then parse the ecoregions, etc.
                     if (sectionIndex == 0)
@@ -273,7 +278,7 @@ namespace Landis.Library.Climate
                             else
                                 ecoRecords[rowIndex].AvgMinTemp = mean;
 
-                            // for temperature variance wait until both min and max have been set to get the final value
+                            // for temperature variance wait until both min and max have been read before calculating the final value
                             if (ecoRecords[rowIndex].AvgVarTemp == -99.0)
                                 ecoRecords[rowIndex].AvgVarTemp = variance;        // set AvgVarTemp to the first value we have (min or max)
                             else
@@ -299,6 +304,7 @@ namespace Landis.Library.Climate
             }
         }
 
+        #region old code
         //--------------------------------------------------------------------
         /// <summary>
         /// This function converts Monthly to Monthly and Daily to Monthly
@@ -306,7 +312,7 @@ namespace Landis.Library.Climate
         /// <returns>string: file name of the converted monthly file </returns>
         //public static void Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity timeStep, string climateFile, string climateFileFormat, Climate.Phase climatePhase)
         //{
-        //    Dictionary<int, IClimateRecord[,]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
+        //    Dictionary<int, ClimateRecord[,]> allDataRef = null; //this dictionary is filled out either by Daily data or Monthly
         //    if (climatePhase == Climate.Phase.Future_Climate)
         //        allDataRef = Climate.Future_AllData;
             
@@ -348,19 +354,19 @@ namespace Landis.Library.Climate
 
         //        IEnumerable<KeyValuePair<string, double[]>> climate_Dic_currentYear = climate_Dic.Where(r => r.Key.Substring(0, 4).ToString() == currentYear);
 
-        //        IClimateRecord[,] icrs = new IClimateRecord[Climate.ModelCore.Ecoregions.Count, climate_Dic_currentYear.Count()]; // climate_Dic_currentYear.Count: number of days/months in a year
+        //        ClimateRecord[,] icrs = new ClimateRecord[Climate.ModelCore.Ecoregions.Count, climate_Dic_currentYear.Count()]; // climate_Dic_currentYear.Count: number of days/months in a year
                 
         //        for (int i = 0; i < Climate.ModelCore.Ecoregions.Count; i++) //for each ecoregion either active or inactive
         //        {
-        //            //IClimateRecord icr;
-        //            List<IClimateRecord> icrList = new List<IClimateRecord>();
+        //            //ClimateRecord icr;
+        //            List<ClimateRecord> icrList = new List<ClimateRecord>();
         //            int icrCount = 0;
         //            foreach (KeyValuePair<string, double[]> row in climate_Dic_currentYear) // foreach day/month in a certain year-ecoregion
         //            {
 
-        //                IClimateRecord icr = new ClimateRecord(row.Value[IndexMinT_Mean], row.Value[IndexMaxT_Mean], (row.Value[IndexMinT_STD] + row.Value[IndexMaxT_STD]) / 2, row.Value[IndexPrcp_Mean], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMinT_Var] + row.Value[IndexMaxT_Var]) / 2, 0, row.Value[IndexRH_Mean], row.Value[IndexRH_Var], row.Value[IndexRH_STD], row.Value[IndexwindSpeed_Mean], row.Value[IndexwindSpeed_Var], row.Value[IndexwindSpeed_STD]);
+        //                ClimateRecord icr = new ClimateRecord(row.Value[IndexMinT_Mean], row.Value[IndexMaxT_Mean], (row.Value[IndexMinT_STD] + row.Value[IndexMaxT_STD]) / 2, row.Value[IndexPrcp_Mean], row.Value[IndexPrcp_STD], 0, (row.Value[IndexMinT_Var] + row.Value[IndexMaxT_Var]) / 2, 0, row.Value[IndexRH_Mean], row.Value[IndexRH_Var], row.Value[IndexRH_STD], row.Value[IndexwindSpeed_Mean], row.Value[IndexwindSpeed_Var], row.Value[IndexwindSpeed_STD]);
         //                if (Climate.ModelCore.Ecoregions[i].Active)
-        //                    icrs[i, icrCount++] = icr;//new KeyValuePair<int, IClimateRecord>(i, icr);
+        //                    icrs[i, icrCount++] = icr;//new KeyValuePair<int, ClimateRecord>(i, icr);
 
         //            }
 
@@ -2185,27 +2191,30 @@ namespace Landis.Library.Climate
 
         //}
 
-        private static void setIndexed()
-        {
+        //private static void setIndexed()
+        //{
 
-            IndexMaxT_Mean = 0;
-            IndexMaxT_Var = 1;
-            IndexMaxT_STD = 2;
-            IndexMinT_Mean = 3;
-            IndexMinT_Var = 4;
-            IndexMinT_STD = 5;
-            IndexPrcp_Mean = 6;
-            IndexPrcp_Var = 7;
-            IndexPrcp_STD = 8;
-            IndexRH_Mean = 9;
-            IndexRH_Var = 10;
-            IndexRH_STD = 11;
+        //    IndexMaxT_Mean = 0;
+        //    IndexMaxT_Var = 1;
+        //    IndexMaxT_STD = 2;
+        //    IndexMinT_Mean = 3;
+        //    IndexMinT_Var = 4;
+        //    IndexMinT_STD = 5;
+        //    IndexPrcp_Mean = 6;
+        //    IndexPrcp_Var = 7;
+        //    IndexPrcp_STD = 8;
+        //    IndexRH_Mean = 9;
+        //    IndexRH_Var = 10;
+        //    IndexRH_STD = 11;
 
-            IndexwindSpeed_Mean = 12;
-            IndexwindSpeed_Var = 13;
-            IndexwindSpeed_STD = 14;
+        //    IndexwindSpeed_Mean = 12;
+        //    IndexwindSpeed_Var = 13;
+        //    IndexwindSpeed_STD = 14;
 
-        }
+        //}
+        
+        #endregion
+
     }
 }
 

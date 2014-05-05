@@ -50,6 +50,23 @@ namespace Landis.Library.Climate
             throw new NotImplementedException("implemented in sub classes.");
         }
 
+        public static bool IsLeapYear(int year)
+        {
+            var commonYear = false;
+            var leapYear = false;
+
+            if (year % 4 != 0)
+                commonYear = true;
+            else if (year % 100 != 0)
+                leapYear = true;
+            else if (year % 400 == 0)
+                leapYear = true;
+            else
+                commonYear = true;
+
+            return leapYear;
+        }
+
         //---------------------------------------------------------------------------
         public static int DaysInMonth(int month, int currentYear)
         //This will return the number of days in a month given the month number where
@@ -71,10 +88,8 @@ namespace Landis.Library.Climate
                 case 10:
                 case 12: return 31;
                 //...save February, etc.
-                case 2: if (currentYear % 4 == 0)
-                        return 29;
-                    else
-                        return 28;
+                case 2: 
+                        return IsLeapYear(currentYear) ? 29 : 28;
             }
             return 0;
         }
