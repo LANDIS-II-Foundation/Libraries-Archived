@@ -122,7 +122,7 @@ namespace Landis.Library.Climate
                     if (timeStep == TemporalGranularity.Monthly && yearData[key][i].Count != 12)
                         throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Monthly data for year {0} in climate file '{1}' does not have 12 records.  It has {2} records.", key, climateFile, yearData[key][i].Count));
 
-                    if (timeStep == TemporalGranularity.Daily && allDataRef[key][i].Length != 365 && yearData[key][i].Count != 366)
+                    if (timeStep == TemporalGranularity.Daily && yearData[key][i].Count != 365 && yearData[key][i].Count != 366)
                         throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Daily data for year {0} in climate file '{1}' does not have 365 or 366 records.  It has {2} records.", key, climateFile, yearData[key][i].Count));
 
                     // convert the yearRecords from List<ClimateRecord>[] to ClimateRecord[][]
