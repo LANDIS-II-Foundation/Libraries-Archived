@@ -77,7 +77,7 @@ namespace Landis.Library.Climate
                     this.timeStep = TemporalGranularity.Monthly;
                     break;
 
-                case "Mauer_daily":  //was griddedobserved
+                case "mauer_daily":  //was griddedobserved
                     this.timeStep = TemporalGranularity.Daily;
                     this.precipTriggerWord = "Prcp";
                     this.maxTempTriggerWord = "Tmax";

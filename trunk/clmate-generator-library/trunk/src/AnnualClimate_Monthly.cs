@@ -62,7 +62,7 @@ namespace  Landis.Library.Climate
                         //    timestepData = AnnualClimate_Avg(ecoregion, actualYear, latitude);
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
                         CalculateMonthlyData(ecoregion, monthlyData, actualYear, latitude);
-                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualYear, this.beginGrowing);
+                        //Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualYear, this.beginGrowing);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, actualYear, latitude);
                         break;
                     }
@@ -70,7 +70,7 @@ namespace  Landis.Library.Climate
                     {
                         this.Year = actualYear;
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
-                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualYear, this.beginGrowing);
+                        //Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualYear, this.beginGrowing);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, actualYear, latitude);
                         // JM: stop here.
                         CalculateMonthlyData_AddVariance(ecoregion, timestepData, actualYear, latitude);
