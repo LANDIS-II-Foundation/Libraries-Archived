@@ -353,7 +353,7 @@ namespace Landis.Library.Climate
         public static void GenerateEcoregionClimateData(IEcoregion ecoregion, int startYear, double latitude, double fieldCapacity, double wiltingPoint)
         {
 
-            Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}.", ecoregion.Name);
+            //Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}.", ecoregion.Name);
             
             int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
             annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, future_allData.Count]; //numberOftimeSteps + 1];
@@ -373,7 +373,7 @@ namespace Landis.Library.Climate
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in spinup_allData)
             {
 
-                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP Year = {0}.", timeStep.Key);
+                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP: timeStep = {0}, actualYear = {1}", timeStep.Key, startYear + timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.SpinUp_Climate, timeStep.Key); 
                 Spinup_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
@@ -403,7 +403,7 @@ namespace Landis.Library.Climate
                 //if (timestepIndex > numberOftimeSteps)
                 //    break;
 
-                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE Year = {0}.", timeStep.Key);
+                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE: timeStep = {0}, actualYear = {1}", timeStep.Key, startYear + timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.Future_Climate, timeStep.Key);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 

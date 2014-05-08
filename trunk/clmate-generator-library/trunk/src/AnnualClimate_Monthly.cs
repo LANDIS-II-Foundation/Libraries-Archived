@@ -530,7 +530,7 @@ namespace  Landis.Library.Climate
                 monthlyData[mo].AvgVarTemp = monthlyVarTemp / nDays;
                 monthlyData[mo].StdDevTemp = Math.Sqrt(monthlyVarTemp / nDays);
                 monthlyData[mo].AvgPptVarTemp = monthlyPptVarTemp / nDays;
-                monthlyData[mo].AvgPpt = monthlyPrecip / nDays;
+                monthlyData[mo].AvgPpt = monthlyPrecip;
                 monthlyData[mo].StdDevPpt = Math.Sqrt(monthlyPrecip / nDays);
                 monthlyData[mo].PAR = monthlyPAR / nDays;
             }
