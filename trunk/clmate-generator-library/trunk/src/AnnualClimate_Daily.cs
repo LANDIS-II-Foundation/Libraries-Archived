@@ -50,12 +50,28 @@ namespace Landis.Library.Climate
             {
                 case "Daily_RandomYear":
                     {
+                        // JM: this code assumes that the constructor for AnnualClimate_Daily is ONLY called from within
+                        //  AnnualClimate_Monthly.AnnualClimate_From_AnnualClimate_Daily(), and, for Daily_RandomYear, the
+                        //  actualYear contains the randomly-selected year.
+
                         TimeStep = timeStep;
+                        Dictionary<int, ClimateRecord[][]> allData;
+
                         if (this.climatePhase == Climate.Phase.Future_Climate)
-                            timestepData = Climate.Future_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
-                        else if (this.climatePhase == Climate.Phase.SpinUp_Climate) 
-                            timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
+                            allData = Climate.Future_AllData;
+                        else
+                            allData = Climate.Spinup_AllData;
+
+                        dailyData = allData[actualYear][ecoregion.Index];
+                        CalculateDailyData(ecoregion, dailyData, actualYear, latitude);
                         break;
+
+                        //TimeStep = timeStep;
+                        //if (this.climatePhase == Climate.Phase.Future_Climate)
+                        //    timestepData = Climate.Future_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
+                        //else if (this.climatePhase == Climate.Phase.SpinUp_Climate) 
+                        //    timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
+                        //break;
                     }
                 case "Daily_AverageAllYears":
                     {
