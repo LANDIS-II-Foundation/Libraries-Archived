@@ -31,7 +31,7 @@ namespace Landis.Library.Climate
         public int[] DailyGDD = new int[366];
 
         //For Sequenced and Random timeStep arg should be passed
-        public AnnualClimate_Daily(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) 
+        public AnnualClimate_Daily(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int actualYear, int timeStep, int timeStepIndex)
         {
 
             this.climatePhase = spinupOrfuture;
@@ -56,11 +56,27 @@ namespace Landis.Library.Climate
 
                         TimeStep = timeStep;
                         Dictionary<int, ClimateRecord[][]> allData;
+                        List<int> randomKeyList;
 
                         if (this.climatePhase == Climate.Phase.Future_Climate)
+                        {
                             allData = Climate.Future_AllData;
+                            randomKeyList = Climate.RandSelectedTimeKeys_future;
+                        }
                         else
+                        {
                             allData = Climate.Spinup_AllData;
+                            randomKeyList = Climate.RandSelectedTimeKeys_spinup;
+                        }
+
+                        if (timeStepIndex >= randomKeyList.Count())
+                        {
+                            throw new ApplicationException(string.Format("Exception: the requested Time-step {0} is out-of-range for the {1} input file.", timeStep, this.climatePhase));
+                        }
+                        else
+                            actualYear = randomKeyList[timeStepIndex];
+
+                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Daily: Daily_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualYear, this.climatePhase);
 
                         dailyData = allData[actualYear][ecoregion.Index];
                         CalculateDailyData(ecoregion, dailyData, actualYear, latitude);

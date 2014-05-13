@@ -26,7 +26,7 @@ namespace  Landis.Library.Climate
         public double[] MonthlyNightLength = new double[12];
         public int[] MonthlyGDD = new int[12];
 
-        public AnnualClimate_Monthly(IEcoregion ecoregion, int actualYear, double latitude, Climate.Phase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue) //For Hist and Random timeStep arg should be passed
+        public AnnualClimate_Monthly(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int actualYear, int timeStep, int timeStepIndex)
         {
             this.climatePhase = spinupOrfuture;
             this.Latitude = latitude;
@@ -68,7 +68,6 @@ namespace  Landis.Library.Climate
                     }
                 case "Monthly_AverageWithVariation":
                     {
-                        this.Year = actualYear;
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
                         Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualYear, this.beginGrowing);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, actualYear, latitude);
@@ -80,20 +79,27 @@ namespace  Landis.Library.Climate
                     {
                         TimeStep = timeStep;
                         Dictionary<int, ClimateRecord[][]> allData;
+                        List<int> randomKeyList;
 
                         if (this.climatePhase == Climate.Phase.Future_Climate)
+                        {
                             allData = Climate.Future_AllData;
+                            randomKeyList = Climate.RandSelectedTimeKeys_future;
+                        }
                         else
+                        {
                             allData = Climate.Spinup_AllData;
+                            randomKeyList = Climate.RandSelectedTimeKeys_spinup;
+                        }
 
-                        // pick a random year key from allData
-                        List<int> years = new List<int>(allData.Keys);
-                        var rand = Climate.ModelCore.GenerateUniform();
-                        var keyIndex = (int)(years.Count * rand);
-                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Monthly_RandomYear: timeStep = {0}, rand = {1}, keyIndex = {2}, keyCount = {3}.", timeStep, rand, keyIndex, years.Count);
-                        actualYear = years[keyIndex];
+                        if (timeStepIndex >= randomKeyList.Count())
+                        {
+                            throw new ApplicationException(string.Format("Exception: the requested Time-step {0} is out-of-range for the {1} input file.", timeStep, this.climatePhase));
+                        }
+                        else
+                            actualYear = randomKeyList[timeStep];
 
-                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Monthly_RandomYear: timeStep = {0}, actualYear = {1}", timeStep, actualYear);
+                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Monthly_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualYear, this.climatePhase);
 
                         monthlyData = allData[actualYear][ecoregion.Index];
                         CalculateMonthlyData(ecoregion, monthlyData, actualYear, latitude);
@@ -154,19 +160,30 @@ namespace  Landis.Library.Climate
                     {
                         TimeStep = timeStep;
                         Dictionary<int, ClimateRecord[][]> allData;
+                        List<int> randomKeyList;
 
                         if (this.climatePhase == Climate.Phase.Future_Climate)
+                        {
                             allData = Climate.Future_AllData;
+                            randomKeyList = Climate.RandSelectedTimeKeys_future;
+                        }
                         else
+                        {
                             allData = Climate.Spinup_AllData;
+                            randomKeyList = Climate.RandSelectedTimeKeys_spinup;
+                        }
 
-                        // pick a random year key from allData
-                        List<int> years = new List<int>(allData.Keys);
-                        actualYear = years[Convert.ToInt32(years.Count() * Climate.ModelCore.GenerateUniform())];
+                        if (timeStepIndex >= randomKeyList.Count())
+                        {
+                            throw new ApplicationException(string.Format("Exception: the requested Time-step {0} is out-of-range for the {1} input file.", timeStep, this.climatePhase));
+                        }
+                        else
+                            actualYear = randomKeyList[timeStepIndex];
 
-                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Daily_RandomYear: timeStep = {0}, actualYear = {1}", timeStep, actualYear);
+                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Daily_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualYear, this.climatePhase);
 
-                        monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
+
+                        monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, actualYear, timeStep, timeStepIndex);
                         CalculateMonthlyData(ecoregion, monthlyData, actualYear, latitude);
                         break;
 
@@ -176,7 +193,7 @@ namespace  Landis.Library.Climate
                 case "Daily_AverageAllYears":
                 case "Daily_SequencedYears":
                     {
-                        monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
+                        monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, actualYear, timeStep, timeStepIndex);
                         CalculateMonthlyData(ecoregion, monthlyData, actualYear, latitude);
                         break;
                     }
@@ -524,13 +541,13 @@ namespace  Landis.Library.Climate
 
 
         //}
-        private ClimateRecord[] AnnualClimate_From_AnnualClimate_Daily(IEcoregion ecoregion,  int actualYear, double latitude, Climate.Phase spinupOrfuture,  int timeStep)
+        private ClimateRecord[] AnnualClimate_From_AnnualClimate_Daily(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int actualYear, int timeStep, int timeStepIndex)
         {
             var monthlyData = new ClimateRecord[12];
             
             int nDays;
             int dayOfYear = 0;
-            AnnualClimate_Daily annDaily = new AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep); //for the same timeStep
+            AnnualClimate_Daily annDaily = new AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, actualYear, timeStep, timeStepIndex); //for the same timeStep
             
             // if annDaily data come from averaging over years, it will always have 365 days, so I can't use the DaysInMonth() method based on the actualYear
             var daysInMonth = annDaily.DailyDataIsLeapYear ? new int[] { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 } : new int[] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };

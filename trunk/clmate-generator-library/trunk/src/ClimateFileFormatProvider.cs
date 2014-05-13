@@ -66,19 +66,20 @@ namespace Landis.Library.Climate
                 case "ipcc5_monthly":
                     this.timeStep = TemporalGranularity.Monthly;
                     this.TemperatureTransformation = ABS_ZERO;      // ipcc5 temp. data are in Kelvin.
-                    this.PrecipTransformation = 86400.0;            // ipcc5 precip. data are in kg / m2 / sec.
+                    this.PrecipTransformation = 8640.0;            // ipcc5 precip. data are in kg / m2 / sec.
                     break;
 
                 case "ipcc5_daily":  //ADD
                     this.timeStep = TemporalGranularity.Daily;
                     this.TemperatureTransformation = ABS_ZERO;      // ipcc5 temp. data are in Kelvin.
+                    this.PrecipTransformation = 8640.0;  
                     break;
 
                 case "prism_monthly":  //was 'prism'
                     this.timeStep = TemporalGranularity.Monthly;
                     break;
 
-                case "Mauer_daily":  //was griddedobserved
+                case "mauer_daily":  //was griddedobserved
                     this.timeStep = TemporalGranularity.Daily;
                     this.precipTriggerWord = "Prcp";
                     this.maxTempTriggerWord = "Tmax";

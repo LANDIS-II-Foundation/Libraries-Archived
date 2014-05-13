@@ -20,8 +20,8 @@ namespace Landis.Library.Climate
         private static TemporalGranularity spinup_allData_granularity;
         private static Dictionary<int, ClimateRecord[][]> future_allData;
         private static Dictionary<int, ClimateRecord[][]> spinup_allData;
-        private static int[] randSelectedTimeSteps_future;
-        private static int[] randSelectedTimeSteps_spinup;
+        private static List<int> randSelectedTimeKeys_future;
+        private static List<int> randSelectedTimeKeys_spinup;
         //private static ClimateRecord[,] timestepData;
         private static ICore modelCore;
         //private static bool flag;
@@ -112,8 +112,8 @@ namespace Landis.Library.Climate
             }
         }
 
-        public static int[] RandSelectedTimeSteps_future { get { return randSelectedTimeSteps_future; } }
-        public static int[] RandSelectedTimeSteps_spinup { get { return randSelectedTimeSteps_spinup; } }
+        public static List<int> RandSelectedTimeKeys_future { get { return randSelectedTimeKeys_future; } }
+        public static List<int> RandSelectedTimeKeys_spinup { get { return randSelectedTimeKeys_spinup; } }
 
         //---------------------------------------------------------------------
         //public static ClimateRecord[,] TimestepData
@@ -254,11 +254,23 @@ namespace Landis.Library.Climate
 
             if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random")) 
             {
-                Climate.randSelectedTimeSteps_future = new int[Climate.future_allData.Count];//should be future_allData.Count or it needs to be different?
-                for (int i = 0; i < Climate.future_allData.Count; i++)
-                {
-                    Climate.randSelectedTimeSteps_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
-                }
+                // pick a random year key from allData
+                List<int> years = new List<int>(Climate.future_allData.Keys);
+                Climate.randSelectedTimeKeys_future = new List<int>();
+                for (var i = 0; i < years.Count; ++i)
+                    Climate.randSelectedTimeKeys_future.Add(years[(int)(years.Count * Climate.ModelCore.GenerateUniform())]);
+
+                string s = string.Empty;
+                foreach (var i in Climate.randSelectedTimeKeys_future)
+                    s += i + ", ";
+
+                ModelCore.UI.WriteLine("   Future Random Keys = " + s);
+
+                //Climate.randSelectedTimeKeys_future = new int[Climate.future_allData.Count];//should be future_allData.Count or it needs to be different?
+                //for (int i = 0; i < Climate.future_allData.Count; i++)
+                //{
+                //    Climate.randSelectedTimeKeys_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
+                //}
 
             }
 
@@ -273,9 +285,21 @@ namespace Landis.Library.Climate
                         maxSpeciesAge = sp.Longevity;
                 }
 
-                Climate.randSelectedTimeSteps_spinup = new int[maxSpeciesAge]; 
-                for (int i = 0; i < maxSpeciesAge; i++)
-                    Climate.randSelectedTimeSteps_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
+                // pick a random year key from allData up to maxSpeciesAge
+                List<int> years = new List<int>(Climate.spinup_allData.Keys);
+                Climate.randSelectedTimeKeys_spinup = new List<int>();
+                for (var i = 0; i < maxSpeciesAge; ++i)
+                    Climate.randSelectedTimeKeys_spinup.Add(years[(int)(years.Count * Climate.ModelCore.GenerateUniform())]);
+
+                string s = string.Empty;
+                foreach (var i in Climate.randSelectedTimeKeys_spinup)
+                    s += i + ", ";
+
+                ModelCore.UI.WriteLine("   Spinup Random Keys = " + s);
+
+                //Climate.randSelectedTimeKeys_spinup = new int[maxSpeciesAge]; 
+                //for (int i = 0; i < maxSpeciesAge; i++)
+                //    Climate.randSelectedTimeKeys_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
                 
             }
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in spinup_allData)
@@ -370,11 +394,12 @@ namespace Landis.Library.Climate
             
             
             //Firt Calculate Climate Normals from Spin-up data
+            int timeStepIndex = 0;
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in spinup_allData)
             {
 
                 //Climate.ModelCore.UI.WriteLine("  Calculating Weather for SPINUP: timeStep = {0}, actualYear = {1}", timeStep.Key, startYear + timeStep.Key);
-                AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.SpinUp_Climate, timeStep.Key); 
+                AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, latitude, Climate.Phase.SpinUp_Climate, startYear + timeStep.Key, timeStep.Key, timeStepIndex++); 
                 Spinup_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
                 for (int mo = 0; mo < 12; mo++)
@@ -391,7 +416,7 @@ namespace Landis.Library.Climate
 
             }
             
-            int timestepIndex = 0;
+            timeStepIndex = 0;
 
             // Next calculate PSDI for the future data
             foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Future_MonthlyData)
@@ -404,14 +429,14 @@ namespace Landis.Library.Climate
                 //    break;
 
                 //Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE: timeStep = {0}, actualYear = {1}", timeStep.Key, startYear + timeStep.Key);
-                AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, startYear + timeStep.Key, latitude, Climate.Phase.Future_Climate, timeStep.Key);
+                AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, latitude, Climate.Phase.Future_Climate, startYear + timeStep.Key, timeStep.Key, timeStepIndex);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
-                Climate.LandscapeAnnualPDSI[timestepIndex] += (Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI / Climate.ModelCore.Ecoregions.Count);
+                Climate.LandscapeAnnualPDSI[timeStepIndex] += (Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI / Climate.ModelCore.Ecoregions.Count);
 
                 //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, PDSI);
-                timestepIndex++;
+                timeStepIndex++;
             }
 
         }

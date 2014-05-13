@@ -273,6 +273,9 @@ namespace Landis.Library.Climate
                         case FileSection.MaxTemperature:
                         case FileSection.MinTemperature:
 
+                            mean += format.TemperatureTransformation;
+
+
                             if (section == FileSection.MaxTemperature)
                                 ecoRecords[rowIndex].AvgMaxTemp = mean;
                             else
