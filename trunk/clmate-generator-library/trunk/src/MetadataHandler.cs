@@ -32,17 +32,39 @@ namespace Landis.Library.Climate
             //---------------------------------------
 
             Climate.PdsiLog = new MetadataTable<PDSI_Log>("Climate-PDSI-log.csv");
-            Climate.MonthlyLog = new MetadataTable<MonthlyLog>("Climate-monthly-log.csv");
+            Climate.SpinupInputLog = new MetadataTable<InputLog>("Climate-spinup-input-log.csv");
+            Climate.FutureInputLog = new MetadataTable<InputLog>("Climate-future-input-log.csv");
+            Climate.AnnualLog = new MetadataTable<AnnualLog>("Climate-annual-log.csv");
 
-            OutputMetadata tblOut_monthly = new OutputMetadata()
+            OutputMetadata tblOut_spinupInput = new OutputMetadata()
             {
                 Type = OutputType.Table,
-                Name = "MonthlyLog",
-                FilePath = Climate.MonthlyLog.FilePath,
+                Name = "Spinup-Input-Log",
+                FilePath = Climate.SpinupInputLog.FilePath,
+                Visualize = false,
+            };
+            tblOut_spinupInput.RetriveFields(typeof(InputLog));
+            Extension.OutputMetadatas.Add(tblOut_spinupInput);
+
+            OutputMetadata tblOut_futureInput = new OutputMetadata()
+            {
+                Type = OutputType.Table,
+                Name = "Future-Input-Log",
+                FilePath = Climate.FutureInputLog.FilePath,
+                Visualize = false,
+            };
+            tblOut_futureInput.RetriveFields(typeof(InputLog));
+            Extension.OutputMetadatas.Add(tblOut_futureInput);
+
+            OutputMetadata tblOut_annual = new OutputMetadata()
+            {
+                Type = OutputType.Table,
+                Name = "Annual-Log",
+                FilePath = Climate.AnnualLog.FilePath,
                 Visualize = true,
             };
-            tblOut_monthly.RetriveFields(typeof(MonthlyLog));
-            Extension.OutputMetadatas.Add(tblOut_monthly);
+            tblOut_futureInput.RetriveFields(typeof(InputLog));
+            Extension.OutputMetadatas.Add(tblOut_futureInput);
 
             OutputMetadata tblOut_pdsi = new OutputMetadata()
             {
