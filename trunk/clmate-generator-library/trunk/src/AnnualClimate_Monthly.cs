@@ -66,16 +66,17 @@ namespace  Landis.Library.Climate
                         //    timestepData = AnnualClimate_Avg(ecoregion, monthlyDataKey, latitude);
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
-                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualTimeStep, this.beginGrowing);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, actualTimeStep);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, monthlyDataKey, latitude);
                         break;
                     }
+                    //this case is not working as of 5/15/14
                 case "Monthly_AverageWithVariation":
                     {
                         TimeStep = timeStep;
                         actualTimeStep = 0;
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
-                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data... Ecoregion = {1}, Year = {2}, BeginGrow = {3}.", this.climatePhase, ecoregion.Name, actualTimeStep, this.beginGrowing);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, actualTimeStep);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, monthlyDataKey, latitude);
                         // JM: stop here.
                         //CalculateMonthlyData_AddVariance(ecoregion, monthlyData, actualTimeStep, latitude);
@@ -105,7 +106,9 @@ namespace  Landis.Library.Climate
                         else
                             actualTimeStep = randomKeyList[timeStepIndex];
 
-                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Monthly_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualTimeStep, this.climatePhase);
+                        //Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Monthly_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualTimeStep, this.climatePhase);
+                        //Climate.ModelCore.UI.WriteLine("  Completed calculations for FutureData using AnnualClimate_Monthly: SimulatedYear = {0}, actualYearSelected = {1}.", timeStep, actualTimeStep);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using RandomYear_Monthly. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
 
                         monthlyData = allData[actualTimeStep][ecoregion.Index];
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
@@ -163,6 +166,7 @@ namespace  Landis.Library.Climate
                         //{
                         //    throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex);
                         //}
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Monthly_SequencedYears. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
                         break;
                     }
                 case "Daily_RandomYear":
@@ -189,7 +193,7 @@ namespace  Landis.Library.Climate
                         else
                             actualTimeStep = randomKeyList[timeStepIndex];
 
-                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Monthly: Daily_RandomYear: timeStep = {0}, monthlyDataKey = {1}, phase = {2}.", timeStep, actualTimeStep, this.climatePhase);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Daily_RandomYear. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
 
 
                         monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, timeStep, timeStepIndex);
@@ -205,6 +209,7 @@ namespace  Landis.Library.Climate
                         actualTimeStep = 0;
                         monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, timeStep, timeStepIndex);
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Daily_AverageAllYears. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, timeStep);
                         break;
                     }
                 case "Daily_SequencedYears":
@@ -223,6 +228,7 @@ namespace  Landis.Library.Climate
 
                         monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, timeStep, timeStepIndex);
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Daily_SequencedYears. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
                         break;
                     }
                 //case "MonthlyStandard":  

@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using System.Collections;
 using Landis.Library.Metadata;
+using System.Linq;
 
 
 namespace Landis.Library.Climate
@@ -270,13 +271,14 @@ namespace Landis.Library.Climate
 
                 // pick a random year key from allData and make spinupTimeStepKeys up to the maximum possible length of spinup
                 List<int> keyList = new List<int>(Climate.spinup_allData.Keys);
+                var startYear = keyList.Min();
                 Climate.randSelectedTimeKeys_spinup = new List<int>();
                 spinupTimeStepKeys.Clear();
 
                 for (var i = 0; i < maxSpeciesAge; ++i)
                 {
                     Climate.randSelectedTimeKeys_spinup.Add(keyList[(int)(keyList.Count * Climate.ModelCore.GenerateUniform())]);
-                    spinupTimeStepKeys.Add(ModelCore.StartTime + i);
+                    spinupTimeStepKeys.Add(startYear + i);
                 }
 
                 //// pick a random year key from allData up to maxSpeciesAge
@@ -324,13 +326,14 @@ namespace Landis.Library.Climate
 
                 // pick a random year key from allData and make futureTimeStepKeys up to the length of the simulation
                 List<int> keyList = new List<int>(Climate.future_allData.Keys);
+                var startYear = keyList.Min();
                 Climate.randSelectedTimeKeys_future = new List<int>();
                 futureTimeStepKeys.Clear();
                 
                 for (var i = 0; i < yearCount; ++i)
                 {
                     Climate.randSelectedTimeKeys_future.Add(keyList[(int)(keyList.Count * Climate.ModelCore.GenerateUniform())]);
-                    futureTimeStepKeys.Add(ModelCore.StartTime + i);
+                    futureTimeStepKeys.Add(startYear + i);
                 }
 
                 //string s = string.Empty;
@@ -437,9 +440,10 @@ namespace Landis.Library.Climate
 
             //Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}.", ecoregion.Name);
             
-            int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
-            annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, future_allData.Count]; //numberOftimeSteps + 1];
-            landscapeAnnualPDSI = new double[future_allData.Count]; //numberOftimeSteps+1];
+            // JM:  these next three lines are not used, but may need to be modified if used:
+            //int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
+            //annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, future_allData.Count]; //numberOftimeSteps + 1];
+            //landscapeAnnualPDSI = new double[future_allData.Count]; //numberOftimeSteps+1];
             double[] temperature_normals = new double[12];
             
             double availableWaterCapacity = fieldCapacity - wiltingPoint;
@@ -450,8 +454,9 @@ namespace Landis.Library.Climate
             //ClimateRecord[] climateRecs = new ClimateRecord[12];
             //int minimumTime = 5000;
 
-            //Climate.ModelCore.UI.WriteLine("   Core.StartTime = {0}, Core.EndTime = {1}.", ModelCore.StartTime, ModelCore.EndTime);
-           
+            Climate.ModelCore.UI.WriteLine("   Core.StartTime = {0}, Core.EndTime = {1}.", ModelCore.StartTime, ModelCore.EndTime);
+            Climate.ModelCore.UI.WriteLine("   Climate.LandscapeAnnualPDSI.Length = {0}.", Climate.LandscapeAnnualPDSI.Length);
+
             //First Calculate Climate Normals from Spin-up data
             int timeStepIndex = 0;
             foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Spinup_MonthlyData)
@@ -482,7 +487,7 @@ namespace Landis.Library.Climate
             // Next calculate PSDI for the future data
             foreach (KeyValuePair<int, AnnualClimate_Monthly[]> timeStep in Future_MonthlyData)
             {
-                //Climate.ModelCore.UI.WriteLine("  Calculating Weather for FUTURE: timeStep = {0}, actualYear = {1}", timeStep.Key, startYear + timeStep.Key);
+                //Climate.ModelCore.UI.WriteLine("  Completed calculations for Future_Climate: TimeStepYear = {0}, actualYear = {1}", timeStep.Key, startYear + timeStep.Key);
                 AnnualClimate_Monthly annualClimateMonthly = new AnnualClimate_Monthly(ecoregion, latitude, Climate.Phase.Future_Climate, timeStep.Key, timeStepIndex);
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index] = annualClimateMonthly;
 
