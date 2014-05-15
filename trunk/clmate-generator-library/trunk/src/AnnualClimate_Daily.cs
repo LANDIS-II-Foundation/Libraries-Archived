@@ -31,7 +31,7 @@ namespace Landis.Library.Climate
         public int[] DailyGDD = new int[366];
 
         //For Sequenced and Random timeStep arg should be passed
-        public AnnualClimate_Daily(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int actualYear, int timeStep, int timeStepIndex)
+        public AnnualClimate_Daily(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int timeStep, int timeStepIndex)
         {
 
             this.climatePhase = spinupOrfuture;
@@ -44,6 +44,8 @@ namespace Landis.Library.Climate
                 climateOption = Climate.ConfigParameters.SpinUpClimateTimeSeries;
 
             ClimateRecord[] dailyData = null;
+
+            int actualTimeStep;
 
             //Climate.ModelCore.UI.WriteLine("  Calculating daily data ...  Ecoregion = {0}, Year = {1}, timestep = {2}.", ecoregion.Name, actualYear, timeStep);
             switch (climateOption)
@@ -74,12 +76,12 @@ namespace Landis.Library.Climate
                             throw new ApplicationException(string.Format("Exception: the requested Time-step {0} is out-of-range for the {1} input file.", timeStep, this.climatePhase));
                         }
                         else
-                            actualYear = randomKeyList[timeStepIndex];
+                            actualTimeStep = randomKeyList[timeStepIndex];
 
-                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Daily: Daily_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualYear, this.climatePhase);
+                        Climate.ModelCore.UI.WriteLine("  AnnualClimate_Daily: Daily_RandomYear: timeStep = {0}, actualYear = {1}, phase = {2}.", timeStep, actualTimeStep, this.climatePhase);
 
-                        dailyData = allData[actualYear][ecoregion.Index];
-                        CalculateDailyData(ecoregion, dailyData, actualYear, latitude);
+                        dailyData = allData[actualTimeStep][ecoregion.Index];
+                        CalculateDailyData(ecoregion, dailyData, actualTimeStep, latitude);
                         break;
 
                         //TimeStep = timeStep;
@@ -91,8 +93,11 @@ namespace Landis.Library.Climate
                     }
                 case "Daily_AverageAllYears":
                     {
+                        TimeStep = timeStep;
+                        actualTimeStep = 0;
+
                         dailyData = AnnualClimate_AvgDaily(ecoregion, latitude);
-                        CalculateDailyData(ecoregion, dailyData, actualYear, latitude);
+                        CalculateDailyData(ecoregion, dailyData, actualTimeStep, latitude);
                         //if (this.climatePhase == Climate.Phase.Future_Climate)
                         //    timestepData = AnnualClimate_AvgDaily(ecoregion, actualYear, latitude); 
                         //else if (this.climatePhase == Climate.Phase.SpinUp_Climate) 
@@ -102,6 +107,7 @@ namespace Landis.Library.Climate
                 case "Daily_SequencedYears":
                     {
                         TimeStep = timeStep;
+                        actualTimeStep = timeStep;
                         Dictionary<int, ClimateRecord[][]> allData;
 
                         if (this.climatePhase == Climate.Phase.Future_Climate)
@@ -113,10 +119,13 @@ namespace Landis.Library.Climate
 
                         // get the climate records for the requested year, or if the year is not found, get the records for the last year
                         if (!allData.TryGetValue(timeStep, out yearRecords))
-                            yearRecords = allData[allData.Keys.Max()];
+                        {
+                            actualTimeStep = allData.Keys.Max();
+                            yearRecords = allData[actualTimeStep];
+                        }
 
                         dailyData = yearRecords[ecoregion.Index];
-                        CalculateDailyData(ecoregion, dailyData, actualYear, latitude);
+                        CalculateDailyData(ecoregion, dailyData, actualTimeStep, latitude);
 
                         //try
                         //{
@@ -178,7 +187,7 @@ namespace Landis.Library.Climate
             this.beginGrowing = CalculateBeginGrowingDay_Daily(); //ecoClimate);
             //this.endGrowing = CalculateEndGrowingDay_Daily(ecoClimate);
             this.endGrowing = CalculateEndGrowingDay_Daily(dailyData);
-            this.growingDegreeDays = GrowSeasonDegreeDays(actualYear);
+            this.growingDegreeDays = GrowSeasonDegreeDays();
 
             this.DailyDataIsLeapYear = dailyData.Length == 366;
 
@@ -420,7 +429,7 @@ namespace Landis.Library.Climate
        
 
          //---------------------------------------------------------------------------
-        public int GrowSeasonDegreeDays(int currentYear)
+        public int GrowSeasonDegreeDays()
         //Calc growing season degree days (Degree_Day) based on monthly temperatures
         //normally distributed around a specified mean with a specified standard
         //deviation.
