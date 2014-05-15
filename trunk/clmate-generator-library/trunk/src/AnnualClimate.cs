@@ -1,5 +1,5 @@
 //  Copyright: Portland State University 2009-2014
-//  Authors:  Robert M. Scheller, Amin Almassian
+//  Authors:  Robert M. Scheller, John McNabb and Amin Almassian
 
 using System.Collections.Generic;
 using System.IO;
@@ -28,11 +28,7 @@ namespace Landis.Library.Climate
         public int Year;
         public static double stdDevTempGenerator;
         public static double stdDevPptGenerator;
-        //public static IClimateRecord[,] avgEcoClimate_future;
-        //public static IClimateRecord[,] avgEcoClimate_spinUp;
         public double Latitude { get; set; }
-
-        //by Amin
         public IEcoregion Ecoregion { get; set; }
         public int TimeStep { get; set; }
         public double PDSI { get; set; }

@@ -1,5 +1,5 @@
 //  Copyright: Portland State University 2009-2014
-//  Authors:  Robert M. Scheller, Amin Almassian
+//  Authors:  Robert M. Scheller, John McNabb, Amin Almassian
 
 using Landis.Core;
 using System.Collections.Generic;
@@ -15,7 +15,6 @@ namespace Landis.Library.Climate
 
     public class Climate
     {
-
 
         private static TemporalGranularity future_allData_granularity;
         private static TemporalGranularity spinup_allData_granularity;
@@ -114,20 +113,7 @@ namespace Landis.Library.Climate
         public static List<int> RandSelectedTimeKeys_future { get { return randSelectedTimeKeys_future; } }
         public static List<int> RandSelectedTimeKeys_spinup { get { return randSelectedTimeKeys_spinup; } }
 
-        //---------------------------------------------------------------------
-        //public static ClimateRecord[,] TimestepData
-        //{
-        //    get
-        //    {
-        //        return timestepData;
-        //    }
-        //    set
-        //    {
-        //        timestepData = value;
-        //    }
-        //}
-
-        //------------------------------------------------------------------------
+       
         public static IInputParameters ConfigParameters
         {
             get
@@ -167,48 +153,7 @@ namespace Landis.Library.Climate
             ModelCore.UI.WriteLine("   Loading future weather data from file {0} ...", configParameters.ClimateFile);
             Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, Climate.Phase.Future_Climate);
             
-
-                //string climateOption = Climate.ConfigParameters.ClimateTimeSeries;
-                //if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-                //    climateOption = Climate.ConfigParameters.SpinUpClimateTimeSeries;
-
-                //switch (climateOption)
-                //{
-                //    case "MonthlyAverage":
-                //        {
-                //            break;
-                //        }
-                //    case "MonthlyRandom":
-                //        {
-                //            break;
-                //        }
-                //    case "DailyHistRandom":
-                //        {
-                //            break;
-                //        }
-                //    case "DailyHistAverage":
-                //        {
-                //            return;
-                //        }
-                //    case "MonthlyStandard":
-                //        {
-                //            break;
-                //        }
-                //    case "DailyGCM":
-                //        {
-                //        }
-                //    case "MonthlyGCM":
-                //        {
-                //            break;
-                //        }
-                //    default:
-                //        throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
-
-                //}
-
-            // **
-            // spin-up
-
+            
             // for all options except random, the spinupTimeStepKeys are those from "allData"
             List<int> spinupTimeStepKeys = new List<int>(Climate.spinup_allData.Keys);
 
@@ -235,22 +180,7 @@ namespace Landis.Library.Climate
                     spinupTimeStepKeys.Add(startYear + i);
                 }
 
-                //// pick a random year key from allData up to maxSpeciesAge
-                //List<int> years = new List<int>(Climate.spinup_allData.Keys);
-                //Climate.randSelectedTimeKeys_spinup = new List<int>();
-                //for (var i = 0; i < maxSpeciesAge; ++i)
-                //    Climate.randSelectedTimeKeys_spinup.Add(years[(int)(years.Count * Climate.ModelCore.GenerateUniform())]);
-
-                //string s = string.Empty;
-                //foreach (var i in Climate.randSelectedTimeKeys_spinup)
-                //    s += i + ", ";
-
-                //ModelCore.UI.WriteLine("   Spinup Random Keys = " + s);
-
-                //Climate.randSelectedTimeKeys_spinup = new int[maxSpeciesAge]; 
-                //for (int i = 0; i < maxSpeciesAge; i++)
-                //    Climate.randSelectedTimeKeys_spinup[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.spinup_allData.Count - 1));
-
+                
             }
 
             // write input data to the log
@@ -290,13 +220,7 @@ namespace Landis.Library.Climate
                     futureTimeStepKeys.Add(startYear + i);
                 }
 
-
-                //Climate.randSelectedTimeKeys_future = new int[Climate.future_allData.Count];//should be future_allData.Count or it needs to be different?
-                //for (int i = 0; i < Climate.future_allData.Count; i++)
-                //{
-                //    Climate.randSelectedTimeKeys_future[i] = (int)Math.Round(Climate.ModelCore.GenerateUniform() * (Climate.future_allData.Count - 1));
-                //}
-
+                                
             }
 
             // write input data to the log
@@ -318,10 +242,8 @@ namespace Landis.Library.Climate
 
         public static void GenerateEcoregionClimateData(IEcoregion ecoregion, int startYear, double latitude, double fieldCapacity, double wiltingPoint)
         {
-
-            //Climate.ModelCore.UI.WriteLine("  Generating Ecoregion Climate Data for ecoregion = {0}.", ecoregion.Name);
-            
-            // JM:  these next three lines are not used, but may need to be modified if used:
+                                    
+            // JM:  these next three lines are not currently used, but may need to be modified if used:
             //int numberOftimeSteps = Climate.ModelCore.EndTime - Climate.ModelCore.StartTime;
             //annualPDSI = new double[Climate.ModelCore.Ecoregions.Count, future_allData.Count]; //numberOftimeSteps + 1];
             //landscapeAnnualPDSI = new double[future_allData.Count]; //numberOftimeSteps+1];
@@ -399,10 +321,10 @@ namespace Landis.Library.Climate
                 spinup_allData_granularity = TemporalGranularity.Monthly;
 
             if (timeSeries.Contains("Daily"))
-                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata_JM(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
+                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Daily, filePath, fileFormat, climatePhase);
             
             else if (timeSeries.Contains("Monthly"))
-                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata_JM(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
+                ClimateDataConvertor.Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity.Monthly, filePath, fileFormat, climatePhase);
 
             return;
 

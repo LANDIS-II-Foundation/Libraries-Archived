@@ -1,5 +1,5 @@
 ﻿//  Copyright: Portland State University 2009-2014
-//  Authors:  Robert M. Scheller, Amin Almassian
+//  Authors:  Robert M. Scheller, John McNabb and Amin Almassian
 
 using System;
 using System.Collections.Generic;
@@ -45,8 +45,7 @@ namespace  Landis.Library.Climate
                 timestepData[i]= new ClimateRecord[12];
 
             // ------------------------------------------------------------------------------------------------------
-            // PossibleValues = "MonthlyRandom, MonthlyAverage, DailyHistRandom, DailyHistAverage, MonthlyStandard, DailyGCM";
-
+            
             string climateOption = Climate.ConfigParameters.ClimateTimeSeries;
             if (this.climatePhase == Climate.Phase.SpinUp_Climate)
                 climateOption = Climate.ConfigParameters.SpinUpClimateTimeSeries;
@@ -61,13 +60,9 @@ namespace  Landis.Library.Climate
                     {
                         TimeStep = timeStep;
                         actualTimeStep = 0;
-                        //if (this.climatePhase == Climate.Phase.Future_Climate) 
-                        //else if (this.climatePhase == Climate.Phase.SpinUp_Climate) 
-                        //    timestepData = AnnualClimate_Avg(ecoregion, monthlyDataKey, latitude);
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
                         Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, actualTimeStep);
-                        //timestepData = AnnualClimate_AvgMonth(ecoregion, monthlyDataKey, latitude);
                         break;
                     }
                     //this case is not working as of 5/15/14
@@ -78,7 +73,6 @@ namespace  Landis.Library.Climate
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
                         Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, actualTimeStep);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, monthlyDataKey, latitude);
-                        // JM: stop here.
                         //CalculateMonthlyData_AddVariance(ecoregion, monthlyData, actualTimeStep, latitude);
                         break;
                     }
@@ -114,20 +108,7 @@ namespace  Landis.Library.Climate
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
                         break;
 
-                        //TimeStep = timeStep;
-                        //try {
-                        //    if (this.climatePhase == Climate.Phase.Future_Climate)
-                        //        timestepData = Climate.Future_AllData[Climate.RandSelectedTimeSteps_future[TimeStep]];
-                        //    else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-                        //        timestepData = Climate.Spinup_AllData[Climate.RandSelectedTimeSteps_spinup[TimeStep]];
-
-                        //    CalculateMonthlyData_NoVariance(ecoregion, timestepData, monthlyDataKey, latitude);
-                        //}
-                        //catch (System.Collections.Generic.KeyNotFoundException ex)
-                        //{
-                        //    throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex);
-                        //}
-                        //break;
+                        
                     }
                 case "Monthly_SequencedYears":
                     {
@@ -152,20 +133,6 @@ namespace  Landis.Library.Climate
                         monthlyData = yearRecords[ecoregion.Index];
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
 
-                        //TimeStep = timeStep;
-                        //try
-                        //{
-                        //    if (this.climatePhase == Climate.Phase.Future_Climate)
-                        //        timestepData = Climate.Future_AllData[TimeStep];
-                        //    else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-                        //        timestepData = Climate.Spinup_AllData[TimeStep];
-
-                        //    CalculateMonthlyData_NoVariance(ecoregion, timestepData, monthlyDataKey, latitude);
-                        //}
-                        //catch (System.Collections.Generic.KeyNotFoundException ex)
-                        //{
-                        //    throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex);
-                        //}
                         Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Monthly_SequencedYears. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
                         break;
                     }
@@ -199,9 +166,7 @@ namespace  Landis.Library.Climate
                         monthlyData = AnnualClimate_From_AnnualClimate_Daily(ecoregion, latitude, spinupOrfuture, timeStep, timeStepIndex);
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
                         break;
-
-                        //this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, monthlyDataKey, latitude, spinupOrfuture, timeStep);
-                        //break;
+                                                
                     }
                 case "Daily_AverageAllYears":
                     {
@@ -231,29 +196,7 @@ namespace  Landis.Library.Climate
                         Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Daily_SequencedYears. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
                         break;
                     }
-                //case "MonthlyStandard":  
-                //    {
-                //        TimeStep = timeStep;
-                //        try
-                //        {
-                //            if (this.climatePhase == Climate.Phase.Future_Climate)
-                //                timestepData = Climate.Future_AllData[TimeStep];
-                //            else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-                //                timestepData = Climate.Spinup_AllData[TimeStep];
-
-                //            CalculateMonthlyData_AddVariance(ecoregion, timestepData, actualYear, latitude);
-                //        }
-                //        catch (System.Collections.Generic.KeyNotFoundException ex)
-                //        {
-                //            throw new ClimateDataOutOfRangeException("Exception: The requested Time-step is out of range for " + this.climatePhase.ToString() + " input file.", ex); 
-                //        }
-                //        break;
-                //    }
-                //case "Daily_SequencedYears":
-                //    {
-                //        this.AnnualClimate_From_AnnualClimate_Daily(ecoregion, actualYear, latitude, spinupOrfuture, timeStep);
-                //        return;
-                //    }
+               
                 default:
                     throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
 
@@ -300,6 +243,7 @@ namespace  Landis.Library.Climate
             }
         }
 
+        //This method is not currently being called.  If it is later used, it will need to be checked to make sure it's working properly.
         private void CalculateMonthlyData_AddVariance(IEcoregion ecoregion, ClimateRecord[][] timestepData, int actualYear, double latitude)
         {
             ClimateRecord[] ecoClimate = new ClimateRecord[12];
@@ -311,7 +255,7 @@ namespace  Landis.Library.Climate
 
             for (int mo = 0; mo < 12; mo++)
             {
-                ecoClimate[mo] = timestepData[ecoregion.Index][mo]; //Climate.TimestepData[ecoregion.Index, mo];
+                ecoClimate[mo] = timestepData[ecoregion.Index][mo]; 
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
 
@@ -353,9 +297,7 @@ namespace  Landis.Library.Climate
                 ecoClimate[mo] = timestepData[ecoregion.Index][mo]; 
 
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
-
-                //double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
-
+                               
                 this.MonthlyTemp[mo] = MonthlyAvgTemp;
                 this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp;
                 this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp;
@@ -377,30 +319,12 @@ namespace  Landis.Library.Climate
         //Daily will not come to here. the average in daily is calculated in the AnnualClimate_Daily
         private ClimateRecord[] AnnualClimate_AvgMonth(IEcoregion ecoregion, double latitude)
         {
-            // this method should summarize monthly data for the ecoregion over all years, placing the summary data into  monthly array of ClimateRecords.
- 
-            //// clear initial data
-            //for (int i = 0; i < 12; i++)
-            //{
-            //    this.MonthlyMinTemp[i] = 0.0;
-            //    this.MonthlyMaxTemp[i] = 0.0;
-            //    this.MonthlyVarTemp[i] = 0.0;
-            //    this.MonthlyPptVarTemp[i] = 0.0;
-            //    this.MonthlyPrecip[i] = 0.0;
-            //    this.MonthlyPAR[i] = 0.0;
-            //}
-
-            //int allDataCount = 0;
-            //if (this.climatePhase == Climate.Phase.Future_Climate)
-            //    allDataCount = Climate.Future_AllData.Count;
-            //else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-            //    allDataCount = Climate.Spinup_AllData.Count;
 
             Dictionary<int, ClimateRecord[][]> timestepData;
-            
+
             if (this.climatePhase == Climate.Phase.Future_Climate)
                 timestepData = Climate.Future_AllData;
-            else 
+            else
                 timestepData = Climate.Spinup_AllData;
 
             var monthlyData = new ClimateRecord[12];      // for returning summary data in ClimateRecord form.
@@ -439,142 +363,10 @@ namespace  Landis.Library.Climate
                     monthlyData[mo].PAR = monthlyPAR / yearCount;
                 }
             }
-
-            
-
-            //for (int mo = 0; mo < 12; mo++)
-            //{
-
-            //    for (int stp = 0; stp < allDataCount; stp++)
-            //    {
-
-            //        if (this.climatePhase == Climate.Phase.Future_Climate)
-            //            timestepData = Climate.Future_AllData.ElementAt(stp).Value;
-            //        else if (this.climatePhase == Climate.Phase.SpinUp_Climate)
-            //            timestepData = Climate.Spinup_AllData.ElementAt(stp).Value;
-
-            //        //Climate.ModelCore.UI.WriteLine("  Calculating annual average climate:  Yr={0}, month={1}, Eco={2}, Phase={3}.", Climate.Future_AllData.ElementAt(stp).Key, mo, ecoregion.Name, this.climatePhase);
-
-            //        this.MonthlyMinTemp[mo] += timestepData[ecoregion.Index][mo].AvgMinTemp;
-            //        this.MonthlyMaxTemp[mo] += timestepData[ecoregion.Index][mo].AvgMaxTemp;
-            //        this.MonthlyVarTemp[mo] += timestepData[ecoregion.Index][mo].AvgVarTemp;
-            //        this.MonthlyPptVarTemp[mo] += timestepData[ecoregion.Index][mo].AvgPptVarTemp;
-            //        this.MonthlyPrecip[mo] += timestepData[ecoregion.Index][mo].AvgPpt;
-            //        this.MonthlyPAR[mo] += timestepData[ecoregion.Index][mo].PAR;
-
-
-            //    }
-            //    this.MonthlyMinTemp[mo] = this.MonthlyMinTemp[mo] / allDataCount;
-            //    this.MonthlyMaxTemp[mo] = this.MonthlyMaxTemp[mo] / allDataCount;
-            //    this.MonthlyVarTemp[mo] = this.MonthlyVarTemp[mo] / allDataCount;
-            //    this.MonthlyPptVarTemp[mo] = this.MonthlyPptVarTemp[mo] / allDataCount;
-            //    this.MonthlyPrecip[mo] = this.MonthlyPrecip[mo] / allDataCount;
-            //    this.MonthlyPAR[mo] = this.MonthlyPAR[mo] / allDataCount;
-            //    avgEcoClimate[ecoregion.Index][mo] = new ClimateRecord();
-            //    avgEcoClimate[ecoregion.Index][mo].AvgMinTemp = this.MonthlyMinTemp[mo];
-            //    avgEcoClimate[ecoregion.Index][mo].AvgMaxTemp = this.MonthlyMaxTemp[mo];
-            //    avgEcoClimate[ecoregion.Index][mo].AvgVarTemp = this.MonthlyVarTemp[mo];
-
-            //    avgEcoClimate[ecoregion.Index][mo].StdDevTemp = Math.Sqrt(MonthlyVarTemp[mo]);
-
-            //    avgEcoClimate[ecoregion.Index][mo].AvgPptVarTemp = this.MonthlyPptVarTemp[mo];
-            //    avgEcoClimate[ecoregion.Index][mo].AvgPpt = this.MonthlyPrecip[mo];
-            //    avgEcoClimate[ecoregion.Index][mo].StdDevPpt = Math.Sqrt(this.MonthlyPrecip[mo]);
-            //    avgEcoClimate[ecoregion.Index][mo].PAR = this.MonthlyPAR[mo];
-
-            //}
-
-            //ClimateRecord[] ecoClimate = new ClimateRecord[12];
-            //this.Year = year;
-            //this.AnnualPrecip = 0.0;
-
-            //for (int mo = 0; mo < 12; mo++)
-            //{
-            //    ecoClimate[mo] = timestepData[ecoregion.Index][mo]; 
-
-            //    double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
-
-            //    //double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
-
-            //    this.MonthlyTemp[mo] = MonthlyAvgTemp;// + standardDeviation;
-            //    this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp; // + standardDeviation;
-            //    this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp; // + standardDeviation;
-
-
-            //    this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt); // + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
-            //    this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
-
-            //    this.AnnualPrecip += this.MonthlyPrecip[mo];
-
-            //    if (this.MonthlyPrecip[mo] < 0)
-            //        this.MonthlyPrecip[mo] = 0;
-
-            //    double hr = CalculateDayNightLength(mo, latitude);
-            //    this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
-            //    this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
-
-            //    //this.DOY[mo] = DayOfYear(mo);
-            //}
-
-
-            
-
             return monthlyData;
-
         }
 
-        //private void AnnualClimate_Base(IEcoregion ecoregion, int year, double latitude)
-        //{
-        //    //Climate.ModelCore.Log.WriteLine("  Generate new annual climate:  Yr={0}, Eco={1}.", year, ecoregion.Name);
-        //    Ecoregion = ecoregion;
-        //    ClimateRecord[] ecoClimate = new ClimateRecord[12];
-
-        //    this.Year = year;
-        //    this.AnnualPrecip = 0.0;
-        //    //this.AnnualN = 0.0;
-        //    this.Latitude = latitude;
-
-        //    for (int mo = 0; mo < 12; mo++)
-        //    {
-        //        ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
-
-        //        double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
-
-        //        double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
-
-        //        this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
-        //        this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
-        //        this.MonthlyMaxTemp[mo] = ecoClimate[mo].AvgMaxTemp + standardDeviation;
-        //        this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
-        //        this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
-
-        //        this.AnnualPrecip += this.MonthlyPrecip[mo];
-
-        //        if (this.MonthlyPrecip[mo] < 0)
-        //            this.MonthlyPrecip[mo] = 0;
-
-        //        double hr = CalculateDayNightLength(mo, latitude);
-        //        this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
-        //        this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
-
-        //        //this.DOY[mo] = DayOfYear(mo);
-        //    }
-
-
-        //    this.MonthlyPET = CalculatePotentialEvapotranspiration(); //ecoClimate);
-        //    this.MonthlyVPD = CalculateVaporPressureDeficit(); //ecoClimate);
-        //    this.MonthlyGDD = CalculatePnETGDD(); //this.MonthlyTemp, year);
-
-        //    this.beginGrowing = CalculateBeginGrowingSeason(); //ecoClimate);
-        //    this.endGrowing = CalculateEndGrowingSeason(); //ecoClimate);
-        //    this.growingDegreeDays = GrowSeasonDegreeDays(); //year);
-
-        //    for (int mo = 5; mo < 8; mo++)
-        //        this.JJAtemperature += this.MonthlyTemp[mo];
-        //    this.JJAtemperature /= 3.0;
-
-
-        //}
+          
         private ClimateRecord[] AnnualClimate_From_AnnualClimate_Daily(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int timeStep, int timeStepIndex)
         {
             var monthlyData = new ClimateRecord[12];
@@ -627,42 +419,6 @@ namespace  Landis.Library.Climate
 
             return monthlyData;
 
-            ////------------------------------------------------------------
-            //// Calculate monthly data derived from precipitation and temperature
-
-            //this.Year = actualYear;
-            //this.AnnualPrecip = 0.0;
-            //for (int mo = 0; mo < 12; mo++)
-            //{
-            //    //ecoClimate[mo] = Climate.TimestepData[ecoregion.Index, mo];
-
-            //    this.AnnualPrecip += this.MonthlyPrecip[mo];
-
-            //    if (this.MonthlyPrecip[mo] < 0)
-            //        throw new System.ApplicationException(String.Format("Error: Precipitation < 0.  Year={0}, Month={1}, Ppt={2}", this.Year, mo, this.MonthlyPrecip[mo]));
-
-            //    double hr = CalculateDayNightLength(mo, latitude);
-            //    this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
-            //    this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
-
-            //}
-
-
-            //this.MonthlyPET = CalculatePotentialEvapotranspiration();
-            //this.MonthlyVPD = CalculateVaporPressureDeficit(); 
-            //this.MonthlyGDD = CalculatePnETGDD(); 
-
-            
-            //this.beginGrowing = annDaily.BeginGrowing; 
-            //this.endGrowing = annDaily.EndGrowing; 
-            //this.growingDegreeDays = annDaily.GrowingDegreeDays;
-
-            //this.JJAtemperature = 0.0;
-            //for (int mo = 5; mo < 8; mo++)
-            //    this.JJAtemperature += this.MonthlyTemp[mo];
-            //this.JJAtemperature /= 3.0;
-
-            //Climate.ModelCore.UI.WriteLine("  Completed calculations from daily data... Ecoregion = {0}, Year = {1}, BeginGrow = {2}.", ecoregion.Name, actualYear, this.beginGrowing);
             
         }
 

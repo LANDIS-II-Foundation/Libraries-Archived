@@ -108,11 +108,7 @@ namespace Landis.Library.Climate
                 
                 ReadValue(par, currentLine);
                 climateRecord.PAR = par.Value;
-
-                //if (currentLine.ToString().ToLower().Contains("avgvartemp"))
-                //{
-                //if(!Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("standard"))
-                //{
+                               
                 try
                 {
                     ReadValue(avgVarTemp, currentLine);
@@ -139,29 +135,7 @@ namespace Landis.Library.Climate
                     }
                 }
 
-                //if(!Climate.ConfigParameters.ClimateFileFormat.ToLower().Contains("standard"))
-                ////{
-                //    ReadValue(avgVarTemp, currentLine);
-                //    climateRecord.AvgVarTemp = avgVarTemp.Value;
-
-                //    ReadValue(avgPptVarTemp, currentLine);
-                //    climateRecord.AvgPptVarTemp = avgPptVarTemp.Value;
-
-                //    allData[yr][ecoregion.Index, mo - 1] = climateRecord;
-                    
-                //    CheckNoDataAfter("the " + avgPptVarTemp.Name + " column",
-                //                     currentLine);
-                //}
-
-                //else
-                //{
-                //    allData[yr][ecoregion.Index, mo - 1] = climateRecord;
-
-                //    CheckNoDataAfter("the " + par.Name + " column",
-                //                     currentLine);
-                //}
-
-                GetNextLine();
+               GetNextLine();
                 
             }
 

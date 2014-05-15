@@ -70,7 +70,7 @@ namespace Landis.Library.Climate
             InputParameters parameters = new InputParameters();
 
             string climateTimeSeries_PossibleValues = "Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYear, Daily_RandomYear, Daily_AverageAllYears, Daily_SequencedYears, Monthly_SequencedYears";
-            string climateFileFormat_PossibleValues = "ipcc3_daily, ipcc3_monthly, ipcc5_daily, ipcc5_monthly, prism_monthly, mauer_daily";
+            string climateFileFormat_PossibleValues = "Daily_Temp-C_Precip-mmDay, Monthly_Temp-C_Precip-mmMonth, Daily_Temp-K_Precip-mmSec, Monthly_Temp-K_Precip-mmSec, mauer_daily";
 
             //InputVar<string> climateConfigFile = new InputVar<string>(Names.ClimateConfigFile);
             //ReadVar(climateConfigFile);
