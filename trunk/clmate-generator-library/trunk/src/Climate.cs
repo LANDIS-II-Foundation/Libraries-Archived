@@ -152,41 +152,41 @@ namespace Landis.Library.Climate
 
             ModelCore.UI.WriteLine("   Loading future weather data from file {0} ...", configParameters.ClimateFile);
             Climate.ConvertFileFormat_FillOutAllData(configParameters.ClimateTimeSeries, configParameters.ClimateFile, configParameters.ClimateFileFormat, Climate.Phase.Future_Climate);
-            
-            
-            // for all options except random, the spinupTimeStepKeys are those from "allData"
-            List<int> spinupTimeStepKeys = new List<int>(Climate.spinup_allData.Keys);
 
-            if (Climate.ConfigParameters.SpinUpClimateTimeSeries.ToLower().Contains("random"))
-            {
-                // generate random keys up to the maximum possible length of spinup
-                
-                int maxSpeciesAge = 0;
-                foreach (ISpecies sp in ModelCore.Species)
-                {
-                    if (sp.Longevity > maxSpeciesAge)
-                        maxSpeciesAge = sp.Longevity;
-                }
 
-                // pick a random year key from allData and make spinupTimeStepKeys up to the maximum possible length of spinup
-                List<int> keyList = new List<int>(Climate.spinup_allData.Keys);
-                var startYear = keyList.Min();
-                Climate.randSelectedTimeKeys_spinup = new List<int>();
-                spinupTimeStepKeys.Clear();
-
-                for (var i = 0; i < maxSpeciesAge; ++i)
-                {
-                    Climate.randSelectedTimeKeys_spinup.Add(keyList[(int)(keyList.Count * Climate.ModelCore.GenerateUniform())]);
-                    spinupTimeStepKeys.Add(startYear + i);
-                }
-
-                
-            }
+            // **
+            // spinup
 
             // write input data to the log
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in spinup_allData)
             {
                 Climate.WriteSpinupInputLog(timeStep.Value, timeStep.Key, Climate.Phase.SpinUp_Climate.ToString());
+            }
+
+            // find maxSpeciesAge as the maximum possible time step count for spin up
+            int maxSpeciesAge = 0;
+            foreach (ISpecies sp in ModelCore.Species)
+            {
+                if (sp.Longevity > maxSpeciesAge)
+                    maxSpeciesAge = sp.Longevity;
+            }
+
+            var spinupTimeStepKeys = new List<int>();
+            var spinupKeyList = new List<int>(Climate.spinup_allData.Keys);
+            var spinupStartYear = spinupKeyList.Min();
+            var spinupTimeStepCount = maxSpeciesAge;
+
+            for (var i = 0; i < spinupTimeStepCount; ++i)
+                spinupTimeStepKeys.Add(spinupStartYear + i);
+
+            if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random"))
+            {
+                // generate random keys for the length of maxSpeciesAge
+                Climate.randSelectedTimeKeys_spinup = new List<int>();
+
+                // pick a random year key from allData
+                for (var i = 0; i < spinupTimeStepCount; ++i)
+                    Climate.randSelectedTimeKeys_spinup.Add(spinupKeyList[(int)(spinupKeyList.Count * Climate.ModelCore.GenerateUniform())]);
             }
 
             // initialize Spinup data arrays
@@ -200,33 +200,28 @@ namespace Landis.Library.Climate
             // **
             // future
 
-            // for all options except random, the futureTimeStepKeys are those from "allData"
-            List<int> futureTimeStepKeys = new List<int>(Climate.future_allData.Keys);
-
-            if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random")) 
-            {
-                // generate random keys for the length of the simulation
-                var yearCount = ModelCore.EndTime - ModelCore.StartTime;
-
-                // pick a random year key from allData and make futureTimeStepKeys up to the length of the simulation
-                List<int> keyList = new List<int>(Climate.future_allData.Keys);
-                var startYear = keyList.Min();
-                Climate.randSelectedTimeKeys_future = new List<int>();
-                futureTimeStepKeys.Clear();
-                
-                for (var i = 0; i < yearCount; ++i)
-                {
-                    Climate.randSelectedTimeKeys_future.Add(keyList[(int)(keyList.Count * Climate.ModelCore.GenerateUniform())]);
-                    futureTimeStepKeys.Add(startYear + i);
-                }
-
-                                
-            }
-
             // write input data to the log
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in future_allData)
             {
                 Climate.WriteFutureInputLog(timeStep.Value, timeStep.Key, Climate.Phase.Future_Climate.ToString());
+            }
+
+            var futureTimeStepKeys = new List<int>();
+            var futureKeyList = new List<int>(Climate.future_allData.Keys);
+            var futureStartYear = futureKeyList.Min();
+            var futureTimeStepCount = ModelCore.EndTime - ModelCore.StartTime;
+
+            for (var i = 0; i < futureTimeStepCount; ++i)
+                futureTimeStepKeys.Add(futureStartYear + i);
+
+            if (Climate.ConfigParameters.ClimateTimeSeries.ToLower().Contains("random")) 
+            {
+                // generate random keys for the length of the simulation
+                Climate.randSelectedTimeKeys_future = new List<int>();
+
+                // pick a random year key from allData
+                for (var i = 0; i < futureTimeStepCount; ++i)
+                    Climate.randSelectedTimeKeys_future.Add(futureKeyList[(int)(futureKeyList.Count * Climate.ModelCore.GenerateUniform())]);                                
             }
 
             // initialize Future data arrays
@@ -235,8 +230,6 @@ namespace Landis.Library.Climate
                 Future_MonthlyData.Add(timeStepKey, new AnnualClimate_Monthly[modelCore.Ecoregions.Count]);
                 Future_DailyData.Add(timeStepKey, new AnnualClimate_Daily[modelCore.Ecoregions.Count]);
             }
-
-
         }
 
 
