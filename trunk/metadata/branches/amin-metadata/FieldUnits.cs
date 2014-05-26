@@ -18,7 +18,7 @@ namespace Landis.Library.Metadata
          public const string g_C = "g C";
          public const string g_N = "g N";
          public const string cm = "cm";
-         public const string DegreeC = "Celcius";
+         public const string DegreeC = "Celsius";
          public const string g_B_m2 = "g Biomass m-2";
          public const string g_B_m2_yr1 = "g Biomass m-2 yr-1";
          public const string Count = "count";
