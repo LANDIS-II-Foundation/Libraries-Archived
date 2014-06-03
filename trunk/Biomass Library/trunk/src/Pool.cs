@@ -129,13 +129,16 @@ namespace Landis.Library.Biomass
         /// <summary>
         /// Decomposes the pool's biomass for a year.
         /// </summary>
-        public void Decompose()
+      
+	public double Decompose()
         {
             //if (PlugIn.CalibrateMode && mass > 0)
             //    PlugIn.ModelCore.UI.WriteLine("Pool mass = {0}.", mass);
-            mass = (uint)(mass * Math.Exp(-decayValue));
+            double oldmass = mass;
+            double newmass  = (uint)(mass * Math.Exp(-decayValue));
+            mass = newmass;
+            return oldmass - newmass; 
         }
-
 
     }
 }
