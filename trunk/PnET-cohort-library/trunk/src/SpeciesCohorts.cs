@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using Landis.Library.BiomassCohorts;
-using log4net;
+
 
 namespace Landis.Library.BiomassCohortsPnET
 {
@@ -22,8 +22,8 @@ namespace Landis.Library.BiomassCohortsPnET
           AgeOnlyCohorts.ISpeciesCohorts,
           BiomassCohorts.ISpeciesCohorts
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly bool isDebugEnabled = log.IsDebugEnabled;
+        //private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static readonly bool isDebugEnabled = log.IsDebugEnabled;
         private ISpecies species;
         private bool isMaturePresent;
         
