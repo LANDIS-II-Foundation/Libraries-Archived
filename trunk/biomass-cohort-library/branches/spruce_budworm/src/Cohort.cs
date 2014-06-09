@@ -45,6 +45,16 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
+        public double[] DefoliationHistory
+        {
+            get
+            {
+                return data.DefoliationHistory;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
         /// <summary>
         /// The cohort's age and biomass data.
         /// </summary>
@@ -60,11 +70,13 @@ namespace Landis.Library.BiomassCohorts
 
         public Cohort(ISpecies species,
                       ushort   age,
-                      int   biomass)
+                      int   biomass,
+                       double [] defoliationHistory)
         {
             this.species = species;
             this.data.Age = age;
             this.data.Biomass = biomass;
+            this.data.DefoliationHistory = defoliationHistory;
         }
 
         //---------------------------------------------------------------------
