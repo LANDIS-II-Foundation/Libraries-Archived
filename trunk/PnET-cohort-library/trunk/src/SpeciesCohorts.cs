@@ -22,8 +22,6 @@ namespace Landis.Library.BiomassCohortsPnET
           AgeOnlyCohorts.ISpeciesCohorts,
           BiomassCohorts.ISpeciesCohorts
     {
-        //private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        //private static readonly bool isDebugEnabled = log.IsDebugEnabled;
         private ISpecies species;
         private bool isMaturePresent;
         
