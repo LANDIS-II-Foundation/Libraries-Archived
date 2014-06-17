@@ -4,3 +4,11 @@ Copyright 2014 University of Notre Dame
 This project is licensed under the Apache License, Version 2.0 (the
 "License").  A copy of the License is in the project file "LICENSE.txt",
 and is also available at http://www.apache.org/licenses/LICENSE-2.0
+
+This project includes code from other projects that were developed at these
+organizations:
+
+  -- University of Wisconsin
+
+The files from those projects have comment headers that indicate their
+origins.

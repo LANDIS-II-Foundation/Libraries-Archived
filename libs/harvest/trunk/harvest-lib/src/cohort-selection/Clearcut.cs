@@ -1,3 +1,5 @@
+// Copyright 2005 University of Wisconsin
+
 using Landis.AgeCohort;
 
 namespace Landis.Harvest

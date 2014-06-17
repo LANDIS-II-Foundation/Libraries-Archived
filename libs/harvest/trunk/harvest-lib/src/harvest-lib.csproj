@@ -37,6 +37,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="cohort-selection\AgeRange.cs" />
+    <Compile Include="cohort-selection\Clearcut.cs" />
+    <Compile Include="cohort-selection\EveryNthCohort.cs" />
+    <Compile Include="cohort-selection\ICohortSelector.cs" />
+    <Compile Include="cohort-selection\MultiSpeciesCohortSelector.cs" />
+    <Compile Include="cohort-selection\SelectCohorts.cs" />
+    <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
