@@ -486,7 +486,7 @@ namespace  Landis.Library.Climate
             for (int month = 0; month < 5; month++)  //Begin looking in February (1).  Should be safe for at least 100 years.
             {
 
-                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, 3)) / 2;
+                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;
                 double MonthlyMinTemp = this.MonthlyMinTemp[month]; // yearClimate[i].AvgMinTemp;// + (monthlyTempSD[i] * randVar.GenerateNumber());
 
                 //Now interpolate between days:
