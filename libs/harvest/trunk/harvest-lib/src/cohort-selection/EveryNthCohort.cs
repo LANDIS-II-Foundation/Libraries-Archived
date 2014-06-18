@@ -1,8 +1,8 @@
 // Copyright 2005 University of Wisconsin
 
-using Landis.AgeCohort;
+using Landis.Library.AgeOnlyCohorts;
 
-namespace Landis.Harvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// Selects every Nth cohort among a species' cohorts for harvesting.

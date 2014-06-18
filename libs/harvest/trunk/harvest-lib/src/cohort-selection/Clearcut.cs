@@ -1,8 +1,8 @@
 // Copyright 2005 University of Wisconsin
 
-using Landis.AgeCohort;
+using Landis.Library.AgeOnlyCohorts;
 
-namespace Landis.Harvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// Removes all the cohorts at a site.

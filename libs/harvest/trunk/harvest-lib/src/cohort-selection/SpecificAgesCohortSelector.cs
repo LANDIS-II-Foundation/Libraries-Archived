@@ -1,11 +1,9 @@
 // Copyright 2005 University of Wisconsin
 
-using Landis.AgeCohort;
-using Landis.Species;
-
+using Landis.Library.AgeOnlyCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Harvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// Selects specific ages and ranges of ages among a species' cohorts

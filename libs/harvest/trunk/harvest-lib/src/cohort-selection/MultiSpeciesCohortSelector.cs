@@ -1,11 +1,10 @@
 // Copyright 2005 University of Wisconsin
 
-using Landis.AgeCohort;
-using Landis.Species;
-
+using Landis.Core;
+using Landis.Library.AgeOnlyCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Harvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// Removes certain cohorts of one or more species from a site.
