@@ -11,16 +11,14 @@ namespace Landis.Library.Harvest
     /// </summary>
     public class SpecificAgesCohortSelector
     {
-        private List<ushort> ages;
-        private List<AgeRange> ranges;
+        private AgesAndRanges agesAndRanges;
 
         //---------------------------------------------------------------------
 
         public SpecificAgesCohortSelector(List<ushort>   ages,
                                           List<AgeRange> ranges)
         {
-            this.ages = new List<ushort>(ages);
-            this.ranges = new List<AgeRange>(ranges);
+            agesAndRanges = new AgesAndRanges(ages, ranges);
         }
 
         //---------------------------------------------------------------------
@@ -33,16 +31,9 @@ namespace Landis.Library.Harvest
     	{
     	    int i = 0;
     	    foreach (ICohort cohort in cohorts) {
-    	        if (ages.Contains(cohort.Age))
+                AgeRange? notUsed;
+    	        if (agesAndRanges.Contains(cohort.Age, out notUsed))
     	            isHarvested[i] = true;
-    	        else {
-    	            foreach (AgeRange range in ranges) {
-    	                if (range.Contains(cohort.Age)) {
-    	                    isHarvested[i] = true;
-    	                    break;
-    	                }
-    	            }
-    	        }
     	        i++;
     	    }
     	}
