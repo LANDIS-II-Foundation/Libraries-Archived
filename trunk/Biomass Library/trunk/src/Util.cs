@@ -36,55 +36,29 @@ namespace Landis.Library.Biomass
             return newParm;
         }
         //---------------------------------------------------------------------
-        public static float CheckBiomassParm(string label, 
-                                            InputValue<float> newValue,
-                                            double minValue,
-                                            double maxValue)
-        {
-            if (newValue != null)
-            {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
-                    throw new InputValueException(newValue.String,
-                                                  "Input value for "+label+"{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
-            }
-            return newValue.Actual;
-        }
         public static float CheckBiomassParm(InputValue<float> newValue,
-                                                    double minValue,
-                                                    double maxValue)
+                                             double minValue,
+                                             double maxValue,
+                                             string label = "inputparameter")
         {
             if (newValue != null)
             {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
-            }
-            return newValue.Actual;
-        }
-        public static double CheckBiomassParm(string label, 
-                                              InputValue<double> newValue,
-                                              double minValue,
-                                              double maxValue)
-        {
-            if (newValue != null)
-            {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
-                    throw new InputValueException(newValue.String,
-                                                  "Input value for " + label + "{0} is not between {1:0.0} and {2:0.0}",
+                                                  "Value for "+label+" {0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
         }
         public static double CheckBiomassParm(InputValue<double> newValue,
-                                                    double             minValue,
-                                                    double             maxValue)
+                                              double             minValue,
+                                              double             maxValue,
+                                              string label = "inputparameter")
         {
             if (newValue != null) {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
+                                                  "Input value for " + label + " {0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
@@ -92,13 +66,14 @@ namespace Landis.Library.Biomass
         //---------------------------------------------------------------------
 
         public static int CheckBiomassParm(InputValue<int> newValue,
-                                                    int             minValue,
-                                                    int             maxValue)
+                                           int             minValue,
+                                           int             maxValue,
+                                           string label = "inputparameter")
         {
             if (newValue != null) {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
+                                                  "Input value for " + label + " {0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
