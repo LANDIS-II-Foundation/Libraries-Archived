@@ -1,5 +1,6 @@
 /*
  * Copyright 2008 Green Code LLC
+ * Copyright 2014 University of Notre Dame
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +21,6 @@ using Landis.Library.BiomassCohorts;
 using Landis.Library.Harvest;
 using System.Collections.Generic;
 
-using AgeCohorts = Landis.AgeCohort;
-
 namespace Landis.Library.BiomassHarvest
 {
     /// <summary>
@@ -32,8 +31,7 @@ namespace Landis.Library.BiomassHarvest
     {
         private static Percentage defaultPercentage;
 
-        private IList<ushort> ages;
-        private IList<AgeRange> ranges;
+        private AgesAndRanges agesAndRanges;
         private IDictionary<ushort, Percentage> percentages;
 
         //---------------------------------------------------------------------
@@ -49,51 +47,37 @@ namespace Landis.Library.BiomassHarvest
                                           IList<AgeRange>                 ranges,
                                           IDictionary<ushort, Percentage> percentages)
         {
-            this.ages = new List<ushort>(ages);
-            this.ranges = new List<AgeRange>(ranges);
+            agesAndRanges = new AgesAndRanges(ages, ranges);
             this.percentages = new Dictionary<ushort, Percentage>(percentages);
         }
 
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Selects which of a species' cohorts are harvested.
+        /// Selects which cohorts are harvested.
         /// </summary>
-        public void SelectCohorts(AgeCohorts.ISpeciesCohorts         cohorts,
-                                  AgeCohorts.ISpeciesCohortBoolArray isHarvested)
+        /// <returns>
+        /// true if the given cohort is to be harvested.  The cohort's biomass
+        /// should be reduced by the percentage returned in the second
+        /// parameter.
+        /// </returns>
+        public bool Selects(ICohort cohort, out Percentage percentage)
         {
-            int i = 0;
-            foreach (ICohort cohort in ((ISpeciesCohorts) cohorts)) {
-                bool cohortSelected = false;
                 ushort ageToLookUp = 0;
-                if (ages.Contains(cohort.Age)) {
-                    cohortSelected = true;
-                    ageToLookUp = cohort.Age;
-                }
-                else {
-                    foreach (AgeRange range in ranges) {
-                        if (range.Contains(cohort.Age)) {
-                            cohortSelected = true;
-                            ageToLookUp = range.Start;
-                            break;
-                        }
+                AgeRange? containingRange;
+                if (agesAndRanges.Contains(cohort.Age, out containingRange))
+                {
+                    if (! containingRange.HasValue)
+                        ageToLookUp = cohort.Age;
+                    else {
+                        ageToLookUp = containingRange.Value.Start;
                     }
-                }
-                if (cohortSelected) {
-                    Percentage percentage;
                     if (! percentages.TryGetValue(ageToLookUp, out percentage))
                         percentage = defaultPercentage;
-                    int reduction = (int) System.Math.Round(cohort.Biomass * percentage);
-                    if (reduction < cohort.Biomass)
-                        PartialHarvestDisturbance.RecordBiomassReduction(cohort, reduction);
-                    else
-                    {
-                        isHarvested[i] = true;
-                        PartialHarvestDisturbance.RecordBiomassReduction(cohort, reduction);
-                    }
+                    return true;
                 }
-                i++;
-            }
+                percentage = null;
+                return false;
         }
     }
 }
