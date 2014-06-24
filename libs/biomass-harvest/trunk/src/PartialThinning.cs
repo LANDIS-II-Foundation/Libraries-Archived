@@ -15,6 +15,7 @@
  */
 
 using Edu.Wisc.Forest.Flel.Util;
+using Landis.Core;
 using Landis.Library.Harvest;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,7 @@ namespace Landis.Library.BiomassHarvest
     /// </summary>
     public static class PartialThinning
     {
+        public static PartialCohortSelectors CohortSelectors { get; private set; }
         private static IDictionary<ushort, Percentage> percentages;
 
         //---------------------------------------------------------------------
@@ -39,6 +41,7 @@ namespace Landis.Library.BiomassHarvest
             InputValues.Register<AgeRange>(PartialThinning.ReadAgeOrRange);
 
             percentages = new Dictionary<ushort, Percentage>();
+            CohortSelectors = new PartialCohortSelectors();
         }
 
         //---------------------------------------------------------------------
@@ -191,6 +194,32 @@ namespace Landis.Library.BiomassHarvest
             }
 
             return new InputValue<AgeRange>(ageRange, word);
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Creates and stores a specific-ages cohort selector for a species
+        /// if at least one percentage was found among the list of ages and
+        /// ranges that were read.
+        /// </summary>
+        /// <returns>
+        /// True if a selector was created and stored in the CohortSelectors
+        /// property.  False is returned if no selector was created because
+        /// there were no percentages read for any age or range.
+        /// </returns>
+        public static bool CreateCohortSelectorFor(ISpecies species,
+                                                   IList<ushort> ages,
+                                                   IList<AgeRange> ageRanges)
+        {
+            if (percentages.Count == 0)
+                return false;
+            else
+            {
+                CohortSelectors[species] = new SpecificAgesCohortSelector(ages, ageRanges, percentages);
+                percentages.Clear();
+                return true;
+            }
         }
     }
 }

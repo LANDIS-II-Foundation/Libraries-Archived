@@ -35,6 +35,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="PartialCohortSelectors.cs" />
     <Compile Include="PartialThinning.cs" />
     <Compile Include="SiteVars.cs" />
     <Compile Include="SpecificAgesCohortSelector.cs" />
