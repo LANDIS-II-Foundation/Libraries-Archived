@@ -7,16 +7,12 @@ using Landis.Core;
 
 namespace Landis.Library.Harvest
 {
-    public static class Main
+    internal static class Model
     {
         /// <summary>
-        /// Initialize the library for use by client code.
+        /// The model core instance used across the library's internal
+        /// components.
         /// </summary>
-        public static void InitializeLib(ICore modelCore)
-        {
-            Model.Core = modelCore;
-            SiteVars.Initialize();
-            AgeRangeParsing.InitializeClass();
-        }
+        internal static ICore Core { get; set; }
     }
 }
