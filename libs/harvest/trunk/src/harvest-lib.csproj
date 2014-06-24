@@ -46,6 +46,7 @@
     <Compile Include="cohort-selection\MultiSpeciesCohortSelector.cs" />
     <Compile Include="cohort-selection\SelectCohorts.cs" />
     <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
+    <Compile Include="Main.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">

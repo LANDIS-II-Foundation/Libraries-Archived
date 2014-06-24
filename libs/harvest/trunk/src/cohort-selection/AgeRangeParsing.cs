@@ -26,6 +26,19 @@ namespace Landis.Library.Harvest
         //---------------------------------------------------------------------
 
         /// <summary>
+        /// Initialize the class.
+        /// </summary>
+        /// <remarks>
+        /// Client code can use this method to explicitly control when the
+        /// class' static constructor is invoked.
+        /// </remarks>
+        public static void InitializeClass()
+        {
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
         /// Parses a word for a cohort age or an age range (format: age-age).
         /// </summary>
         public static AgeRange ParseAgeOrRange(string word)
