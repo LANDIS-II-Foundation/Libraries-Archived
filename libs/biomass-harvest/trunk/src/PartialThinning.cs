@@ -25,6 +25,30 @@ namespace Landis.Library.BiomassHarvest
     /// </summary>
     public static class PartialThinning
     {
+        static PartialThinning()
+        {
+            // Force the harvest library to register its read method for age
+            // ranges.  Then replace it with this project's read method that
+            // handles percentages for partial thinning.
+            AgeRangeParsing.InitializeClass();
+            InputValues.Register<AgeRange>(PartialThinning.ReadAgeOrRange);
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Initialize the class.
+        /// </summary>
+        /// <remarks>
+        /// Client code can use this method to explicitly control when the
+        /// class' static constructor is invoked.
+        /// </remarks>
+        public static void InitializeClass()
+        {
+        }
+
+        //---------------------------------------------------------------------
+
         public static InputValueException MakeInputValueException(string value,
                                                                   string message)
         {
@@ -166,7 +190,7 @@ namespace Landis.Library.BiomassHarvest
             if (word == "")
                 throw new InputValueException();  // Missing value
 
-            AgeRange ageRange = BaseHarvest.ParametersParser.ParseAgeOrRange(word);
+            AgeRange ageRange = AgeRangeParsing.ParseAgeOrRange(word);
 
             //  Does a percentage follow?
             TextReader.SkipWhitespace(reader);
