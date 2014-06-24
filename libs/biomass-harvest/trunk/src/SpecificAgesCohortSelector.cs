@@ -15,14 +15,14 @@
  */
 
 using Edu.Wisc.Forest.Flel.Util;
-using Landis.Biomass;
-using Landis.Harvest;
-using Landis.Species;
+using Landis.Core;
+using Landis.Library.BiomassCohorts;
+using Landis.Library.Harvest;
 using System.Collections.Generic;
 
 using AgeCohorts = Landis.AgeCohort;
 
-namespace Landis.Extension.BiomassHarvest
+namespace Landis.Library.BiomassHarvest
 {
     /// <summary>
     /// Selects specific ages and ranges of ages among a species' cohorts

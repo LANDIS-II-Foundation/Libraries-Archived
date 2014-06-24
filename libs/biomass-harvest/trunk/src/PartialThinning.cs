@@ -15,12 +15,10 @@
  */
 
 using Edu.Wisc.Forest.Flel.Util;
-using Landis.Harvest;
+using Landis.Library.Harvest;
 using System.Text;
 
-using BaseHarvest = Landis.Harvest;
-
-namespace Landis.Extension.BiomassHarvest
+namespace Landis.Library.BiomassHarvest
 {
     /// <summary>
     /// Static class for partial thinning.

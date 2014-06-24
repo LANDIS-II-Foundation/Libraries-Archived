@@ -35,7 +35,9 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="PartialThinning.cs" />
     <Compile Include="SiteVars.cs" />
+    <Compile Include="SpecificAgesCohortSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
@@ -49,6 +51,9 @@
     </Reference>
     <Reference Include="Landis.Library.Cohorts">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Harvest-v0">
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\build\Landis.Library.Harvest-v0.dll</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4815.34359, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
