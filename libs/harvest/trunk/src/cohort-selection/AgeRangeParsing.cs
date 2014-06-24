@@ -1,3 +1,5 @@
+// Copyright 2005 University of Wisconsin
+
 using Edu.Wisc.Forest.Flel.Util; 
 using Landis.Species;
 using Landis.Succession;
@@ -7,7 +9,7 @@ using System.Text;
 
 using FormatException = System.FormatException;
 
-namespace Landis.Harvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A parser that reads harvest parameters from text input.
