@@ -1,4 +1,5 @@
 // Copyright 2005 University of Wisconsin
+// Copyright 2014 University of Notre Dame
 
 using Edu.Wisc.Forest.Flel.Util; 
 using Landis.Core;
@@ -14,6 +15,7 @@ namespace Landis.Library.Harvest
     public abstract class BasicParameterParser<T>
         : Landis.TextParser<T>
     {
+        private bool keywordsEnabled;
         private ISpeciesDataset speciesDataset;
         private InputVar<string> speciesName;
         private Dictionary<string, int> speciesLineNumbers;
@@ -31,8 +33,13 @@ namespace Landis.Library.Harvest
         /// <param name="speciesDataset">
         /// The dataset of species to look up species' names in.
         /// </param>
-        public BasicParameterParser(ISpeciesDataset speciesDataset)
+        /// <param name="keywordsEnabled">
+        /// Are keywords like "Oldest" and "AllExceptYoungest" accepted?
+        /// </param>
+        public BasicParameterParser(ISpeciesDataset speciesDataset,
+                                    bool            keywordsEnabled)
         {
+            this.keywordsEnabled = keywordsEnabled;
             this.speciesDataset = speciesDataset;
             this.speciesName = new InputVar<string>("Species");
             this.speciesLineNumbers = new Dictionary<string, int>();
@@ -98,37 +105,40 @@ namespace Landis.Library.Harvest
                 if (word == "")
                     throw NewParseException("No cohort keyword, age or age range after the species name");
 
-                bool isKeyword = false;
-                if (word == "All") {
-                    cohortSelector[species] = SelectCohorts.All;
-                    isKeyword = true;
-                }
-                else if (word == "Youngest") {
-                    cohortSelector[species] = SelectCohorts.Youngest;
-                    isKeyword = true;
-                }
-                else if (word == "AllExceptYoungest") {
-                    cohortSelector[species] = SelectCohorts.AllExceptYoungest;
-                    isKeyword = true;
-                }
-                else if (word == "Oldest") {
-                    cohortSelector[species] = SelectCohorts.Oldest;
-                    isKeyword = true;
-                }
-                else if (word == "AllExceptOldest") {
-                    cohortSelector[species] = SelectCohorts.AllExceptOldest;
-                    isKeyword = true;
-                }
-                else if (word.StartsWith("1/")) {
-                    InputVar<ushort> N = new InputVar<ushort>("1/N");
-                    N.ReadValue(new StringReader(word.Substring(2)));
-                    if (N.Value.Actual == 0)
-                        throw NewParseException("For \"1/N\", N must be > 0");
-                    cohortSelector[species] = new EveryNthCohort(N.Value.Actual).SelectCohorts;
-                    isKeyword = true;
+                bool foundKeyword = false;
+                if (keywordsEnabled)
+                {
+                    if (word == "All") {
+                        cohortSelector[species] = SelectCohorts.All;
+                        foundKeyword = true;
+                    }
+                    else if (word == "Youngest") {
+                        cohortSelector[species] = SelectCohorts.Youngest;
+                        foundKeyword = true;
+                    }
+                    else if (word == "AllExceptYoungest") {
+                        cohortSelector[species] = SelectCohorts.AllExceptYoungest;
+                        foundKeyword = true;
+                    }
+                    else if (word == "Oldest") {
+                        cohortSelector[species] = SelectCohorts.Oldest;
+                        foundKeyword = true;
+                    }
+                    else if (word == "AllExceptOldest") {
+                        cohortSelector[species] = SelectCohorts.AllExceptOldest;
+                        foundKeyword = true;
+                    }
+                    else if (word.StartsWith("1/")) {
+                        InputVar<ushort> N = new InputVar<ushort>("1/N");
+                        N.ReadValue(new StringReader(word.Substring(2)));
+                        if (N.Value.Actual == 0)
+                            throw NewParseException("For \"1/N\", N must be > 0");
+                        cohortSelector[species] = new EveryNthCohort(N.Value.Actual).SelectCohorts;
+                        foundKeyword = true;
+                    }
                 }
 
-                if (isKeyword)
+                if (foundKeyword)
                     CheckNoDataAfter("the keyword \"" + word + "\"", currentLine);
                 else {
                     //  Read one or more ages or age ranges
