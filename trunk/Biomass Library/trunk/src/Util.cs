@@ -45,7 +45,7 @@ namespace Landis.Library.Biomass
             {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "Value for "+label+" {0} is not between {1:0.0} and {2:0.0}",
+                                                  "Value for "+label+": {0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
@@ -58,7 +58,7 @@ namespace Landis.Library.Biomass
             if (newValue != null) {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "Input value for " + label + " {0} is not between {1:0.0} and {2:0.0}",
+                                                  "Input value for " + label + ": {0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
@@ -73,7 +73,7 @@ namespace Landis.Library.Biomass
             if (newValue != null) {
                 if (newValue.Actual < minValue || newValue.Actual > maxValue)
                     throw new InputValueException(newValue.String,
-                                                  "Input value for " + label + " {0} is not between {1:0.0} and {2:0.0}",
+                                                  "Input value for " + label + ": {0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
             }
             return newValue.Actual;
