@@ -1,3 +1,5 @@
+// Copyright 2005 University of Wisconsin
+
 using Edu.Wisc.Forest.Flel.Util; 
 using Landis.Species;
 using Landis.Succession;
@@ -7,13 +9,14 @@ using System.Text;
 
 using FormatException = System.FormatException;
 
-namespace Landis.Harvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
-    /// A parser that reads harvest parameters from text input.
+    /// An extended base class for text parsers that need to parse basic
+    /// harvest parameters -- cohort selectors and species planting list.
     /// </summary>
-    public class ParametersParser
-        : Landis.TextParser<IParameters>
+    public abstract class BasicParameterParser<T>
+        : Landis.TextParser<T>
     {
         private static ParseMethod<ushort> uShortParse;
         private Species.IDataset speciesDataset;
