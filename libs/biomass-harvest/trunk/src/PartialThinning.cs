@@ -16,6 +16,7 @@
 
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Library.Harvest;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Landis.Library.BiomassHarvest
@@ -25,6 +26,10 @@ namespace Landis.Library.BiomassHarvest
     /// </summary>
     public static class PartialThinning
     {
+        private static IDictionary<ushort, Percentage> percentages;
+
+        //---------------------------------------------------------------------
+
         static PartialThinning()
         {
             // Force the harvest library to register its read method for age
@@ -32,6 +37,8 @@ namespace Landis.Library.BiomassHarvest
             // handles percentages for partial thinning.
             AgeRangeParsing.InitializeClass();
             InputValues.Register<AgeRange>(PartialThinning.ReadAgeOrRange);
+
+            percentages = new Dictionary<ushort, Percentage>();
         }
 
         //---------------------------------------------------------------------
@@ -157,23 +164,6 @@ namespace Landis.Library.BiomassHarvest
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Handler for events when an age or range and its associated
-        /// percentage have been read.
-        /// </summary>
-        public delegate void ReadEventHandler(AgeRange   ageRange,
-                                              Percentage percentage);
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// An event when a percentage for partial thinning is found after a
-        /// a cohort age or a range of ages.
-        /// </summary>
-        public static event ReadEventHandler ReadAgeOrRangeEvent;
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
         /// Reads a cohort age or a range of ages (format: age-age) followed
         /// by an optional percentage for partial thinning.
         /// </summary>
@@ -197,12 +187,7 @@ namespace Landis.Library.BiomassHarvest
             if (reader.Peek() == '(') {
                 int ignore;
                 InputValue<Percentage> percentage = ReadPercentage(reader, out ignore);
-                if (ReadAgeOrRangeEvent != null)
-                    ReadAgeOrRangeEvent(ageRange, percentage.Actual);
-            }
-            else {
-                if (ReadAgeOrRangeEvent != null)
-                    ReadAgeOrRangeEvent(ageRange, null);
+                percentages[ageRange.Start] = percentage;
             }
 
             return new InputValue<AgeRange>(ageRange, word);
