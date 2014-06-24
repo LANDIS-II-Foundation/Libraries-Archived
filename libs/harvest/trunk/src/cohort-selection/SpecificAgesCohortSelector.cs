@@ -15,8 +15,8 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
-        public SpecificAgesCohortSelector(List<ushort>   ages,
-                                          List<AgeRange> ranges)
+        public SpecificAgesCohortSelector(IList<ushort>   ages,
+                                          IList<AgeRange> ranges)
         {
             agesAndRanges = new AgesAndRanges(ages, ranges);
         }

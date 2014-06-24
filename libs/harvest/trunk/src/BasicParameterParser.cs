@@ -19,6 +19,8 @@ namespace Landis.Library.Harvest
         private ISpeciesDataset speciesDataset;
         private InputVar<string> speciesName;
         private Dictionary<string, int> speciesLineNumbers;
+        private MultiSpeciesCohortSelector cohortSelector;
+
         private static class Names
         {
             public const string PreventEstablishment = "PreventEstablishment";
@@ -87,7 +89,7 @@ namespace Landis.Library.Harvest
             else
                 namesThatFollow = new List<string>(names);
 
-            MultiSpeciesCohortSelector cohortSelector = new MultiSpeciesCohortSelector();
+            cohortSelector = new MultiSpeciesCohortSelector();
             speciesLineNumbers.Clear();
 
             while (! AtEndOfInput && ! namesThatFollow.Contains(CurrentName)) {
@@ -151,7 +153,7 @@ namespace Landis.Library.Harvest
                         ValidateAgeOrRange(ageOrRange.Value, ages, ranges);
                         TextReader.SkipWhitespace(currentLine);
                     }
-                    cohortSelector[species] = new SpecificAgesCohortSelector(ages, ranges).SelectCohorts;
+                    CreateCohortSelectionMethodFor(species, ages, ranges);
                 }
 
                 GetNextLine();
@@ -161,6 +163,24 @@ namespace Landis.Library.Harvest
                 throw NewParseException("Expected a line starting with a species name");
 
             return cohortSelector;
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Creates and stores the cohort selection method for a particular
+        /// species based on lists of specific ages and age ranges.
+        /// </summary>
+        /// <remarks>
+        /// Derived classes can override this method to perform special
+        /// handling of ages and ranges (for example, percentages for partial
+        /// harvesting in biomass extensions).
+        /// </remarks>
+        protected virtual void CreateCohortSelectionMethodFor(ISpecies species,
+                                                              IList<ushort> ages,
+                                                              IList<AgeRange> ranges)
+        {
+            cohortSelector[species] = new SpecificAgesCohortSelector(ages, ranges).SelectCohorts;
         }
 
         //---------------------------------------------------------------------
