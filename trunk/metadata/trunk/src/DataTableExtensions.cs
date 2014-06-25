@@ -195,7 +195,7 @@ namespace Landis.Library.Metadata
                 
                 foreach (DataColumn col in tbl.Columns)
                 {
-                    strb.AppendFormat("{0}, ", col.ColumnName);
+                    strb.AppendFormat("{0},", col.ColumnName);
                 }
                 file.WriteLine(strb.ToString());
                 //file.Close();
