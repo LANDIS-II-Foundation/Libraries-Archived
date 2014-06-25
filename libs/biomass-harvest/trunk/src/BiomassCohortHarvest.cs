@@ -4,6 +4,7 @@
 //   http://landis-extensions.googlecode.com/svn/libs/biomass-harvest/trunk/
 
 using Edu.Wisc.Forest.Flel.Util;
+using Landis.Core;
 using Landis.Library.BiomassCohorts;
 using Landis.Library.Harvest;
 using Landis.SpatialModeling;
@@ -21,7 +22,7 @@ namespace Landis.Library.BiomassHarvest
     /// removed (i.e., a percentage was specified for at least one age or age
     /// range).
     /// </remarks>
-    public class BiomassCohortHarvest
+    public abstract class BiomassCohortHarvest
         : AgeCohortHarvest, IDisturbance
     {
         private PartialCohortSelectors partialCohortSelectors;
@@ -49,8 +50,22 @@ namespace Landis.Library.BiomassHarvest
                 if (specificAgeCohortSelector.Selects(cohort, out percentage))
                     reduction = (int)(percentage * cohort.Biomass);
             }
+            Record(reduction, cohort);
             return reduction;
         }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Record a reduction that's been computed for a particular cohort.
+        /// </summary>
+        /// <remarks>
+        /// Derived classes will override this method in order to collect
+        /// statistics about biomass (for example, the amount of biomass
+        /// harvest per species at a site).
+        /// </remarks>
+        protected abstract void Record(int     reduction,
+                                       ICohort cohort);
 
         //---------------------------------------------------------------------
 
