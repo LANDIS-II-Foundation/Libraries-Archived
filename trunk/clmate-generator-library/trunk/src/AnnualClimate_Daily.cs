@@ -137,7 +137,7 @@ namespace Landis.Library.Climate
         {
             this.Year = actualYear;
 
-            this.AnnualPrecip = 0.0;
+            this.TotalAnnualPrecip = 0.0;
             for (int d = 0; d < dailyClimateRecords.Length; d++)
             {
                 this.DailyMinTemp[d] = dailyClimateRecords[d].AvgMinTemp;
@@ -149,7 +149,7 @@ namespace Landis.Library.Climate
 
                 this.DailyTemp[d] = (this.DailyMinTemp[d] + this.DailyMaxTemp[d]) / 2.0;
 
-                this.AnnualPrecip += this.DailyPrecip[d];
+                this.TotalAnnualPrecip += this.DailyPrecip[d];
 
                 var hr = CalculateDayNightLength(d, latitude);
                 this.DailyDayLength[d] = (3600.0 * hr);                  // seconds of daylight/day

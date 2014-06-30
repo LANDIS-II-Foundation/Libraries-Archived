@@ -62,16 +62,16 @@ namespace  Landis.Library.Climate
                         actualTimeStep = 0;
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
                         CalculateMonthlyData(ecoregion, monthlyData, actualTimeStep, latitude);
-                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, actualTimeStep);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = AVERAGED.", this.climatePhase, ecoregion.Name, actualTimeStep);
                         break;
                     }
-                    //this case is not working as of 5/15/14
-                case "Monthly_AverageWithVariation":
+
+                case "Monthly_AverageWithVariation": //this case is not working as of 5/15/14
                     {
                         TimeStep = timeStep;
                         actualTimeStep = 0;
                         monthlyData = AnnualClimate_AvgMonth(ecoregion, latitude);
-                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = {2}.", this.climatePhase, ecoregion.Name, actualTimeStep);
+                        Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} from AVERAGE MONTHLY data. Ecoregion = {1}, SimulatedYear = AVERAGED.", this.climatePhase, ecoregion.Name, actualTimeStep);
                         //timestepData = AnnualClimate_AvgMonth(ecoregion, monthlyDataKey, latitude);
                         //CalculateMonthlyData_AddVariance(ecoregion, monthlyData, actualTimeStep, latitude);
                         break;
@@ -223,7 +223,7 @@ namespace  Landis.Library.Climate
         {
             this.Year = actualYear;
 
-            this.AnnualPrecip = 0.0;
+            this.TotalAnnualPrecip = 0.0;
             for (int mo = 0; mo < 12; mo++)
             {
                 this.MonthlyMinTemp[mo] = monthlyClimateRecords[mo].AvgMinTemp;
@@ -235,12 +235,14 @@ namespace  Landis.Library.Climate
 
                 this.MonthlyTemp[mo] = (this.MonthlyMinTemp[mo] + this.MonthlyMaxTemp[mo]) / 2.0;
 
-                this.AnnualPrecip += this.MonthlyPrecip[mo];
+                this.TotalAnnualPrecip += this.MonthlyPrecip[mo];
 
                 var hr = CalculateDayNightLength(mo, latitude);
                 this.MonthlyDayLength[mo] = (3600.0 * hr);                  // seconds of daylight/day
                 this.MonthlyNightLength[mo] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
             }
+
+            this.MeanAnnualTemperature = CalculateMeanAnnualTemp(actualYear);
         }
 
         //This method is not currently being called.  If it is later used, it will need to be checked to make sure it's working properly.
@@ -249,7 +251,7 @@ namespace  Landis.Library.Climate
             ClimateRecord[] ecoClimate = new ClimateRecord[12];
 
             this.Year = actualYear;
-            this.AnnualPrecip = 0.0;
+            this.TotalAnnualPrecip = 0.0;
 
             //if(timestepData[ecoregion.Index].  ADD MONTH CHECK HERE.
 
@@ -260,7 +262,6 @@ namespace  Landis.Library.Climate
                 double MonthlyAvgTemp = (ecoClimate[mo].AvgMinTemp + ecoClimate[mo].AvgMaxTemp) / 2.0;
 
                 double standardDeviation = ecoClimate[mo].StdDevTemp * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0);
-                //Climate.ModelCore.NormalDistribution
 
                 this.MonthlyTemp[mo] = MonthlyAvgTemp + standardDeviation;
                 this.MonthlyMinTemp[mo] = ecoClimate[mo].AvgMinTemp + standardDeviation;
@@ -268,7 +269,7 @@ namespace  Landis.Library.Climate
                 this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt + (ecoClimate[mo].StdDevPpt * (Climate.ModelCore.GenerateUniform() * 2.0 - 1.0)));
                 this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
 
-                this.AnnualPrecip += this.MonthlyPrecip[mo];
+                this.TotalAnnualPrecip += this.MonthlyPrecip[mo];
 
                 if (this.MonthlyPrecip[mo] < 0)
                     this.MonthlyPrecip[mo] = 0;
@@ -277,8 +278,10 @@ namespace  Landis.Library.Climate
                 this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
                 this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
-                //this.DOY[mo] = DayOfYear(mo);
             }
+
+            this.MeanAnnualTemperature = CalculateMeanAnnualTemp(actualYear);
+
         }
 
         private void CalculateMonthlyData_NoVariance(IEcoregion ecoregion, ClimateRecord[][] timestepData, int actualYear, double latitude)
@@ -286,10 +289,7 @@ namespace  Landis.Library.Climate
             ClimateRecord[] ecoClimate = new ClimateRecord[12];
 
             this.Year = actualYear;
-            this.AnnualPrecip = 0.0;
-
-            //if(timestepData[ecoregion.Index].  ADD MONTH CHECK HERE.
-
+            this.TotalAnnualPrecip = 0.0;
 
             for (int mo = 0; mo < 12; mo++)
             {
@@ -304,7 +304,7 @@ namespace  Landis.Library.Climate
                 this.MonthlyPrecip[mo] = Math.Max(0.0, ecoClimate[mo].AvgPpt); 
                 this.MonthlyPAR[mo] = ecoClimate[mo].PAR;
 
-                this.AnnualPrecip += this.MonthlyPrecip[mo];
+                this.TotalAnnualPrecip += this.MonthlyPrecip[mo];
 
                 if (this.MonthlyPrecip[mo] < 0)
                     this.MonthlyPrecip[mo] = 0;
@@ -314,6 +314,9 @@ namespace  Landis.Library.Climate
                 this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
             }
+
+            this.MeanAnnualTemperature = CalculateMeanAnnualTemp(actualYear);
+
         }
         
         //Daily will not come to here. the average in daily is calculated in the AnnualClimate_Daily
@@ -459,12 +462,10 @@ namespace  Landis.Library.Climate
 
             for (int month = 0; month < 12; month++) //12 months in year
             {
-                //double GDD = monthlyTemp[i] * DaysInMonth(i, currentYear);
                 double GDD = this.MonthlyTemp[month] * DaysInMonth(month, this.Year); //currentYear);
                 if (GDD < 0)
                     GDD = 0;
                 MonthlyGDD[month] = (int)GDD;
-                //GDDTot = GDDTot + GDD;
             }
 
             return MonthlyGDD;
@@ -479,7 +480,7 @@ namespace  Landis.Library.Climate
              //Climate.ModelCore.UI.WriteLine("  Calculating monthly growing season....");
 
 
-            double lastMonthMinTemp = this.MonthlyMinTemp[11]; // yearClimate[0].AvgMinTemp;
+            double lastMonthMinTemp = this.MonthlyMinTemp[11]; 
             int dayCnt = 15;  //the middle of February
             int beginGrowingSeason = 0;
 
@@ -487,7 +488,7 @@ namespace  Landis.Library.Climate
             {
 
                 int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;
-                double MonthlyMinTemp = this.MonthlyMinTemp[month]; // yearClimate[i].AvgMinTemp;// + (monthlyTempSD[i] * randVar.GenerateNumber());
+                double MonthlyMinTemp = this.MonthlyMinTemp[month]; 
 
                 //Now interpolate between days:
                 double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;
@@ -506,7 +507,6 @@ namespace  Landis.Library.Climate
                 dayCnt += totalDays;  //new monthly mid-point
             }
             
-            //this.beginGrowing = beginGrowingSeason;
             return beginGrowingSeason;
         }
 
@@ -563,8 +563,8 @@ namespace  Landis.Library.Climate
 
             for (int month = 0; month < 12; month++)
             {
-                double Tmin = this.MonthlyMinTemp[month]; // annualClimate[month].AvgMinTemp;
-                double Tday = this.MonthlyTemp[month]; // (annualClimate[month].AvgMinTemp + annualClimate[month].AvgMaxTemp) / 2.0;
+                double Tmin = this.MonthlyMinTemp[month]; 
+                double Tday = this.MonthlyTemp[month]; 
 
                 double es = 0.61078 * Math.Exp(17.26939 * Tday / (Tday + 237.3)); //kPa
                 if (Tday < 0)
@@ -573,7 +573,6 @@ namespace  Landis.Library.Climate
                 }
 
                 //Calculation of mean daily vapor pressure from minimum daily temperature.
-
                 //   Tmin = minimum daily air temperature                  //degrees C
                 //   emean = mean daily vapor pressure                     //kPa
                 //   Vapor pressure equations are from:
@@ -722,7 +721,7 @@ namespace  Landis.Library.Climate
         }
 
         //---------------------------------------------------------------------------
-        public double MeanAnnualTemp(int currentYear)
+        public double CalculateMeanAnnualTemp(int currentYear)
         {
             double MAT = 0.0;
             //Calc monthly temperatures (mean +/- normally distributed
@@ -743,24 +742,24 @@ namespace  Landis.Library.Climate
         }
 
         //---------------------------------------------------------------------------
-        public double TotalAnnualPrecip()
-        {
-            //Main loop for yearly water balance calculation by month   */
-            double TAP = 0.0;
-            for (int i = 0; i < 12; i++)
-            {
-                TAP += MonthlyPrecip[i];
-            }
-            return TAP;
-        }
+        //public double TotalAnnualPrecip()
+        //{
+        //    //Main loop for yearly water balance calculation by month   */
+        //    double TAP = 0.0;
+        //    for (int i = 0; i < 12; i++)
+        //    {
+        //        TAP += MonthlyPrecip[i];
+        //    }
+        //    return TAP;
+        //}
 
         ////---------------------------------------------------------------------------
-        public void WriteToLandisLogFile()
-        {
-            Climate.ModelCore.UI.WriteLine("  ClimatePhase = {0}, Year = {1}, MAP = {2:0.00}.", this.climatePhase, this.Year, this.AnnualPrecip);
+        //public void WriteToLandisLogFile()
+        //{
+        //    Climate.ModelCore.UI.WriteLine("  ClimatePhase = {0}, Year = {1}, MAP = {2:0.00}.", this.climatePhase, this.Year, this.AnnualPrecip);
 
-            //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue)
-        }
+        //    //(IEcoregion ecoregion, int actualYear, double latitude, ClimatePhase spinupOrfuture = Climate.Phase.Future_Climate, int timeStep = Int32.MinValue)
+        //}
 
     }
 }

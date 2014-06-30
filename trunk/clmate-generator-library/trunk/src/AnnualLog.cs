@@ -8,8 +8,8 @@ namespace Landis.Library.Climate
 {
     public class AnnualLog
     {
-        [DataFieldAttribute(Desc = "Simulation Period")]
-        public string SimulationPeriod { set; get; }
+        //[DataFieldAttribute(Desc = "Simulation Period")]
+        //public string SimulationPeriod { set; get; }
         
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Simulation Year")]
         public int Time {set; get;}
@@ -23,8 +23,8 @@ namespace Landis.Library.Climate
         [DataFieldAttribute(Desc = "Ecoregion Index")]
         public int EcoregionIndex { set; get; }
 
-        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Mean Annual Precipitation", Format = "0.00")]
-        public double MAP {get; set;}
+        [DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Total Annual Precipitation", Format = "0.00")]
+        public double TAP {get; set;}
 
         [DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Mean Annual Temperature", Format = "0.00")]
         public double MAT { get; set; }
@@ -35,16 +35,8 @@ namespace Landis.Library.Climate
         [DataFieldAttribute(Desc = "End Growing Season Julian Day")]
         public int EndGrow { get; set; }
         
-        //[DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Average Minimum Air Temperature", Format = "0.00")]
-        //public double min_airtemp { get; set; }
+        [DataFieldAttribute(Desc = "Palmer Drought Severity Index")]
+        public double PDSI { set; get; }
 
-        //[DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Average Maximum Air Temperature", Format = "0.00")]
-        //public double max_airtemp { get; set; }
-
-        //[DataFieldAttribute(Unit = FieldUnits.cm, Desc = "Standard Deviation Precipitation", Format = "0.00")]
-        //public double std_ppt { get; set; }
-
-        //[DataFieldAttribute(Unit = FieldUnits.DegreeC, Desc = "Standard Deviation Temperature", Format = "0.00")]
-        //public double std_temp { get; set; }
     }
 }

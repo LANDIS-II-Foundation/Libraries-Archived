@@ -8,17 +8,17 @@ namespace Landis.Library.Climate
 {
     public class InputLog
     {
-        [DataFieldAttribute(Desc = "Input Period")]
-        public string SimulationPeriod { set; get; }
+        //[DataFieldAttribute(Desc = "Input Period")]
+        //public string SimulationPeriod { set; get; }
         
         [DataFieldAttribute(Unit = FieldUnits.Year, Desc = "Input Year")]
-        public int Time {set; get;}
+        public int Year {set; get;}
 
-        [DataFieldAttribute(Unit = FieldUnits.Month, Desc = "Input Month")]
-        public int Month { set; get; }
+        [DataFieldAttribute(Desc = "Input Timestep")]
+        public int Timestep { set; get; }
 
-        [DataFieldAttribute(Desc = "Input Day")]
-        public int Day { set; get; }
+        //[DataFieldAttribute(Desc = "Input Day")]
+        //public int Day { set; get; }
 
         [DataFieldAttribute(Desc = "Ecoregion Name")]
         public string EcoregionName { set; get; }

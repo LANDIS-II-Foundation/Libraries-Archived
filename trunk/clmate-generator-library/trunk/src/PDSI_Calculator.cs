@@ -440,16 +440,16 @@ namespace Landis.Library.Climate
 
             annualPDSI /= 12.0;
 
-            Climate.PdsiLog.Clear();
-            PDSI_Log pl = new PDSI_Log();
+            //Climate.PdsiLog.Clear();
+            //PDSI_Log pl = new PDSI_Log();
 
-            pl.Time = oneClimate.Year;
-            pl.EcoregionName = ecoregion.Name;
-            pl.EcoregionIndex = ecoregion.Index;
-            pl.PDSI = annualPDSI;
+            //pl.Time = oneClimate.Year;
+            //pl.EcoregionName = ecoregion.Name;
+            //pl.EcoregionIndex = ecoregion.Index;
+            //pl.PDSI = annualPDSI;
 
-            Climate.PdsiLog.AddObject(pl);
-            Climate.PdsiLog.WriteToFile();
+            //Climate.PdsiLog.AddObject(pl);
+            //Climate.PdsiLog.WriteToFile();
 
             return annualPDSI;
         }

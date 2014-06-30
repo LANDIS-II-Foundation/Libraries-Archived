@@ -20,7 +20,8 @@ namespace Landis.Library.Climate
         public int EndGrowing { get { return this.endGrowing; } }
         public int GrowingDegreeDays { get { return this.growingDegreeDays; } }
 
-        public double AnnualPrecip;
+        public double TotalAnnualPrecip;
+        public double MeanAnnualTemperature;
         public double JJAtemperature;
         //public double AnnualN;
         public double AnnualAET;  // Actual Evapotranspiration
@@ -48,17 +49,17 @@ namespace Landis.Library.Climate
 
         public static bool IsLeapYear(int year)
         {
-            var commonYear = false;
+            //var commonYear = false;
             var leapYear = false;
 
-            if (year % 4 != 0)
-                commonYear = true;
-            else if (year % 100 != 0)
+            //if (year % 4 != 0)
+            //    commonYear = true;
+            if (year % 100 != 0)
                 leapYear = true;
-            else if (year % 400 == 0)
+            if (year % 400 == 0)
                 leapYear = true;
-            else
-                commonYear = true;
+            //else
+            //    commonYear = true;
 
             return leapYear;
         }
@@ -163,6 +164,40 @@ namespace Landis.Library.Climate
             return 0;
         }
 
+        public static int MonthOfYear(int day)
+        {
+
+            // Month returned in array format, 0-11.
+
+            if (day < 0 || day > 366)
+                throw new System.ApplicationException("Error: Month of Year not found.  Bad day data");
+
+            if (day <= 31)
+                return 0;
+            if (day <= 59)
+                return 1;
+            if (day <= 90)
+                return 2;
+            if (day <= 120)
+                return 3;
+            if (day <= 151)
+                return 4;
+            if (day <= 181)
+                return 5;
+            if (day <= 212)
+                return 6;
+            if (day <= 243)
+                return 7;
+            if (day <= 273)
+                return 8;
+            if (day <= 305)
+                return 9;
+            if (day <= 336)
+                return 10;
+
+            return 11;
+        }
+        
         public static double LatitudeCorrection(int month, double latitude)
         {
             double latitudeCorrection = 0;

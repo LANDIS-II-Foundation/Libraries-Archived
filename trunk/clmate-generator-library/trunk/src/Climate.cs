@@ -29,7 +29,7 @@ namespace Landis.Library.Climate
         private static double[,] annualPDSI;
         private static double[] landscapeAnnualPDSI;
 
-        public static MetadataTable<PDSI_Log> PdsiLog;
+        //public static MetadataTable<PDSI_Log> PdsiLog;
         public static MetadataTable<InputLog> SpinupInputLog;
         public static MetadataTable<InputLog> FutureInputLog;
         public static MetadataTable<AnnualLog> AnnualLog;
@@ -160,7 +160,7 @@ namespace Landis.Library.Climate
             // write input data to the log
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in spinup_allData)
             {
-                Climate.WriteSpinupInputLog(timeStep.Value, timeStep.Key, Climate.Phase.SpinUp_Climate.ToString());
+                Climate.WriteSpinupInputLog(timeStep.Value, timeStep.Key); //, Climate.Phase.SpinUp_Climate.ToString());
             }
 
             // find maxSpeciesAge as the maximum possible time step count for spin up
@@ -203,7 +203,7 @@ namespace Landis.Library.Climate
             // write input data to the log
             foreach (KeyValuePair<int, ClimateRecord[][]> timeStep in future_allData)
             {
-                Climate.WriteFutureInputLog(timeStep.Value, timeStep.Key, Climate.Phase.Future_Climate.ToString());
+                Climate.WriteFutureInputLog(timeStep.Value, timeStep.Key); //, future_allData_granularity);
             }
 
             var futureTimeStepKeys = new List<int>();
@@ -284,7 +284,7 @@ namespace Landis.Library.Climate
                 Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
                 Climate.LandscapeAnnualPDSI[timeStepIndex] += (Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI / Climate.ModelCore.Ecoregions.Count);
 
-                //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timestepIndex, timeStep.Key, PDSI);
+                //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timeStepIndex, timeStep.Key, Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI);
                 timeStepIndex++;
 
                 WriteAnnualLog(ecoregion, startYear + timeStep.Key, annualClimateMonthly);
@@ -323,28 +323,33 @@ namespace Landis.Library.Climate
 
         }
         //---------------------------------------------------------------------
-        private static void WriteSpinupInputLog(ClimateRecord[][] TimestepData, int year, string period)
+        private static void WriteSpinupInputLog(ClimateRecord[][] TimestepData, int year)
         {
+            int maxtimestep = 12;
+            if (spinup_allData_granularity == TemporalGranularity.Daily)
+                maxtimestep = 365;
+            
             //spinup_allData.
             foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
             {
                 if (ecoregion.Active)
                 {
-                    for (int month = 0; month < 12; month++)
-                    {
+                    //for (int month = 0; month < 12; month++)
+                        for (int timestep = 0; timestep < maxtimestep; timestep++)
+                        {
                         SpinupInputLog.Clear();
                         InputLog sil = new InputLog();
 
-                        sil.SimulationPeriod = period;
-                        sil.Time = year;
-                        sil.Month = month + 1;
+                        //sil.SimulationPeriod = period;
+                        sil.Year = year;
+                        sil.Timestep = timestep + 1;
                         sil.EcoregionName = ecoregion.Name;
                         sil.EcoregionIndex = ecoregion.Index;
-                        sil.min_airtemp = TimestepData[ecoregion.Index][month].AvgMinTemp;
-                        sil.max_airtemp = TimestepData[ecoregion.Index][month].AvgMaxTemp;
-                        sil.std_temp = TimestepData[ecoregion.Index][month].StdDevTemp;
-                        sil.ppt = TimestepData[ecoregion.Index][month].AvgPpt;
-                        sil.std_ppt = TimestepData[ecoregion.Index][month].StdDevPpt;
+                        sil.min_airtemp = TimestepData[ecoregion.Index][timestep].AvgMinTemp;
+                        sil.max_airtemp = TimestepData[ecoregion.Index][timestep].AvgMaxTemp;
+                        sil.std_temp = TimestepData[ecoregion.Index][timestep].StdDevTemp;
+                        sil.ppt = TimestepData[ecoregion.Index][timestep].AvgPpt;
+                        sil.std_ppt = TimestepData[ecoregion.Index][timestep].StdDevPpt;
 
                         SpinupInputLog.AddObject(sil);
                         SpinupInputLog.WriteToFile();
@@ -356,28 +361,34 @@ namespace Landis.Library.Climate
         }
 
         //---------------------------------------------------------------------
-        private static void WriteFutureInputLog(ClimateRecord[][] TimestepData, int year, string period)
+        private static void WriteFutureInputLog(ClimateRecord[][] TimestepData, int year)
         {
             //spinup_allData.
+            int maxtimestep = 12;
+            if (future_allData_granularity == TemporalGranularity.Daily)
+                maxtimestep = 365;
+
             foreach (IEcoregion ecoregion in Climate.ModelCore.Ecoregions)
             {
                 if (ecoregion.Active)
                 {
-                    for (int month = 0; month < 12; month++)
+
+                    //for (int month = 0; month < 12; month++)
+                    for (int timestep = 0; timestep < maxtimestep; timestep++)
                     {
                         FutureInputLog.Clear();
                         InputLog fil = new InputLog();
 
-                        fil.SimulationPeriod = period;
-                        fil.Time = year;
-                        fil.Month = month + 1;
+                        //fil.SimulationPeriod = period;
+                        fil.Year = year;
+                        fil.Timestep = timestep + 1;
                         fil.EcoregionName = ecoregion.Name;
                         fil.EcoregionIndex = ecoregion.Index;
-                        fil.min_airtemp = TimestepData[ecoregion.Index][month].AvgMinTemp;
-                        fil.max_airtemp = TimestepData[ecoregion.Index][month].AvgMaxTemp;
-                        fil.std_temp = TimestepData[ecoregion.Index][month].StdDevTemp;
-                        fil.ppt = TimestepData[ecoregion.Index][month].AvgPpt;
-                        fil.std_ppt = TimestepData[ecoregion.Index][month].StdDevPpt;
+                        fil.min_airtemp = TimestepData[ecoregion.Index][timestep].AvgMinTemp;
+                        fil.max_airtemp = TimestepData[ecoregion.Index][timestep].AvgMaxTemp;
+                        fil.std_temp = TimestepData[ecoregion.Index][timestep].StdDevTemp;
+                        fil.ppt = TimestepData[ecoregion.Index][timestep].AvgPpt;
+                        fil.std_ppt = TimestepData[ecoregion.Index][timestep].StdDevPpt;
 
                         FutureInputLog.AddObject(fil);
                         FutureInputLog.WriteToFile();
@@ -394,13 +405,15 @@ namespace Landis.Library.Climate
             AnnualLog.Clear();
             AnnualLog al = new AnnualLog();
 
+            //al.SimulationPeriod = TBD
             al.Time = year;
             al.EcoregionName = ecoregion.Name;
             al.EcoregionIndex = ecoregion.Index;
             al.BeginGrow = annualClimateMonthly.BeginGrowing;
             al.EndGrow = annualClimateMonthly.EndGrowing;
-            //al.MAP = TBD;
-            //al.MAT = TBD;
+            al.TAP = annualClimateMonthly.TotalAnnualPrecip;
+            al.MAT = annualClimateMonthly.MeanAnnualTemperature;
+            al.PDSI = Future_MonthlyData[year][ecoregion.Index].PDSI;
 
             AnnualLog.AddObject(al);
             AnnualLog.WriteToFile();

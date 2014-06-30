@@ -31,7 +31,7 @@ namespace Landis.Library.Climate
             //          table outputs:   
             //---------------------------------------
 
-            Climate.PdsiLog = new MetadataTable<PDSI_Log>("Climate-PDSI-log.csv");
+            //Climate.PdsiLog = new MetadataTable<PDSI_Log>("Climate-PDSI-log.csv");
             Climate.SpinupInputLog = new MetadataTable<InputLog>("Climate-spinup-input-log.csv");
             Climate.FutureInputLog = new MetadataTable<InputLog>("Climate-future-input-log.csv");
             Climate.AnnualLog = new MetadataTable<AnnualLog>("Climate-annual-log.csv");
@@ -66,15 +66,15 @@ namespace Landis.Library.Climate
             tblOut_futureInput.RetriveFields(typeof(InputLog));
             Extension.OutputMetadatas.Add(tblOut_futureInput);
 
-            OutputMetadata tblOut_pdsi = new OutputMetadata()
-            {
-                Type = OutputType.Table,
-                Name = "PDSILog",
-                FilePath = Climate.PdsiLog.FilePath,
-                Visualize = false,
-            };
-            tblOut_pdsi.RetriveFields(typeof(PDSI_Log));
-            Extension.OutputMetadatas.Add(tblOut_pdsi);
+            //OutputMetadata tblOut_pdsi = new OutputMetadata()
+            //{
+            //    Type = OutputType.Table,
+            //    Name = "PDSILog",
+            //    FilePath = Climate.PdsiLog.FilePath,
+            //    Visualize = false,
+            //};
+            //tblOut_pdsi.RetriveFields(typeof(PDSI_Log));
+            //Extension.OutputMetadatas.Add(tblOut_pdsi);
 
             //---------------------------------------            
             //          map outputs:         
