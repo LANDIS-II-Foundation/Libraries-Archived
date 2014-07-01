@@ -63,18 +63,8 @@ namespace Landis.Library.Climate
                 FilePath = Climate.AnnualLog.FilePath,
                 Visualize = true,
             };
-            tblOut_futureInput.RetriveFields(typeof(InputLog));
-            Extension.OutputMetadatas.Add(tblOut_futureInput);
-
-            //OutputMetadata tblOut_pdsi = new OutputMetadata()
-            //{
-            //    Type = OutputType.Table,
-            //    Name = "PDSILog",
-            //    FilePath = Climate.PdsiLog.FilePath,
-            //    Visualize = false,
-            //};
-            //tblOut_pdsi.RetriveFields(typeof(PDSI_Log));
-            //Extension.OutputMetadatas.Add(tblOut_pdsi);
+            tblOut_annual.RetriveFields(typeof(AnnualLog));
+            Extension.OutputMetadatas.Add(tblOut_annual);
 
             //---------------------------------------            
             //          map outputs:         
