@@ -161,6 +161,11 @@ namespace Landis.Library.Climate
                         if (ecoRegionCount == 0)
                             throw new ApplicationException(string.Format("Error in ClimateDataConvertor: climate file '{0}' contains no ecoregion data.", climateFile));
 
+                        var modelCoreActiveEcoRegionCount = Climate.ModelCore.Ecoregions.Count(x => x.Active);
+
+                        if (ecoRegionCount != modelCoreActiveEcoRegionCount)
+                            throw new ApplicationException(string.Format("Error in ClimateDataConvertor: climate file '{0}' contains data for {1} ecoregions, but the simulation has {2} active ecoregions.", climateFile, ecoRegionCount, modelCoreActiveEcoRegionCount));
+
                         // determine the map from ecoregions in this file to ecoregion indicies in ModelCore
                         ecoRegionIndexMap = new int[ecoRegionCount];
                         for (var i = 0; i < ecoRegionCount; ++i)
