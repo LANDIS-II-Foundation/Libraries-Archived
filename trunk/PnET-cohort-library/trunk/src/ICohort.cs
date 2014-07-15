@@ -37,11 +37,7 @@ namespace Landis.Library.BiomassCohortsPnET
             get;
         }
         
-        bool Leaf_On
-        {
-            get;
-            set;
-        }
+        
         float Wood
         {
             get;

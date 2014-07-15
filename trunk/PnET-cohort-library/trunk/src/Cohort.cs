@@ -16,7 +16,7 @@ namespace Landis.Library.BiomassCohortsPnET
         private ISpecies species;
         ushort age;
         float fol;
-        bool leaf_on;
+        
         float wood;
         float root;
         float sep;
@@ -73,19 +73,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 return species;
             }
         }
-
-        
-        public bool Leaf_On
-        {
-            get
-            {
-                return leaf_on;
-            }
-            set
-            {
-                leaf_on = value;
-            }
-        }
+         
         public ushort Age
         {
             get {
@@ -166,8 +154,7 @@ namespace Landis.Library.BiomassCohortsPnET
                       float Wood, 
                       float NSC,
                       float Root,
-                      int year_of_birth,
-                      bool leaf_on
+                      int year_of_birth 
                         )
         {
             this.species = species;
@@ -177,7 +164,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.root = Root;
             this.fol = Fol;
             this.year_of_birth = year_of_birth;
-            this.leaf_on = leaf_on;
+            
             this.folshed = folshed;
         }
 
@@ -192,7 +179,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.root = cohort.root;
             this.fol = cohort.fol;
             this.year_of_birth = cohort.year_of_birth;//
-            this.leaf_on = cohort.leaf_on;
+            
             this.folshed = cohort.folshed;
         }
          
