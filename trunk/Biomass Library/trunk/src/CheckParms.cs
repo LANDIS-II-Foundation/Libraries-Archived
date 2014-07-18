@@ -41,34 +41,34 @@ namespace Landis.Library.Biomass
         
 
         //---------------------------------------------------------------------
-        public static T CheckBiomassParm<T>(InputValue<T> newValue,
+        public static T CheckBiomassParm<T>(T newValue,
                                             T minValue,
                                             T maxValue,
-                                            string label = "inputparameter")
+                                            string label = null)
         {
             if (newValue != null)
             {
-                
-                double d = double.Parse(newValue.Actual.ToString());
+
+                double d = double.Parse(newValue.ToString());
                 double min = double.Parse(minValue.ToString());
                 double max = double.Parse(maxValue.ToString());
                 if (d < min || d > max)
                 {
-                    if (label == "inputparameter")
+                    if (label == null)
                     {
-                        throw new InputValueException(newValue.String,
+                        throw new InputValueException(newValue.ToString(),
                                                      "Input value {0} is not between {1:0.0} and {2:0.0}",
-                                                     newValue.String, minValue, maxValue);
+                                                     newValue, minValue, maxValue);
                     }
                     else
                     {
-                        throw new InputValueException(newValue.String,
+                        throw new InputValueException(newValue.ToString(),
                                                       "Input value for " + label + " {0} is not between {1:0.0} and {2:0.0}",
-                                                      newValue.String, minValue, maxValue);
+                                                      newValue, minValue, maxValue);
                     }
                 }
             }
-            return newValue.Actual;
+            return newValue;
         }
          
     }
