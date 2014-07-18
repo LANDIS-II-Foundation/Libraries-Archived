@@ -14,7 +14,7 @@ namespace Landis.Library.Biomass
     /// <summary>
     /// Utility methods.
     /// </summary>
-    public static class Util
+    public static class CheckParms
     {
         /*public static bool Contains(this string source, string toCheck, StringComparison comp)
         {
