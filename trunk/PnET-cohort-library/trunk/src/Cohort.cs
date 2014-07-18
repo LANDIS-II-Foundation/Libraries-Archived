@@ -17,6 +17,7 @@ namespace Landis.Library.BiomassCohortsPnET
         ushort age;
         float fol;
         
+        int maxbiomass;
         float wood;
         float root;
         float sep;
@@ -24,6 +25,7 @@ namespace Landis.Library.BiomassCohortsPnET
         int year_of_birth;
         int canopylayer;
         float folshed;
+
         public float FolShed
         {
             get
@@ -41,6 +43,17 @@ namespace Landis.Library.BiomassCohortsPnET
             get
             {
                 return (int)(wood + fol);
+            }
+        }
+        public int MaxBiomass
+        {
+            get
+            {
+                return maxbiomass;
+            }
+            set
+            {
+                maxbiomass = value;
             }
         }
         public int CanopyLayer

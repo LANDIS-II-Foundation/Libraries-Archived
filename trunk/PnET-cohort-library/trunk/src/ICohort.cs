@@ -17,11 +17,7 @@ namespace Landis.Library.BiomassCohortsPnET
         /// The cohort's biomass (g m-2).
         /// </summary>
 
-        //int Biomass_gr
-        //{
-        //    get;
-        //}
-         
+       
         float FolShed
         {
             get;
@@ -36,8 +32,6 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get;
         }
-        
-        
         float Wood
         {
             get;
@@ -48,7 +42,6 @@ namespace Landis.Library.BiomassCohortsPnET
             get;
             set;
         }
-        
         float Root
         {
             get;
@@ -59,6 +52,12 @@ namespace Landis.Library.BiomassCohortsPnET
             get;
             set;
         }
+        int MaxBiomass 
+        {
+            get;
+            set;
+        }
+       
         void IncrementAge();
          
          
