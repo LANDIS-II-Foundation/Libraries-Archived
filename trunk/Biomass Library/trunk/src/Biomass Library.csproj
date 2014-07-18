@@ -66,6 +66,7 @@
     <Compile Include="Pool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpeciesAuxParm.cs" />
+    <Compile Include="SpeciesEcoregionAuxParm.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -16,7 +16,7 @@ namespace Landis.Library.Biomass
     /// </summary>
     public static class Util
     {
-        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        /*public static bool Contains(this string source, string toCheck, StringComparison comp)
         {
             if (string.IsNullOrEmpty(toCheck) || string.IsNullOrEmpty(source))
             {
@@ -24,8 +24,9 @@ namespace Landis.Library.Biomass
             }
             return source.IndexOf(toCheck, comp) >= 0;
         } 
+         * */
         //---------------------------------------------------------------------
-
+        /*
         public static Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> CreateSpeciesEcoregionParm<T>(ISpeciesDataset speciesDataset, IEcoregionDataset ecoregionDataset)
         {
             Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> newParm;
@@ -35,6 +36,8 @@ namespace Landis.Library.Biomass
             }
             return newParm;
         }
+         * */
+
         //---------------------------------------------------------------------
         public static float CheckBiomassParm(string label, 
                                             InputValue<float> newValue,
