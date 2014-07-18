@@ -16,98 +16,49 @@ namespace Landis.Library.Biomass
     /// </summary>
     public static class CheckParms
     {
-        /*public static bool Contains(this string source, string toCheck, StringComparison comp)
+        // For compatibility with Edu.Wisc.Forest.flel.Util
+        public static void CheckBiomassParm(InputValue<float> newValue,
+                                            float minValue,
+                                            float maxValue)
         {
-            if (string.IsNullOrEmpty(toCheck) || string.IsNullOrEmpty(source))
-            {
-                return true;
-            }
-            return source.IndexOf(toCheck, comp) >= 0;
-        } 
-         * */
-        //---------------------------------------------------------------------
-        /*
-        public static Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> CreateSpeciesEcoregionParm<T>(ISpeciesDataset speciesDataset, IEcoregionDataset ecoregionDataset)
-        {
-            Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> newParm;
-            newParm = new Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>>(speciesDataset);
-            foreach (ISpecies species in speciesDataset) {
-                newParm[species] = new Landis.Library.Biomass.Ecoregions.AuxParm<T>(ecoregionDataset);
-            }
-            return newParm;
+            CheckBiomassParm<float>(newValue, minValue, maxValue);
         }
-         * */
-
-        //---------------------------------------------------------------------
-        public static float CheckBiomassParm(string label, 
-                                            InputValue<float> newValue,
+        public static void CheckBiomassParm(InputValue<int> newValue,
+                                            int minValue,
+                                            int maxValue)
+        {
+            CheckBiomassParm<int>(newValue, minValue, maxValue);
+        }
+        public static void CheckBiomassParm(InputValue<double> newValue,
                                             double minValue,
                                             double maxValue)
         {
-            if (newValue != null)
-            {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
-                    throw new InputValueException(newValue.String,
-                                                  "Input value for "+label+"{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
-            }
-            return newValue.Actual;
+            CheckBiomassParm<double>(newValue, minValue, maxValue);
         }
-        public static float CheckBiomassParm(InputValue<float> newValue,
-                                                    double minValue,
-                                                    double maxValue)
+        
+
+        //---------------------------------------------------------------------
+        public static T CheckBiomassParm<T>(InputValue<T> newValue,
+                                            T minValue,
+                                            T maxValue,
+                                            string label = "inputparameter")
         {
             if (newValue != null)
             {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
-                    throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
-            }
-            return newValue.Actual;
-        }
-        public static double CheckBiomassParm(string label, 
-                                              InputValue<double> newValue,
-                                              double minValue,
-                                              double maxValue)
-        {
-            if (newValue != null)
-            {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
+                
+                double d = double.Parse(newValue.Actual.ToString());
+                double min = double.Parse(minValue.ToString());
+                double max = double.Parse(maxValue.ToString());
+                if (d < min || d > max)
+                {
+
                     throw new InputValueException(newValue.String,
                                                   "Input value for " + label + "{0} is not between {1:0.0} and {2:0.0}",
                                                   newValue.String, minValue, maxValue);
+                }
             }
             return newValue.Actual;
         }
-        public static double CheckBiomassParm(InputValue<double> newValue,
-                                                    double             minValue,
-                                                    double             maxValue)
-        {
-            if (newValue != null) {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
-                    throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
-            }
-            return newValue.Actual;
-        }
-        //---------------------------------------------------------------------
-
-        public static int CheckBiomassParm(InputValue<int> newValue,
-                                                    int             minValue,
-                                                    int             maxValue)
-        {
-            if (newValue != null) {
-                if (newValue.Actual < minValue || newValue.Actual > maxValue)
-                    throw new InputValueException(newValue.String,
-                                                  "{0} is not between {1:0.0} and {2:0.0}",
-                                                  newValue.String, minValue, maxValue);
-            }
-            return newValue.Actual;
-        }
-        //---------------------------------------------------------------------
-
-        
+         
     }
 }
