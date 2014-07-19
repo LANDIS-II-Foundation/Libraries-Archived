@@ -17,7 +17,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
         void AddNewCohort(Cohort cohort, int SuccessionTimeStep);
         void IncrementCohortsAge();
-        void UpdateMaturePresent();
+        
      
     }
 }

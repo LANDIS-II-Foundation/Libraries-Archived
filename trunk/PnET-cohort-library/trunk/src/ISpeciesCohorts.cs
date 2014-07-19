@@ -18,7 +18,7 @@ namespace Landis.Library.BiomassCohortsPnET
                               ActiveSite site,
                               ExtensionType disturbanceType);
 
-            
+
 
             Cohort Get(int index);
         }

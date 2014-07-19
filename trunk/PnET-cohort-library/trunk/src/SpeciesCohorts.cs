@@ -23,8 +23,7 @@ namespace Landis.Library.BiomassCohortsPnET
           BiomassCohorts.ISpeciesCohorts
     {
         private ISpecies species;
-        private bool isMaturePresent;
-        
+       
         private static AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged;
         static SpeciesCohorts()
         {
@@ -57,7 +56,11 @@ namespace Landis.Library.BiomassCohortsPnET
         public bool IsMaturePresent
         {
             get {
-                return isMaturePresent;
+                foreach (Cohort c in cohorts)
+                {
+                    if (c.Age > species.Maturity) return true;
+                }
+                return false;
             }
         }
 
@@ -66,7 +69,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public ICohort this[int index]
         {
             get {
-                return new Cohort(cohorts[index]);
+                return cohorts[index];
             }
              
         }
@@ -79,7 +82,6 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             this.species = species;
             this.cohorts = new List<Cohort>();
-            this.isMaturePresent = false;
         }
        
         //---------------------------------------------------------------------
@@ -91,14 +93,12 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             SpeciesCohorts clone = new SpeciesCohorts(this.species);
             clone.cohorts = new List<Cohort>(this.cohorts);
-            clone.isMaturePresent = this.isMaturePresent;
             return clone;
         }
 
         //---------------------------------------------------------------------
         public void AddNewCohort2(Cohort c)
         {
-            //System.Console.WriteLine("AddNewCohort2\t" + c.Species.Name);
             this.cohorts.Add(c);
         }
         
@@ -133,7 +133,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
         //---------------------------------------------------------------------
-        public void RemoveCohort( Cohort    cohort,
+        public void RemoveCohort(Cohort cohort,
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
@@ -160,10 +160,10 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             //  Go backwards through list of cohort data, so the removal of an
             //  item doesn't mess up the loop.
-            isMaturePresent = false;
             for (int i = cohorts.Count - 1; i >= 0; i--)
             {
-                Cohort cohort = new Cohort(cohorts[i]);
+                //Cohort cohort = new Cohort(cohorts[i]);
+                Cohort cohort = cohorts[i];
                 disturbance.ReduceOrKillMarkedCohort(cohort);
                 double defoliation = disturbance.CumulativeDefoliation();
                 cohort.Fol *= 1 - (float)defoliation;
@@ -171,30 +171,10 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return 0;
         }
-        /// <summary>
-        /// Updates the IsMaturePresent property.
-        /// </summary>
-        /// <remarks>
-        /// Should be called after all the species' cohorts have grown.
-        /// </remarks>
-        public void UpdateMaturePresent()
-        {
-            isMaturePresent = false;
-            for (int i = 0; i < cohorts.Count; i++)
-            {
-                if (cohorts[i].Age >= species.Maturity)
-                {
-                    
-                    isMaturePresent = true;
-                    break;
-                }
-            }
-        }
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
             //  item doesn't mess up the loop.
-            isMaturePresent = false;
             int totalReduction = 0;
             for (int i = cohorts.Count - 1; i >= 0; i--)
             {
@@ -215,11 +195,7 @@ namespace Landis.Library.BiomassCohortsPnET
                         cohort = null;
                     }
                 }
-                if (cohort != null && cohort.Age >= species.Maturity)
-                {
-                   
-                    isMaturePresent = true;
-                }
+                 
             }
             return totalReduction;
         }
@@ -236,7 +212,6 @@ namespace Landis.Library.BiomassCohortsPnET
 
             //  Go backwards through list of cohort data, so the removal of an
             //  item doesn't mess up the loop.
-            isMaturePresent = false;
             float totalReduction = 0;
             for (int i = cohorts.Count - 1; i >= 0; i--)
             {
@@ -251,11 +226,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
                     //cohort = null;
                 }
-                else if (cohorts[i].Age >= species.Maturity)
-                {
-                   
-                    isMaturePresent = true;
-                }
+               
             }
             return totalReduction;
         }
@@ -263,10 +234,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             throw new System.Exception("Cannot implement MarkCohorts");
         }
-        //----------------------------------------------------------------------
-        // MarkCohorts
-        //---------------------------------------------------------------------
-
+       
         //---------------------------------------------------------------------
         //  GetEnumerator
         //---------------------------------------------------------------------
@@ -274,16 +242,13 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             foreach (Cohort data in cohorts)
                 yield return data;
-            //yield return new Cohort(data);
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            //Console.Out.WriteLine("Itor 2");
             return ((IEnumerable<ICohort>)this).GetEnumerator();
         }
         IEnumerator<Landis.Library.AgeOnlyCohorts.ICohort> IEnumerable<Landis.Library.AgeOnlyCohorts.ICohort>.GetEnumerator()
         {
-            //Console.Out.WriteLine("Itor 3");
             foreach (Cohort data in cohorts)
                 yield return new Landis.Library.AgeOnlyCohorts.Cohort(species, data.Age);
         }

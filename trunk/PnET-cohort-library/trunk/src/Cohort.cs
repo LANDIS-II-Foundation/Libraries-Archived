@@ -73,6 +73,10 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 return year_of_birth;
             }
+            set
+            {
+                year_of_birth = value;
+            }
         }
          
         public int ComputeNonWoodyBiomass(ActiveSite site)
@@ -84,6 +88,10 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get {
                 return species;
+            }
+            set
+            {
+                species = value;
             }
         }
          
@@ -116,10 +124,6 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             set
             {
-                if (value < 0)
-                {
-                    return;
-                }
                 wood = value;
             }
         }
@@ -159,42 +163,14 @@ namespace Landis.Library.BiomassCohortsPnET
         }
        
         //---------------------------------------------------------------------
-
-        public Cohort(ISpecies species,
-                      ushort   age,
-                      float Fol,
-                      float folshed,
-                      float Wood, 
-                      float NSC,
-                      float Root,
-                      int year_of_birth 
-                        )
-        {
-            this.species = species;
-            this.Age = age;
-            this.Wood = Wood;
-            this.nsc = NSC;
-            this.root = Root;
-            this.fol = Fol;
-            this.year_of_birth = year_of_birth;
-            
-            this.folshed = folshed;
+        public Cohort()
+        { 
+        
         }
+        
 
         //---------------------------------------------------------------------
-         
-        public Cohort(Cohort cohort)
-        {
-            this.species = cohort.Species;
-            this.Age = cohort.age;
-            this.Wood = cohort.wood;
-            this.nsc = cohort.nsc;
-            this.root = cohort.root;
-            this.fol = cohort.fol;
-            this.year_of_birth = cohort.year_of_birth;//
-            
-            this.folshed = cohort.folshed;
-        }
+ 
          
         //---------------------------------------------------------------------
 
@@ -204,7 +180,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public void IncrementAge()
         {
             age += 1;
-           //System.Console.WriteLine(year_of_birth + "\t" + species.Name + "\t" + age);
+         
         }
 
         

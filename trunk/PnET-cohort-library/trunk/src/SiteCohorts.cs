@@ -17,8 +17,15 @@ namespace Landis.Library.BiomassCohortsPnET
          AgeOnlyCohorts.ISiteCohorts,
          BiomassCohorts.ISiteCohorts
     {
-         private List<SpeciesCohorts> cohorts;
-      //   private Landis.Library.Biomass.Species.AuxParm<int> establishments;
+        List<SpeciesCohorts> cohorts;
+
+        public List<SpeciesCohorts> Cohorts
+        {
+            get
+            {
+                return cohorts;
+            }
+        }
         //---------------------------------------------------------------------
         
 
@@ -34,15 +41,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             throw new System.Exception("Incompatibility issue");
         }
-        
-       // public Landis.Library.Biomass.Species.AuxParm<int> Establishments
-       // {
-       //     get
-        //    {
-       //         return establishments;
-       //     }
-        // }
-
+       
         public int ReduceOrKillBiomassCohorts(IDisturbance disturbance)
         {
             float totalReduction = 0;
@@ -124,15 +123,6 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
         
-        public void UpdateMaturePresent()
-        {
-            foreach (SpeciesCohorts s in cohorts)
-            {
-                s.UpdateMaturePresent();
-            }
-        }
-
- 
         //---------------------------------------------------------------------
         void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ICohortDisturbance disturbance)
         {
@@ -232,15 +222,9 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public bool IsMaturePresent(ISpecies species)
         {
-            for (int i = 0; i < cohorts.Count; i++)
-            {
-                SpeciesCohorts speciesCohorts = cohorts[i];
-                if (speciesCohorts.Species == species)
-                {
-                    return speciesCohorts.IsMaturePresent;
-                }
-            }
-            return false;
+            int index = SpeciesIndex(species);
+            if (index < 0) return false;
+            return cohorts[index].IsMaturePresent;
         }
 
 
