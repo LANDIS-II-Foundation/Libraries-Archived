@@ -10,21 +10,19 @@ namespace Landis.Library.BiomassCohortsPnET
     /// <summary>
     /// A species cohort with biomass information.
     /// </summary>
-    public class Cohort
-        : ICohort, Landis.Library.BiomassCohorts.ICohort, Landis.Library.AgeOnlyCohorts.ICohort
+    public class Cohort :  Landis.Library.BiomassCohorts.Cohort, ICohort, Landis.Library.BiomassCohorts.ICohort
     {
-        private ISpecies species;
-        ushort age;
-        float fol;
         
-        int maxbiomass;
+        float fol;
         float wood;
         float root;
-        float sep;
         float nsc;
-        int year_of_birth;
-        int canopylayer;
         float folshed;
+
+        public Cohort(ISpecies species, int biomass, ushort age) : base(species, new BiomassCohorts.CohortData(age,biomass))
+        { 
+        
+        }
 
         public float FolShed
         {
@@ -38,74 +36,13 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
        
-        public int Biomass
+        public new int Biomass
         {
             get
             {
                 return (int)(wood + fol);
             }
         }
-        public int MaxBiomass
-        {
-            get
-            {
-                return maxbiomass;
-            }
-            set
-            {
-                maxbiomass = value;
-            }
-        }
-        public int CanopyLayer
-        {
-            get
-            {
-                return canopylayer;
-            }
-            set
-            {
-                canopylayer = value;
-            }
-        }
-        public int YearOfBirth
-        {
-            get
-            {
-                return year_of_birth;
-            }
-            set
-            {
-                year_of_birth = value;
-            }
-        }
-         
-        public int ComputeNonWoodyBiomass(ActiveSite site)
-        {
-            return (int)(Fol + Root);
-        }
-       
-        public ISpecies Species
-        {
-            get {
-                return species;
-            }
-            set
-            {
-                species = value;
-            }
-        }
-         
-        public ushort Age
-        {
-            get {
-                return age;
-            }
-            set
-            {
-                age = value;
-            }
-        }
-         
         public float Fol
         {
             get
@@ -119,7 +56,8 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public float Wood
         {
-            get {
+            get
+            {
                 return wood;
             }
             set
@@ -127,7 +65,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 wood = value;
             }
         }
-        
+
         public float Root
         {
             get
@@ -139,17 +77,13 @@ namespace Landis.Library.BiomassCohortsPnET
                 root = value;
             }
         }
-        public float SEP
+         
+        public new int ComputeNonWoodyBiomass(ActiveSite site)
         {
-            get
-            {
-                return sep;
-            }
-            set 
-            {
-                sep = value;
-            }
+            return (int)(Fol + Root);
         }
+        
+        
         public float NSC
         {
             get
@@ -161,34 +95,12 @@ namespace Landis.Library.BiomassCohortsPnET
                 nsc = value;
             }
         }
-       
-        //---------------------------------------------------------------------
-        public Cohort()
-        { 
-        
-        }
-        
-
-        //---------------------------------------------------------------------
- 
-         
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Increments the cohort's age by one year.
-        /// </summary>
-        public void IncrementAge()
-        {
-            age += 1;
-         
-        }
-
         
         /// <summary>
         /// Occurs when a cohort dies either due to senescence or biomass
         /// disturbances.
         /// </summary>
-        public static event Landis.Library.BiomassCohorts.DeathEventHandler<Landis.Library.BiomassCohorts.DeathEventArgs> DeathEvent;
+        public static new event Landis.Library.BiomassCohorts.DeathEventHandler<Landis.Library.BiomassCohorts.DeathEventArgs> DeathEvent;
 
         //---------------------------------------------------------------------
 
@@ -209,7 +121,7 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// Occurs when a cohort is killed by an age-only disturbance.
         /// </summary>
-        public static event Landis.Library.BiomassCohorts.DeathEventHandler<Landis.Library.BiomassCohorts.DeathEventArgs> AgeOnlyDeathEvent;
+        public static new event Landis.Library.BiomassCohorts.DeathEventHandler<Landis.Library.BiomassCohorts.DeathEventArgs> AgeOnlyDeathEvent;
 
         //---------------------------------------------------------------------
 

@@ -23,15 +23,6 @@ namespace Landis.Library.BiomassCohortsPnET
             get;
             set;
         }
-        int CanopyLayer
-        {
-            get;
-            set;
-        }
-        int YearOfBirth
-        {
-            get;
-        }
         float Wood
         {
             get;
@@ -52,11 +43,7 @@ namespace Landis.Library.BiomassCohortsPnET
             get;
             set;
         }
-        int MaxBiomass 
-        {
-            get;
-            set;
-        }
+         
        
         void IncrementAge();
          

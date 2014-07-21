@@ -41,11 +41,11 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             throw new System.Exception("Incompatibility issue");
         }
-       
-        public int ReduceOrKillBiomassCohorts(IDisturbance disturbance)
+
+        public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             float totalReduction = 0;
-            //  Go through list of species cohorts from back to front so that
+            //  Go through list of species co horts from back to front so that
             //  a removal does not mess up the loop.
             for (int i = cohorts.Count - 1; i >= 0; i--)
             {
@@ -56,7 +56,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
             return (int)totalReduction;
         }
-         
+         /*
         public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             float totalReduction = 0;
@@ -73,7 +73,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
             
         }
-         
+         */
         //---------------------------------------------------------------------
         public ISpeciesCohorts this[ISpecies species]
         {

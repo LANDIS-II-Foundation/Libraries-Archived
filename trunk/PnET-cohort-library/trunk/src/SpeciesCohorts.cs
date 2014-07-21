@@ -102,18 +102,6 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohorts.Add(c);
         }
         
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Gets the age of a cohort at a specific index.
-        /// </summary>
-        /// <exception cref="System.IndexOutOfRangeException">
-        /// </exception>
-        public int GetAge(int index)
-        {
-            return cohorts[index].Age;
-        }
-
          
         //---------------------------------------------------------------------
         public void IncrementCohortsAge()
@@ -124,14 +112,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             
         }
-        private void CohortsToConsole(string msg)
-        {
-            System.Console.WriteLine(msg);
-            foreach (Cohort c in cohorts)
-            {
-                System.Console.WriteLine(c.Species.Name);
-            }
-        }
+      
         //---------------------------------------------------------------------
         public void RemoveCohort(Cohort cohort,
                                   ActiveSite site,
@@ -171,6 +152,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return 0;
         }
+        
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
@@ -223,8 +205,6 @@ namespace Landis.Library.BiomassCohortsPnET
                     Cohort.KilledByAgeOnlyDisturbance(this, cohorts[i], disturbance.CurrentSite, disturbance.Type);
                     RemoveCohort(cohorts[i], disturbance.CurrentSite, disturbance.Type);
                     
-
-                    //cohort = null;
                 }
                
             }
