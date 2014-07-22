@@ -41,6 +41,15 @@ namespace Landis.Library.Biomass
         
 
         //---------------------------------------------------------------------
+        public static double ToDouble<T>(T value)
+        {
+            // This function is needed because double.Parse(double.minValue) throws an error (value to big) so an exception is needed in case CheckBiomassParm
+            // is called with maxValue of any numerical type
+            if (typeof(T) == typeof(double) && value.ToString() == double.MinValue.ToString()) return double.MinValue;
+            if (typeof(T) == typeof(double) && value.ToString() == double.MaxValue.ToString()) return double.MaxValue;
+            
+            return double.Parse(value.ToString());
+        }
         public static T CheckBiomassParm<T>(T newValue,
                                             T minValue,
                                             T maxValue,
@@ -48,10 +57,9 @@ namespace Landis.Library.Biomass
         {
             if (newValue != null)
             {
-
-                double d = double.Parse(newValue.ToString());
-                double min = double.Parse(minValue.ToString());
-                double max = double.Parse(maxValue.ToString());
+                double d = ToDouble(newValue);
+                double min = ToDouble(minValue);
+                double max = ToDouble(maxValue);  
                 if (d < min || d > max)
                 {
                     if (label == null)
