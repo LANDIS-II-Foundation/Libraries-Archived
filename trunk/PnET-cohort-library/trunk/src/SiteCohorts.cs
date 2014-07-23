@@ -129,7 +129,7 @@ namespace Landis.Library.BiomassCohortsPnET
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,
                                                                        disturbance.Type));
-           ReduceOrKillBiomassCohorts(new WrappedDisturbance(disturbance));
+            ReduceOrKillBiomassCohorts(new Landis.Library.BiomassCohorts.WrappedDisturbance(disturbance));
         }
 
         //---------------------------------------------------------------------

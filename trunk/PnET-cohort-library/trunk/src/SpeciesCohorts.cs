@@ -24,11 +24,7 @@ namespace Landis.Library.BiomassCohortsPnET
     {
         private ISpecies species;
        
-        private static AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged;
-        static SpeciesCohorts()
-        {
-            isSpeciesCohortDamaged = new AgeOnlyCohorts.SpeciesCohortBoolArray();
-        }
+       
 
         //  Cohort data is in oldest to youngest order.
         private List<Cohort> cohorts;
@@ -85,18 +81,6 @@ namespace Landis.Library.BiomassCohortsPnET
         }
        
         //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Creates a copy of a species' cohorts.
-        /// </summary>
-        public SpeciesCohorts Clone()
-        {
-            SpeciesCohorts clone = new SpeciesCohorts(this.species);
-            clone.cohorts = new List<Cohort>(this.cohorts);
-            return clone;
-        }
-
-        //---------------------------------------------------------------------
         public void AddNewCohort2(Cohort c)
         {
             this.cohorts.Add(c);
@@ -137,6 +121,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 return null;
             }
         }
+        /*
         public float MarkCohorts(IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
@@ -152,7 +137,12 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return 0;
         }
-        
+        public float MarkCohorts(Landis.Library.BiomassCohorts.ISpeciesCohortsDisturbance disturbance)
+        {
+            throw new System.Exception("Cannot implement MarkCohorts");
+        }
+       
+        */
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
@@ -189,6 +179,8 @@ namespace Landis.Library.BiomassCohortsPnET
         /// </returns>
         public float MarkCohorts(AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
+            AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged = new AgeOnlyCohorts.SpeciesCohortBoolArray();
+      
             isSpeciesCohortDamaged.SetAllFalse(Count);
             disturbance.MarkCohortsForDeath(this, isSpeciesCohortDamaged);
 
@@ -209,10 +201,6 @@ namespace Landis.Library.BiomassCohortsPnET
                
             }
             return totalReduction;
-        }
-        public float MarkCohorts(Landis.Library.BiomassCohorts.ISpeciesCohortsDisturbance disturbance)
-        {
-            throw new System.Exception("Cannot implement MarkCohorts");
         }
        
         //---------------------------------------------------------------------

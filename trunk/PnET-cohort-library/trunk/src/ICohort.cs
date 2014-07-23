@@ -45,7 +45,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
          
        
-        void IncrementAge();
+        //void IncrementAge();
          
          
         //---------------------------------------------------------------------
