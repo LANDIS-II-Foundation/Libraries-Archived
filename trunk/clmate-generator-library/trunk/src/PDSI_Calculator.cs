@@ -343,7 +343,7 @@ namespace Landis.Library.Climate
             double[] corrected_mon_T_normal = new double[12];
 
             // -------------------------------------------------------------------
-            //Converting Celcius temps to Fahrenheit by  Tf = (9/5)*Tc+32; formula
+            //Converting Celsius temps to Fahrenheit by  Tf = (9/5)*Tc+32; formula
             //Converting precepitation from cm to inches by  in = cm * 0.39370 formula
             if (arsUnitSystem == UnitSystem.metrics)
             {
