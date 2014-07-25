@@ -12,47 +12,16 @@ namespace Landis.Library.BiomassCohortsPnET
     /// <summary>
     /// The cohorts for a particular species at a site.
     /// </summary>
-    public class SpeciesCohorts:  ISpeciesCohorts, BiomassCohorts.ISpeciesCohorts
+    public class SpeciesCohorts:BiomassCohorts.SpeciesCohorts,  ISpeciesCohorts, BiomassCohorts.ISpeciesCohorts
     {
-        private ISpecies species;
+        
+        //private ISpecies species;
        
         //  Cohort data is in oldest to youngest order.
         private List<Cohort> cohorts;
 
-        //---------------------------------------------------------------------
-
-        public int Count
-        {
-            get {
-                return cohorts.Count;
-            }
-        }
-
-        //---------------------------------------------------------------------
-
-        public ISpecies Species
-        {
-            get {
-                return species;
-            }
-        }
-
-        //---------------------------------------------------------------------
-
-        public bool IsMaturePresent
-        {
-            get {
-                foreach (Cohort c in cohorts)
-                {
-                    if (c.Age > species.Maturity) return true;
-                }
-                return false;
-            }
-        }
-
-        //---------------------------------------------------------------------
-
-        public ICohort this[int index]
+        
+        public new ICohort this[int index]
         {
             get {
                 return cohorts[index];
@@ -64,9 +33,9 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// Initializes a new instance with one young cohort (age = 1).
         /// </summary>
-        public SpeciesCohorts(ISpecies species)
+        public SpeciesCohorts(ISpecies species):base(species,1,0)
         {
-            this.species = species;
+            //this.species = species;
             this.cohorts = new List<Cohort>();
         }
        
@@ -107,7 +76,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 return null;
             }
         }
-        public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
+        public new int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
             //  item doesn't mess up the loop.
@@ -149,7 +118,7 @@ namespace Landis.Library.BiomassCohortsPnET
         IEnumerator<Landis.Library.BiomassCohorts.ICohort> IEnumerable<Landis.Library.BiomassCohorts.ICohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)
-                yield return new Landis.Library.BiomassCohorts.Cohort(species, data.Age, (int)data.Wood);
+                yield return new Landis.Library.BiomassCohorts.Cohort(data.Species, data.Age, (int)data.Wood);
         }
          
     }
