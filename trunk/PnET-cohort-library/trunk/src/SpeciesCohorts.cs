@@ -26,7 +26,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
              
         }
-
+        
        //---------------------------------------------------------------------
         /// <summary>
         /// Initializes a new instance with one young cohort (age = 1).
@@ -34,6 +34,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public SpeciesCohorts(Cohort c) : base(c.Species,c.Age,c.Biomass)
         {
             this.cohorts = new List<Cohort>();
+            AddNewCohort(c);
         }
        
         //---------------------------------------------------------------------
@@ -42,37 +43,15 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohorts.Add(c);
         }
         
-         
-        //---------------------------------------------------------------------
-        public void IncrementCohortsAge()
-        {
-            foreach (Cohort d in cohorts)
-            {
-                d.IncrementAge();
-            }
-            
-        }
-      
         //---------------------------------------------------------------------
         public void RemoveCohort(Cohort cohort,
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
-            
             cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, disturbanceType);
         }
-        public Cohort Get(int index)
-        {
-            try
-            {
-                return cohorts[index];
-            }
-            catch
-            {
-                return null;
-            }
-        }
+       
         public new int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an

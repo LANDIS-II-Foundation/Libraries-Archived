@@ -48,14 +48,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohorts = new List<SpeciesCohorts>();
         }
         //---------------------------------------------------------------------
-        public void IncrementCohortsAge()
-        {
-            foreach (SpeciesCohorts s in cohorts)
-            {
-                s.IncrementCohortsAge();
-            }
-        }
-        
+         
          
         int SpeciesIndex(ISpecies species)
         {

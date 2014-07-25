@@ -20,7 +20,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
 
 
-            Cohort Get(int index);
+             
         }
     
 }
