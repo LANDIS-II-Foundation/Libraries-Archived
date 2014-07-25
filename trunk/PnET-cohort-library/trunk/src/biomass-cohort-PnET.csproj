@@ -72,9 +72,6 @@
     <Compile Include="Cohort.cs" />
     <Compile Include="ICohort.cs" />
     <Compile Include="IDisturbance.cs" />
-    <Compile Include="ISiteCohorts.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ISpeciesCohorts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteCohorts.cs" />

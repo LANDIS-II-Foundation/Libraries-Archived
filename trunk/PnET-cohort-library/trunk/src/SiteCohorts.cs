@@ -13,7 +13,7 @@ using System;
 namespace Landis.Library.BiomassCohortsPnET
 {
     public class SiteCohorts
-        : ISiteCohorts,
+        :  
          AgeOnlyCohorts.ISiteCohorts,
          BiomassCohorts.ISiteCohorts
     {
@@ -177,33 +177,6 @@ namespace Landis.Library.BiomassCohortsPnET
         public void AddNewCohort(ISpecies species)
         {
             throw new System.Exception("Incompatibility issue");
-        }
-        public void AddNewCohort(Cohort cohort, int SuccessionTimeStep)
-        {
-            int index = SpeciesIndex(cohort.Species);
-            if (index >= 0)
-            {
-                for (int i = 0; i < cohorts[index].Count ; i++)
-                {
-                    ICohort c = cohorts[index][i];
-                    if (c.Age <= SuccessionTimeStep)
-                    {
-                        c.Wood += cohort.Wood;
-                        c.Fol += cohort.Fol;
-                        c.Root += cohort.Root;
-                        c.FolShed += cohort.FolShed;
-                         
-                        return;
-                    }
-                }
-                cohorts[index].AddNewCohort2(cohort);//
-            }
-            else
-            {
-                cohorts.Add(new SpeciesCohorts(cohort.Species));
-                cohorts[cohorts.Count - 1].AddNewCohort2(cohort);
-            }
-           
         }
         
 
