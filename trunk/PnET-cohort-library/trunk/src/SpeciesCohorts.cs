@@ -15,9 +15,7 @@ namespace Landis.Library.BiomassCohortsPnET
     public class SpeciesCohorts:BiomassCohorts.SpeciesCohorts,  ISpeciesCohorts, BiomassCohorts.ISpeciesCohorts
     {
         
-        //private ISpecies species;
-       
-        //  Cohort data is in oldest to youngest order.
+        
         private List<Cohort> cohorts;
 
         
@@ -33,14 +31,13 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// Initializes a new instance with one young cohort (age = 1).
         /// </summary>
-        public SpeciesCohorts(ISpecies species):base(species,1,0)
+        public SpeciesCohorts(Cohort c) : base(c.Species,c.Age,c.Biomass)
         {
-            //this.species = species;
             this.cohorts = new List<Cohort>();
         }
        
         //---------------------------------------------------------------------
-        public void AddNewCohort2(Cohort c)
+        public void AddNewCohort(Cohort c)
         {
             this.cohorts.Add(c);
         }
