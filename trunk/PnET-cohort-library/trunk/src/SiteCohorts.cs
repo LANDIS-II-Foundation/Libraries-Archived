@@ -13,8 +13,7 @@ using System;
 namespace Landis.Library.BiomassCohortsPnET
 {
     public class SiteCohorts
-        :  
-         AgeOnlyCohorts.ISiteCohorts,
+        : AgeOnlyCohorts.ISiteCohorts,
          BiomassCohorts.ISiteCohorts
     {
         List<SpeciesCohorts> cohorts;
