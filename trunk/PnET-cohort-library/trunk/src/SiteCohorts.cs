@@ -12,9 +12,8 @@ using System;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class SiteCohorts
-        : AgeOnlyCohorts.ISiteCohorts,
-         BiomassCohorts.ISiteCohorts
+    public class SiteCohorts : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>, AgeOnlyCohorts.ISiteCohorts, BiomassCohorts.ISiteCohorts
+         
     {
         List<SpeciesCohorts> cohorts;
 
@@ -55,24 +54,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
             return (int)totalReduction;
         }
-         /*
-        public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
-        {
-            float totalReduction = 0;
-            //  Go through list of species cohorts from back to front so that
-            //  a removal does not mess up the loop.
-            for (int i = cohorts.Count - 1; i >= 0; i--)
-            {
-                totalReduction += cohorts[i].MarkCohorts(disturbance);
-                if (cohorts[i].Count == 0)
-                    cohorts.RemoveAt(i);
-            }
-
-            return (int)totalReduction;
-
-            
-        }
-         */
+       
         //---------------------------------------------------------------------
         public ISpeciesCohorts this[ISpecies species]
         {
