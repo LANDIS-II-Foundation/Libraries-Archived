@@ -12,7 +12,7 @@ using System;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class SiteCohorts : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>, AgeOnlyCohorts.ISiteCohorts, BiomassCohorts.ISiteCohorts
+    public class SiteCohorts : BiomassCohorts.SiteCohorts, Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>, AgeOnlyCohorts.ISiteCohorts, BiomassCohorts.ISiteCohorts
          
     {
         List<SpeciesCohorts> cohorts;
@@ -24,60 +24,16 @@ namespace Landis.Library.BiomassCohortsPnET
                 return cohorts;
             }
         }
-        //---------------------------------------------------------------------
-        
-
-        public void Grow(ushort years, ActiveSite site, int? successionTimestep, ICore mCore)
-        {
-        }
-        public string  Write()
-        {
-            throw new System.Exception("Cannot implement write");
-        }
-       
-        public void Grow(ActiveSite site, bool isSuccessionTimestep)
-        {
-            throw new System.Exception("Incompatibility issue");
-        }
-
-        public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
-        {
-            float totalReduction = 0;
-            //  Go through list of species co horts from back to front so that
-            //  a removal does not mess up the loop.
-            for (int i = cohorts.Count - 1; i >= 0; i--)
-            {
-                totalReduction += cohorts[i].MarkCohorts(disturbance);
-                if (cohorts[i].Count == 0)
-                    cohorts.RemoveAt(i);
-            }
-
-            return (int)totalReduction;
-        }
        
         //---------------------------------------------------------------------
-        public ISpeciesCohorts this[ISpecies species]
+        public new ISpeciesCohorts this[ISpecies species]
         {
             get
             {
                 return GetCohorts(species);
             }
         }
-        //---------------------------------------------------------------------
-        AgeCohort.ISpeciesCohorts Landis.Library.Cohorts.ISiteCohorts<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
-        {
-            get
-            {
-                return GetCohorts(species);
-            }
-        }
-        Landis.Library.BiomassCohorts.ISpeciesCohorts Landis.Library.Cohorts.ISiteCohorts<Landis.Library.BiomassCohorts.ISpeciesCohorts>.this[ISpecies species]
-        {
-            get
-            {
-                return GetCohorts(species);
-            }
-        }
+         
         //---------------------------------------------------------------------
         private SpeciesCohorts GetCohorts(ISpecies species)
         {
@@ -135,7 +91,7 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// Occurs when a site is disturbed by an age-only disturbance.
         /// </summary>
-        public static event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
+        public static new event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
 
         int SpeciesIndex(ISpecies species)
         {
@@ -148,19 +104,8 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return -1;
         }
-        public void AddNewCohort(ISpecies species, ushort age, int initialBiomass)
-        {
-            throw new System.Exception("Incompatibility issue");
-        }
-        /// <summary>
-        /// Add new age-only cohort.  Only used to maintain interface.  .DO NOT USE.
-        /// </summary>
-        public void AddNewCohort(ISpecies species)
-        {
-            throw new System.Exception("Incompatibility issue");
-        }
         
-
+         
         void AssertUniqueSpecies()
         {
             List<string> spc = new List<string>();
@@ -174,20 +119,14 @@ namespace Landis.Library.BiomassCohortsPnET
                 }
             }
         }
-        public bool IsMaturePresent(ISpecies species)
-        {
-            int index = SpeciesIndex(species);
-            if (index < 0) return false;
-            return cohorts[index].IsMaturePresent;
-        }
-
+        
 
         //---------------------------------------------------------------------
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-        public IEnumerator<ISpeciesCohorts> GetEnumerator()
+        public new IEnumerator<ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;

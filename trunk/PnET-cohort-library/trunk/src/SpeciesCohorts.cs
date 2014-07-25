@@ -121,7 +121,28 @@ namespace Landis.Library.BiomassCohortsPnET
                 return null;
             }
         }
-        
+        /*
+        public float MarkCohorts(IDisturbance disturbance)
+        {
+            //  Go backwards through list of cohort data, so the removal of an
+            //  item doesn't mess up the loop.
+            for (int i = cohorts.Count - 1; i >= 0; i--)
+            {
+                //Cohort cohort = new Cohort(cohorts[i]);
+                Cohort cohort = cohorts[i];
+                disturbance.ReduceOrKillMarkedCohort(cohort);
+                double defoliation = disturbance.CumulativeDefoliation();
+                cohort.Fol *= 1 - (float)defoliation;
+
+            }
+            return 0;
+        }
+        public float MarkCohorts(Landis.Library.BiomassCohorts.ISpeciesCohortsDisturbance disturbance)
+        {
+            throw new System.Exception("Cannot implement MarkCohorts");
+        }
+       
+        */
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
@@ -156,7 +177,6 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <returns>
         /// The total biomass of all the cohorts damaged by the disturbance.
         /// </returns>
-
         public float MarkCohorts(AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged = new AgeOnlyCohorts.SpeciesCohortBoolArray();
