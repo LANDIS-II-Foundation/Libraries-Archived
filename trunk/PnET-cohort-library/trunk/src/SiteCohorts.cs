@@ -2,17 +2,13 @@
 //  Authors:  Robert M. Scheller, James B. Domingo
 
 using Landis.Core;
-using AgeCohort = Landis.Library.AgeOnlyCohorts;
-using Landis.SpatialModeling;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System;
- 
+
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class SiteCohorts : BiomassCohorts.SiteCohorts, Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>, AgeOnlyCohorts.ISiteCohorts, BiomassCohorts.ISiteCohorts
+    public class SiteCohorts : BiomassCohorts.SiteCohorts,  BiomassCohorts.ISiteCohorts
          
     {
         List<SpeciesCohorts> cohorts;
@@ -60,39 +56,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
         
-        //---------------------------------------------------------------------
-        void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ICohortDisturbance disturbance)
-        {
-            if (AgeOnlyDisturbanceEvent != null)
-                AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,
-                                                                       disturbance.Type));
-            ReduceOrKillBiomassCohorts(new Landis.Library.BiomassCohorts.WrappedDisturbance(disturbance));
-        }
-
-        //---------------------------------------------------------------------
-        void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ISpeciesCohortsDisturbance disturbance)
-        {
-            if (AgeOnlyDisturbanceEvent != null)
-                AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,
-                                                                       disturbance.Type));
-
-            //  Go through list of species cohorts from back to front so that
-            //  a removal does not mess up the loop.
-            float totalReduction = 0;
-            for (int i = cohorts.Count - 1; i >= 0; i--)
-            {
-                totalReduction += cohorts[i].MarkCohorts(disturbance);
-                if (cohorts[i].Count == 0)
-                    cohorts.RemoveAt(i);
-            }
-            //totalBiomass -= totalReduction;
-        }
-        //---------------------------------------------------------------------
-        /// <summary>
-        /// Occurs when a site is disturbed by an age-only disturbance.
-        /// </summary>
-        public static new event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
-
+         
         int SpeciesIndex(ISpecies species)
         {
             for (int i = 0; i < cohorts.Count; i++)
@@ -131,11 +95,7 @@ namespace Landis.Library.BiomassCohortsPnET
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
         }
-        IEnumerator<AgeCohort.ISpeciesCohorts> IEnumerable<AgeCohort.ISpeciesCohorts>.GetEnumerator()
-        {
-            foreach (SpeciesCohorts speciesCohorts in cohorts)
-                yield return speciesCohorts;
-        }
+        
         IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.BiomassCohorts.ISpeciesCohorts>.GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)

@@ -10,7 +10,7 @@ namespace Landis.Library.BiomassCohortsPnET
     /// <summary>
     /// A species cohort with biomass information.
     /// </summary>
-    public class Cohort :  Landis.Library.BiomassCohorts.Cohort, ICohort, Landis.Library.BiomassCohorts.ICohort
+    public class Cohort :  Landis.Library.BiomassCohorts.Cohort, ICohort
     {
         
         float fol;
