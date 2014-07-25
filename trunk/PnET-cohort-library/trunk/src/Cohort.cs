@@ -96,45 +96,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
         
-        /// <summary>
-        /// Occurs when a cohort dies either due to senescence or biomass
-        /// disturbances.
-        /// </summary>
-        public static new event Landis.Library.BiomassCohorts.DeathEventHandler<Landis.Library.BiomassCohorts.DeathEventArgs> DeathEvent;
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Raises a Cohort.DeathEvent.
-        /// </summary>
-        public static void Died(object     sender,
-                                ICohort    cohort,
-                                ActiveSite site,
-                                ExtensionType disturbanceType)
-        {
-            if (DeathEvent != null)
-                DeathEvent(sender, new Landis.Library.BiomassCohorts.DeathEventArgs(cohort, site, disturbanceType));
-        }
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Occurs when a cohort is killed by an age-only disturbance.
-        /// </summary>
-        public static new event Landis.Library.BiomassCohorts.DeathEventHandler<Landis.Library.BiomassCohorts.DeathEventArgs> AgeOnlyDeathEvent;
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Raises a Cohort.AgeOnlyDeathEvent.
-        /// </summary>
-        public static void KilledByAgeOnlyDisturbance(object     sender,
-                                                      ICohort    cohort,
-                                                      ActiveSite site,
-                                                      ExtensionType disturbanceType)
-        {
-            if (AgeOnlyDeathEvent != null)
-                AgeOnlyDeathEvent(sender, new Landis.Library.BiomassCohorts.DeathEventArgs(cohort, site, disturbanceType));
-        }
+      
+         
     }
 }
