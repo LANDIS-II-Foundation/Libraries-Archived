@@ -1,0 +1,5 @@
+C:\bin\Debug\Landis.Library.BiomassCohortsPnET.dll
+C:\bin\Debug\Landis.Library.BiomassCohortsPnET.pdb
+C:\BRM\LANDIS_II\code\PnET-cohort-library\oldcode\src\obj\Release\ResolveAssemblyReference.cache
+C:\BRM\LANDIS_II\code\PnET-cohort-library\oldcode\src\obj\Release\Landis.Library.BiomassCohortsPnET.dll
+C:\BRM\LANDIS_II\code\PnET-cohort-library\oldcode\src\obj\Release\Landis.Library.BiomassCohortsPnET.pdb
