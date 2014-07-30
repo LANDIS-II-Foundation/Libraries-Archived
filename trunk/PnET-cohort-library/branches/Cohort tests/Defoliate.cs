@@ -4,11 +4,8 @@
 //using Landis.Extension.Succession.Biomass;
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.Biomass;
 using System.Collections.Generic;
 using System;
-using Landis.Library.BiomassCohorts;
-using Landis.Library.LeafBiomassCohorts;
 
 
 namespace Landis.Extension.Insects
