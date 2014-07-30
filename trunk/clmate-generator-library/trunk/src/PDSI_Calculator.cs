@@ -15,7 +15,7 @@ namespace Landis.Library.Climate
         //private static AnnualClimate_Monthly annualClimate;
         //public static double[] mon_T_normal;
         private static Potential potential;// = new Potential[12];
-        public static int Verbose; 
+        public static int Verbose = 1; 
         //private static AnnualClimate_Monthly annClimate;
 
         //===========================================PDSI Attributes=====================================================
@@ -28,7 +28,7 @@ namespace Landis.Library.Climate
         // The variables used as flags to the pdsi class
         private static int bug = 0;
         public static int e_year;
-        private static int metric = 0;
+        //private static int metric = 0;
         private static bool south; //whethere the location is in Southern Hemisphere (If TLA is positive, we assume location is in NORTHERN Hemisphere.
         //private static int nadss = 0;
 
@@ -42,8 +42,8 @@ namespace Landis.Library.Climate
         // The arrays used to read in the normal temp data, a years worth of 
         // actual temp data, and a years worth of precipitation data
         //private static double[] TNorm = new double[12];
-        private static double[] T = new double[12];
-        private static double[] P = new double[12];
+        private static double[] Temp = new double[12];
+        private static double[] Precip = new double[12];
         private static double[] PDSI_Monthly = new double[12];
 
         // These variables are used in calculation to store the current period's
@@ -195,14 +195,14 @@ namespace Landis.Library.Climate
             double new_Su, new_Ss;    // new soil moisture values
 
 
-            if (P[per] >= PE)
+            if (Precip[per] >= PE)
             {
                 // The precipitation exceeded the maximum possible evapotranspiration
                 // (excess moisture)
                 ET = PE;   // Enough moisture for all potential evapotranspiration to occur
                 L = 0.0;   // with no actual loss of soil moisture
 
-                if ((P[per] - PE) > (1.0 - Ss))
+                if ((Precip[per] - PE) > (1.0 - Ss))
                 {
                     // The excess precip will recharge both layers. Note: (1.0 - SS) is the 
                     // amount of water needed to saturate the top layer of soil assuming it
@@ -210,19 +210,19 @@ namespace Landis.Library.Climate
                     R_surface = 1.0 - Ss;
                     new_Ss = 1.0;
 
-                    if ((P[per] - PE - R_surface) < ((AWC - 1.0) - Su))
+                    if ((Precip[per] - PE - R_surface) < ((AWC - 1.0) - Su))
                     {
                         // The entire amount of precip can be absorbed by the soil (no runoff)
                         // and the underlying layer will receive whats left after the top layer
                         // Note: (AWC - 1.0) is the amount able to be stored in lower layer
-                        R_under = (P[per] - PE - R_surface);
+                        R_under = (Precip[per] - PE - R_surface);
                         RO = 0.0;
                     }
                     else
                     {
                         // The underlying layer is fully recharged and some runoff will occur
                         R_under = (AWC - 1.0) - Su;
-                        RO = P[per] - PE - (R_surface + R_under);
+                        RO = Precip[per] - PE - (R_surface + R_under);
                     }
                     new_Su = Su + R_under;
                     R = R_surface + R_under;//total recharge
@@ -230,7 +230,7 @@ namespace Landis.Library.Climate
                 else
                 {
                     // There is only enough moisture to recharge some of the top layer.
-                    R = P[per] - PE;
+                    R = Precip[per] - PE;
                     new_Ss = Ss + R;
                     new_Su = Su;
                     RO = 0.0;
@@ -240,11 +240,11 @@ namespace Landis.Library.Climate
             {
                 // The evapotranspiration is greater than the precipitation received.  This
                 // means some moisture loss will occur from the soil.
-                if (Ss > (PE - P[per]))
+                if (Ss > (PE - Precip[per]))
                 {
                     // The moisture from the top layer is enough to meet the remaining PE so 
                     // only the top layer losses moisture.
-                    surface_L = PE - P[per];
+                    surface_L = PE - Precip[per];
                     under_L = 0.0;
                     new_Ss = Ss - surface_L;
                     new_Su = Su;
@@ -253,7 +253,7 @@ namespace Landis.Library.Climate
                 {
                     // The top layer is drained, so the underlying layer loses moisture also.
                     surface_L = Ss;
-                    under_L = (PE - P[per] - surface_L) * Su / AWC;
+                    under_L = (PE - Precip[per] - surface_L) * Su / AWC;
                     if (Su < under_L)
                         under_L = Su;
                     new_Ss = 0.0;
@@ -262,13 +262,15 @@ namespace Landis.Library.Climate
                 R = 0;// No recharge occurs
                 L = under_L + surface_L;// Total loss
                 RO = 0.0;// No extra moisture so no runoff
-                ET = P[per] + L;// Total evapotranspiration
+                ET = Precip[per] + L;// Total evapotranspiration
             }
             Ss = new_Ss;//update soil moisture values
             Su = new_Su;
-        }//end of CalcActual(int per)
+        }
 
-        //-----------Is called from SumAll()----------------
+        // -------------------------------------------------------------------
+        // Calculate Monthly Potential Evapotranspiration
+        // -------------------------------------------------------------------
         private static void CalcMonPE(int month, int year)
         {
             double[] Phi = { -.3865982, -.2316132, -.0378180, .1715539, .3458803, .4308320, .3916645, .2452467, .0535511, -.15583436, -.3340551, -.4310691 };
@@ -281,7 +283,7 @@ namespace Landis.Library.Climate
             else
                 offset = 0;
 
-            if (T[month] <= 32)
+            if (Temp[month] <= 32)
                 PE = 0;
             else
             {
@@ -290,13 +292,13 @@ namespace Landis.Library.Climate
                 if (Dk < 0)
                     Dk += 3.141593;
                 Dk = (Dk + .0157) / 1.57;
-                if (T[month] >= 80)
+                if (Temp[month] >= 80)
                 {
-                    PE = (Math.Sin(T[month] / 57.3 - .166) - .76) * Dk;
+                    PE = (Math.Sin(Temp[month] / 57.3 - .166) - .76) * Dk;
                 }
                 else
                 {
-                    Dum = Math.Log(T[month] - 32);
+                    Dum = Math.Log(Temp[month] - 32);
                     PE = (Math.Exp(-3.863233 + A * 1.715598 - A * Math.Log(I) + A * Dum)) * Dk;
                 }
             }
@@ -352,18 +354,19 @@ namespace Landis.Library.Climate
                     corrected_mon_T_normal[i] = (9.0 / 5.0) * mon_T_normal[i] + 32.0;
                 }
 
-                //for (int i = 0; i < _AnnualClimates.Length; i++)
-                //{
                 for (int month = 0; month < 12; month++)
                 {
-                        T[month] = (9.0 / 5.0) * oneClimate.MonthlyTemp[month] + 32.0;
-                        P[month] = oneClimate.MonthlyPrecip[month] * 0.39370;
+                        Temp[month] = (9.0 / 5.0) * oneClimate.MonthlyTemp[month] + 32.0;
+                        Precip[month] = oneClimate.MonthlyPrecip[month] * 0.39370;
                 }
 
                 //awt is passed and used in GetParam(awt)
                 double awc_temp = AWC;
                 AWC = awc_temp * 0.39370;
                 //TLA = TLA * 0.39370;  //WHY IS TLA TRANSFORMED??
+            } else
+            {
+                throw new ApplicationException("Units are not metric.  Nothing Calculated Correctly.");
             }
             
             // -------------------------------------------------------------------
@@ -381,40 +384,26 @@ namespace Landis.Library.Climate
             I = CalcMonThornI(corrected_mon_T_normal);
 
             A = CalcThornA(I);
-            if (Verbose > 1)
+            
+            if (Verbose > 0)
             {
-                Climate.ModelCore.UI.WriteLine("AWC = {0}  TLA = {1}", AWC, TLA);
-                Climate.ModelCore.UI.WriteLine("HEAT INDEX, THORNTHWAITE A: {0} {1}", I, A);
+                Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Available Water Capacity = {0}", AWC);
+                Climate.ModelCore.UI.WriteLine("      PDSI Calculator: HEAT INDEX (Thornthwaite I) = {0:0.00}, THORNTHWAITE A ={1:0.00}", I, A);
             }
 
-
-            //------------------------
-            //--------Calculation-----
-            //------------------------
             //totalyears = HistoricClimate.endyear - HistoricClimate.startyear + 1;
-            // Output seen only in maximum Verbose mode
-            if (Verbose > 1)
-                Climate.ModelCore.UI.WriteLine("processing station 1\n");
             
             // SumAll is called to compute the sums for the 8 water balance variables
             PDSI_SumAll();
 
-            // This outputs those sums to the screen
-            if (Verbose > 1)
-            {
-                // Climate.ModelCore.UI.WriteLine("STATION = %5d %18c SUMMATION OF MONTHLY VALUES OVER %4d YEARS\n", 0, ' ', totalyears);
-                Climate.ModelCore.UI.WriteLine("%36c CALIBRATION YEARS:\n", ' ');
-                Climate.ModelCore.UI.WriteLine("PER P S PR PE PL ET R L RO DEP\n\n");
-            }
             for (int i = 0; i < num_of_periods; i++)  // months
             {
                 DEPSum[i] = ETSum[i] + RSum[i] - PESum[i] + ROSum[i];
-                if (Verbose > 2)
+                if (Verbose > 1)
                 {
-                    Climate.ModelCore.UI.WriteLine("{0}", (period_length * i) + 1);
-                    Climate.ModelCore.UI.WriteLine("{0} {1} {2} {3} {4}", PSum[i], PROSum[i], PRSum[i], PESum[i], PLSum[i]);
-                    Climate.ModelCore.UI.WriteLine("{0} {1} {2} {3} {4}", ETSum[i], RSum[i], LSum[i], ROSum[i], DEPSum[i]);
-                    Climate.ModelCore.UI.WriteLine("\n");
+                    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month = {0}", i + 1);
+                    Climate.ModelCore.UI.WriteLine("            PSum={0} PROSum={1} PRSum={2} PESum={3} PLSum={4}", PSum[i], PROSum[i], PRSum[i], PESum[i], PLSum[i]);
+                    Climate.ModelCore.UI.WriteLine("            ETSum={0} RSum={1} LSum={2} ROSum={3} DEPSum={4}", ETSum[i], RSum[i], LSum[i], ROSum[i], DEPSum[i]);
                 }
                 DSSqr[i] = 0;
             }
@@ -422,23 +411,27 @@ namespace Landis.Library.Climate
             // CalcWBCoef is then called to calculate alpha, beta, gamma, and delta
             CalcWBCoef();
 
-            // Next Calcd is called to calculate the monthly departures from normal
+            // Next calculate the monthly departures from normal
             CalcMonthlyDepartures();
             
-            // Finally CalcK is called to compute the K and Z values.  CalcX is called within CalcK.
+            // Finally C ompute the K and Z values.  CalcX is called within CalcK.
             CalcOrigK();
 
-            double annualPDSI = 0;
+            double annualPDSI = 0.0;
             //double ecoAverage = 0;
             //LinkedListNode<double> node = Xlist.Last;
 
             for (int m = 0; m < 12; m++)
             {
-                annualPDSI += PDSI_Monthly[m]; //Math.Round(node.Value, 2);
-                //Climate.ModelCore.UI.WriteLine("Month = {0}, Output Monthly T normal = {1:0.00}, PDSI = {2:0.000}", m, mon_T_normal[m], PDSI_Monthly[m]);
+                annualPDSI += PDSI_Monthly[m]; 
+                if (Verbose > 0)
+                    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month = {0}, Monthly_T_normal = {1:0.00}, Monthly_T_Actual={2:0.00}, Precip={3:0.0}, PDSI = {4:0.000}", m, corrected_mon_T_normal[m], Temp[m], Precip[m], PDSI_Monthly[m]);
             }
 
             annualPDSI /= 12.0;
+
+            if (Verbose > 0)
+                Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Annual PDSI = {0}", annualPDSI);
 
             //Climate.PdsiLog.Clear();
             //PDSI_Log pl = new PDSI_Log();
@@ -464,7 +457,7 @@ namespace Landis.Library.Climate
             SD2 = 0;
 
             // Initializes the sums to 0;
-            for (int i = 0; i < num_of_periods; i++)
+            for (int i = 0; i < num_of_periods; i++)  //months
             {
                 ETSum[i] = 0;
                 RSum[i] = 0;
@@ -525,7 +518,7 @@ namespace Landis.Library.Climate
                         // to the screen in the most Verbose mode (Verbose > 1)
                         if (per > 4 && per < 8)
                         {
-                            DEP = DEP + P[per] + L - PE;
+                            DEP = DEP + Precip[per] + L - PE;
                             if (per == 7)
                             {
                                 SD = SD + DEP;
@@ -546,7 +539,7 @@ namespace Landis.Library.Climate
                         RSum[per] += R;
                         ROSum[per] += RO;
                         LSum[per] += L;
-                        PSum[per] += P[per];
+                        PSum[per] += Precip[per];
                         PESum[per] += PE;
                         PRSum[per] += PR;
                         PROSum[per] += PRO;
@@ -554,12 +547,12 @@ namespace Landis.Library.Climate
 
                         pot.Year = 2012; // Placeholder! _AnnualClimates[y - 1].Year;
                         pot.Period[per] = (period_length * per) + 1;
-                        pot.P[per] = P[per];
+                        pot.P[per] = Precip[per];
                         pot.PE[per] = PE;
                         pot.PR[per] = PR;
                         pot.PRO[per] = PRO;
                         pot.PL[per] = PL;
-                        pot.P_PE[per] = P[per] - PE;
+                        pot.P_PE[per] = Precip[per] - PE;
                         //_Potential[year] = new Potential()  { Year = _AnnualClimates[year].Year, Period[per] = (period_length * per) + 1, P[per] = P[per], PE[per] = PE, PR[per] = PR, PRO[per] = PRO, PL[per] = PL, P_PE[per] = P[per] - PE };
                     //}
                     //else
@@ -595,13 +588,15 @@ namespace Landis.Library.Climate
                 //    TNorm[i] = mon_T_normal[i] * (9.0 / 5.0) + 32;//TNorm[i] = t[i]*(9.0/5.0)+32;
                 //else
                 TNorm[i] = mon_T_normal[i];//TNorm[i]=t[i];
-                // Prints the normal temperatures to the screen
-                if (Verbose > 1)
-                    Climate.ModelCore.UI.WriteLine("{0}", TNorm[i]);
+                
                 // Adds the modified temp to heat if the temp is above freezing
                 if (TNorm[i] > 32)
                     I = I + Math.Pow((TNorm[i] - 32) / 9, 1.514);
             }
+
+            //if (Verbose > 1)
+            //    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Thornthwaite I={0}", I);
+
             
             return I;
         }
@@ -625,15 +620,11 @@ namespace Landis.Library.Climate
         //-----------------------------------------------------------------------------
         private static void SetSoilMoisture(double awc)
         {
-            //double lat;
             AWC = awc;
-            //double PI = 3.1415926535;
 
-            ////the negative of the tangent of the latitude  of the station - TLA
+            //if (metric == 1)
+            //    AWC = AWC / 25.4;
 
-
-            if (metric == 1)
-                AWC = AWC / 25.4;
             if (AWC <= 0)
             {
                 throw new ApplicationException("Invalid value for AWC: " + Su);
@@ -649,6 +640,9 @@ namespace Landis.Library.Climate
             if (Su < 0)
                 Su = 0;
         }
+        //-----------------------------------------------------------------------------
+        // This function calculates a Latitude Correction factor
+        //-----------------------------------------------------------------------------
         private static void SetTLA()
         {
                 double lat = TLA;
@@ -657,8 +651,8 @@ namespace Landis.Library.Climate
                 TLA = -Math.Tan(PI * lat / 180);
                 if (lat >= 0)
                 {
-                    if (Verbose > 1)
-                        Climate.ModelCore.UI.WriteLine("TLA is positive, assuming location is in Southern Hemisphere. TLA: %f\n", TLA);
+                    if (Verbose > 0)
+                        Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Latitude is positive, assuming location is in Northern Hemisphere. TLA: {0}", TLA);
                     south = false;//0;
                 }
                 else
@@ -667,125 +661,17 @@ namespace Landis.Library.Climate
                     TLA = -TLA;
                 }
 
-                if (Verbose > 1)
-                {
-                    Climate.ModelCore.UI.WriteLine("AWC = {0}  TLA = {1}", AWC, TLA);
-                    Climate.ModelCore.UI.WriteLine("HEAT INDEX, THORNTHWAITE A: {0} {1}", I, A);
-                }
         }
 
 
 
-        //-----------------------------------------------------------------------------
-        // This function reads in a years worth of data from file In and places those
-        // values in array A.  It's been modified to average the input data to the 
-        // correct time scale.  Because of this modification, it only works for 
-        // temperature data; precip data must be summed, not averaged.
-        //-----------------------------------------------------------------------------
-        public static void GetTemp(ref double[] A, int max) //int GetTemp(FILE *In, number *A, int max) 
-        {
-            double[] t = new double[12], t2 = new double[12];
-            double temp;
-            int i, j, bad_weeks;
-            //char line[4096];
-            //char letter;
-
-            for (i = 0; i < 12; i++)
-                A[i] = 0;
-
-            //for (i = 0; i < max; i++)
-            //    t[i] = annClimate.MonthlyTemp[i];
-
-            //place values read into array t2 to be summarized
-            //  if(read == max+1){
-            //a full year's worth of data was read
-            for (i = 0; i < max; i++)
-                t2[i] = t[i];
-
-            for (i = 0; i < num_of_periods; i++)
-            {
-                bad_weeks = 0;
-                temp = 0;
-                for (j = 0; j < period_length; j++)
-                {
-                    if (t2[i * period_length + j] != MISSING)
-                        temp += t2[i * period_length + j];
-                    else
-                        bad_weeks++;
-                }
-                if (bad_weeks < period_length)
-                    A[i] = temp / (period_length - bad_weeks);
-                else
-                    A[i] = MISSING;
-            }
-            //if (metric == 1)
-            //{
-            //    for (i = 0; i < num_of_periods; i++)
-            //    {
-            //        if (A[i] != MISSING)
-            //            A[i] = A[i] * (9.0 / 5.0) + 32;
-            //    }
-            //}
-
-            //return year;
-
-        }
-        //-----------------------------------------------------------------------------
-        // This function is a modified version of GetTemp() function for precip only.
-        //-----------------------------------------------------------------------------
-        private static void GetPrecip(ref double[] A, int max) 
-        {
-            double[] t = new double[12], t2 = new double[12];
-            double temp;
-            int i, j, bad_weeks;
-            //  char line[4096];
-            //  char letter;
-
-            for (i = 0; i < 12; i++)
-                A[i] = 0;
-
-            //for (i = 0; i < max; i++)
-            //    t[i] = annClimate.MonthlyPrecip[i];
-
-
-            for (i = 0; i < max; i++)
-                t2[i] = t[i];
-
-            //now summaraize data in t2 into A
-            for (i = 0; i < num_of_periods; i++)
-            {
-                bad_weeks = 0;
-                temp = 0;
-                for (j = 0; j < period_length; j++)
-                {
-                    if (t2[i * period_length + j] != MISSING)
-                        temp += t2[i * period_length + j];
-                    else
-                        bad_weeks++;
-                }
-                if (bad_weeks < period_length)
-                    A[i] = temp;
-                else
-                    A[i] = MISSING;
-            }
-
-            if (metric == 1)
-            {
-                for (i = 0; i < num_of_periods; i++)
-                {
-                    if (A[i] != MISSING)
-                        A[i] = A[i] / 25.4;
-                }
-            }
-
-            //return year;
-        }
 
         // ------------------------------------------------
         // Calculates alpha, beta, gamma, and delta
+        // ------------------------------------------------
         private static void CalcWBCoef()
         {
-            // The coefficients are calculated by per
+            // The coefficients are calculated by per month
             for (int per = 0; per < num_of_periods; per++)
             {
                 //calculate alpha:
@@ -821,10 +707,12 @@ namespace Landis.Library.Climate
 
         }
 
+        // ------------------------------------------------
         // Calculates the monthly departures from normal
+        // ------------------------------------------------
         private static void CalcMonthlyDepartures()
         {
-            int per;           // The period in question
+            int per;           // The month in question
             //int yr;           // The year in question
             double p;         // The precip for that period
             int i = 0;
@@ -854,8 +742,8 @@ namespace Landis.Library.Climate
                     PL = potential.PL[per];//scn5;
                     //scn6 is P - PE, which can be ignored for calculations.
 
-                    if (p != MISSING && PE != MISSING && PR != MISSING && PRO != MISSING && PL != MISSING)
-                    {
+                    //if (p != MISSING && PE != MISSING && PR != MISSING && PRO != MISSING && PL != MISSING)
+                    //{
                         // Then the calculations for Phat and d are done
                         Phat = (Alpha[per] * PE) + (Beta[per] * PR) + (Gamma[per] * PRO) - (Delta[per] * PL);
                         potential.d[per] = p - Phat;//d=p - Phat;
@@ -881,28 +769,28 @@ namespace Landis.Library.Climate
                         DSAct[per] += potential.d[per];
                         DSSqr[per] += potential.d[per] * potential.d[per];
                         SPhat[per] += Phat;
-                    }
-                    else
-                    {
-                        potential.d[per] = MISSING;//d = MISSING;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    potential.d[per] = MISSING;//d = MISSING;
+                    //}
                 }
 
             //}
             // If the user specifies, the various sums are output to the screen
-            if (Verbose > 1)
-            {
-                Climate.ModelCore.UI.WriteLine("\n{0} CHECK SUMS OF ESTIMATED VARIABLES\n\n", ' ');
-                Climate.ModelCore.UI.WriteLine("{0} {1} {2} {3}", "PER", "SCET", "SCR", "SCRO");
-                Climate.ModelCore.UI.WriteLine("{0} {1} {2}\n\n", "SCL", "SCP", "SCD");
-            }
+            //if (Verbose > 1)
+            //{
+            //    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: CHECK SUMS OF ESTIMATED VARIABLES");
+            //    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PER={0} SCET={1} SCR={2} SCRO={3}", PER, SCET, SCR, SCRO);
+            //    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: SCL={0} SCP={1} SCD={2}", "SCL", "SCP", "SCD");
+            //}
             for (i = 0; i < num_of_periods; i++)
             {
                 if (Verbose > 1)
                 {
-                    Climate.ModelCore.UI.WriteLine("{0}{1}{2}", (period_length * i) + 1, Alpha[i] * PESum[i], Beta[i] * PRSum[i]);
-                    Climate.ModelCore.UI.WriteLine("{0}{1}", Gamma[i] * PROSum[i], Delta[i] * PLSum[i]);
-                    Climate.ModelCore.UI.WriteLine("{0}{1}\n", SPhat[i], DSAct[i]);
+                    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month={0} Alpha={1} PESum={2} Beta={3} PRSum={4}", i + 1, Alpha[i], PESum[i], Beta[i], PRSum[i]);
+                    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month={0} Gamma={1} PROSum={2} Delta={3} PLSum={4}", i+1, Gamma[i], PROSum[i], Delta[i], PLSum[i]);
+                    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month={0} SPhat={1} DSAct={2}", i+1, SPhat[i], DSAct[i]);
                 }
                 // D becomes the mean of D_sum
                 /* SG 6/5/06: changed totalyears to nCalibrationYears to support
@@ -910,13 +798,13 @@ namespace Landis.Library.Climate
                 **            nCalibrationYears==totalyears; hence no change then
                 */
 
-                D[i] = D_sum[i] / 1; // totalyears;//111// nCalibrationYears;
+                D[i] = D_sum[i]; // / 1; // totalyears;//111// nCalibrationYears;
             }
         }
 
-
-
+        // ------------------------------------------------
         //Computes the K and Z values.  CalcX is called within CalcK.
+        // ------------------------------------------------
         private static void CalcOrigK()
         {
             int month; //, year;
@@ -966,16 +854,22 @@ namespace Landis.Library.Climate
                     //                YearList.insert(year);
 
                     d = potential.d[per];//d = dtemp;
-                    //                month--; //In this code the month is the indes of month ie. 0..11 for a year 
                     K = (17.67 / DKSum) * k[month];
+
+                    if (Verbose > 0)
+                    {
+                        Climate.ModelCore.UI.WriteLine("      PDSI Calculator: d={0}, K={1}", d, K);
+                        Climate.ModelCore.UI.WriteLine("      PDSI Calculator: DKSum={0}, k={1}", DKSum, k[month]);
+                    }
                     if (d != MISSING)
                         Z = d * K;
                     else
-                        Z = MISSING;
+                        throw new ApplicationException(String.Format("d-Value not correctly calculated for month = ", month)); 
+                //Z = MISSING;
 
                     //                ZIND.insert(Z);
                     //CalcOneX(table, month, year);
-                    CalcOnePDSI(month);
+                    CalcMonthlyPDSI(month);
             }
 
         }
@@ -992,7 +886,7 @@ namespace Landis.Library.Climate
         // newPDSI will be one of X1, X2 and X3 depending on what the current 
         // spell is, or if there is an established spell at all.
         //-----------------------------------------------------------------------------
-        private static void CalcOnePDSI(int month)//, int yearIndex)
+        private static void CalcMonthlyPDSI(int month)//, int yearIndex)
         {
 
             double newV;    //These variables represent the values for 
@@ -1010,7 +904,7 @@ namespace Landis.Library.Climate
             //equations during both a wet or dry spell by adjusting the
             //appropriate signs.
 
-            if (X3 >= 0)  // Seems unlikely given the above.
+            if (X3 >= 0)  
             {
                 m = wetm;
                 b = wetb;
@@ -1052,10 +946,12 @@ namespace Landis.Library.Climate
                         newX1 = 0;
                         newX2 = 0;
                         newPDSI = newX3;
-                        while (altX1.Count > 0)//(!altX1.is_empty())
-                            altX1.RemoveFirst();//altX1.head_remove();
-                        while (altX2.Count > 0)//(!altX2.is_empty())
-                            altX2.RemoveFirst();//altX2.head_remove();
+                        if (Verbose > 0)
+                            Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX3 = {0:0.00}", newX3);
+                        //while (altX1.Count > 0)//(!altX1.is_empty())
+                        //    altX1.RemoveFirst();//altX1.head_remove();
+                        //while (altX2.Count > 0)//(!altX2.is_empty())
+                        //    altX2.RemoveFirst();//altX2.head_remove();
                     }
                     else
                     {
@@ -1122,7 +1018,12 @@ namespace Landis.Library.Climate
         }
 
 
-        private static void ChooseX(ref double newX, ref double newX1, ref double newX2, ref double newX3, int bug)
+        //-----------------------------------------------------------------------------
+        // Select the new PDSI from the three options
+        // X1 cannot be greater than zero (dry)
+        // X2 cannot be less than zero (wet)
+        //-----------------------------------------------------------------------------
+        private static void ChooseX(ref double newPDSI, ref double newX1, ref double newX2, ref double newX3, int bug)
         {
             double m, b;
             double wetc, dryc;
@@ -1146,19 +1047,27 @@ namespace Landis.Library.Climate
                 newX1 = 0;
             newX2 = X2;
 
-            if (bug == 0) // bug is always 0
-            {
-                newX2 = (dryc * X2 + Z / (drym + dryb));
-                if (newX2 > 0)
-                    newX2 = 0;
-            }
+            if (Verbose > 0)
+                Climate.ModelCore.UI.WriteLine("      PDSI Calculator: wetc={0}, X1={1}, Z={2}, wetm={3}, wetb={4}", wetc, X1, Z, wetm, wetb);
+
+            //if (bug == 0) // bug is always 0
+            //{
+            newX2 = (dryc * X2 + Z / (drym + dryb));
+            if (newX2 > 0)
+                newX2 = 0;
+            
+            if (Verbose > 0)
+                Climate.ModelCore.UI.WriteLine("      PDSI Calculator: dryc={0}, X2={1}, Z={2}, drym={3}, dryb={4}", dryc, X2, Z, drym, dryb);
+            
 
             if ((newX1 >= 0.5) && (newX3 == 0))
             {
-                Backtrack(newX1, newX2);
-                newX = newX1;
+                //Backtrack(newX1, newX2);
+                newPDSI = newX1;
                 newX3 = newX1;
                 newX1 = 0;
+                if (Verbose > 0)
+                    Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX1 = {0:0.00}", newX1);
             }
             else
             {
@@ -1168,37 +1077,47 @@ namespace Landis.Library.Climate
 
                 if ((newX2 <= -0.5) && (newX3 == 0))
                 {
-                    Backtrack(newX2, newX1);
-                    newX = newX2;
+                    //Backtrack(newX2, newX1);
+                    newPDSI = newX2;
                     newX3 = newX2;
                     newX2 = 0;
+                    if (Verbose > 0)
+                        Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX2 = {0:0.00}", newX2);
                 }
                 else if (newX3 == 0)
                 {
                     if (newX1 == 0)
                     {
-                        Backtrack(newX2, newX1);
-                        newX = newX2;
+                        //Backtrack(newX2, newX1);
+                        newPDSI = newX2;
+                        if (Verbose > 0)
+                            Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX2 = {0:0.00} (newX1/X3=0)", newX2);
                     }
                     else if (newX2 == 0)
                     {
-                        Backtrack(newX1, newX2);
-                        newX = newX1;
+                        //Backtrack(newX1, newX2);
+                        newPDSI = newX1;
+                        if (Verbose > 0)
+                            Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX1 = {0:0.00} (newX2/X3=0)", newX1);
                     }
                     else
                     {
-                        altX1.AddFirst(newX1);//altX1.insert(newX1);
-                        altX2.AddFirst(newX2);//altX2.insert(newX2);
-                        newX = newX3;
+                        //altX1.AddFirst(newX1);//altX1.insert(newX1);
+                        //altX2.AddFirst(newX2);//altX2.insert(newX2);
+                        newPDSI = newX3;
+                        if (Verbose > 0)
+                            Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX3 = 0.0");
                     }
                 }
 
                 else
                 {
                     //store X1 and X2 in their linked lists for possible use later
-                    altX1.AddFirst(newX1);//altX1.insert(newX1);
-                    altX2.AddFirst(newX2);//altX2.insert(newX2);
-                    newX = newX3;
+                    //altX1.AddFirst(newX1);//altX1.insert(newX1);
+                    //altX2.AddFirst(newX2);//altX2.insert(newX2);
+                    newPDSI = newX3;
+                    if (Verbose > 0)
+                        Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX3 = {0:0.00}", newX3);
                 }
             }
         }//end of chooseX
@@ -1373,3 +1292,108 @@ namespace Landis.Library.Climate
 //        new PDSI_Calculator().CalculatePDSI(acs, mon_T_normal, AWC, latitude, /*outputFilePath,*/ UnitSystem.USCustomaryUnits);
 
 //    }
+
+//-----------------------------------------------------------------------------
+// This function reads in a years worth of data from file In and places those
+// values in array A.  It's been modified to average the input data to the 
+// correct time scale.  Because of this modification, it only works for 
+// temperature data; precip data must be summed, not averaged.
+//-----------------------------------------------------------------------------
+//public static void GetTemp(ref double[] A, int max) //int GetTemp(FILE *In, number *A, int max) 
+//{
+//    double[] t = new double[12], t2 = new double[12];
+//    double temp;
+//    int i, j, bad_weeks;
+//    //char line[4096];
+//    //char letter;
+
+//    for (i = 0; i < 12; i++)
+//        A[i] = 0;
+
+//    //for (i = 0; i < max; i++)
+//    //    t[i] = annClimate.MonthlyTemp[i];
+
+//    //place values read into array t2 to be summarized
+//    //  if(read == max+1){
+//    //a full year's worth of data was read
+//    for (i = 0; i < max; i++)
+//        t2[i] = t[i];
+
+//    for (i = 0; i < num_of_periods; i++)
+//    {
+//        bad_weeks = 0;
+//        temp = 0;
+//        for (j = 0; j < period_length; j++)
+//        {
+//            if (t2[i * period_length + j] != MISSING)
+//                temp += t2[i * period_length + j];
+//            else
+//                bad_weeks++;
+//        }
+//        if (bad_weeks < period_length)
+//            A[i] = temp / (period_length - bad_weeks);
+//        else
+//            A[i] = MISSING;
+//    }
+//    //if (metric == 1)
+//    //{
+//    //    for (i = 0; i < num_of_periods; i++)
+//    //    {
+//    //        if (A[i] != MISSING)
+//    //            A[i] = A[i] * (9.0 / 5.0) + 32;
+//    //    }
+//    //}
+
+//    //return year;
+
+//}
+//-----------------------------------------------------------------------------
+// This function is a modified version of GetTemp() function for precip only.
+//-----------------------------------------------------------------------------
+//private static void GetPrecip(ref double[] A, int max) 
+//{
+//    double[] t = new double[12], t2 = new double[12];
+//    double temp;
+//    int i, j, bad_weeks;
+//    //  char line[4096];
+//    //  char letter;
+
+//    for (i = 0; i < 12; i++)
+//        A[i] = 0;
+
+//    //for (i = 0; i < max; i++)
+//    //    t[i] = annClimate.MonthlyPrecip[i];
+
+
+//    for (i = 0; i < max; i++)
+//        t2[i] = t[i];
+
+//    //now summaraize data in t2 into A
+//    for (i = 0; i < num_of_periods; i++)
+//    {
+//        bad_weeks = 0;
+//        temp = 0;
+//        for (j = 0; j < period_length; j++)
+//        {
+//            if (t2[i * period_length + j] != MISSING)
+//                temp += t2[i * period_length + j];
+//            else
+//                bad_weeks++;
+//        }
+//        if (bad_weeks < period_length)
+//            A[i] = temp;
+//        else
+//            A[i] = MISSING;
+//    }
+
+//    if (metric == 1)
+//    {
+//        for (i = 0; i < num_of_periods; i++)
+//        {
+//            if (A[i] != MISSING)
+//                A[i] = A[i] / 25.4;
+//        }
+//    }
+
+//    //return year;
+//}
