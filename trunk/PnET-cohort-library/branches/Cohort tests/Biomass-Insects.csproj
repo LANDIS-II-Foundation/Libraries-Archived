@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5E46A962-1CD4-48A2-B20C-199C18D0EECE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Landis.Extension.Insects</RootNamespace>
+    <AssemblyName>Landis.Extension.BiomassInsects</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Edu.Wisc.Forest.Flel.Util">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Console-6.0">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\Landis.Console-6.0.exe</HintPath>
+    </Reference>
+    <Reference Include="Landis.Core">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.AgeOnlyCohorts">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.AgeOnlyCohorts.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Biomass">
+      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Biomass.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.BiomassCohorts">
+      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.BiomassCohorts.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Cohorts">
+      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.LeafBiomassCohorts">
+      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.LeafBiomassCohorts.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.Succession, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Succession.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.SpatialModeling">
+      <HintPath>..\..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Troschuetz.Random">
+      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Troschuetz.Random.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IDistribution.cs" />
+    <Compile Include="ISusceptible.cs" />
+    <Compile Include="IInsect.cs" />
+    <Compile Include="Defoliate.cs" />
+    <Compile Include="Distribution.cs" />
+    <Compile Include="GrowthReduction.cs" />
+    <Compile Include="InputParameterParser.cs" />
+    <Compile Include="InputParameters.cs" />
+    <Compile Include="Insect.cs" />
+    <Compile Include="InsectParser.cs" />
+    <Compile Include="MapNames.cs" />
+    <Compile Include="Outbreak.cs" />
+    <Compile Include="PartialDisturbance.cs" />
+    <Compile Include="PlugIn.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SiteVars.cs" />
+    <Compile Include="Susceptible.cs" />
+    <Compile Include="ShortPixel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
