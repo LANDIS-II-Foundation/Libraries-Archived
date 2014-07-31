@@ -8,7 +8,9 @@ using System.Collections.Generic;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class SiteCohorts : BiomassCohorts.SiteCohorts,  BiomassCohorts.ISiteCohorts
+    public class SiteCohorts : 
+          BiomassCohorts.SiteCohorts,
+          BiomassCohorts.ISiteCohorts
          
     {
         List<SpeciesCohorts> cohorts;
@@ -117,7 +119,7 @@ namespace Landis.Library.BiomassCohortsPnET
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
         }
-
+         
        
 
 
