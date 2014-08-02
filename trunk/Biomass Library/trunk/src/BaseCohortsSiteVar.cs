@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using AgeOnlyCohorts = Landis.Library.AgeOnlyCohorts;
-using BiomassCohorts = Landis.Library.BiomassCohorts;
 using Landis.SpatialModeling;
 
 namespace Landis.Library.Biomass

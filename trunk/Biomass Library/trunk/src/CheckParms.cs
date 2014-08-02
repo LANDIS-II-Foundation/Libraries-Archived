@@ -1,13 +1,7 @@
 //  Copyright 2005-2010 Portland State University, University of Wisconsin
 //  Authors:  Robert M. Scheller
 
-using Landis.SpatialModeling;
-using Landis.Core;
 using Edu.Wisc.Forest.Flel.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Landis.Library.Biomass
 {
