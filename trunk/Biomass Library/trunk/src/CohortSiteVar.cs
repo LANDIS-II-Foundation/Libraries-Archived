@@ -24,91 +24,91 @@ namespace Landis.Library.Biomass
     /// <typeparam name="TSiteCohortsInterface">The interface for the site cohorts</typeparam>
     public static class CohortSiteVar<TSiteCohortsInterface>
     {
-    /// <summary>
-    /// A wrapper around a site variable of cohorts so it can accessed as a site
-    /// variable of a "simpler" cohort type.  For example, a wrapper around a site
-    /// variable of biomass cohorts so the cohorts can be acccessed through their
-    /// age-cohort interfaces.
-    /// </summary>
-    /// <typeparam name="TSiteCohorts">The class for site cohorts</typeparam>
-    public class Wrapper<TSiteCohorts>
-        : ISiteVar<TSiteCohortsInterface>
-        where TSiteCohorts : class, TSiteCohortsInterface
-    {
-        private ISiteVar<TSiteCohorts> wrappedSiteVar;
-
-        public Wrapper(ISiteVar<TSiteCohorts> siteVar)
+        /// <summary>
+        /// A wrapper around a site variable of cohorts so it can accessed as a site
+        /// variable of a "simpler" cohort type.  For example, a wrapper around a site
+        /// variable of biomass cohorts so the cohorts can be acccessed through their
+        /// age-cohort interfaces.
+        /// </summary>
+        /// <typeparam name="TSiteCohorts">The class for site cohorts</typeparam>
+        public class Wrapper<TSiteCohorts>
+            : ISiteVar<TSiteCohortsInterface>
+            where TSiteCohorts : class, TSiteCohortsInterface
         {
-            wrappedSiteVar = siteVar;
-        }
+            private ISiteVar<TSiteCohorts> wrappedSiteVar;
 
-        #region ISiteVariable members
-        System.Type ISiteVariable.DataType
-        {
-            get
+            public Wrapper(ISiteVar<TSiteCohorts> siteVar)
             {
-                return typeof(TSiteCohortsInterface);
+                wrappedSiteVar = siteVar;
             }
-        }
 
-        InactiveSiteMode ISiteVariable.Mode
-        {
-            get
+            #region ISiteVariable members
+            System.Type ISiteVariable.DataType
             {
-                return wrappedSiteVar.Mode;
+                get
+                {
+                    return typeof(TSiteCohortsInterface);
+                }
             }
-        }
 
-        ILandscape ISiteVariable.Landscape
-        {
-            get
+            InactiveSiteMode ISiteVariable.Mode
             {
-                return wrappedSiteVar.Landscape;
+                get
+                {
+                    return wrappedSiteVar.Mode;
+                }
             }
-        }
-        #endregion
 
-        #region ISiteVar<TSiteCohortsInterface> members
-        // Extensions other than succession have no need to assign the whole
-        // site-cohorts object at any site.
+            ILandscape ISiteVariable.Landscape
+            {
+                get
+                {
+                    return wrappedSiteVar.Landscape;
+                }
+            }
+            #endregion
 
-        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.this[Site site]
-        {
-            get
-            {
-                return wrappedSiteVar[site];
-            }
-            set
-            {
-                throw new System.InvalidOperationException("Operation restricted to succession extension");
-            }
-        }
+            #region ISiteVar<TSiteCohortsInterface> members
+            // Extensions other than succession have no need to assign the whole
+            // site-cohorts object at any site.
 
-        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.ActiveSiteValues
-        {
-            set
+            TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.this[Site site]
             {
-                throw new System.InvalidOperationException("Operation restricted to succession extension");
+                get
+                {
+                    return wrappedSiteVar[site];
+                }
+                set
+                {
+                    throw new System.InvalidOperationException("Operation restricted to succession extension");
+                }
             }
-        }
 
-        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.InactiveSiteValues
-        {
-            set
+            TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.ActiveSiteValues
             {
-                throw new System.InvalidOperationException("Operation restricted to succession extension");
+                set
+                {
+                    throw new System.InvalidOperationException("Operation restricted to succession extension");
+                }
             }
-        }
 
-        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.SiteValues
-        {
-            set
+            TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.InactiveSiteValues
             {
-                throw new System.InvalidOperationException("Operation restricted to succession extension");
+                set
+                {
+                    throw new System.InvalidOperationException("Operation restricted to succession extension");
+                }
             }
+
+            TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.SiteValues
+            {
+                set
+                {
+                    throw new System.InvalidOperationException("Operation restricted to succession extension");
+                }
+            }
+            #endregion
         }
-        #endregion
-    }
 
         /// <summary>
         /// Wraps a site variable of site cohorts into a new site variable of an
