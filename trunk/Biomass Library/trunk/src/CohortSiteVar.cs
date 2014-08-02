@@ -1,4 +1,5 @@
 ﻿// Copyright 2010 Green Code LLC
+// Copyright 2014 University of Notre Dame
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +13,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Landis.Core;
 using Landis.SpatialModeling;
 
 namespace Landis.Library.Biomass
 {
     /// <summary>
-    /// Wraps a biomass-cohorts site variable and provides access to it as a
-    /// site variable of base cohorts.
+    /// A site variable for a particular type of site cohorts.
     /// </summary>
-    public class BaseCohortsSiteVar
-        : ISiteVar<AgeOnlyCohorts.ISiteCohorts>
+    /// <typeparam name="TSiteCohortsInterface">The interface for the site cohorts</typeparam>
+    public static class CohortSiteVar<TSiteCohortsInterface>
     {
-        private ISiteVar<BiomassCohorts.ISiteCohorts> biomassCohortSiteVar;
+    /// <summary>
+    /// A wrapper around a site variable of cohorts so it can accessed as a site
+    /// variable of a "simpler" cohort type.  For example, a wrapper around a site
+    /// variable of biomass cohorts so the cohorts can be acccessed through their
+    /// age-cohort interfaces.
+    /// </summary>
+    /// <typeparam name="TSiteCohorts">The class for site cohorts</typeparam>
+    public class Wrapper<TSiteCohorts>
+        : ISiteVar<TSiteCohortsInterface>
+        where TSiteCohorts : class, TSiteCohortsInterface
+    {
+        private ISiteVar<TSiteCohorts> wrappedSiteVar;
 
-        public BaseCohortsSiteVar(ISiteVar<BiomassCohorts.ISiteCohorts> siteVar)
+        public Wrapper(ISiteVar<TSiteCohorts> siteVar)
         {
-            biomassCohortSiteVar = siteVar;
+            wrappedSiteVar = siteVar;
         }
 
         #region ISiteVariable members
@@ -35,7 +47,7 @@ namespace Landis.Library.Biomass
         {
             get
             {
-                return typeof(AgeOnlyCohorts.ISiteCohorts);
+                return typeof(TSiteCohortsInterface);
             }
         }
 
@@ -43,7 +55,7 @@ namespace Landis.Library.Biomass
         {
             get
             {
-                return biomassCohortSiteVar.Mode;
+                return wrappedSiteVar.Mode;
             }
         }
 
@@ -51,21 +63,20 @@ namespace Landis.Library.Biomass
         {
             get
             {
-                return biomassCohortSiteVar.Landscape;
+                return wrappedSiteVar.Landscape;
             }
         }
         #endregion
 
-        #region ISiteVar<BaseCohorts.ISiteCohorts> members
+        #region ISiteVar<TSiteCohortsInterface> members
         // Extensions other than succession have no need to assign the whole
         // site-cohorts object at any site.
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.this[Site site]
+        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.this[Site site]
         {
             get
             {
-                return (AgeOnlyCohorts.ISiteCohorts) biomassCohortSiteVar[site];
-                //return biomassCohortSiteVar[site]; 
+                return wrappedSiteVar[site];
             }
             set
             {
@@ -73,7 +84,7 @@ namespace Landis.Library.Biomass
             }
         }
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.ActiveSiteValues
+        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.ActiveSiteValues
         {
             set
             {
@@ -81,7 +92,7 @@ namespace Landis.Library.Biomass
             }
         }
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.InactiveSiteValues
+        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.InactiveSiteValues
         {
             set
             {
@@ -89,7 +100,7 @@ namespace Landis.Library.Biomass
             }
         }
 
-        AgeOnlyCohorts.ISiteCohorts ISiteVar<AgeOnlyCohorts.ISiteCohorts>.SiteValues
+        TSiteCohortsInterface ISiteVar<TSiteCohortsInterface>.SiteValues
         {
             set
             {
@@ -97,5 +108,63 @@ namespace Landis.Library.Biomass
             }
         }
         #endregion
+    }
+
+        /// <summary>
+        /// Wraps a site variable of site cohorts into a new site variable of an
+        /// interface that the cohorts implement.
+        /// </summary>
+        /// <typeparam name="TSiteCohorts">The class of the variable's site cohorts</typeparam>
+        public static ISiteVar<TSiteCohortsInterface> Wrap<TSiteCohorts>(ISiteVar<TSiteCohorts> siteVar)
+            where TSiteCohorts : class, TSiteCohortsInterface
+        {
+            return new Wrapper<TSiteCohorts>(siteVar);
+        }
+    }
+
+    //-------------------------------------------------------------------------------------
+
+    /// <summary>
+    /// Example of how the SiteVars class in Biomass Succession would define its Cohorts
+    /// property, and then register a couple of site-variable wrappers.
+    /// </summary>
+    public static class Example_SiteVars
+    {
+        // Notice the type argument below is the SiteCohorts, not its interface used by
+        // non-succession extensions.  All the code within the succession extension will
+        // need to access all the methods of SiteCohorts (e.g., growth-related methods).
+        public static ISiteVar<BiomassCohorts.SiteCohorts> Cohorts { get; private set; }
+
+        public static void Initialize()
+        {
+            Cohorts = Model.Core.Landscape.NewSiteVar<BiomassCohorts.SiteCohorts>();
+
+            // Create a site variable for biomass (non-succession) extensions to access the cohorts.
+            ISiteVar<BiomassCohorts.ISiteCohorts> biomassCohortSiteVar = CohortSiteVar<BiomassCohorts.ISiteCohorts>.Wrap(Cohorts);
+            Model.Core.RegisterSiteVar(biomassCohortSiteVar, "Succession.BiomassCohorts");
+
+            // Create a site variable for base extensions to access the cohorts as age cohorts.
+            ISiteVar<AgeOnlyCohorts.ISiteCohorts> ageCohortSiteVar = CohortSiteVar<AgeOnlyCohorts.ISiteCohorts>.Wrap(Cohorts);
+            Model.Core.RegisterSiteVar(ageCohortSiteVar, "Succession.AgeOnlyCohorts");
+        }
+    }
+
+    public class Example_SuccessionMain
+    {
+        public void LoadParameters(string dataFile, ICore modelCore)
+        {
+            Model.Core = modelCore;
+            Model.Core.UI.WriteLine("Reading input file \"{0}\" ...", dataFile);
+            // parse parameters in dataFile
+            // ...
+        }
+    }
+
+    /// <summary>
+    /// See https://code.google.com/p/landis-extensions/wiki/ModelClass
+    /// </summary>
+    internal static class Model
+    {
+        internal static ICore Core;
     }
 }
