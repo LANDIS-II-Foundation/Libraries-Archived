@@ -21,12 +21,6 @@ namespace Landis.Library.Harvest
         private Dictionary<string, int> speciesLineNumbers;
         private MultiSpeciesCohortSelector cohortSelector;
 
-        private static class Names
-        {
-            public const string PreventEstablishment = "PreventEstablishment";
-            public const string Plant = "Plant";
-        }
-
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -45,6 +39,17 @@ namespace Landis.Library.Harvest
             this.speciesDataset = speciesDataset;
             this.speciesName = new InputVar<string>("Species");
             this.speciesLineNumbers = new Dictionary<string, int>();
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Reads the optional "PreventEstablishment" keyword.
+        /// </summary>
+        /// <returns>true if keyword was present; false otherwise</returns>
+        protected bool ReadPreventEstablishment()
+        {
+            return ReadOptionalName(ParameterNames.PreventEstablishment);
         }
 
         //---------------------------------------------------------------------
@@ -254,7 +259,7 @@ namespace Landis.Library.Harvest
 
         protected Planting.SpeciesList ReadSpeciesToPlant()
         {
-            InputVar<List<ISpecies>> plant = new InputVar<List<ISpecies>>("Plant", ReadSpeciesList);
+            InputVar<List<ISpecies>> plant = new InputVar<List<ISpecies>>(ParameterNames.Plant, ReadSpeciesList);
             if (ReadOptionalVar(plant))
                 return new Planting.SpeciesList(plant.Value.Actual, speciesDataset);
             else

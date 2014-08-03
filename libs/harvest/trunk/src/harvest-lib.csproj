@@ -50,6 +50,7 @@
     <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="ParameterNames.cs" />
     <Compile Include="SiteVars.cs" />
   </ItemGroup>
   <ItemGroup>
