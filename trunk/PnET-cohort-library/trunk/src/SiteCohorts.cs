@@ -1,5 +1,5 @@
 //  Copyright 2005-2010 Portland State University, University of Wisconsin
-//  Authors:  Robert M. Scheller, James B. Domingo
+//  Authors:  Arjan de Bruijn
 
 using Landis.Core;
 using System.Collections;
