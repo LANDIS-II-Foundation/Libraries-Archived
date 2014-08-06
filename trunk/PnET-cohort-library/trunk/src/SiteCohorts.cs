@@ -4,7 +4,7 @@
 using Landis.Core;
 using System.Collections;
 using System.Collections.Generic;
-
+using Landis.SpatialModeling;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
@@ -17,33 +17,33 @@ namespace Landis.Library.BiomassCohortsPnET
 
         public void AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
-            int index = SpeciesIndex(cohort.Species);
-            if (index >= 0)
+            ISpeciesCohorts speciescohort = this[cohort.Species];
+
+
+            if (speciescohort != null) foreach (Cohort mycohort in speciescohort)
             {
-                for (int i = 0; i < cohorts.Count; i++)
+                if (cohort.Age <= SuccessionTimeStep)
                 {
-                    for (int cc =0; cc< cohorts[i].Count ; cc++)
-                    {
-                        ICohort c = cohorts[i][cc];
-                        if (c.Species == cohort.Species && c.Age <= SuccessionTimeStep)
-                        {
-                            c.Wood += cohort.Wood;
-                            c.Fol += cohort.Fol;
-                            c.Root += cohort.Root;
-                            c.FolShed += cohort.FolShed;
-
-                            return;
-                        }
-                    }
+                    mycohort.Wood += cohort.Wood;
+                    mycohort.Fol += cohort.Fol;
+                    mycohort.Root += cohort.Root;
+                    mycohort.FolShed += cohort.FolShed;
+                    return;
                 }
-
-                cohorts[index].AddNewCohort(cohort);//
             }
-            else
+            cohorts.Add(new SpeciesCohorts(cohort));
+             
+
+            
+        }
+
+        public void RemoveCohort(Cohort cohort, ActiveSite site)
+        {
+            this[cohort.Species].RemoveCohort(cohort, site, null);
+            if (this[cohort.Species].Count == 0)
             {
-                cohorts.Add(new SpeciesCohorts(cohort));
+                cohorts.RemoveAt(SpeciesIndex(cohort.Species));
             }
-
         }
        
      

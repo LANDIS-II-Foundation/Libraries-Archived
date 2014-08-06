@@ -22,6 +22,10 @@ namespace Landis.Library.BiomassCohortsPnET
         public new ICohort this[int index]
         {
             get {
+                if (cohorts.Count == 0)
+                {
+                    return null;
+                }
                 return cohorts[index];
             }
              
