@@ -11,14 +11,14 @@ namespace Landis.Library.BiomassCohortsPnET
         /// The biomass cohorts for a particular species at a site.
         /// </summary>
         public interface ISpeciesCohorts
-             : Landis.Library.Cohorts.ISpeciesCohorts<Landis.Library.BiomassCohortsPnET.ICohort>
+             : Landis.Library.Cohorts.ISpeciesCohorts<Landis.Library.BiomassCohortsPnET.Cohort>
         {
-
+             
             void RemoveCohort(Cohort cohort,
                               ActiveSite site,
                               ExtensionType disturbanceType);
-
-
+             
+             void AddNewCohort(Cohort c);
 
              
         }

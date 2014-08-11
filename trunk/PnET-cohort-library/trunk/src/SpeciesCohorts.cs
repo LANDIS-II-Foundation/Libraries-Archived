@@ -19,7 +19,7 @@ namespace Landis.Library.BiomassCohortsPnET
         private List<Cohort> cohorts;
 
         
-        public new ICohort this[int index]
+        public new Cohort this[int index]
         {
             get {
                  
@@ -28,20 +28,14 @@ namespace Landis.Library.BiomassCohortsPnET
              
         }
         
-       //---------------------------------------------------------------------
-        /// <summary>
-        /// Initializes a new instance with one young cohort (age = 1).
-        /// </summary>
         public SpeciesCohorts(Cohort c) : base(c.Species,c.Age,c.Biomass)
         {
             this.cohorts = new List<Cohort>();
             AddNewCohort(c);
         }
-       
-        //---------------------------------------------------------------------
         public void AddNewCohort(Cohort c)
         {
-            this.cohorts.Add(c);
+             this.cohorts.Add(c);
         }
         
         //---------------------------------------------------------------------
@@ -52,7 +46,7 @@ namespace Landis.Library.BiomassCohortsPnET
             cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, disturbanceType);
         }
-       
+        
         public new int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
@@ -82,14 +76,14 @@ namespace Landis.Library.BiomassCohortsPnET
             return totalReduction;
         }
         
-        IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
+        IEnumerator<Cohort> IEnumerable<Cohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)
                 yield return data;
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable<ICohort>)this).GetEnumerator();
+            return ((IEnumerable<Cohort>)this).GetEnumerator();
         }
         
         IEnumerator<Landis.Library.BiomassCohorts.ICohort> IEnumerable<Landis.Library.BiomassCohorts.ICohort>.GetEnumerator()
