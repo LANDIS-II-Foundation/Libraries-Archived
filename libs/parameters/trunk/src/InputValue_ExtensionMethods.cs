@@ -81,7 +81,7 @@ namespace Landis.Library.Parameters
         //--------------------------------------------------------------------
 
         /// <summary>
-        /// Check if an input value is < or = a maximum value.
+        /// Check if an input value is &lt; or = a maximum value.
         /// </summary>
         /// <example>
         /// This example checks if a float input value is no more than 0.75.
