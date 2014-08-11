@@ -1,23 +1,10 @@
 ﻿using Landis.Core;
 
-namespace Landis.Library.Biomass
+namespace Landis.Library.Parameters
 {
    public class SpeciesEcoregionAuxParm<T>
     {
-       Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> values;
-
-        /*public Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>> Parm
-        {
-            get
-            {
-                return values;
-            }
-            set
-            {
-                values = value;
-            }
-        }
-         * */
+       Parameters.Species.AuxParm<Parameters.Ecoregions.AuxParm<T>> values;
 
         public T this[ISpecies species, IEcoregion ecoregion]
         {
@@ -34,12 +21,11 @@ namespace Landis.Library.Biomass
 
         public SpeciesEcoregionAuxParm(ISpeciesDataset speciesDataset, IEcoregionDataset ecoregionDataset)
         {
-            values = new Landis.Library.Biomass.Species.AuxParm<Landis.Library.Biomass.Ecoregions.AuxParm<T>>(speciesDataset);
+            values = new Parameters.Species.AuxParm<Parameters.Ecoregions.AuxParm<T>>(speciesDataset);
             foreach (ISpecies species in speciesDataset)
             {
-                values[species] = new Landis.Library.Biomass.Ecoregions.AuxParm<T>(ecoregionDataset);
+                values[species] = new Parameters.Ecoregions.AuxParm<T>(ecoregionDataset);
             }
         }
-        //---------------------------------------------------------------------
     }
 }
