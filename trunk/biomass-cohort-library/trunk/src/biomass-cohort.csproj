@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{33808160-94BB-488A-B323-67F091EF4840}</ProjectGuid>
+    <ProjectGuid>{B9351E11-1659-4988-8E84-2B61E9CCF9AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>biomass_cohort</RootNamespace>
