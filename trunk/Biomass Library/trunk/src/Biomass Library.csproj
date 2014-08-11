@@ -54,9 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseCohortsSiteVar.cs" />
     <Compile Include="CohortDefoliation.cs" />
-    <Compile Include="CohortSiteVar.cs" />
     <Compile Include="EcoregionAuxParm.cs" />
     <Compile Include="Pool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
