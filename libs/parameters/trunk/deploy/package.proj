@@ -30,13 +30,14 @@
     </RegexReplace>
     <PropertyGroup>
       <LibVersion>@(MajorMinor)</LibVersion>
+	  <ReleaseSuffix>-a1</ReleaseSuffix>      <!-- Alpha release 1 -->
     </PropertyGroup>
 
     <ItemGroup>
       <PackageContents Include="$(LibAssembly)" />
       <PackageContents Include="$(LibXmlDoc)" />
     </ItemGroup>
-    <Zip ZipFileName="Landis.Library.Parameters-$(LibVersion).zip"
+    <Zip ZipFileName="Landis.Library.Parameters-$(LibVersion)$(ReleaseSuffix).zip"
          Files="@(PackageContents)"
          Flatten="true" />
   </Target>
