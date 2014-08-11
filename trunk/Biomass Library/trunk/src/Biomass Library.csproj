@@ -55,11 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CohortDefoliation.cs" />
-    <Compile Include="EcoregionAuxParm.cs" />
     <Compile Include="Pool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpeciesAuxParm.cs" />
-    <Compile Include="SpeciesEcoregionAuxParm.cs" />
     <Compile Include="CheckParms.cs" />
   </ItemGroup>
   <ItemGroup />
