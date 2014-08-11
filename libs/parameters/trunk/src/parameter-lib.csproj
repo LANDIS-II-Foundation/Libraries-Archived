@@ -31,11 +31,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="InputValue_ExtensionMethods.cs" />
     <Compile Include="Ecoregions_AuxParm.cs" />
     <Compile Include="SpeciesEcoregionAuxParm.cs" />
     <Compile Include="Species_AuxParm.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Edu.Wisc.Forest.Flel.Util">
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+    </Reference>
     <Reference Include="Landis.Core">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
