@@ -57,6 +57,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CohortSiteVar.cs" />
     <Compile Include="DisturbedSiteEnumerator.cs" />
     <Compile Include="ExtensionBase.cs" />
     <Compile Include="FormOfReproduction.cs" />
