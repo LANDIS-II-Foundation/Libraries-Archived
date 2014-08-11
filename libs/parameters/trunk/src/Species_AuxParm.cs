@@ -1,4 +1,8 @@
-namespace Landis.Species
+// Copyright 2005 University of Wisconsin
+
+using Landis.Core;
+
+namespace Landis.Library.Parameters.Species
 {
 	/// <summary>
 	/// An auxiliary parameter for species.
@@ -22,7 +26,7 @@ namespace Landis.Species
 
 		//---------------------------------------------------------------------
 
-		public AuxParm(IDataset species)
+		public AuxParm(ISpeciesDataset species)
 		{
 			values = new T[species.Count];
 		}

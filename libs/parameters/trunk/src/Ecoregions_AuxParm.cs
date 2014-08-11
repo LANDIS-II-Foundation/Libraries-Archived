@@ -1,4 +1,8 @@
-namespace Landis.Ecoregions
+// Copyright 2005 University of Wisconsin
+
+using Landis.Core;
+
+namespace Landis.Library.Parameters.Ecoregions
 {
 	/// <summary>
 	/// An auxiliary parameter for ecoregions.
@@ -22,7 +26,7 @@ namespace Landis.Ecoregions
 
 		//---------------------------------------------------------------------
 
-		public AuxParm(IDataset ecoregions)
+		public AuxParm(IEcoregionDataset ecoregions)
 		{
 			values = new T[ecoregions.Count];
 		}

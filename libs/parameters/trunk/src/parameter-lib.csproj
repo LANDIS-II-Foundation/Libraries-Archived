@@ -31,8 +31,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Ecoregions_AuxParm.cs" />
+    <Compile Include="Species_AuxParm.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Landis.Core">
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
