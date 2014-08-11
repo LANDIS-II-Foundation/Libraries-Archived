@@ -1,8 +1,13 @@
 ﻿using System.Reflection;
 
-[assembly: AssemblyTitle("Landis.Library.Succession")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("Succession Library")]
+[assembly: AssemblyDescription("Succession Library for LANDIS-II")]
+
+#if DEBUG
+[assembly: AssemblyConfiguration("Debug")]
+#else
+[assembly: AssemblyConfiguration("Release")]
+#endif
 
 // Version information for an assembly consists of the following four values:
 //
