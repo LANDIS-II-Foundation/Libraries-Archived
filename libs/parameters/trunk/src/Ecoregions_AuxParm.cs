@@ -13,6 +13,9 @@ namespace Landis.Library.Parameters.Ecoregions
 
         //---------------------------------------------------------------------
 
+        ///<Summary>
+        /// Gets an ecoregion-specific value
+        ///</Summary>
         public T this[IEcoregion ecoregion]
         {
             get {
@@ -26,6 +29,9 @@ namespace Landis.Library.Parameters.Ecoregions
 
         //---------------------------------------------------------------------
 
+        ///<Summary>
+        /// Initializes an ecoregion-specific value
+        ///</Summary>
         public AuxParm(IEcoregionDataset ecoregions)
         {
             values = new T[ecoregions.Count];
