@@ -13,6 +13,9 @@ namespace Landis.Library.Parameters.Species
 
         //---------------------------------------------------------------------
 
+        ///<Summary>
+        /// Gets a species specific value
+        ///</Summary>
         public T this[ISpecies species]
         {
             get {
@@ -26,6 +29,9 @@ namespace Landis.Library.Parameters.Species
 
         //---------------------------------------------------------------------
 
+        ///<Summary>
+        /// Initializes a species-specific parameter
+        ///</Summary>
         public AuxParm(ISpeciesDataset species)
         {
             values = new T[species.Count];
