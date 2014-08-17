@@ -8,6 +8,9 @@ using Landis.SpatialModeling;
 
 namespace Landis.Library.Harvest
 {
+    /// <summary>
+    /// Main interface for initializing and configuring the library.
+    /// </summary>
     public static class Main
     {
         /// <summary>

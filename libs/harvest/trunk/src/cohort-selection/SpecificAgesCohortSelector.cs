@@ -15,7 +15,10 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
-        public SpecificAgesCohortSelector(IList<ushort>   ages,
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        public SpecificAgesCohortSelector(IList<ushort> ages,
                                           IList<AgeRange> ranges)
         {
             agesAndRanges = new AgesAndRanges(ages, ranges);

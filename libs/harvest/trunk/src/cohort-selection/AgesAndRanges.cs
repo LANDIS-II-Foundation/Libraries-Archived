@@ -15,7 +15,10 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
-        public AgesAndRanges(IList<ushort>   ages,
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        public AgesAndRanges(IList<ushort> ages,
                              IList<AgeRange> ranges)
         {
             this.ages = new List<ushort>(ages);

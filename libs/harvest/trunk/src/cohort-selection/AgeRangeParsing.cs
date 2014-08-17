@@ -74,6 +74,9 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Parses a cohort age from a text value.
+        /// </summary>
         public static ushort ParseAge(string text)
         {
             try {

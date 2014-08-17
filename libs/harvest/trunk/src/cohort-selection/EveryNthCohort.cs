@@ -16,6 +16,9 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
         public EveryNthCohort(int N)
         {
             this.N = N;

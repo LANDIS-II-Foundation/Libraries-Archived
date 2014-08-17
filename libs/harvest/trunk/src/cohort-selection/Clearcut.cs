@@ -10,6 +10,9 @@ namespace Landis.Library.Harvest
     public class ClearCut
         : ICohortSelector
     {
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
         public ClearCut()
         {
         }

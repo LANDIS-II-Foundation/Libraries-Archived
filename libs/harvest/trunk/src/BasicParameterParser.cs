@@ -54,6 +54,13 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Read a species name from the current input line.
+        /// </summary>
+        /// <exception cref="InputValueException">
+        /// Thrown if the species name was previously used on an earlier line in
+        /// the input file.
+        /// </exception>
         protected ISpecies ReadSpecies(StringReader currentLine)
         {
             ISpecies species = ReadAndValidateSpeciesName(currentLine);
@@ -70,6 +77,12 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Read a species name from the current input line.
+        /// </summary>
+        /// <exception cref="InputValueException">
+        /// Thrown if the species name is not valid.
+        /// </exception>
         protected ISpecies ReadAndValidateSpeciesName(StringReader currentLine)
         {
             ReadValue(speciesName, currentLine);
@@ -257,6 +270,10 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Reads the optional "Plant" parameter which specifies one or more
+        /// tree species to plant at a site.
+        /// </summary>
         protected Planting.SpeciesList ReadSpeciesToPlant()
         {
             InputVar<List<ISpecies>> plant = new InputVar<List<ISpecies>>(ParameterNames.Plant, ReadSpeciesList);
@@ -268,6 +285,9 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Reads a list of species names from the current input line.
+        /// </summary>
         public InputValue<List<ISpecies>> ReadSpeciesList(StringReader currentLine,
                                                           out int      index)
         {

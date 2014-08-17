@@ -36,7 +36,10 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
-    	public AgeRange(ushort start,
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        public AgeRange(ushort start,
                         ushort end)
     	{
             this.start = start;

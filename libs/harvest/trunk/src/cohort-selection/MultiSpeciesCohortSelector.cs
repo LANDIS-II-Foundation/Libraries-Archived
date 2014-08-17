@@ -38,6 +38,9 @@ namespace Landis.Library.Harvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
         public MultiSpeciesCohortSelector()
         {
             selectionMethods = new Dictionary<ISpecies, SelectCohorts.Method>();
