@@ -14,15 +14,17 @@ namespace Landis.Library.BiomassCohortsPnET
          
     {
         List<SpeciesCohorts> cohorts;
-
+        
+         
         public bool AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
-            ISpeciesCohorts speciescohort = this[cohort.Species];
+            SpeciesCohorts speciescohort = this[cohort.Species];
 
             if (speciescohort != null)
             {
-                foreach (Cohort mycohort in speciescohort)
+                foreach (Landis.Library.BiomassCohortsPnET.Cohort mycohort in speciescohort)
                 {
+                    /*
                     if (cohort.Age <= SuccessionTimeStep)
                     {
                         mycohort.Wood += cohort.Wood;
@@ -31,6 +33,7 @@ namespace Landis.Library.BiomassCohortsPnET
                         mycohort.FolShed += cohort.FolShed;
                         return false;
                     }
+                     */
                 }
                 speciescohort.AddNewCohort(cohort);
                 return true;
@@ -40,9 +43,25 @@ namespace Landis.Library.BiomassCohortsPnET
 
             return true;
         }
-
+        public bool HasCohort(Cohort cohort)
+        {
+            if (this[cohort.Species] == null)
+            {
+                return false;
+            }
+            foreach (Cohort c in this[cohort.Species])
+            {
+                if (cohort == c) return true;
+            }
+            return false;
+        }
         public void RemoveCohort(Cohort cohort, ActiveSite site)
         {
+            if (this[cohort.Species] == null)
+            {
+                return;
+                SpeciesCohorts s = this[cohort.Species];
+            }
             this[cohort.Species].RemoveCohort(cohort, site, null);
             if (this[cohort.Species].Count == 0)
             {
@@ -52,7 +71,7 @@ namespace Landis.Library.BiomassCohortsPnET
        
      
         //---------------------------------------------------------------------
-        public new ISpeciesCohorts this[ISpecies species]
+        public new SpeciesCohorts this[ISpecies species]
         {
             get
             {
@@ -112,11 +131,12 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             return GetEnumerator();
         }
+        /*
         public new IEnumerator<ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in cohorts)
                 yield return speciesCohorts;
-        }
+        }*/
         
         IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.BiomassCohorts.ISpeciesCohorts>.GetEnumerator()
         {

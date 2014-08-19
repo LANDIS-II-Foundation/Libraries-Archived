@@ -12,14 +12,44 @@ namespace Landis.Library.BiomassCohortsPnET
     /// <summary>
     /// The cohorts for a particular species at a site.
     /// </summary>
-    public class SpeciesCohorts:BiomassCohorts.SpeciesCohorts,  ISpeciesCohorts, BiomassCohorts.ISpeciesCohorts
+    public class SpeciesCohorts : BiomassCohorts.ISpeciesCohorts, IEnumerable<Cohort>
+       
     {
-        
-        
+
+        private ISpecies species;
         private List<Cohort> cohorts;
 
+        public int Count
+        {
+            get
+            {
+                return cohorts.Count;
+            }
+        }
+        public ISpecies Species
+        {
+            get
+            {
+                return species;
+            }
+        }
+        public bool IsMaturePresent 
+        {
+            get
+            {
+                for (int i = 0; i < cohorts.Count; i++)
+                {
+                    Cohort Cohorts = cohorts[i];
+                    if (Cohorts.Age > species.Maturity)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
         
-        public new Cohort this[int index]
+        public Cohort this[int index]
         {
             get {
                  
@@ -28,14 +58,16 @@ namespace Landis.Library.BiomassCohortsPnET
              
         }
         
-        public SpeciesCohorts(Cohort c) : base(c.Species,c.Age,c.Biomass)
+        public SpeciesCohorts(Cohort c) //: base(c.Species,c.Age,c.Biomass)
         {
+            this.species = c.Species;
             this.cohorts = new List<Cohort>();
             AddNewCohort(c);
         }
         public void AddNewCohort(Cohort c)
         {
              this.cohorts.Add(c);
+           
         }
         
         //---------------------------------------------------------------------
@@ -47,7 +79,7 @@ namespace Landis.Library.BiomassCohortsPnET
             Cohort.Died(this, cohort, site, disturbanceType);
         }
         
-        public new int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
+        public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
             //  item doesn't mess up the loop.
@@ -75,17 +107,24 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return totalReduction;
         }
+
         
-        IEnumerator<Cohort> IEnumerable<Cohort>.GetEnumerator()
+        IEnumerator<Landis.Library.BiomassCohortsPnET.Cohort> IEnumerable<Landis.Library.BiomassCohortsPnET.Cohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)
                 yield return data;
         }
-        IEnumerator IEnumerable.GetEnumerator()
+        
+        public IEnumerator GetEnumerator()
         {
             return ((IEnumerable<Cohort>)this).GetEnumerator();
         }
-        
+        /*
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return cohorts.GetEnumerator();
+        }
+        */
         IEnumerator<Landis.Library.BiomassCohorts.ICohort> IEnumerable<Landis.Library.BiomassCohorts.ICohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)
