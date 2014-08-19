@@ -24,7 +24,7 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 foreach (Landis.Library.BiomassCohortsPnET.Cohort mycohort in speciescohort)
                 {
-                    /*
+                    
                     if (cohort.Age <= SuccessionTimeStep)
                     {
                         mycohort.Wood += cohort.Wood;
@@ -33,7 +33,7 @@ namespace Landis.Library.BiomassCohortsPnET
                         mycohort.FolShed += cohort.FolShed;
                         return false;
                     }
-                     */
+                    
                 }
                 speciescohort.AddNewCohort(cohort);
                 return true;
@@ -57,11 +57,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public void RemoveCohort(Cohort cohort, ActiveSite site)
         {
-            if (this[cohort.Species] == null)
-            {
-                return;
-                SpeciesCohorts s = this[cohort.Species];
-            }
+            
             this[cohort.Species].RemoveCohort(cohort, site, null);
             if (this[cohort.Species].Count == 0)
             {
