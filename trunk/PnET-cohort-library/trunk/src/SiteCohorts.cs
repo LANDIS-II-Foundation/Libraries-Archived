@@ -18,13 +18,13 @@ namespace Landis.Library.BiomassCohortsPnET
          
         public bool AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
-            SpeciesCohorts speciescohort = this[cohort.Species];
+            SpeciesCohorts speciescohort = GetCohorts(cohort.Species); 
 
             if (speciescohort != null)
             {
                 foreach (Landis.Library.BiomassCohortsPnET.Cohort mycohort in speciescohort)
                 {
-                    
+                     
                     if (cohort.Age <= SuccessionTimeStep)
                     {
                         mycohort.Wood += cohort.Wood;
@@ -57,24 +57,14 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public void RemoveCohort(Cohort cohort, ActiveSite site)
         {
-            
-            this[cohort.Species].RemoveCohort(cohort, site, null);
+            GetCohorts(cohort.Species).RemoveCohort(cohort, site, null);
             if (this[cohort.Species].Count == 0)
             {
                 cohorts.RemoveAt(SpeciesIndex(cohort.Species));
             }
         }
        
-     
-        //---------------------------------------------------------------------
-        public new SpeciesCohorts this[ISpecies species]
-        {
-            get
-            {
-                return GetCohorts(species);
-            }
-        }
-         
+      
         //---------------------------------------------------------------------
         private SpeciesCohorts GetCohorts(ISpecies species)
         {
@@ -127,12 +117,6 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             return GetEnumerator();
         }
-        /*
-        public new IEnumerator<ISpeciesCohorts> GetEnumerator()
-        {
-            foreach (SpeciesCohorts speciesCohorts in cohorts)
-                yield return speciesCohorts;
-        }*/
         
         IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.BiomassCohorts.ISpeciesCohorts>.GetEnumerator()
         {
