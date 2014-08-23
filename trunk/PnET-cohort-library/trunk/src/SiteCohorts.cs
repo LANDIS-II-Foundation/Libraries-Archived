@@ -87,32 +87,18 @@ namespace Landis.Library.BiomassCohortsPnET
 
         public bool AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
-            cohorts.Add(cohort);
-
-            /*
-            SpeciesCohorts speciescohort = this[cohort.Species];
-
-            if (speciescohort != null)
+            foreach (Cohort mycohort in Cohorts)
             {
-                foreach (Landis.Library.BiomassCohortsPnET.Cohort mycohort in speciescohort)
+                if (mycohort.Age <= SuccessionTimeStep && cohort.Species == mycohort.Species)
                 {
-                    
-                    if (cohort.Age <= SuccessionTimeStep)
-                    {
-                        mycohort.Wood += cohort.Wood;
-                        mycohort.Fol += cohort.Fol;
-                        mycohort.Root += cohort.Root;
-                        mycohort.FolShed += cohort.FolShed;
-                        return false;
-                    }
-                    
+                    cohort.Wood += cohort.Wood;
+                    mycohort.Fol += cohort.Fol;
+                    mycohort.Root += cohort.Root;
+                    mycohort.FolShed += cohort.FolShed;
+                    return false;
                 }
-                speciescohort.AddCohort(cohort);
-                return true;
-            }
-            speciescohorts.Add(new SpeciesCohorts(cohort));
+            }    
              
-            */
             return true;
         }
         public bool HasCohort(Cohort cohort)
