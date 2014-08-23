@@ -12,6 +12,21 @@ namespace Landis.Library.BiomassCohortsPnET
     {
         List<SpeciesCohorts> speciescohorts;
 
+        List<Cohort> cohorts;
+
+
+        public List<Cohort> Cohorts
+        {
+            get
+            {
+                return cohorts;
+            }
+            set
+            {
+                cohorts = value;
+            }
+        }
+
         public virtual void RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             //  Go through list of species cohorts from back to front so that
@@ -133,6 +148,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public SiteCohorts()
         {
             this.speciescohorts = new List<SpeciesCohorts>();
+            cohorts = new List<Landis.Library.BiomassCohortsPnET.Cohort>();
         }
         //---------------------------------------------------------------------
         
