@@ -76,14 +76,14 @@ namespace Landis.Library.BiomassCohortsPnET
              
         }
         
-        public SpeciesCohorts(Cohort c) //: base(c.Species,c.Age,c.Biomass)
+        public SpeciesCohorts(Cohort c)
         {
             this.species = c.Species;
             this.cohorts = new List<Cohort>();
-            AddNewCohort(c);
+            AddCohort(c);
             isSpeciesCohortDamaged = new Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray();
         }
-        public void AddNewCohort(Cohort c)
+        public void AddCohort(Cohort c)
         {
              this.cohorts.Add(c);
            
