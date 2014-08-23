@@ -51,6 +51,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 }
             }
         }
+        
         public bool IsMaturePresent 
         {
             get
@@ -67,15 +68,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
         
-        public Cohort this[int index]
-        {
-            get {
-                 
-                return cohorts[index];
-            }
-             
-        }
-        
+       
         public SpeciesCohorts(Cohort c)
         {
             this.species = c.Species;
@@ -115,13 +108,11 @@ namespace Landis.Library.BiomassCohortsPnET
 
                     RemoveCohort(cohorts[i], disturbance.CurrentSite, disturbance.Type);
 
-                    
-
-                    //cohort = null;
                 }
             }
             return totalReduction;
         }
+        /*
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an
@@ -150,7 +141,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return totalReduction;
         }
-
+        */
         
         IEnumerator<Landis.Library.BiomassCohortsPnET.Cohort> IEnumerable<Landis.Library.BiomassCohortsPnET.Cohort>.GetEnumerator()
         {
@@ -162,12 +153,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             return ((IEnumerable<Cohort>)this).GetEnumerator();
         }
-        /*
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return cohorts.GetEnumerator();
-        }
-        */
+       
         IEnumerator<Landis.Library.BiomassCohorts.ICohort> IEnumerable<Landis.Library.BiomassCohorts.ICohort>.GetEnumerator()
         {
             foreach (Cohort cohort in cohorts)
