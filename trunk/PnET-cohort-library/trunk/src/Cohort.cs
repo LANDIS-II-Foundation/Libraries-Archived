@@ -43,6 +43,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public Cohort(ISpecies species, ushort age) 
         {
             this.species = species;
+            this.age = age;
         }
         public ISpecies Species
         {

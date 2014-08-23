@@ -8,14 +8,53 @@ using Landis.SpatialModeling;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class SiteCohorts : 
-          BiomassCohorts.SiteCohorts,
-          BiomassCohorts.ISiteCohorts
-         
+    public class SiteCohorts : BiomassCohorts.SiteCohorts,   BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts
     {
-        List<SpeciesCohorts> cohorts;
-        
-         
+        List<SpeciesCohorts> speciescohorts;
+
+        public virtual void RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
+        {
+            //  Go through list of species cohorts from back to front so that
+            //  a removal does not mess up the loop.
+            for (int i = speciescohorts.Count - 1; i >= 0; i--)
+            {
+                speciescohorts[i].RemoveCohorts(disturbance);
+                if (speciescohorts[i].Count == 0)speciescohorts.RemoveAt(i);
+                    
+            }
+        }
+
+
+        public List<SpeciesCohorts> Speciescohorts
+        {
+            get
+            {
+                return speciescohorts;
+            }
+        }
+        /// <summary>
+        /// Occurs when a site is disturbed by an age-only disturbance.
+        /// </summary>
+        public static new event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
+
+        void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
+        {
+            if (AgeOnlyDisturbanceEvent != null)
+                AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,disturbance.Type));
+                                                                       
+
+            //  Go through list of species cohorts from back to front so that
+            //  a removal does not mess up the loop.
+            int totalReduction = 0;
+            for (int i = speciescohorts.Count - 1; i >= 0; i--)
+            {
+                totalReduction += speciescohorts[i].MarkCohorts(disturbance);
+                if (speciescohorts[i].Count == 0)speciescohorts.RemoveAt(i);
+                    
+            }
+            //totalBiomass -= totalReduction;
+        }
+
         public bool AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
             SpeciesCohorts speciescohort = this[cohort.Species];
@@ -38,7 +77,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 speciescohort.AddNewCohort(cohort);
                 return true;
             }
-            cohorts.Add(new SpeciesCohorts(cohort));
+            speciescohorts.Add(new SpeciesCohorts(cohort));
              
 
             return true;
@@ -59,10 +98,14 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             
             this[cohort.Species].RemoveCohort(cohort, site, null);
+
+            /*
             if (this[cohort.Species].Count == 0)
             {
-                cohorts.RemoveAt(SpeciesIndex(cohort.Species));
+                int index = SpeciesIndex(cohort.Species);
+                speciescohorts.RemoveAt(index);
             }
+             */
         }
        
      
@@ -78,11 +121,10 @@ namespace Landis.Library.BiomassCohortsPnET
         //---------------------------------------------------------------------
         private SpeciesCohorts GetCohorts(ISpecies species)
         {
-            for (int i = 0; i < cohorts.Count; i++)
+            for (int i = 0; i < speciescohorts.Count; i++)
             {
-                SpeciesCohorts speciesCohorts = cohorts[i];
-                if (speciesCohorts.Species == species)
-                    return speciesCohorts;
+                if (speciescohorts[i].Species == species)
+                    return speciescohorts[i];
             }
             return null;
         }
@@ -90,15 +132,15 @@ namespace Landis.Library.BiomassCohortsPnET
         //---------------------------------------------------------------------
         public SiteCohorts()
         {
-            this.cohorts = new List<SpeciesCohorts>();
+            this.speciescohorts = new List<SpeciesCohorts>();
         }
         //---------------------------------------------------------------------
         
         int SpeciesIndex(ISpecies species)
         {
-            for (int i = 0; i < cohorts.Count; i++)
+            for (int i = 0; i < speciescohorts[i].Count; i++)
             {
-                if (cohorts[i].Species == species)
+                if (speciescohorts[i][i].Species == species)
                 {
                     return i;
                 }
@@ -110,7 +152,7 @@ namespace Landis.Library.BiomassCohortsPnET
         void AssertUniqueSpecies()
         {
             List<string> spc = new List<string>();
-            for (int i = 0; i < cohorts.Count; i++)spc.Add(cohorts[i].Species.Name);
+            for (int i = 0; i < speciescohorts[i].Count; i++) spc.Add(speciescohorts[i][i].Species.Name);
             spc.Sort();
             for (int s = 0; s < spc.Count - 1; s++)
             {
@@ -136,10 +178,14 @@ namespace Landis.Library.BiomassCohortsPnET
         
         IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.BiomassCohorts.ISpeciesCohorts>.GetEnumerator()
         {
-            foreach (SpeciesCohorts speciesCohorts in cohorts)
-                yield return speciesCohorts;
+            foreach (SpeciesCohorts speciesCohort in speciescohorts)
+                yield return speciesCohort;
         }
-         
+        IEnumerator<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.GetEnumerator()
+        {
+            foreach (SpeciesCohorts speciesCohort in speciescohorts)
+                yield return speciesCohort;
+        }
        
 
 
