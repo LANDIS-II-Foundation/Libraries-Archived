@@ -34,6 +34,21 @@ namespace Landis.Library.Harvest
         //  Index of the highest-ranked stand that's not yet harvested.
         private int highestUnharvestedStand;
 
+        private static double currentRank;
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// The rank of the stand currently being harvested.
+        /// </summary>
+        public static double CurrentRank
+        {
+            get
+            {
+                return currentRank;
+            }
+        }
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -304,7 +319,7 @@ namespace Landis.Library.Harvest
                     // set the global current rank so it can be taken by 
                     // Prescription.Harvest and applied 
                     // to this harvest event
-                    PlugIn.CurrentRank = rankings[highestUnharvestedStand].Rank;
+                    currentRank = rankings[highestUnharvestedStand].Rank;
                     
                     prescription.Harvest(stand);
                     this.HighestRankedStand = stand;

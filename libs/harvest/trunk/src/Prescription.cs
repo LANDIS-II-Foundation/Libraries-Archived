@@ -219,7 +219,7 @@ namespace Landis.Library.Harvest
         {
             //set prescription name for stand
             stand.PrescriptionName = this.Name;
-            stand.HarvestedRank = PlugIn.CurrentRank;
+            stand.HarvestedRank = AppliedPrescription.CurrentRank;
             stand.LastPrescription = this;
             
             stand.MinTimeSinceDamage = this.minTimeSinceDamage;
