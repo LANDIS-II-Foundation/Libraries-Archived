@@ -8,7 +8,7 @@ using Landis.SpatialModeling;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A stand is a collection of sites and represent typical or average

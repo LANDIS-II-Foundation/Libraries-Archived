@@ -8,7 +8,7 @@ using Landis.SpatialModeling;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A site-selection method that selects small non-contiguous collections

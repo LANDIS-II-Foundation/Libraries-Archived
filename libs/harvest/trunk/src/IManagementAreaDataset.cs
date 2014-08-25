@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A collection of management areas.

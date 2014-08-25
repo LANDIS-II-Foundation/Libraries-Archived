@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;   //added to use List data structure
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A ranking requirement which requires a stand be no more than a certain

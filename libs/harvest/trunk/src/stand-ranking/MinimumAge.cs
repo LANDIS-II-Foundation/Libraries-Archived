@@ -3,7 +3,7 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/libs/harvest/trunk/
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A ranking requirement which requires a stand be at least a certain

@@ -5,7 +5,7 @@
 
 using Landis.Library.Succession;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A single repeat-harvest harvests stands and then sets them aside for

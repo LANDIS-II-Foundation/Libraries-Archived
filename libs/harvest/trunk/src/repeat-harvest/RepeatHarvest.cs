@@ -6,7 +6,7 @@
 using Landis.Library.Succession;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A repeat harvest is a variation of a prescription that harvests stands

@@ -9,7 +9,7 @@ using System.Text;
 using System.IO;
 
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// Utility methods for management areas.

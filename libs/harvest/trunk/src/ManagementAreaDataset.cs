@@ -8,7 +8,7 @@ using Edu.Wisc.Forest.Flel.Util;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A collection of management areas.

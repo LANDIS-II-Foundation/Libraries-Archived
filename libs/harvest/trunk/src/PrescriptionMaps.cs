@@ -5,7 +5,7 @@
 
 using Landis.SpatialModeling;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// Utility class for prescription maps.

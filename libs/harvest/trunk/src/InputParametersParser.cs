@@ -12,7 +12,7 @@ using System.Text;
 
 using FormatException = System.FormatException;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A parser that reads harvest parameters from text input.

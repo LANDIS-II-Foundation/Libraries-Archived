@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A ranking requirement which requires a stand 's neighbors to be no less than

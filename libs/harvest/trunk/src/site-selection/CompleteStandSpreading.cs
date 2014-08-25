@@ -8,7 +8,7 @@ using Landis.SpatialModeling;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest {
+namespace Landis.Library.Harvest {
     /// <summary>
     /// A site-selection method that harvests complete stands until a target
     /// size is reached.
@@ -263,4 +263,4 @@ namespace Landis.Extension.BaseHarvest {
 
 
     } //     public class PartialStandSpreading
-} // namespace Landis.Extension.BaseHarvest
+} // namespace Landis.Library.Harvest

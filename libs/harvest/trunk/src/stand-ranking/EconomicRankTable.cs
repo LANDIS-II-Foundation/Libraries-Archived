@@ -5,7 +5,7 @@
 
 using Landis.Core;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A collection of parameters for computing the economic ranks of species.

@@ -8,7 +8,7 @@ using Landis.SpatialModeling;
 using Landis.Core;
 using Landis.Library.Succession;
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
     /// <summary>
     /// A prescription describes how stands are ranked, how sites are selected,

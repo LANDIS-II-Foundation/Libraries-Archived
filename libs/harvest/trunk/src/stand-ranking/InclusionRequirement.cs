@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 
 
-namespace Landis.Extension.BaseHarvest
+namespace Landis.Library.Harvest
 {
 
     public class InclusionRequirement

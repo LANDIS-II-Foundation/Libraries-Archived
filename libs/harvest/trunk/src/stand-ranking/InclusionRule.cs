@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseHarvest {
+namespace Landis.Library.Harvest {
 	/// <summary>
 	/// a struct for the inclusion-rule type
 	/// to hold all parameters
