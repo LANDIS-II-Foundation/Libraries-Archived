@@ -250,8 +250,7 @@ namespace Landis.Library.Harvest
 
             if (areaSelected >= standTargetArea) {
                 stand.MarkAsHarvested();
-                stand.EventId = PlugIn.EventId;
-                PlugIn.EventId++; //increment global event nmbr
+                stand.EventId = EventId.MakeNewId();
             } else {
                 //Model.Core.UI.WriteLine("Rejecting stand {0} for prescription {1}",stand.MapCode, stand.PrescriptionName);
                 stand.RejectPrescriptionName(stand.PrescriptionName);

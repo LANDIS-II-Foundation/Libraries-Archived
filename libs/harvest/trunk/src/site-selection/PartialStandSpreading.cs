@@ -101,14 +101,13 @@ namespace Landis.Library.Harvest
 
             // Attempt to do the harvest
             if (SpreadFromStand(initialStand)) {
-                //increment global event id number
-                PlugIn.EventId++;
+                int eventId = EventId.MakeNewId();
 
                 // loop through all harvestable stands and update
                 // appropriate items
                 foreach (Stand standToHarvest in standsToHarvest) {
                     standToHarvest.MarkAsHarvested();
-                    standToHarvest.EventId = PlugIn.EventId;
+                    standToHarvest.EventId = eventId;
                     standToHarvest.PrescriptionName = prescriptionName;
                     standToHarvest.LastPrescription = lastPrescription;
                     standToHarvest.MinTimeSinceDamage = minTimeSinceDamage;

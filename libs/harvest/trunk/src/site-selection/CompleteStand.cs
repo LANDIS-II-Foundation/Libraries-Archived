@@ -38,10 +38,7 @@ namespace Landis.Library.Harvest
             areaSelected = stand.ActiveArea;
             stand.MarkAsHarvested();
 			//mark this stand's event id
-			stand.EventId = PlugIn.EventId;
-			
-			//increment global event id number
-			PlugIn.EventId++;
+			stand.EventId = EventId.MakeNewId();
 			
             return stand;
         }
