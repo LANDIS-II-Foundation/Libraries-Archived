@@ -146,7 +146,7 @@ namespace Landis.Library.Harvest
         ExtensionType IDisturbance.Type
         {
             get {
-                return PlugIn.ExtType;
+                return HarvestExtensionMain.ExtType;
             }
         }
 

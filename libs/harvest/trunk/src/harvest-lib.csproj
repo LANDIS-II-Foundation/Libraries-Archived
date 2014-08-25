@@ -52,6 +52,7 @@
     <Compile Include="cohort-selection\SelectCohorts.cs" />
     <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
     <Compile Include="EventId.cs" />
+    <Compile Include="HarvestExtensionMain.cs" />
     <Compile Include="IInputParameters.cs" />
     <Compile Include="IManagementAreaDataset.cs" />
     <Compile Include="InputParameters.cs" />
