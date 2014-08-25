@@ -32,14 +32,14 @@ namespace Landis.Library.Harvest
             IInputRaster<UIntPixel> map;
 
             try {
-                map = PlugIn.ModelCore.OpenRaster<UIntPixel>(path);
+                map = Model.Core.OpenRaster<UIntPixel>(path);
             }
             catch (FileNotFoundException) {
                 string mesg = string.Format("Error: The file {0} does not exist", path);
                 throw new System.ApplicationException(mesg);
             }
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            if (map.Dimensions != Model.Core.Landscape.Dimensions)
             {
                 string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
                 throw new System.ApplicationException(mesg);
@@ -49,7 +49,7 @@ namespace Landis.Library.Harvest
 
             using (map) {
                 UIntPixel pixel = map.BufferPixel;
-                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                foreach (Site site in Model.Core.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
                     if (site.IsActive)
@@ -71,7 +71,7 @@ namespace Landis.Library.Harvest
             // Inform user about non-active areas: those that don't have any
             // applied prescriptions.
             if (inactiveMgmtAreas.Count > 0) {
-                PlugIn.ModelCore.UI.WriteLine("   Inactive management areas: {0}",
+                Model.Core.UI.WriteLine("   Inactive management areas: {0}",
                              MapCodesToString(inactiveMgmtAreas));
             }
         }

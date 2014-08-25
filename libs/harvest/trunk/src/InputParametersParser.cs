@@ -27,7 +27,7 @@ namespace Landis.Library.Harvest
         private Dictionary<string, int> speciesLineNumbers;
         private List<RoundedInterval> roundedIntervals;
         private static int scenarioStart = 0;
-        private static int scenarioEnd = PlugIn.ModelCore.EndTime;
+        private static int scenarioEnd = Model.Core.EndTime;
         private static class Names
         {
             public const string HarvestImplementations = "HarvestImplementations";
@@ -397,7 +397,7 @@ namespace Landis.Library.Harvest
                 //get set-aside var if defined
                 ushort set_aside = 0;
                 if (ReadOptionalVar(adjacencyNeighborSetAside)) {
-                    //PlugIn.ModelCore.UI.WriteLine("adjacencyNeighborSetAside = {0}", adjacencyNeighborSetAside.Value.Actual);
+                    //Model.Core.UI.WriteLine("adjacencyNeighborSetAside = {0}", adjacencyNeighborSetAside.Value.Actual);
                     set_aside = adjacencyNeighborSetAside.Value.Actual;
                 }
                 //add stand-adjacency to list of ranking requirements
@@ -620,7 +620,7 @@ namespace Landis.Library.Harvest
                     //percentage column
                     TextReader.SkipWhitespace(currentLine);
                     ReadValue(percentOfCells, currentLine);
-                    //PlugIn.ModelCore.UI.WriteLine("percentOfCells = {0}", percentOfCells.Value.String);
+                    //Model.Core.UI.WriteLine("percentOfCells = {0}", percentOfCells.Value.String);
                     //cannot validate until parsing is done.  will do this in the inclusionRule constructor
 
                     //a list in case there are multiple species on this line
@@ -949,7 +949,7 @@ namespace Landis.Library.Harvest
         {
             InputVar<List<ISpecies>> plant = new InputVar<List<ISpecies>>("Plant", ReadSpeciesList);
             if (ReadOptionalVar(plant))
-                return new Planting.SpeciesList(plant.Value.Actual, speciesDataset); //PlugIn.ModelCore.Species);
+                return new Planting.SpeciesList(plant.Value.Actual, speciesDataset); //Model.Core.Species);
             else
                 return null;
         }
@@ -1144,7 +1144,7 @@ namespace Landis.Library.Harvest
 
         protected ISpecies GetSpecies(InputValue<string> name)
         {
-            ISpecies species = speciesDataset[name.Actual]; // PlugIn.ModelCore.Species[name.Actual];
+            ISpecies species = speciesDataset[name.Actual]; // Model.Core.Species[name.Actual];
             if (species == null)
                 throw new InputValueException(name.String,
                                               "{0} is not a species name.",

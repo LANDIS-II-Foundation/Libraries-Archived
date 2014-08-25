@@ -29,7 +29,7 @@ namespace Landis.Library.Harvest
 
             try
             {
-                map = PlugIn.ModelCore.OpenRaster<UIntPixel>(path);
+                map = Model.Core.OpenRaster<UIntPixel>(path);
             }
             catch (FileNotFoundException)
             {
@@ -37,7 +37,7 @@ namespace Landis.Library.Harvest
                 throw new System.ApplicationException(mesg);
             }
 
-            if (map.Dimensions != PlugIn.ModelCore.Landscape.Dimensions)
+            if (map.Dimensions != Model.Core.Landscape.Dimensions)
             {
                 string mesg = string.Format("Error: The input map {0} does not have the same dimension (row, column) as the ecoregions map", path);
                 throw new System.ApplicationException(mesg);
@@ -46,7 +46,7 @@ namespace Landis.Library.Harvest
             using (map) {
                 
                 UIntPixel pixel = map.BufferPixel;
-                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                foreach (Site site in Model.Core.Landscape.AllSites)
                 {
                     map.ReadBufferPixel();
                     uint mapCode = pixel.MapCode.Value;

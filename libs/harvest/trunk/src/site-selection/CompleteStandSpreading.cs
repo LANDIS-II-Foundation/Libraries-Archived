@@ -109,7 +109,7 @@ namespace Landis.Library.Harvest {
                 // mark them all as such using the prescriptionName.
 
                 foreach (Stand standToReject in standsToHarvest) {
-                    //PlugIn.ModelCore.UI.WriteLine("Rejecting stand {0} for prescription {1}",standToReject.MapCode, prescriptionName);
+                    //Model.Core.UI.WriteLine("Rejecting stand {0} for prescription {1}",standToReject.MapCode, prescriptionName);
                     standToReject.RejectPrescriptionName(prescriptionName);
                     standToReject.HarvestedRank = standsToHarvestRankings.Dequeue();
 
@@ -121,7 +121,7 @@ namespace Landis.Library.Harvest {
             // prescription name
 
             foreach (Stand standToReject in standsToReject) {
-                //PlugIn.ModelCore.UI.WriteLine("Rejecting stand {0} for prescription {1}",standToReject.MapCode, prescriptionName);
+                //Model.Core.UI.WriteLine("Rejecting stand {0} for prescription {1}",standToReject.MapCode, prescriptionName);
                 standToReject.RejectPrescriptionName(prescriptionName);
             }
 
@@ -246,7 +246,7 @@ namespace Landis.Library.Harvest {
                 if (SiteVars.TimeSinceLastDamage(crntSite) >= minTimeSinceDamage) {
                     sitesHarvested++;
                     harvestableSites.Enqueue(crntSite);
-                    areaSelected += PlugIn.ModelCore.CellArea;
+                    areaSelected += Model.Core.CellArea;
                     rtrnVal = true;
                 } 
             } 

@@ -125,7 +125,7 @@ namespace Landis.Library.Harvest
                             break;
                     }
 
-                    //PlugIn.ModelCore.UI.WriteLine("   place={0}, rank={1}.", i, neighborRanking.Rank);
+                    //Model.Core.UI.WriteLine("   place={0}, rank={1}.", i, neighborRanking.Rank);
                     neighborRankings.Insert(i, neighborRanking);
                     
                 }

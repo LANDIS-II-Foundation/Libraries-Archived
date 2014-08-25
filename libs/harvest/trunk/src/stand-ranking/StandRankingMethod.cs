@@ -81,7 +81,7 @@ namespace Landis.Library.Harvest
                     //otherwise, rank it 0 (so it will not be harvested.)
                     else {
                         rank = 0;
-                        //PlugIn.ModelCore.UI.WriteLine("   Stand {0} did not meet its requirements.", stand.MapCode);
+                        //Model.Core.UI.WriteLine("   Stand {0} did not meet its requirements.", stand.MapCode);
                     }
                 }
 				else {
@@ -90,7 +90,7 @@ namespace Landis.Library.Harvest
                 rankings[i].Stand = stand;
                 rankings[i].Rank = rank;
                 //assign rank to stand
-				//PlugIn.ModelCore.UI.WriteLine("   Stand {0} rank = {1}.", rankings[i].Stand.MapCode, rankings[i].Rank);
+				//Model.Core.UI.WriteLine("   Stand {0} rank = {1}.", rankings[i].Stand.MapCode, rankings[i].Rank);
             }
         }
     }

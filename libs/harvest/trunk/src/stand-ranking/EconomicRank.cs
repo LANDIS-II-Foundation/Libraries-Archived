@@ -31,7 +31,7 @@ namespace Landis.Library.Harvest
         protected override double ComputeRank(Stand stand, int i)
         {
             double standEconImportance = 0.0;
-            //PlugIn.ModelCore.UI.WriteLine("Base Harvest: EconomicRank.cs: ComputeRank:  there are {0} sites in this stand.", stand.SiteCount);
+            //Model.Core.UI.WriteLine("Base Harvest: EconomicRank.cs: ComputeRank:  there are {0} sites in this stand.", stand.SiteCount);
             foreach (ActiveSite site in stand) {
 
                 double siteEconImportance = 0.0;

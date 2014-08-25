@@ -27,9 +27,9 @@ namespace Landis.Library.Harvest
         //eligible for harvesting again.
         bool IRequirement.MetBy(Stand stand)
         {
-            //PlugIn.ModelCore.UI.WriteLine("stand {0} TimeLastHarvested = {1}", stand.MapCode, stand.TimeLastHarvested);
-            int time_since = PlugIn.ModelCore.CurrentTime - stand.TimeLastHarvested;
-            //PlugIn.ModelCore.UI.WriteLine("time_since stand {0} was harvested = {1}\n", stand.MapCode, time_since);
+            //Model.Core.UI.WriteLine("stand {0} TimeLastHarvested = {1}", stand.MapCode, stand.TimeLastHarvested);
+            int time_since = Model.Core.CurrentTime - stand.TimeLastHarvested;
+            //Model.Core.UI.WriteLine("time_since stand {0} was harvested = {1}\n", stand.MapCode, time_since);
             return time_since >= minTime;
         }
         

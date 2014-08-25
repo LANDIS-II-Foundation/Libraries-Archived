@@ -39,11 +39,11 @@ namespace Landis.Library.Harvest
         public void WriteMap(int timestep)
         {
             string path = MapNames.ReplaceTemplateVars(nameTemplate, timestep);
-            using (IOutputRaster<ShortPixel> outputRaster = PlugIn.ModelCore.CreateRaster<ShortPixel>(path, PlugIn.ModelCore.Landscape.Dimensions))
+            using (IOutputRaster<ShortPixel> outputRaster = Model.Core.CreateRaster<ShortPixel>(path, Model.Core.Landscape.Dimensions))
             {
                 ShortPixel pixel = outputRaster.BufferPixel;
             
-                foreach (Site site in PlugIn.ModelCore.Landscape.AllSites)
+                foreach (Site site in Model.Core.Landscape.AllSites)
                 {
                     if (site.IsActive) {
                         Prescription prescription = SiteVars.Prescription[site];

@@ -35,8 +35,8 @@ namespace Landis.Library.Harvest
                 stand_rankings.Add(i+1);
             }
 			
-            //PlugIn.ModelCore.Shuffle(stand_rankings);
-            stand_rankings = PlugIn.ModelCore.shuffle(stand_rankings);
+            //Model.Core.Shuffle(stand_rankings);
+            stand_rankings = Model.Core.shuffle(stand_rankings);
             
             rank_array = stand_rankings.ToArray();
         }

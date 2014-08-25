@@ -240,7 +240,7 @@ namespace Landis.Library.Harvest
                 
                 if (SiteVars.CohortsDamaged[site] > 0)
                 {
-                    stand.LastAreaHarvested += PlugIn.ModelCore.CellArea;
+                    stand.LastAreaHarvested += Model.Core.CellArea;
                     SiteVars.Prescription[site] = this;
                 }    
 
@@ -263,7 +263,7 @@ namespace Landis.Library.Harvest
                     
                     //if this cohort is killed, update the damage table (for the stand of this site) with this species name
                     SiteVars.Stand[currentSite].UpdateDamageTable(cohorts.Species.Name);
-                    //PlugIn.ModelCore.UI.WriteLine("Damaged:  {0}.", cohorts.Species.Name);
+                    //Model.Core.UI.WriteLine("Damaged:  {0}.", cohorts.Species.Name);
                     
                     //and increment the cohortsDamaged
                     cohortsDamaged++;

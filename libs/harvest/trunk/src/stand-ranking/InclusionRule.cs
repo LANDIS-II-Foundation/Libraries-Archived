@@ -45,12 +45,12 @@ namespace Landis.Library.Harvest {
 			//get the species index list using species name
 			this.species_index_list = new List<int>();
 			foreach (string species in species_list) {
-                if (PlugIn.ModelCore.Species[species] != null)
+                if (Model.Core.Species[species] != null)
                 {
-                    this.species_index_list.Add(PlugIn.ModelCore.Species[species].Index);
+                    this.species_index_list.Add(Model.Core.Species[species].Index);
 				}				
 			}
-			//PlugIn.ModelCore.UI.WriteLine("species index = {0}", this.species_index);
+			//Model.Core.UI.WriteLine("species index = {0}", this.species_index);
 		}
 		
 		//---------------------------------------------------------------------

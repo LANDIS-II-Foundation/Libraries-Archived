@@ -33,7 +33,7 @@ namespace Landis.Library.Harvest
             //if any of the stand's neighbors are too young,
             //don't rank this stand (set rank = 0)
             foreach (Stand neighbor in stand.Neighbors) {
-                //PlugIn.ModelCore.UI.WriteLine("neighbor {0} age = {1}", neighbor.MapCode, neighbor.Age);
+                //Model.Core.UI.WriteLine("neighbor {0} age = {1}", neighbor.MapCode, neighbor.Age);
                 if (neighbor.Age < minAge) {
                     //don't allow stand to be ranked
                     allow_rank = false;
@@ -41,7 +41,7 @@ namespace Landis.Library.Harvest
                 }
             }
             //return allow_rank.  if false, stand will be ranked 0
-            //PlugIn.ModelCore.UI.WriteLine("stand {0} allow_rank = {1}", stand.MapCode, allow_rank);
+            //Model.Core.UI.WriteLine("stand {0} allow_rank = {1}", stand.MapCode, allow_rank);
             return allow_rank;
         }
         

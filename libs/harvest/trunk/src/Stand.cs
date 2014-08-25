@@ -128,10 +128,10 @@ namespace Landis.Library.Harvest
         public ushort Age
         {
             get {
-                if (yearAgeComputed != PlugIn.ModelCore.CurrentTime)
+                if (yearAgeComputed != Model.Core.CurrentTime)
                 {
                     age = ComputeAge();
-                    yearAgeComputed = PlugIn.ModelCore.CurrentTime;
+                    yearAgeComputed = Model.Core.CurrentTime;
                 }
                 return age;
             }
@@ -213,7 +213,7 @@ namespace Landis.Library.Harvest
         /// </summary>
         public int TimeSinceLastHarvested {
             get {
-                return PlugIn.ModelCore.CurrentTime - timeLastHarvested;
+                return Model.Core.CurrentTime - timeLastHarvested;
             }
 
         }
@@ -263,7 +263,7 @@ namespace Landis.Library.Harvest
         {
             get {
 
-                bool ret = (PlugIn.ModelCore.CurrentTime <= setAsideUntil);
+                bool ret = (Model.Core.CurrentTime <= setAsideUntil);
                 return ret;
             }
         }
@@ -328,12 +328,12 @@ namespace Landis.Library.Harvest
         {
             this.mapCode = mapCode;
             this.siteLocations = new List<Location>();
-            this.activeArea = PlugIn.ModelCore.CellArea;
+            this.activeArea = Model.Core.CellArea;
             this.mgmtArea = null;
             this.neighbors = new List<Stand>();
             this.ma_neighbors = new List<Stand>();      //new list for neighbors not in this management area
-            this.yearAgeComputed = PlugIn.ModelCore.StartTime;
-            this.setAsideUntil = PlugIn.ModelCore.StartTime;
+            this.yearAgeComputed = Model.Core.StartTime;
+            this.setAsideUntil = Model.Core.StartTime;
             this.timeLastHarvested = -1;
             //initialize damage_table dictionary
             damage_table = new Dictionary<string, int>();
@@ -351,7 +351,7 @@ namespace Landis.Library.Harvest
          {
 
             siteLocations.Add(site.Location);
-            this.activeArea = siteLocations.Count * PlugIn.ModelCore.CellArea;
+            this.activeArea = siteLocations.Count * Model.Core.CellArea;
             //set site var
             SiteVars.Stand[site] = this;
 
@@ -394,10 +394,10 @@ namespace Landis.Library.Harvest
                 if(siteLocations == null || siteLocations.Count == 0)
                     return new ActiveSite(); 
 
-                int random = (int)(PlugIn.ModelCore.GenerateUniform() * (siteLocations.Count - 1));
+                int random = (int)(Model.Core.GenerateUniform() * (siteLocations.Count - 1));
                 if(random < 0 || random > siteLocations.Count - 1)
                     return new ActiveSite(); 
-                return PlugIn.ModelCore.Landscape[siteLocations[random]];
+                return Model.Core.Landscape[siteLocations[random]];
             }
         }
 
@@ -405,7 +405,7 @@ namespace Landis.Library.Harvest
 
         public void DelistActiveSite(ActiveSite site) {
             siteLocations.Remove(site.Location);
-            this.activeArea = siteLocations.Count * PlugIn.ModelCore.CellArea;
+            this.activeArea = siteLocations.Count * Model.Core.CellArea;
         } 
 
         //---------------------------------------------------------------------
@@ -461,7 +461,7 @@ namespace Landis.Library.Harvest
         public void MarkAsHarvested()
         {
             //reset timeLastHarvested to current time
-            this.timeLastHarvested = PlugIn.ModelCore.CurrentTime;
+            this.timeLastHarvested = Model.Core.CurrentTime;
 
             //mark stand as harvested
             harvested = true;
@@ -518,7 +518,7 @@ namespace Landis.Library.Harvest
         IEnumerator<ActiveSite> IEnumerable<ActiveSite>.GetEnumerator()
         {
             foreach (Location location in siteLocations)
-               yield return PlugIn.ModelCore.Landscape[location];
+               yield return Model.Core.Landscape[location];
         }
 
         //---------------------------------------------------------------------

@@ -40,7 +40,7 @@ namespace Landis.Library.Harvest
 
         bool IRequirement.MetBy(Stand stand)
         {
-			//PlugIn.ModelCore.UI.WriteLine("checking stand {0}", stand.MapCode);
+			//Model.Core.UI.WriteLine("checking stand {0}", stand.MapCode);
 			//get list of neighboring stands (must cast from enum)
 			List<Stand> neighbor_stands = new List<Stand>();
 			neighbor_stands = (List<Stand>) stand.Neighbors;
@@ -59,7 +59,7 @@ namespace Landis.Library.Harvest
 				//if type was mintimesincelastharvest
 				else {
 					if (n_stand.TimeSinceLastHarvested < time) {
-						//PlugIn.ModelCore.UI.WriteLine("stand {0} NOT ranked.", stand.MapCode);
+						//Model.Core.UI.WriteLine("stand {0} NOT ranked.", stand.MapCode);
 						return false;
 					}
 				}

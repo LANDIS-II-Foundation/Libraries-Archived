@@ -91,19 +91,19 @@ namespace Landis.Library.Harvest
             double standTargetArea;
 
             //get a random site from the stand
-            //random = (int) (PlugIn.ModelCore.GenerateUniform() * 
+            //random = (int) (Model.Core.GenerateUniform() * 
             //    (stand.SiteCount - 1));
             
             //get a random active site from the stand
-            random = (int) (PlugIn.ModelCore.GenerateUniform() * (sites.Count - 1));
+            random = (int) (Model.Core.GenerateUniform() * (sites.Count - 1));
             crntSite = sites[random];
 
             //while (!(((Site)crntSite).IsActive) && sites.Count > 0) {
             //while (sites.Count > 0) {
-            //    //PlugIn.ModelCore.UI.WriteLine("   ERROR:  Non-active site included in stand {0}.", stand.MapCode);
+            //    //Model.Core.UI.WriteLine("   ERROR:  Non-active site included in stand {0}.", stand.MapCode);
             //    sitesConsidered.Enqueue(crntSite);
             //    sites.Remove(crntSite);
-            //    random = (int)(PlugIn.ModelCore.GenerateUniform() * (sites.Count - 1));
+            //    random = (int)(Model.Core.GenerateUniform() * (sites.Count - 1));
             //    crntSite = sites[random];
             //} // while (!(((Site)crntSite).IsActive) && sites.Count > 0)
 
@@ -111,7 +111,7 @@ namespace Landis.Library.Harvest
             sitesToConsider.Enqueue(crntSite);
             sites.Remove(crntSite);
             
-            standTargetArea = PlugIn.ModelCore.CellArea * stand.SiteCount * percent;
+            standTargetArea = Model.Core.CellArea * stand.SiteCount * percent;
 
             // loop through stand, harvesting patches of size patch_size at a time
             while (areaSelected < standTargetArea && sites.Count > 0) 
@@ -157,8 +157,8 @@ namespace Landis.Library.Harvest
                             sitesToHarvest.Enqueue(crntConsideredSite);
                         
                             // increment area selected and total_areaSelected
-                            patchAreaSelected += PlugIn.ModelCore.CellArea;
-                            areaSelected += PlugIn.ModelCore.CellArea;
+                            patchAreaSelected += Model.Core.CellArea;
+                            areaSelected += Model.Core.CellArea;
                         }
 
                         // Whether harvestable or not, it has been considered
@@ -177,8 +177,8 @@ namespace Landis.Library.Harvest
                             sitesToHarvest.Enqueue(crntConsideredSite);
 
                             //increment area selected and total_areaSelected
-                            patchAreaSelected += PlugIn.ModelCore.CellArea;
-                            areaSelected += PlugIn.ModelCore.CellArea;
+                            patchAreaSelected += Model.Core.CellArea;
+                            areaSelected += Model.Core.CellArea;
                         }
 
                         // Whether harvestable or not, it has been considered
@@ -186,13 +186,13 @@ namespace Landis.Library.Harvest
 
                     } else {
                     // else just break out- if it's not big enough it's not big enough
-                      //PlugIn.ModelCore.UI.WriteLine("patch isn't big enough ({0}), must BREAK.", areaSelected);
+                      //Model.Core.UI.WriteLine("patch isn't big enough ({0}), must BREAK.", areaSelected);
                         break;
                     } // if (sitesToConsider.Count > 1)
 
                 } // while (patchAreaSelected < patch_size && 
 
-                //PlugIn.ModelCore.UI.WriteLine("Done with a patch.");
+                //Model.Core.UI.WriteLine("Done with a patch.");
 
                 //clear the sitesToConsider queue to get rid of old sites
                 sitesToConsider.Clear();
@@ -206,16 +206,16 @@ namespace Landis.Library.Harvest
 
                     //increment the number of tries
                     tries++;
-                    random = (int) (PlugIn.ModelCore.GenerateUniform() * (sites.Count - 1));
+                    random = (int) (Model.Core.GenerateUniform() * (sites.Count - 1));
                     crntSite = sites[random];
 
                     // Get an active site
                     //while (!(((Site)crntSite).IsActive) && sites.Count > 0) {
                     //while (sites.Count > 0) {
-                        //PlugIn.ModelCore.UI.WriteLine("   ERROR:  Non-active site included in stand {0}.", stand.MapCode);
+                        //Model.Core.UI.WriteLine("   ERROR:  Non-active site included in stand {0}.", stand.MapCode);
                     //    sitesConsidered.Enqueue(crntSite);
                     //    sites.Remove(crntSite);
-                    //    random = (int)(PlugIn.ModelCore.GenerateUniform() *
+                    //    random = (int)(Model.Core.GenerateUniform() *
                     //        (sites.Count - 1));
                     //    crntSite = sites[random];
                     //} // while (!(((Site)crntSite).IsActive) && sites.Count > 0)
@@ -241,7 +241,7 @@ namespace Landis.Library.Harvest
                 }
                 //reset areaSelected = 0 to start over
                 patchAreaSelected = 0;
-                //PlugIn.ModelCore.UI.WriteLine("areaSelected = {0}", areaSelected);
+                //Model.Core.UI.WriteLine("areaSelected = {0}", areaSelected);
             } // while (areaSelected < standTargetArea && sites.Count > 0)
 
             // if the stand met the criteria for the harvest, mark it
@@ -253,7 +253,7 @@ namespace Landis.Library.Harvest
                 stand.EventId = PlugIn.EventId;
                 PlugIn.EventId++; //increment global event nmbr
             } else {
-                //PlugIn.ModelCore.UI.WriteLine("Rejecting stand {0} for prescription {1}",stand.MapCode, stand.PrescriptionName);
+                //Model.Core.UI.WriteLine("Rejecting stand {0} for prescription {1}",stand.MapCode, stand.PrescriptionName);
                 stand.RejectPrescriptionName(stand.PrescriptionName);
             }
 

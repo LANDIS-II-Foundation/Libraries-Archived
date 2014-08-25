@@ -56,7 +56,7 @@ namespace Landis.Library.Harvest
                     if (rule.InclusionType == "Forbidden") {
                         if (meets) {
                             //this stand meets a 'forbidden' rule so it is disqualified (can return false right away)
-//                          PlugIn.ModelCore.UI.WriteLine("returning false1");
+//                          Model.Core.UI.WriteLine("returning false1");
                             return false;
                         }
                     }
@@ -64,13 +64,13 @@ namespace Landis.Library.Harvest
                     else if (rule.InclusionType == "Required") {
                         if (!meets) {
                             //this stand violates a 'required' rule so it is disqualified (can return false right away)
-                            //PlugIn.ModelCore.UI.WriteLine("returning false2");
+                            //Model.Core.UI.WriteLine("returning false2");
                             return false;
                         }
                         else {
                             //this stand does not violate this 'required' rule.  in case of no optionals, 
                             //it must know that it has fulfilled a required rule to return true.
-//                          PlugIn.ModelCore.UI.WriteLine("returning true1");
+//                          Model.Core.UI.WriteLine("returning true1");
                             //required_flag = true;
                         }
                     }
@@ -89,7 +89,7 @@ namespace Landis.Library.Harvest
                 
                 //do nothing if key is not found.
                 //catch (KeyNotFoundException) {
-                //    PlugIn.ModelCore.UI.WriteLine("Key Not Found Exception");
+                //    Model.Core.UI.WriteLine("Key Not Found Exception");
                 //}
             }
 
@@ -97,7 +97,7 @@ namespace Landis.Library.Harvest
             if (optionalStatements > 1 && optionalStatementsMet < 1) 
                 return false;
             
-//          PlugIn.ModelCore.UI.WriteLine("returning default truth!!");
+//          Model.Core.UI.WriteLine("returning default truth!!");
             return true;
         }
         
@@ -109,7 +109,7 @@ namespace Landis.Library.Harvest
             int numCellsValid = 0;
             int numActiveCells = 0;
             
-            int[] numCellsOtherSpecies = new int[PlugIn.ModelCore.Species.Count];
+            int[] numCellsOtherSpecies = new int[Model.Core.Species.Count];
             
             foreach(ActiveSite site in stand.GetActiveSites())
             {
@@ -121,9 +121,9 @@ namespace Landis.Library.Harvest
                 bool goodSite = false;
                 //bool otherSpecies = false;
                     
-                //Landis.Library.BaseCohorts.ISiteCohorts siteCohorts = (Landis.Library.BaseCohorts.ISiteCohorts) PlugIn.ModelCore.SuccessionCohorts[site];
+                //Landis.Library.BaseCohorts.ISiteCohorts siteCohorts = (Landis.Library.BaseCohorts.ISiteCohorts) Model.Core.SuccessionCohorts[site];
                 
-                foreach(ISpecies species in PlugIn.ModelCore.Species)
+                foreach(ISpecies species in Model.Core.Species)
                 {
                     if(SiteVars.Cohorts[site][species] != null)
                     {
@@ -171,7 +171,7 @@ namespace Landis.Library.Harvest
                 }
                 if(numCellsValid >= targetNumCells)
                 {
-                    //PlugIn.ModelCore.UI.WriteLine("       numGoodSites={0}, targetNumCells={1}", numCellsValid, targetNumCells);
+                    //Model.Core.UI.WriteLine("       numGoodSites={0}, targetNumCells={1}", numCellsValid, targetNumCells);
                     return true;
                 }
             }
@@ -180,11 +180,11 @@ namespace Landis.Library.Harvest
             else 
             {
                     
-                for(int i = 0; i < PlugIn.ModelCore.Species.Count; i++)
+                for(int i = 0; i < Model.Core.Species.Count; i++)
                 {
                     if(numCellsValid < numCellsOtherSpecies[i])
                         highest = false;
-                    //PlugIn.ModelCore.UI.WriteLine("       numGoodSites={0}, otherSppCnt={1}, true? {2}", numCellsValid, otherSpeciesCount[i], highest);
+                    //Model.Core.UI.WriteLine("       numGoodSites={0}, otherSppCnt={1}, true? {2}", numCellsValid, otherSpeciesCount[i], highest);
                 }
             }
             

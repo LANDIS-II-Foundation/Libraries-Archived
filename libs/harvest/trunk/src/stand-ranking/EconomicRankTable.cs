@@ -31,7 +31,7 @@ namespace Landis.Library.Harvest
 
         public EconomicRankTable()
         {
-            parameters = new EconomicRankParameters[PlugIn.ModelCore.Species.Count];
+            parameters = new EconomicRankParameters[Model.Core.Species.Count];
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Landis.Library.Harvest
         /// </summary>
         public void SetAsideForSingleHarvest(Stand stand)
         {
-            stand.SetAsideUntil(Math.Min(PlugIn.ModelCore.CurrentTime + repeatHarvest.Interval,
+            stand.SetAsideUntil(Math.Min(Model.Core.CurrentTime + repeatHarvest.Interval,
                                          EndTime));
         }
 
@@ -142,7 +142,7 @@ namespace Landis.Library.Harvest
         /// </summary>
         protected void ScheduleNextHarvest(Stand stand)
         {
-            int nextTimeToHarvest = PlugIn.ModelCore.CurrentTime + repeatHarvest.Interval;
+            int nextTimeToHarvest = Model.Core.CurrentTime + repeatHarvest.Interval;
             if (nextTimeToHarvest <= EndTime)
                 reservedStands.Enqueue(new ReservedStand(stand, nextTimeToHarvest));
         }
@@ -156,7 +156,7 @@ namespace Landis.Library.Harvest
         public void HarvestReservedStands()
         {
             while (reservedStands.Count > 0 &&
-                   reservedStands.Peek().NextTimeToHarvest <= PlugIn.ModelCore.CurrentTime) {
+                   reservedStands.Peek().NextTimeToHarvest <= Model.Core.CurrentTime) {
                 //Stand stand = reservedStands.Dequeue().Stand;
                 Stand stand = reservedStands.Peek().Stand;
                 

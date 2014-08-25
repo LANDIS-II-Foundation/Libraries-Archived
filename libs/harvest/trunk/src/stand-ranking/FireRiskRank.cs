@@ -35,12 +35,12 @@ namespace Landis.Library.Harvest
             //    throw new System.ApplicationException("Error: CFS Fuel Type NOT Initialized.  Fuel extension MUST be active.");
 
             double standFireRisk = 0.0;
-            //PlugIn.ModelCore.UI.WriteLine("Base Harvest: EconomicRank.cs: ComputeRank:  there are {0} sites in this stand.", stand.SiteCount);
+            //Model.Core.UI.WriteLine("Base Harvest: EconomicRank.cs: ComputeRank:  there are {0} sites in this stand.", stand.SiteCount);
             foreach (ActiveSite site in stand) {
 
                 //double siteFireRisk = 0.0;
                 int fuelType = SiteVars.CFSFuelType[site];
-                //PlugIn.ModelCore.UI.WriteLine("Base Harvest: ComputeRank:  FuelType = {0}.", fuelType);
+                //Model.Core.UI.WriteLine("Base Harvest: ComputeRank:  FuelType = {0}.", fuelType);
                 FireRiskParameters rankingParameters = rankTable[fuelType];
                 standFireRisk = (double)rankingParameters.Rank;
 
