@@ -21,6 +21,7 @@ namespace Landis.Library.Harvest
         : TextParser<IInputParameters>
     {
         private static ParseMethod<ushort> uShortParse;
+        private string extensionName;
         private ISpeciesDataset speciesDataset;
         private IStandRankingMethod rankingMethod;  //made global because of re-use
         private InputVar<string> speciesName;
@@ -53,7 +54,7 @@ namespace Landis.Library.Harvest
         public override string LandisDataValue
         {
             get {
-                return PlugIn.ExtensionName;
+                return extensionName;
             }
         }
 
@@ -142,14 +143,10 @@ namespace Landis.Library.Harvest
         /// <param name="speciesDataset">
         /// The dataset of species to look up species' names in.
         /// </param>
-        /// <param name="scenarioStart">
-        /// The year that the model scenario starts.
-        /// </param>
-        /// <param name="scenarioEnd">
-        /// The year that the model scenario ends.
-        /// </param>
-        public InputParametersParser(ISpeciesDataset speciesDataset)
+        public InputParametersParser(string          extensionName,
+                                     ISpeciesDataset speciesDataset)
         {
+            this.extensionName = extensionName;
             this.speciesDataset = speciesDataset;
             this.speciesName = new InputVar<string>("Species");
             this.speciesLineNumbers = new Dictionary<string, int>();
