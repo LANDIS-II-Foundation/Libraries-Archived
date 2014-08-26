@@ -114,19 +114,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 maintenancerespiration = value;
             }
         }
-        
-        private float wue;
-        public float WUE 
-        { 
-            get 
-            { 
-                return wue; 
-            }
-            set
-            {
-                wue = value;
-            }
-        }
+         
         public float AverageFwater()
         {
             if (fwater.Count == 0) return 1;
