@@ -40,6 +40,18 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
+        float activewood;
+        public float ActiveWood
+        {
+            get
+            {
+                return activewood;
+            }
+            set
+            {
+                activewood = value;
+            }
+        }
 
         private float woodsenescence;
         public float Woodsenescence
@@ -120,7 +132,7 @@ namespace Landis.Library.BiomassCohortsPnET
             if (fwater.Count == 0) return 1;
             return fwater.Average();
         }
-        public int Index;
+     
         private float folresp;
 
         private float transpiration;
@@ -234,6 +246,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.NSC = NSC;
             this.Root = Root;
             this.YearOfBirth = year_of_birth;
+           
 
         }
         public Cohort(Cohort cohort)
@@ -246,7 +259,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Root = cohort.Root;
             this.Fol = cohort.Fol;
             this.YearOfBirth = cohort.YearOfBirth;//
-            this.FolShed = cohort.FolShed;
+           
             this.MaxBiomass = cohort.MaxBiomass;
             this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
@@ -269,7 +282,7 @@ namespace Landis.Library.BiomassCohortsPnET
         float wood;
         float root;
         float nsc;
-        float folshed;
+        
         ushort age;
         float lai;
         ISpecies species;
@@ -342,16 +355,16 @@ namespace Landis.Library.BiomassCohortsPnET
                 fage = value;
             }
         }
-        int canopylayer;
-        public int CanopyLayer
+        float dominance;
+        public float Dominance
         {
             get
             {
-                return canopylayer;
+                return dominance;
             }
             set
             {
-                canopylayer = value;
+                dominance = value;
             }
         }
         private float maintenancerespiration;
@@ -401,18 +414,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 return age;
             }
         }
-        public float FolShed
-        {
-            get
-            {
-                return folshed;
-            }
-            set
-            {
-                folshed = value;
-            }
-        }
-       
+         
         public int Biomass
         {
             get

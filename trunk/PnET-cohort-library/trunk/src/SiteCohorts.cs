@@ -94,7 +94,7 @@ namespace Landis.Library.BiomassCohortsPnET
                     cohort.Wood += cohort.Wood;
                     mycohort.Fol += cohort.Fol;
                     mycohort.Root += cohort.Root;
-                    mycohort.FolShed += cohort.FolShed;
+                   
                     return false;
                 }
             }
