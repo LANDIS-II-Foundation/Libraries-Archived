@@ -9,8 +9,11 @@ using System.Linq;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
+
+    // THERE SHOULD NOT BE INHERITANCE OF BiomassCohorts.SiteCohorts HERE. Cannot get rid of it because it gets stuck on the 'this' pointer
     public class SiteCohorts : BiomassCohorts.SiteCohorts,   BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts
     {
+
         List<Cohort> cohorts = new List<Cohort>();
     
         
