@@ -15,8 +15,10 @@ namespace Landis.Library.BiomassCohortsPnET
     public class SpeciesCohorts : BiomassCohorts.ISpeciesCohorts, AgeOnlyCohorts.ISpeciesCohorts, IEnumerable<Cohort>
     {
         private static Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged;
-        private ISpecies species;
+       
         private List<Cohort> cohorts;
+
+        public ISpecies Species { get; private set; }
 
         public int Count
         {
@@ -25,14 +27,8 @@ namespace Landis.Library.BiomassCohortsPnET
                 return cohorts.Count;
             }
         }
-        public ISpecies Species
-        {
-            get
-            {
-                return species;
-            }
-        }
-        
+       
+ 
         public void RemoveCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             isSpeciesCohortDamaged.SetAllFalse(Count);
@@ -59,7 +55,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 for (int i = 0; i < cohorts.Count; i++)
                 {
                     Cohort Cohorts = cohorts[i];
-                    if (Cohorts.Age > species.Maturity)
+                    if (Cohorts.Age > Species.Maturity)
                     {
                         return true;
                     }
@@ -71,7 +67,7 @@ namespace Landis.Library.BiomassCohortsPnET
        
         public SpeciesCohorts(Cohort c)
         {
-            this.species = c.Species;
+            this.Species = c.Species;
             this.cohorts = new List<Cohort>();
             AddCohort(c);
             isSpeciesCohortDamaged = new Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray();
