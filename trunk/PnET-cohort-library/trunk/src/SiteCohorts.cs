@@ -25,7 +25,19 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             
         }
-        
+
+        public new bool IsMaturePresent(ISpecies species)
+        {
+            foreach (Cohort cohort in cohorts)
+            {
+                if (cohort.Species == species && cohort.Age > species.Maturity)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public virtual void RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             foreach (SpeciesCohorts speciescohort in Speciescohorts)

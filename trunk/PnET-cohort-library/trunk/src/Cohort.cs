@@ -12,236 +12,46 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort, Landis.Library.BiomassCohorts.ICohort  
     {
-        public float FolCnt;
-
-        int year_of_birth;
-
-         
-        private ActiveSite site;
-
-        public ActiveSite Site
-        {
-            get
-            {
-                return site;
-            }
-        }
+        public float Rootsenescence {get;set;}
+        public float ActiveWood { get; set; }
+        public float Woodsenescence { get; set; }
+        public System.Collections.Generic.List<float> Fwater { get; set; }
+        public float Folalloc { get; set; }
+        public float Maintenancerespiration { get; set; }
+        public float WoodAlloc { get; set; }
+        public float RootAlloc { get; set; }
+        public float Bottomfrad{ get; set; }
+        public float UpperFrad{ get; set; }
+        public float ReleasedNSC { get; set; }
+        public float FolResp{ get; set; }
+        public float Transpiration { get; set; }
+        public float AboveCohortRadiation { get; set; }
+        public float Netpsn { get; set; }
+        public int MaxBiomass { get; set; }
+        public float Fage { get; set; }
+        public float Dominance { get; set; }
+        public float MaintenanceRespiration { get; set; }
+        public float Grosspsn{ get; set; }
+        public float LAI{ get; set; }
+        public ushort Age { get; set; }
+        public float Fol{ get; set; }
+        public float Wood{ get; set; }
+        public float Root{ get; set; }
+        public float NSC{ get; set; }
+        public float NSCfrac { get; set; }
         
-        private float rootsenescence;
-        public float Rootsenescence
-        {
-            get
-            {
-                return rootsenescence;
-            }
-            set
-            {
-                rootsenescence = value;
-            }
-        }
-
-        float activewood;
-        public float ActiveWood
-        {
-            get
-            {
-                return activewood;
-            }
-            set
-            {
-                activewood = value;
-            }
-        }
-
-        private float woodsenescence;
-        public float Woodsenescence
-        {
-            get
-            {
-                return woodsenescence;
-            }
-            set
-            {
-                woodsenescence = value;
-            }
-        }
-
-        System.Collections.Generic.List<float> fwater;
-        public System.Collections.Generic.List<float> Fwater
-        {
-            get
-            {
-                return fwater;
-            }
-            set
-            {
-                fwater = value;
-            }
-        }
-        private float folalloc;
-        public float Folalloc
-        {
-            get
-            {
-                return folalloc;
-            }
-            set
-            {
-                folalloc = value;
-            }
-        }
-        private float rootalloc;
-        public float Rootalloc
-        {
-            get
-            {
-                return rootalloc;
-            }
-            set
-            {
-                rootalloc = value;
-            }
-        }
-
-        private float woodalloc;
-        public float Woodalloc
-        {
-            get
-            {
-                return woodalloc;
-            }
-            set
-            {
-                woodalloc = value;
-            }
-        }
-        public float Maintenancerespiration
-        {
-            get
-            {
-                return maintenancerespiration;
-            }
-            set
-            {
-                maintenancerespiration = value;
-            }
-        }
-         
-        public float AverageFwater()
-        {
-            if (fwater.Count == 0) return 1;
-            return fwater.Average();
-        }
-     
-        private float folresp;
-
-        private float transpiration;
-
-        private float abovecohortradiation;
-
-        float bottomfrad;
-        public float Bottomfrad
-        {
-            get
-            {
-                return bottomfrad;
-            }
-            set
-            {
-                bottomfrad = value;
-            }
-        }
-        float upperfrad;
-        public float UpperFrad
-        {
-            get
-            {
-                return upperfrad;
-            }
-            set
-            {
-                upperfrad = value;
-            }
-        }
-        private float releasednsc;
-        public float ReleasedNSC 
-        { 
-            get 
-            { 
-                return releasednsc; 
-            } 
-            set 
-            {
-                releasednsc = value;
-            } 
-        }
-        public float WoodAlloc 
-        { 
-            get 
-            { 
-                return woodalloc; 
-            }
-            set 
-            {
-                woodalloc = value;
-            }
-        }
-        public float RootAlloc 
-        { 
-            get 
-            { 
-                return rootalloc; 
-            }
-            set
-            {
-                rootalloc = value;
-            }
-        }
-
-        public float FolResp
-        {
-            get
-            {
-                return folresp;
-            }
-            set
-            {
-                folresp = value;
-            }
-        }
-        public float Transpiration
-        {
-            get
-            {
-                return transpiration;
-            }
-            set
-            {
-                transpiration = value;
-            }
-        }
-
-
-
-
-        public int YearOfBirth
-        {
-            get
-            {
-                return year_of_birth;
-            }
-            set
-            {
-                year_of_birth = value;
-            }
-        }
-
+        public ActiveSite Site { get; private set; }
+        public int YearOfBirth { get; private set; }
+        public ISpecies Species { get; private set; }
+        
+      
+          
         public Cohort(ISpecies species, ActiveSite site, float NSC, int year_of_birth)
              
         {
-            this.species = species;
-            this.age = 1;
-            this.site = site;
+            this.Species = species;
+            this.Age = 1;
+            this.Site = site;
             this.Wood = Wood;
             this.NSC = NSC;
             this.Root = Root;
@@ -251,9 +61,9 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public Cohort(Cohort cohort)
         {
-            this.species = cohort.species;
-            this.age = cohort.Age;
-            this.site = cohort.site;
+            this.Species = cohort.Species;
+            this.Age = cohort.Age;
+            this.Site = cohort.Site;
             this.Wood = cohort.Wood;
             this.NSC = cohort.NSC;
             this.Root = cohort.Root;
@@ -265,27 +75,13 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Fage = cohort.Fage;
         }
 
-        public float AboveCohortRadiation
+
+        public float AverageFwater()
         {
-            get
-            {
-                return abovecohortradiation;
-            }
-            set
-            {
-                abovecohortradiation = value;
-            }
+            if (Fwater.Count == 0) return 1;
+            return Fwater.Average();
         }
-       
         
-        float fol;
-        float wood;
-        float root;
-        float nsc;
-        
-        ushort age;
-        float lai;
-        ISpecies species;
 
         /// <summary>
         /// Occurs when a cohort dies either due to senescence or disturbances.
@@ -309,171 +105,27 @@ namespace Landis.Library.BiomassCohortsPnET
 
         public Cohort(ISpecies species, ushort age) 
         {
-            this.species = species;
-            this.age = age;
+            this.Species = species;
+            this.Age = age;
         }
-        public ISpecies Species
-        {
-            get
-            {
-                return species;
-            }
-        }
-        private float netpsn;
-        public float Netpsn
-        {
-            get
-            {
-                return netpsn;
-            }
-            set
-            {
-                netpsn = value;
-            }
-        }
-        int maxbiomass;
-        public int MaxBiomass
-        {
-            get
-            {
-                return maxbiomass;
-            }
-            set
-            {
-                maxbiomass = value;
-            }
-        }
-        private float fage;
-        public float Fage 
-        { 
-            get 
-            { 
-                return fage; 
-            }
-            set
-            {
-                fage = value;
-            }
-        }
-        float dominance;
-        public float Dominance
-        {
-            get
-            {
-                return dominance;
-            }
-            set
-            {
-                dominance = value;
-            }
-        }
-        private float maintenancerespiration;
-        public float MaintenanceRespiration 
-        { 
-            get 
-            { 
-                return maintenancerespiration; 
-            }
-            set
-            {
-                maintenancerespiration = value;
-            }
-        }
-        
-        private float grosspsn;
-        public float Grosspsn
-        {
-            get
-            {
-                return grosspsn;
-            }
-            set
-            {
-                grosspsn = value;
-            }
-        }
-        public float LAI
-        {
-            get
-            {
-                return lai;
-            }
-            set
-            {
-                lai = value;
-            }
-        }
-        public ushort Age
-        {
-            set
-            {
-                age = value;
-            }
-            get
-            {
-                return age;
-            }
-        }
-         
         public int Biomass
         {
             get
             {
-                return (int)(wood + fol);
+                return (int)(Wood + Fol);
             }
         }
-        public float Fol
-        {
-            get
-            {
-                return fol;
-            }
-            set
-            {
-                fol = value;
-            }
-        }
-        public float Wood
-        {
-            get
-            {
-                return wood;
-            }
-            set
-            {
-                wood = value;
-            }
-        }
-
-        public float Root
-        {
-            get
-            {
-                return root;
-            }
-            set
-            {
-                root = value;
-            }
-        }
-         
         public int ComputeNonWoodyBiomass(ActiveSite site)
         {
             return (int)(Fol);
         }
-        
-        
-        public float NSC
+        public static Percentage ComputeNonWoodyPercentage(Landis.Library.BiomassCohortsPnET.Cohort cohort, ActiveSite site)
         {
-            get
-            {
-                return nsc;
-            }
-            set
-            {
-                nsc = value;
-            }
+            return new Percentage(cohort.Fol / (cohort.Wood + cohort.Fol));
         }
+        
+        
+        
         
       
          
