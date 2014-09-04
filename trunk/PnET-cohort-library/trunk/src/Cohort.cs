@@ -13,7 +13,7 @@ namespace Landis.Library.BiomassCohortsPnET
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort, Landis.Library.BiomassCohorts.ICohort  
     {
         public float Rootsenescence {get;set;}
-        public float ActiveWood { get; set; }
+        public float ActiveWoodFraction { get; set; }
         public float Woodsenescence { get; set; }
         public System.Collections.Generic.List<float> Fwater { get; set; }
         public float Folalloc { get; set; }
