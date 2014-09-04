@@ -17,7 +17,6 @@ namespace Landis.Library.BiomassCohortsPnET
         public float Woodsenescence { get; set; }
         public System.Collections.Generic.List<float> Fwater { get; set; }
         public float Folalloc { get; set; }
-        public float Maintenancerespiration { get; set; }
         public float WoodAlloc { get; set; }
         public float RootAlloc { get; set; }
         public float Bottomfrad{ get; set; }
