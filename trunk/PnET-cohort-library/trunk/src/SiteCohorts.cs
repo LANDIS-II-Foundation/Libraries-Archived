@@ -15,7 +15,14 @@ namespace Landis.Library.BiomassCohortsPnET
     {
 
         List<Cohort> cohorts = new List<Cohort>();
-    
+        public  IEcoregion Ecoregion { get; private set; }
+        public ActiveSite Site { get; private set; }
+
+        public SiteCohorts(IEcoregion Ecoregion, ActiveSite Site)
+        {
+            this.Ecoregion = Ecoregion;
+            this.Site = Site;
+        }
         
         public List<Cohort> Cohorts
         {
