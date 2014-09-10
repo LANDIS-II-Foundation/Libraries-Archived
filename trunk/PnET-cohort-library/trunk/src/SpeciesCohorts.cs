@@ -138,7 +138,30 @@ namespace Landis.Library.BiomassCohortsPnET
             return totalReduction;
         }
         */
-        
+        public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
+        {
+            //  Go backwards through list of cohort data, so the removal of an
+            //  item doesn't mess up the loop.
+            int totalReduction = 0;
+            for (int i = cohorts.Count - 1; i >= 0; i--)
+            {
+                int reduction = disturbance.ReduceOrKillMarkedCohort(cohorts[i]);
+                if (reduction > 0)
+                {
+                    totalReduction += reduction;
+                    if (reduction < cohorts[i].Biomass)
+                    {
+                        cohorts[i].Wood -= reduction;
+                    }
+                    else
+                    {
+                        RemoveCohort(cohorts[i], disturbance.CurrentSite, null);
+                    }
+                }
+
+            }
+            return totalReduction;
+        }
         IEnumerator<Landis.Library.BiomassCohortsPnET.Cohort> IEnumerable<Landis.Library.BiomassCohortsPnET.Cohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)

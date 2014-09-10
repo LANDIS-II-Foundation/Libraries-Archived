@@ -11,12 +11,55 @@ namespace Landis.Library.BiomassCohortsPnET
 {
 
     // THERE SHOULD NOT BE INHERITANCE OF BiomassCohorts.SiteCohorts HERE. Cannot get rid of it because it gets stuck on the 'this' pointer
-    public class SiteCohorts : BiomassCohorts.SiteCohorts,   BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts
+    public class SiteCohorts :  BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts//BiomassCohorts.SiteCohorts,
     {
 
         List<Cohort> cohorts = new List<Cohort>();
         public  IEcoregion Ecoregion { get; private set; }
         public ActiveSite Site { get; private set; }
+
+        public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
+        {
+            int totalReduction = 0;
+            
+            foreach(SpeciesCohorts s in Speciescohorts)
+            {
+                totalReduction += s.MarkCohorts(disturbance);
+            }
+
+            return totalReduction;
+        }
+        void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ICohortDisturbance disturbance)
+        {
+            if (AgeOnlyDisturbanceEvent != null)
+                AgeOnlyDisturbanceEvent(this, new  Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,
+                                                                       disturbance.Type));
+            ReduceOrKillBiomassCohorts(new Landis.Library.BiomassCohorts.WrappedDisturbance(disturbance));
+        }
+        public Landis.Library.BiomassCohorts.ISpeciesCohorts this[ISpecies species]
+        {
+            get
+            {
+                foreach(SpeciesCohorts s in Speciescohorts)
+                {
+                    if(s.Species == species)return s;
+                }
+                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
+            }
+        }
+        Landis.Library.AgeOnlyCohorts.ISpeciesCohorts Landis.Library.Cohorts.ISiteCohorts<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
+        {
+            get
+            {
+                foreach (SpeciesCohorts s in Speciescohorts)
+                {
+                    if (s.Species == species) return s;
+                }
+                return null;
+                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
+            }
+        }
+
 
         public SiteCohorts(IEcoregion Ecoregion, ActiveSite Site)
         {
@@ -24,6 +67,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Site = Site;
         }
         
+
         public List<Cohort> Cohorts
         {
             get
@@ -33,7 +77,7 @@ namespace Landis.Library.BiomassCohortsPnET
             
         }
 
-        public new bool IsMaturePresent(ISpecies species)
+        public bool IsMaturePresent(ISpecies species)
         {
             foreach (Cohort cohort in cohorts)
             {
@@ -90,7 +134,7 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// Occurs when a site is disturbed by an age-only disturbance.
         /// </summary>
-        public static new event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
+        public static event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
 
         void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
@@ -129,7 +173,11 @@ namespace Landis.Library.BiomassCohortsPnET
             Cohort.Died(this, cohort, site, null);
             
         }
-        
+        public IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> GetEnumerator()
+        {
+            foreach (SpeciesCohorts speciesCohorts in Speciescohorts)
+                yield return speciesCohorts;
+        }
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

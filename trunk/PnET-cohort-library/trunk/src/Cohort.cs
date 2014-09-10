@@ -13,13 +13,16 @@ namespace Landis.Library.BiomassCohortsPnET
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort, Landis.Library.BiomassCohorts.ICohort  
     {
         public float Rootsenescence {get;set;}
-        public float ActiveWoodFraction { get; set; }
+       
         public float Woodsenescence { get; set; }
         public System.Collections.Generic.List<float> Fwater { get; set; }
         public float Folalloc { get; set; }
         public float WoodAlloc { get; set; }
         public float RootAlloc { get; set; }
-        public float Bottomfrad{ get; set; }
+        public float[] BottomfradHistory{ get; set; }
+        public float[] BottomfradHistoryRunning { get; set; }
+        public float Bottomfrad { get; set; }
+
         public float UpperFrad{ get; set; }
         public float ReleasedNSC { get; set; }
         public float FolResp{ get; set; }
@@ -27,6 +30,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public float AboveCohortRadiation { get; set; }
         public float Netpsn { get; set; }
         public int MaxBiomass { get; set; }
+        public float MaxFol { get; set; }
         public float Fage { get; set; }
         public float Dominance { get; set; }
         public float MaintenanceRespiration { get; set; }
@@ -55,8 +59,13 @@ namespace Landis.Library.BiomassCohortsPnET
             this.NSC = NSC;
             this.Root = Root;
             this.YearOfBirth = year_of_birth;
-           
-
+            BottomfradHistory = new float[Constants.Months.GetNames(typeof(Constants.Months)).Length];
+            BottomfradHistoryRunning = new float[Constants.Months.GetNames(typeof(Constants.Months)).Length];
+            for (int m = 0; m < Constants.Months.GetNames(typeof(Constants.Months)).Length; m++)
+            {
+                BottomfradHistory[m] = 1;
+                BottomfradHistoryRunning[m] = 1;
+            }
         }
         public Cohort(Cohort cohort)
         {
@@ -72,6 +81,8 @@ namespace Landis.Library.BiomassCohortsPnET
             this.MaxBiomass = cohort.MaxBiomass;
             this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
+            BottomfradHistory = new System.Collections.Generic.List<float>(cohort.BottomfradHistory).ToArray();
+            BottomfradHistoryRunning = new System.Collections.Generic.List<float>(cohort.BottomfradHistoryRunning).ToArray();
         }
 
 
