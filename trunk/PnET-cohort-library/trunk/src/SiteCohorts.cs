@@ -44,7 +44,8 @@ namespace Landis.Library.BiomassCohortsPnET
                 {
                     if(s.Species == species)return s;
                 }
-                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
+                return null;
+//                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
             }
         }
         Landis.Library.AgeOnlyCohorts.ISpeciesCohorts Landis.Library.Cohorts.ISiteCohorts<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
@@ -56,7 +57,7 @@ namespace Landis.Library.BiomassCohortsPnET
                     if (s.Species == species) return s;
                 }
                 return null;
-                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
+                
             }
         }
 

@@ -19,11 +19,9 @@ namespace Landis.Library.BiomassCohortsPnET
         public float Folalloc { get; set; }
         public float WoodAlloc { get; set; }
         public float RootAlloc { get; set; }
-        public float[] BottomfradHistory{ get; set; }
-        public float[] BottomfradHistoryRunning { get; set; }
+        
         public float Bottomfrad { get; set; }
-
-        public float UpperFrad{ get; set; }
+        public float ActiveWood { get; set; }
         public float ReleasedNSC { get; set; }
         public float FolResp{ get; set; }
         public float Transpiration { get; set; }
@@ -52,6 +50,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public Cohort(ISpecies species, ActiveSite site, float NSC, int year_of_birth)
              
         {
+            this.NSCfrac = 0.1F;
             this.Species = species;
             this.Age = 1;
             this.Site = site;
@@ -59,16 +58,12 @@ namespace Landis.Library.BiomassCohortsPnET
             this.NSC = NSC;
             this.Root = Root;
             this.YearOfBirth = year_of_birth;
-            BottomfradHistory = new float[Constants.Months.GetNames(typeof(Constants.Months)).Length];
-            BottomfradHistoryRunning = new float[Constants.Months.GetNames(typeof(Constants.Months)).Length];
-            for (int m = 0; m < Constants.Months.GetNames(typeof(Constants.Months)).Length; m++)
-            {
-                BottomfradHistory[m] = 1;
-                BottomfradHistoryRunning[m] = 1;
-            }
+           
+           
         }
         public Cohort(Cohort cohort)
         {
+            this.NSCfrac = cohort.NSCfrac;
             this.Species = cohort.Species;
             this.Age = cohort.Age;
             this.Site = cohort.Site;
@@ -81,8 +76,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.MaxBiomass = cohort.MaxBiomass;
             this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
-            BottomfradHistory = new System.Collections.Generic.List<float>(cohort.BottomfradHistory).ToArray();
-            BottomfradHistoryRunning = new System.Collections.Generic.List<float>(cohort.BottomfradHistoryRunning).ToArray();
+            
         }
 
 
