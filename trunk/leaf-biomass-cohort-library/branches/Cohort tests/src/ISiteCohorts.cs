@@ -10,8 +10,8 @@ namespace Landis.Library.LeafBiomassCohorts
     /// <summary>
     /// All the biomass cohorts at a site.
     /// </summary>
-    public interface ISiteCohorts
-        : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>, BiomassCohorts.ISiteCohorts
+    public interface ISiteCohorts : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>
+    //    : Landis.Library.Cohorts.ISiteCohorts<ISpeciesCohorts>, BiomassCohorts.ISiteCohorts,AgeOnlyCohorts.ISiteCohorts
     {
         
         int ReduceOrKillBiomassCohorts(IDisturbance disturbance);

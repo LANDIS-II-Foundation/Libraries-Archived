@@ -12,21 +12,23 @@ namespace Landis.Library.LeafBiomassCohorts
         /// <summary>
         /// The disturbance's type.
         /// </summary>
+        /*
         ExtensionType Type
         {
             get;
         }
-
+        */
         //---------------------------------------------------------------------
 
         /// <summary>
         /// The current site that the disturbance is damaging.
         /// </summary>
+        /*
         ActiveSite CurrentSite
         {
             get;
         }
-
+        */
         //---------------------------------------------------------------------
 
         /// <summary>

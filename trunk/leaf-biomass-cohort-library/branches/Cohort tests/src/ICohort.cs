@@ -9,7 +9,7 @@ namespace Landis.Library.LeafBiomassCohorts
     /// A species cohort with biomass information.
     /// </summary>
     public interface ICohort
-        : Landis.Library.BiomassCohorts.ICohort, Landis.Library.AgeOnlyCohorts.ICohort
+        : Landis.Library.BiomassCohorts.ICohort //, Landis.Library.AgeOnlyCohorts.ICohort
     {
         /// <summary>
         /// The cohort's biomass (g / m^2).

@@ -12,8 +12,10 @@ namespace Landis.Library.LeafBiomassCohorts
     /// A species cohort with biomass information.
     /// </summary>
     public class Cohort
-        : //Landis.Library.BiomassCohorts.Cohort,
-        ICohort, Landis.Library.BiomassCohorts.ICohort, Landis.Library.AgeOnlyCohorts.ICohort
+        : ICohort
+        
+        //Landis.Library.BiomassCohorts.Cohort,
+        //, Landis.Library.BiomassCohorts.ICohort, Landis.Library.AgeOnlyCohorts.ICohort
     {
         private ISpecies species;
         private CohortData data;
