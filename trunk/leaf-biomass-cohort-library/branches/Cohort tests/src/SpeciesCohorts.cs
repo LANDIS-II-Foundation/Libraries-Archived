@@ -1,13 +1,10 @@
 
-using Landis.Core;
-//using Landis.Cohorts;
-using Landis.SpatialModeling;
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
-
+using Landis.Core;
+using Landis.SpatialModeling;
 using log4net;
 
 namespace Landis.Library.LeafBiomassCohorts
@@ -57,7 +54,6 @@ namespace Landis.Library.LeafBiomassCohorts
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
-            //CohortData cohortData = new CohortData();
             CohortData thisCohortData = cohort.Data;
             int index = cohortData.IndexOf(thisCohortData);
             RemoveCohort(index, cohort, site, disturbanceType);
@@ -371,7 +367,7 @@ namespace Landis.Library.LeafBiomassCohorts
         }
 
         //---------------------------------------------------------------------
-        /*
+        
         /// <summary>
         /// Removes the cohorts that are damaged by an age-only disturbance.
         /// </summary>
@@ -407,7 +403,7 @@ namespace Landis.Library.LeafBiomassCohorts
             }
             return totalReduction;
         }
-         * */
+        
         //--------------------------------------------------------------------- 
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
@@ -459,7 +455,6 @@ namespace Landis.Library.LeafBiomassCohorts
 
         IEnumerator<ICohort> IEnumerable<ICohort>.GetEnumerator()
         {
-            //UI.WriteLine("Itor 1");
             foreach (CohortData data in cohortData)
                 yield return new Cohort(species, data);
         }
@@ -468,7 +463,6 @@ namespace Landis.Library.LeafBiomassCohorts
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            //PlugIn.ModelCore.UI.WriteLine("Itor 2");
             return ((IEnumerable<ICohort>)this).GetEnumerator();
         }
 
@@ -476,7 +470,6 @@ namespace Landis.Library.LeafBiomassCohorts
         
         IEnumerator<Landis.Library.AgeOnlyCohorts.ICohort> IEnumerable<Landis.Library.AgeOnlyCohorts.ICohort>.GetEnumerator()
         {
-            //Console.Out.WriteLine("Itor 3");
             foreach (CohortData data in cohortData)
                 yield return new Landis.Library.AgeOnlyCohorts.Cohort(species, data.Age);
         }

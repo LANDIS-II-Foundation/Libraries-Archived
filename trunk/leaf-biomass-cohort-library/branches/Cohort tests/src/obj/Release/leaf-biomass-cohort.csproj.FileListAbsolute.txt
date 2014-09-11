@@ -1,5 +1,0 @@
-C:\bin\Debug\Landis.Library.LeafBiomassCohorts.dll
-C:\bin\Debug\Landis.Library.LeafBiomassCohorts.pdb
-C:\BRM\LANDIS_II\code\leaf-biomass-cohort-library\branches\Cohort tests\src\obj\Release\ResolveAssemblyReference.cache
-C:\BRM\LANDIS_II\code\leaf-biomass-cohort-library\branches\Cohort tests\src\obj\Release\Landis.Library.LeafBiomassCohorts.dll
-C:\BRM\LANDIS_II\code\leaf-biomass-cohort-library\branches\Cohort tests\src\obj\Release\Landis.Library.LeafBiomassCohorts.pdb
