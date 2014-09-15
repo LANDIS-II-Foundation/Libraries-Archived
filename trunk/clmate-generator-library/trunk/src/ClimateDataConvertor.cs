@@ -21,7 +21,9 @@ namespace Landis.Library.Climate
             MaxTemperature = 2,
             MinTemperature = 3,
             RH = 4,
-            Windspeed = 5
+            Windspeed = 5,
+            NDeposition = 6,
+            CO2 = 7
         }
 
         public static void Convert_USGS_to_ClimateData_FillAlldata(TemporalGranularity timeStep, string climateFile, string climateFileFormat, Climate.Phase climatePhase)
@@ -255,15 +257,27 @@ namespace Landis.Library.Climate
                             break;
 
                         case FileSection.RH:
-                            ecoRecords[rowIndex].RHMean = mean;
-                            ecoRecords[rowIndex].RHVar = variance;
-                            ecoRecords[rowIndex].RHSTD = stdev;
+                            ecoRecords[rowIndex].AvgRH = mean;
+                            ecoRecords[rowIndex].AvgVarRH = variance;
+                            ecoRecords[rowIndex].StdDevRH = stdev;
                             break;
 
                         case FileSection.Windspeed:
-                            ecoRecords[rowIndex].WindSpeedMean = mean;
-                            ecoRecords[rowIndex].WindSpeedVar = variance;
-                            ecoRecords[rowIndex].WindSpeedSTD = stdev;
+                            ecoRecords[rowIndex].AvgWindSpeed = mean;
+                            ecoRecords[rowIndex].AvgVarWindSpeed = variance;
+                            ecoRecords[rowIndex].AvgVarWindSpeed = stdev;
+                            break;
+
+                        case FileSection.NDeposition:
+                            ecoRecords[rowIndex].AvgNDeposition = mean;
+                            ecoRecords[rowIndex].AvgVarNDeposition = variance;
+                            ecoRecords[rowIndex].AvgVarNDeposition = stdev;
+                            break;
+
+                        case FileSection.CO2:
+                            ecoRecords[rowIndex].AvgCO2 = mean;
+                            ecoRecords[rowIndex].AvgVarCO2 = variance;
+                            ecoRecords[rowIndex].AvgVarCO2 = stdev;
                             break;
                     }
                 }                

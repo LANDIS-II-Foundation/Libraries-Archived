@@ -45,6 +45,8 @@ namespace Landis.Library.Climate
         [DataFieldAttribute(Desc = "Average Nitrogen Deposition (units variable)", Format = "0.00")]
         public double ndeposition { get; set; }
 
+        [DataFieldAttribute(Desc = "Average CO2 concentration (units variable)", Format = "0.00")]
+        public double co2{ get; set; }
 
 
 

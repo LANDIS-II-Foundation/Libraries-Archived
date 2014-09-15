@@ -418,6 +418,7 @@ namespace  Landis.Library.Climate
                 var monthlyRH = 0.0;
                 var monthlyWindSpeed = 0.0; 
                 var monthlyNDeposition = 0.0;
+                var monthlyCO2 = 0.0;
 
                 nDays = daysInMonth[mo];
                 for (int d = 0; d < nDays; d++)
@@ -431,6 +432,7 @@ namespace  Landis.Library.Climate
                     monthlyRH += annDaily.DailyRH[dayOfYear];
                     monthlyWindSpeed += annDaily.DailyWindSpeed[dayOfYear];
                     monthlyNDeposition += annDaily.DailyNDeposition[dayOfYear];
+                    monthlyCO2 += annDaily.DailyCO2[dayOfYear];
 
                     dayOfYear++;
                 }
@@ -448,6 +450,7 @@ namespace  Landis.Library.Climate
                 monthlyData[mo].AvgRH = monthlyRH / nDays;
                 monthlyData[mo].AvgWindSpeed = monthlyWindSpeed / nDays;
                 monthlyData[mo].AvgNDeposition = monthlyNDeposition / nDays;
+                monthlyData[mo].AvgCO2 = monthlyCO2 / nDays;
             }
 
             return monthlyData;

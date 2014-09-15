@@ -28,6 +28,9 @@ namespace Landis.Library.Climate
         private double avgNDeposition;
         private double stdDevNDeposition;
         private double avgVarNDeposition;
+        private double avgCO2;
+        private double stdDevCO2;
+        private double avgVarCO2;
         
 
         
@@ -191,7 +194,7 @@ namespace Landis.Library.Climate
             }
         }
 
-        public double AvgVarNdeposition
+        public double AvgVarNDeposition
         {
             get
             {
@@ -214,11 +217,44 @@ namespace Landis.Library.Climate
                 stdDevNDeposition = value;
             }
         }
-        
-      
+        public double AvgCO2
+        {
+            get
+            {
+                return avgCO2;
+            }
+            set
+            {
+                avgCO2 = value;
+            }
+        }
+        public double AvgVarCO2
+        {
+            get
+            {
+                return avgVarCO2;
+            }
+            set
+            {
+                avgVarCO2 = value;
+            }
+        }
+        public double StdDevCO2
+        {
+            get
+            {
+                return stdDevCO2;
+            }
+            set
+            {
+                stdDevCO2 = value;
+            }
+        }
 
-        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double avgPAR, double avgVarTemp, double avgPptVarTemp, double avgRH,
-                            double avgVarRH, double stdDevRH, double avgWindSpeed, double avgVarWindSpeed, double stdDevWindSpeed, double avgNDeposition, double avgVarNDeposition, double stdDevNDeposition)
+
+
+        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double avgPAR, double avgVarTemp, double avgVarPpt, double avgRH,
+                            double avgVarRH, double stdDevRH, double avgWindSpeed, double avgVarWindSpeed, double stdDevWindSpeed, double avgNDeposition, double avgVarNDeposition, double stdDevNDeposition, double avgCO2, double avgVarCO2, double stdDevCO2)
         {
             this.avgMinTemp = avgMinTemp;
             this.avgMaxTemp = avgMaxTemp;
@@ -237,6 +273,9 @@ namespace Landis.Library.Climate
             this.avgNDeposition = avgNDeposition;
             this.avgVarNDeposition = avgVarNDeposition;
             this.stdDevNDeposition = stdDevNDeposition;
+            this.avgCO2 = avgCO2;
+            this.avgVarCO2 = avgVarCO2;
+            this.stdDevCO2 = stdDevCO2;
         }
         
         public ClimateRecord()
@@ -258,6 +297,9 @@ namespace Landis.Library.Climate
             this.avgNDeposition = -99.0;
             this.avgVarNDeposition = -99.0;
             this.stdDevNDeposition = -99.0;
+            this.avgCO2 = -99.0;
+            this.avgVarCO2 = -99.0;
+            this.stdDevCO2 = -99.0;
         }
     }
 }

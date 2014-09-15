@@ -393,6 +393,7 @@ namespace Landis.Library.Climate
                         fil.rh = TimestepData[ecoregion.Index][timestep].AvgRH;
                         fil.windspeed = TimestepData[ecoregion.Index][timestep].AvgWindSpeed;
                         fil.ndeposition = TimestepData[ecoregion.Index][timestep].AvgNDeposition;
+                        fil.co2 = TimestepData[ecoregion.Index][timestep].AvgCO2;
 
                         FutureInputLog.AddObject(fil);
                         FutureInputLog.WriteToFile();

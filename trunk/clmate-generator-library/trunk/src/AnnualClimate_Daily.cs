@@ -25,6 +25,7 @@ namespace Landis.Library.Climate
         public double[] DailyRH = new double[366];
         public double[] DailyWindSpeed = new double[366];
         public double[] DailyNDeposition = new double[366];
+        public double[] DailyCO2 = new double[366];
 
         //public int tempEcoIndex = -1;
 
@@ -153,6 +154,7 @@ namespace Landis.Library.Climate
                 this.DailyRH[d] = dailyClimateRecords[d].AvgRH;
                 this.DailyWindSpeed[d] = dailyClimateRecords[d].AvgWindSpeed;
                 this.DailyNDeposition[d] = dailyClimateRecords[d].AvgNDeposition;
+                this.DailyCO2[d] = dailyClimateRecords[d].AvgCO2;
 
                 this.DailyTemp[d] = (this.DailyMinTemp[d] + this.DailyMaxTemp[d]) / 2.0;
 
@@ -194,6 +196,7 @@ namespace Landis.Library.Climate
                 var dailyRH = 0.0;
                 var dailyWindSpeed = 0.0;
                 var dailyNDeposition = 0.0;
+                var dailyCO2 = 0.0;
 
                 // loop over years
                 int dIndex;
@@ -214,6 +217,7 @@ namespace Landis.Library.Climate
                         dailyRH += (yearRecords[d].AvgRH + yearRecords[d + 1].AvgRH) / 2.0;
                         dailyWindSpeed += (yearRecords[d].AvgWindSpeed + yearRecords[d + 1].AvgWindSpeed) / 2.0;
                         dailyNDeposition += (yearRecords[d].AvgNDeposition + yearRecords[d + 1].AvgNDeposition) / 2.0;
+                        dailyCO2 += (yearRecords[d].AvgCO2 + yearRecords[d + 1].AvgCO2) / 2.0;
                     }
                     else
                     {
@@ -229,6 +233,7 @@ namespace Landis.Library.Climate
                         dailyRH += yearRecords[dIndex].AvgRH;
                         dailyWindSpeed += yearRecords[dIndex].AvgWindSpeed;
                         dailyNDeposition += yearRecords[dIndex].AvgNDeposition;
+                        dailyCO2 += yearRecords[dIndex].AvgCO2;
                     }
                 }
 
@@ -246,6 +251,7 @@ namespace Landis.Library.Climate
                     dailyData[d].AvgRH = dailyRH / yearCount;
                     dailyData[d].AvgWindSpeed = dailyWindSpeed / yearCount;
                     dailyData[d].AvgNDeposition = dailyNDeposition / yearCount;
+                    dailyData[d].AvgCO2 = dailyCO2 / yearCount;
                 }
             }
 
