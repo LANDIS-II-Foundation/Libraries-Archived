@@ -35,5 +35,18 @@ namespace Landis.Library.Climate
 
         [DataFieldAttribute(Desc = "Standard Deviation Temperature (units variable)", Format = "0.00")]
         public double std_temp { get; set; }
+        
+        [DataFieldAttribute(Desc = "Average Relative Humidity (units variable)", Format = "0.00")]
+        public double rh { get; set; }
+       
+        [DataFieldAttribute(Desc = "Average Wind Speed (units variable)", Format = "0.00")]
+        public double windspeed { get; set; }
+       
+        [DataFieldAttribute(Desc = "Average Nitrogen Deposition (units variable)", Format = "0.00")]
+        public double ndeposition { get; set; }
+
+
+
+
     }
 }

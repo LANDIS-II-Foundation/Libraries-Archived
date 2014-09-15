@@ -351,6 +351,7 @@ namespace Landis.Library.Climate
                         sil.ppt = TimestepData[ecoregion.Index][timestep].AvgPpt;
                         sil.std_ppt = TimestepData[ecoregion.Index][timestep].StdDevPpt;
 
+
                         SpinupInputLog.AddObject(sil);
                         SpinupInputLog.WriteToFile();
 
@@ -389,6 +390,9 @@ namespace Landis.Library.Climate
                         fil.std_temp = TimestepData[ecoregion.Index][timestep].StdDevTemp;
                         fil.ppt = TimestepData[ecoregion.Index][timestep].AvgPpt;
                         fil.std_ppt = TimestepData[ecoregion.Index][timestep].StdDevPpt;
+                        fil.rh = TimestepData[ecoregion.Index][timestep].AvgRH;
+                        fil.windspeed = TimestepData[ecoregion.Index][timestep].AvgWindSpeed;
+                        fil.ndeposition = TimestepData[ecoregion.Index][timestep].AvgNDeposition;
 
                         FutureInputLog.AddObject(fil);
                         FutureInputLog.WriteToFile();

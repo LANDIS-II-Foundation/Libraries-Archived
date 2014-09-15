@@ -14,17 +14,21 @@ namespace Landis.Library.Climate
         private double avgMinTemp;
         private double avgMaxTemp;
         private double stdDevTemp;
-        private double avgPpt;
-        private double stdDevPpt;
-        private double par;
         private double avgVarTemp;
-        private double avgPptVarTemp;
-        private double rhMean;
-        private double rhVar;
-        private double rhSTD;
-        private double windSpeedMean;
-        private double windSpeedVar;
-        private double windSpeedSTD;
+        private double avgPpt;
+        private double avgVarPpt;
+        private double stdDevPpt;
+        private double avgPAR;
+        private double avgRH;
+        private double stdDevRH;
+        private double avgVarRH;
+        private double avgWindSpeed;
+        private double stdDevWindSpeed;
+        private double avgVarWindSpeed;
+        private double avgNDeposition;
+        private double stdDevNDeposition;
+        private double avgVarNDeposition;
+        
 
         
         public double AvgMinTemp
@@ -73,13 +77,13 @@ namespace Landis.Library.Climate
                 stdDevPpt = value;
             }
         }
-        public double PAR
+        public double AvgPAR
         {
             get {
-                return par;
+                return avgPAR;
             }
             set {
-                par = value;
+                avgPAR = value;
             }
         }
 
@@ -94,105 +98,145 @@ namespace Landis.Library.Climate
                 avgVarTemp = value;
             }
         }
-        public double AvgPptVarTemp
+        public double AvgVarPpt
         {
             get
             {
-                return avgPptVarTemp;
+                return avgVarPpt;
             }
             set
             {
-                avgPptVarTemp = value;
+                avgVarPpt = value;
             }
         }
 
-        public double RHMean
+        public double AvgRH
         {
             get
             {
-                return rhMean;
+                return avgRH;
             }
             set
             {
-                rhMean = value;
+                avgRH = value;
             }
         }
-        public double RHVar
+        public double StdDevRH
         {
             get
             {
-                return rhVar;
+                return stdDevRH;
             }
             set
             {
-                rhVar = value;
+                stdDevRH = value;
             }
         }
-        public double RHSTD
+        public double AvgVarRH
         {
             get
             {
-                return rhSTD;
+                return avgVarRH;
             }
             set
             {
-                rhSTD = value;
+                avgVarRH = value;
             }
         }
 
-        public double WindSpeedMean
+        public double AvgWindSpeed
         {
             get
             {
-                return windSpeedMean;
+                return avgWindSpeed;
             }
             set
             {
-                windSpeedMean = value;
+                avgWindSpeed = value;
             }
         }
-        public double WindSpeedVar
+        public double StdDevWindSpeed
         {
             get
             {
-                return windSpeedVar;
+                return stdDevWindSpeed;
             }
             set
             {
-                windSpeedVar = value;
+                stdDevWindSpeed = value;
             }
         }
-        public double WindSpeedSTD
+        public double AvgVarWindSpeed
         {
             get
             {
-                return windSpeedSTD;
+                return avgVarWindSpeed;
             }
             set
             {
-                windSpeedSTD = value;
+                avgVarWindSpeed = value;
+            }
+        }
+
+
+        public double AvgNDeposition
+        {
+            get
+            {
+                return avgNDeposition;
+            }
+            set
+            {
+                avgNDeposition = value;
+            }
+        }
+
+        public double AvgVarNdeposition
+        {
+            get
+            {
+                return avgVarNDeposition;
+            }
+            set
+            {
+                avgVarNDeposition = value;
+            }
+        }
+
+        public double StdDevNDeposition
+        {
+            get
+            {
+                return stdDevNDeposition;
+            }
+            set
+            {
+                stdDevNDeposition = value;
             }
         }
         
       
 
-        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double par, double avgVarTemp, double avgPptVarTemp, double rhMean,
-                            double rhVar, double rhSTD, double windSpeedMean, double windSpeedVar, double windSpeedSTD)
+        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double avgPAR, double avgVarTemp, double avgPptVarTemp, double avgRH,
+                            double avgVarRH, double stdDevRH, double avgWindSpeed, double avgVarWindSpeed, double stdDevWindSpeed, double avgNDeposition, double avgVarNDeposition, double stdDevNDeposition)
         {
             this.avgMinTemp = avgMinTemp;
             this.avgMaxTemp = avgMaxTemp;
             this.stdDevTemp = stdDevTemp;
             this.avgPpt = avgPpt;
             this.stdDevPpt = stdDevPpt;
-            this.par = par;
+            this.avgPAR = avgPAR;
             this.avgVarTemp = avgVarTemp;
-            this.avgPptVarTemp = avgPptVarTemp;
-            this.rhMean = rhMean;
-            this.rhVar = rhVar;
-            this.rhSTD = rhSTD;
-            this.windSpeedMean = windSpeedMean;
-            this.windSpeedVar = windSpeedVar;
-            this.windSpeedSTD = windSpeedSTD;
+            this.avgVarPpt = avgVarPpt;
+            this.avgRH = avgRH;
+            this.avgVarRH = avgVarRH;
+            this.stdDevRH = stdDevRH;
+            this.avgWindSpeed = avgWindSpeed;
+            this.avgVarWindSpeed = avgVarWindSpeed;
+            this.stdDevWindSpeed = stdDevWindSpeed;
+            this.avgNDeposition = avgNDeposition;
+            this.avgVarNDeposition = avgVarNDeposition;
+            this.stdDevNDeposition = stdDevNDeposition;
         }
         
         public ClimateRecord()
@@ -202,15 +246,18 @@ namespace Landis.Library.Climate
             this.stdDevTemp = -99.0;
             this.avgPpt = -99.0;
             this.stdDevPpt = -99.0;
-            this.par = -99.0;
+            this.avgPAR = -99.0;
             this.avgVarTemp = -99.0;
-            this.avgPptVarTemp = -99.0;
-            this.rhMean = -99.0;
-            this.rhVar = -99.0;
-            this.rhSTD = -99.0;
-            this.windSpeedMean = -99.0;
-            this.windSpeedVar = -99.0;
-            this.windSpeedSTD = -99.0;
+            this.avgVarPpt = -99.0;
+            this.avgRH = -99.0;
+            this.avgVarRH = -99.0;
+            this.stdDevRH = -99.0;
+            this.avgWindSpeed = -99.0;
+            this.avgVarWindSpeed = -99.0;
+            this.stdDevWindSpeed = -99.0;
+            this.avgNDeposition = -99.0;
+            this.avgVarNDeposition = -99.0;
+            this.stdDevNDeposition = -99.0;
         }
     }
 }

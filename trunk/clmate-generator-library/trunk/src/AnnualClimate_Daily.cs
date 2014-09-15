@@ -21,7 +21,11 @@ namespace Landis.Library.Climate
         public double[] DailyPrecip = new double[366];
         public double[] DailyPAR = new double[366];
         public double[] DailyVarTemp = new double[366];
-        public double[] DailyPptVarTemp = new double[366];
+        public double[] DailyVarPpt = new double[366];
+        public double[] DailyRH = new double[366];
+        public double[] DailyWindSpeed = new double[366];
+        public double[] DailyNDeposition = new double[366];
+
         //public int tempEcoIndex = -1;
 
         public double[] DailyPET = new double[366];  // Potential Evapotranspiration
@@ -143,9 +147,12 @@ namespace Landis.Library.Climate
                 this.DailyMinTemp[d] = dailyClimateRecords[d].AvgMinTemp;
                 this.DailyMaxTemp[d] = dailyClimateRecords[d].AvgMaxTemp;
                 this.DailyVarTemp[d] = dailyClimateRecords[d].AvgVarTemp;
-                this.DailyPptVarTemp[d] = dailyClimateRecords[d].AvgPptVarTemp;
+                this.DailyVarPpt[d] = dailyClimateRecords[d].AvgVarPpt;
                 this.DailyPrecip[d] = dailyClimateRecords[d].AvgPpt;
-                this.DailyPAR[d] = dailyClimateRecords[d].PAR;
+                this.DailyPAR[d] = dailyClimateRecords[d].AvgPAR;
+                this.DailyRH[d] = dailyClimateRecords[d].AvgRH;
+                this.DailyWindSpeed[d] = dailyClimateRecords[d].AvgWindSpeed;
+                this.DailyNDeposition[d] = dailyClimateRecords[d].AvgNDeposition;
 
                 this.DailyTemp[d] = (this.DailyMinTemp[d] + this.DailyMaxTemp[d]) / 2.0;
 
@@ -156,6 +163,10 @@ namespace Landis.Library.Climate
                 this.DailyNightLength[d] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
             }
         }
+
+        //public double[] DailyRH = new double[366];
+        //public double[] DailyWindSpeed = new double[366];
+        //public double[] DailyNdeposition = new double[366];
 
         private ClimateRecord[] AnnualClimate_AvgDaily(IEcoregion ecoregion, double latitude)
         {
@@ -177,9 +188,12 @@ namespace Landis.Library.Climate
                 var dailyMinTemp = 0.0;
                 var dailyMaxTemp = 0.0;
                 var dailyVarTemp = 0.0;
-                var dailyPptVarTemp = 0.0;
+                var dailyVarPpt = 0.0;
                 var dailyPrecip = 0.0;
                 var dailyPAR = 0.0;
+                var dailyRH = 0.0;
+                var dailyWindSpeed = 0.0;
+                var dailyNDeposition = 0.0;
 
                 // loop over years
                 int dIndex;
@@ -194,9 +208,12 @@ namespace Landis.Library.Climate
                         dailyMinTemp += (yearRecords[d].AvgMinTemp + yearRecords[d + 1].AvgMinTemp) / 2.0;
                         dailyMaxTemp += (yearRecords[d].AvgMaxTemp + yearRecords[d + 1].AvgMaxTemp) / 2.0;
                         dailyVarTemp += (yearRecords[d].AvgVarTemp + yearRecords[d + 1].AvgVarTemp) / 2.0;
-                        dailyPptVarTemp += (yearRecords[d].AvgPptVarTemp + yearRecords[d + 1].AvgPptVarTemp) / 2.0;
+                        dailyVarPpt += (yearRecords[d].AvgVarPpt + yearRecords[d + 1].AvgVarPpt) / 2.0;
                         dailyPrecip += (yearRecords[d].AvgPpt + yearRecords[d + 1].AvgPpt) / 2.0;
-                        dailyPAR += (yearRecords[d].PAR + yearRecords[d + 1].PAR) / 2.0;
+                        dailyPAR += (yearRecords[d].AvgPAR + yearRecords[d + 1].AvgPAR) / 2.0;
+                        dailyRH += (yearRecords[d].AvgRH + yearRecords[d + 1].AvgRH) / 2.0;
+                        dailyWindSpeed += (yearRecords[d].AvgWindSpeed + yearRecords[d + 1].AvgWindSpeed) / 2.0;
+                        dailyNDeposition += (yearRecords[d].AvgNDeposition + yearRecords[d + 1].AvgNDeposition) / 2.0;
                     }
                     else
                     {
@@ -206,9 +223,12 @@ namespace Landis.Library.Climate
                         dailyMinTemp += yearRecords[dIndex].AvgMinTemp;
                         dailyMaxTemp += yearRecords[dIndex].AvgMaxTemp;
                         dailyVarTemp += yearRecords[dIndex].AvgVarTemp;
-                        dailyPptVarTemp += yearRecords[dIndex].AvgPptVarTemp;
+                        dailyVarPpt += yearRecords[dIndex].AvgVarPpt;
                         dailyPrecip += yearRecords[dIndex].AvgPpt;
-                        dailyPAR += yearRecords[dIndex].PAR;
+                        dailyPAR += yearRecords[dIndex].AvgPAR;
+                        dailyRH += yearRecords[dIndex].AvgRH;
+                        dailyWindSpeed += yearRecords[dIndex].AvgWindSpeed;
+                        dailyNDeposition += yearRecords[dIndex].AvgNDeposition;
                     }
                 }
 
@@ -219,10 +239,13 @@ namespace Landis.Library.Climate
                     dailyData[d].AvgMaxTemp = dailyMaxTemp / yearCount;
                     dailyData[d].AvgVarTemp = dailyVarTemp / yearCount;
                     dailyData[d].StdDevTemp = Math.Sqrt(dailyVarTemp / yearCount);
-                    dailyData[d].AvgPptVarTemp = dailyPptVarTemp / yearCount;
+                    dailyData[d].AvgVarPpt = dailyVarPpt / yearCount;
                     dailyData[d].AvgPpt = dailyPrecip / yearCount;
                     dailyData[d].StdDevPpt = Math.Sqrt(dailyPrecip / yearCount);
-                    dailyData[d].PAR = dailyPAR / yearCount;
+                    dailyData[d].AvgPAR = dailyPAR / yearCount;
+                    dailyData[d].AvgRH = dailyRH / yearCount;
+                    dailyData[d].AvgWindSpeed = dailyWindSpeed / yearCount;
+                    dailyData[d].AvgNDeposition = dailyNDeposition / yearCount;
                 }
             }
 
