@@ -12,23 +12,20 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort, Landis.Library.BiomassCohorts.ICohort  
     {
-        public float Rootsenescence {get;set;}
-       
-        public float Woodsenescence { get; set; }
         public System.Collections.Generic.List<float> Fwater { get; set; }
+        public System.Collections.Generic.List<float> SubLayerDominance { get; set; }   
+
+        public float Rootsenescence {get;set;}
+        public float Woodsenescence { get; set; }
         public float Folalloc { get; set; }
         public float WoodAlloc { get; set; }
         public float RootAlloc { get; set; }
-        
-        public float Bottomfrad { get; set; }
-        public float ActiveWood { get; set; }
+        public float FActiveBiom { get; set; }
         public float ReleasedNSC { get; set; }
         public float FolResp{ get; set; }
         public float Transpiration { get; set; }
-        public float AboveCohortRadiation { get; set; }
         public float Netpsn { get; set; }
         public int MaxBiomass { get; set; }
-        public float MaxFol { get; set; }
         public float Fage { get; set; }
         public float Dominance { get; set; }
         public float MaintenanceRespiration { get; set; }
@@ -40,43 +37,37 @@ namespace Landis.Library.BiomassCohortsPnET
         public float Root{ get; set; }
         public float NSC{ get; set; }
         public float NSCfrac { get; set; }
-        
-        public ActiveSite Site { get; private set; }
+        public bool IsAlive { get; set; }
         public int YearOfBirth { get; private set; }
         public ISpecies Species { get; private set; }
-        
       
           
         public Cohort(ISpecies species, ActiveSite site, float NSC, int year_of_birth)
              
         {
+            this.SubLayerDominance = new System.Collections.Generic.List<float>();
             this.NSCfrac = 0.1F;
             this.Species = species;
             this.Age = 1;
-            this.Site = site;
-            this.Wood = Wood;
+            this.Wood = 10;
             this.NSC = NSC;
             this.Root = Root;
             this.YearOfBirth = year_of_birth;
-           
-           
         }
         public Cohort(Cohort cohort)
         {
+            this.SubLayerDominance = new System.Collections.Generic.List<float>(cohort.SubLayerDominance);
             this.NSCfrac = cohort.NSCfrac;
             this.Species = cohort.Species;
             this.Age = cohort.Age;
-            this.Site = cohort.Site;
             this.Wood = cohort.Wood;
             this.NSC = cohort.NSC;
             this.Root = cohort.Root;
             this.Fol = cohort.Fol;
             this.YearOfBirth = cohort.YearOfBirth;//
-           
             this.MaxBiomass = cohort.MaxBiomass;
             this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
-            
         }
 
 
