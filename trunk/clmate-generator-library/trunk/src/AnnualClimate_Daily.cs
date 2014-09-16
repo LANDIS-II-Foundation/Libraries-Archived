@@ -22,10 +22,11 @@ namespace Landis.Library.Climate
         public double[] DailyPAR = new double[366];
         public double[] DailyVarTemp = new double[366];
         public double[] DailyVarPpt = new double[366];
-        public double[] DailyRH = new double[366];
+        public double[] DailyWindDirection = new double[366];
         public double[] DailyWindSpeed = new double[366];
         public double[] DailyNDeposition = new double[366];
         public double[] DailyCO2 = new double[366];
+        public double[] DailyRH = new double[366];
 
         //public int tempEcoIndex = -1;
 
@@ -133,7 +134,7 @@ namespace Landis.Library.Climate
             this.beginGrowing = CalculateBeginGrowingDay_Daily(); //ecoClimate);
             this.endGrowing = CalculateEndGrowingDay_Daily(dailyData);
             this.growingDegreeDays = GrowSeasonDegreeDays();
-
+            
             this.DailyDataIsLeapYear = dailyData.Length == 366;
 
         }
@@ -151,7 +152,7 @@ namespace Landis.Library.Climate
                 this.DailyVarPpt[d] = dailyClimateRecords[d].AvgVarPpt;
                 this.DailyPrecip[d] = dailyClimateRecords[d].AvgPpt;
                 this.DailyPAR[d] = dailyClimateRecords[d].AvgPAR;
-                this.DailyRH[d] = dailyClimateRecords[d].AvgRH;
+                this.DailyWindDirection[d] = dailyClimateRecords[d].AvgWindDirection;
                 this.DailyWindSpeed[d] = dailyClimateRecords[d].AvgWindSpeed;
                 this.DailyNDeposition[d] = dailyClimateRecords[d].AvgNDeposition;
                 this.DailyCO2[d] = dailyClimateRecords[d].AvgCO2;
@@ -163,8 +164,11 @@ namespace Landis.Library.Climate
                 var hr = CalculateDayNightLength(d, latitude);
                 this.DailyDayLength[d] = (3600.0 * hr);                  // seconds of daylight/day
                 this.DailyNightLength[d] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
+                var avgTemp = (this.DailyMinTemp[d] + this.DailyMaxTemp[d])/2;
+                this.DailyRH[d] = 100* ((6.1078 * (Math.Exp((17.269 * this.DailyMinTemp[d])/(273.3 + this.DailyMinTemp[d]))))/(6.1078 * (Math.Exp((17.269 * avgTemp)/(273.3 + avgTemp)))));
             }
         }
+
 
         //public double[] DailyRH = new double[366];
         //public double[] DailyWindSpeed = new double[366];
@@ -193,10 +197,11 @@ namespace Landis.Library.Climate
                 var dailyVarPpt = 0.0;
                 var dailyPrecip = 0.0;
                 var dailyPAR = 0.0;
-                var dailyRH = 0.0;
+                var dailyWindDirection = 0.0;
                 var dailyWindSpeed = 0.0;
                 var dailyNDeposition = 0.0;
                 var dailyCO2 = 0.0;
+                var dailyRH = 0.0;
 
                 // loop over years
                 int dIndex;
@@ -214,10 +219,11 @@ namespace Landis.Library.Climate
                         dailyVarPpt += (yearRecords[d].AvgVarPpt + yearRecords[d + 1].AvgVarPpt) / 2.0;
                         dailyPrecip += (yearRecords[d].AvgPpt + yearRecords[d + 1].AvgPpt) / 2.0;
                         dailyPAR += (yearRecords[d].AvgPAR + yearRecords[d + 1].AvgPAR) / 2.0;
-                        dailyRH += (yearRecords[d].AvgRH + yearRecords[d + 1].AvgRH) / 2.0;
+                        dailyWindDirection += (yearRecords[d].AvgWindDirection + yearRecords[d + 1].AvgWindDirection) / 2.0;
                         dailyWindSpeed += (yearRecords[d].AvgWindSpeed + yearRecords[d + 1].AvgWindSpeed) / 2.0;
                         dailyNDeposition += (yearRecords[d].AvgNDeposition + yearRecords[d + 1].AvgNDeposition) / 2.0;
                         dailyCO2 += (yearRecords[d].AvgCO2 + yearRecords[d + 1].AvgCO2) / 2.0;
+                        dailyRH += (yearRecords[d].AvgRH + yearRecords[d + 1].AvgRH) / 2.0;
                     }
                     else
                     {
@@ -230,10 +236,11 @@ namespace Landis.Library.Climate
                         dailyVarPpt += yearRecords[dIndex].AvgVarPpt;
                         dailyPrecip += yearRecords[dIndex].AvgPpt;
                         dailyPAR += yearRecords[dIndex].AvgPAR;
-                        dailyRH += yearRecords[dIndex].AvgRH;
+                        dailyWindDirection += yearRecords[dIndex].AvgWindDirection;
                         dailyWindSpeed += yearRecords[dIndex].AvgWindSpeed;
                         dailyNDeposition += yearRecords[dIndex].AvgNDeposition;
-                        dailyCO2 += yearRecords[dIndex].AvgCO2;
+                        dailyRH += yearRecords[dIndex].AvgRH;
+                        
                     }
                 }
 
@@ -248,10 +255,11 @@ namespace Landis.Library.Climate
                     dailyData[d].AvgPpt = dailyPrecip / yearCount;
                     dailyData[d].StdDevPpt = Math.Sqrt(dailyPrecip / yearCount);
                     dailyData[d].AvgPAR = dailyPAR / yearCount;
-                    dailyData[d].AvgRH = dailyRH / yearCount;
+                    dailyData[d].AvgWindDirection = dailyWindDirection / yearCount;
                     dailyData[d].AvgWindSpeed = dailyWindSpeed / yearCount;
                     dailyData[d].AvgNDeposition = dailyNDeposition / yearCount;
                     dailyData[d].AvgCO2 = dailyCO2 / yearCount;
+                    dailyData[d].AvgRH = dailyRH / yearCount;
                 }
             }
 
@@ -333,13 +341,17 @@ namespace Landis.Library.Climate
             //sum degree days for consecutve months.
             for (int i = 0; i < 12 ; i++) //12 months in year
             {
-                //I talked to Melissa and Allec  and we decided to use the difference between Begin and End growing days for the GrowSeasonDegreeDays. 
+                //I talked to Melissa and Alec  and we decided to use the difference between Begin and End growing days for the GrowSeasonDegreeDays. 
                 //if (DailyTemp[i] > degDayBase)
                     Deg_Days += (DailyTemp[i] - degDayBase);
             }
             this.growingDegreeDays = (int)Deg_Days;
             return (int)Deg_Days;
+        }
+
             
+        //---------------------------------------------------------------------------
+                    
         }              
     }
-}
+

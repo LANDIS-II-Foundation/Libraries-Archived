@@ -19,9 +19,9 @@ namespace Landis.Library.Climate
         private double avgVarPpt;
         private double stdDevPpt;
         private double avgPAR;
-        private double avgRH;
-        private double stdDevRH;
-        private double avgVarRH;
+        private double avgWindDirection;
+        private double stdDevWindDirection;
+        private double avgVarWindDirection;
         private double avgWindSpeed;
         private double stdDevWindSpeed;
         private double avgVarWindSpeed;
@@ -31,6 +31,7 @@ namespace Landis.Library.Climate
         private double avgCO2;
         private double stdDevCO2;
         private double avgVarCO2;
+        private double avgRH;
         
 
         
@@ -113,37 +114,37 @@ namespace Landis.Library.Climate
             }
         }
 
-        public double AvgRH
+        public double AvgWindDirection
         {
             get
             {
-                return avgRH;
+                return avgWindDirection;
             }
             set
             {
-                avgRH = value;
+                avgWindDirection = value;
             }
         }
-        public double StdDevRH
+        public double StdDevWindDirection
         {
             get
             {
-                return stdDevRH;
+                return stdDevWindDirection;
             }
             set
             {
-                stdDevRH = value;
+                stdDevWindDirection = value;
             }
         }
-        public double AvgVarRH
+        public double AvgVarWindDirection
         {
             get
             {
-                return avgVarRH;
+                return avgVarWindDirection;
             }
             set
             {
-                avgVarRH = value;
+                avgVarWindDirection = value;
             }
         }
 
@@ -250,11 +251,22 @@ namespace Landis.Library.Climate
                 stdDevCO2 = value;
             }
         }
+        public double AvgRH
+        {
+            get
+            {
+                return avgRH;
+            }
+            set
+            {
+                avgRH = value;
+            }
+        }
 
 
 
-        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double avgPAR, double avgVarTemp, double avgVarPpt, double avgRH,
-                            double avgVarRH, double stdDevRH, double avgWindSpeed, double avgVarWindSpeed, double stdDevWindSpeed, double avgNDeposition, double avgVarNDeposition, double stdDevNDeposition, double avgCO2, double avgVarCO2, double stdDevCO2)
+        public ClimateRecord(double avgMinTemp, double avgMaxTemp, double stdDevTemp, double avgPpt, double stdDevPpt, double avgPAR, double avgVarTemp, double avgVarPpt, double avgWindDirection,
+                            double avgVarWindDirection, double stdDevWindDirection, double avgWindSpeed, double avgVarWindSpeed, double stdDevWindSpeed, double avgNDeposition, double avgVarNDeposition, double stdDevNDeposition, double avgCO2, double avgVarCO2, double stdDevCO2)
         {
             this.avgMinTemp = avgMinTemp;
             this.avgMaxTemp = avgMaxTemp;
@@ -264,9 +276,9 @@ namespace Landis.Library.Climate
             this.avgPAR = avgPAR;
             this.avgVarTemp = avgVarTemp;
             this.avgVarPpt = avgVarPpt;
-            this.avgRH = avgRH;
-            this.avgVarRH = avgVarRH;
-            this.stdDevRH = stdDevRH;
+            this.avgWindDirection = avgWindDirection;
+            this.avgVarWindDirection = avgVarWindDirection;
+            this.stdDevWindDirection = stdDevWindDirection;
             this.avgWindSpeed = avgWindSpeed;
             this.avgVarWindSpeed = avgVarWindSpeed;
             this.stdDevWindSpeed = stdDevWindSpeed;
@@ -288,9 +300,9 @@ namespace Landis.Library.Climate
             this.avgPAR = -99.0;
             this.avgVarTemp = -99.0;
             this.avgVarPpt = -99.0;
-            this.avgRH = -99.0;
-            this.avgVarRH = -99.0;
-            this.stdDevRH = -99.0;
+            this.avgWindDirection = -99.0;
+            this.avgVarWindDirection = -99.0;
+            this.stdDevWindDirection = -99.0;
             this.avgWindSpeed = -99.0;
             this.avgVarWindSpeed = -99.0;
             this.stdDevWindSpeed = -99.0;

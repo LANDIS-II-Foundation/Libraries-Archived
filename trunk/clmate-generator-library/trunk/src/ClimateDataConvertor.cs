@@ -20,7 +20,7 @@ namespace Landis.Library.Climate
             Precipitation = 1,
             MaxTemperature = 2,
             MinTemperature = 3,
-            RH = 4,
+            Winddirection = 4,
             Windspeed = 5,
             NDeposition = 6,
             CO2 = 7
@@ -141,8 +141,8 @@ namespace Landis.Library.Climate
                         section = FileSection.MaxTemperature;
                     else if (format.MinTempTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
                         section = FileSection.MinTemperature;
-                    else if (format.RhTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
-                        section = FileSection.RH;
+                    else if (format.WindDirectionTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
+                        section = FileSection.Winddirection;
                     else if (format.WindSpeedTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
                         section = FileSection.Windspeed;
                     else
@@ -256,10 +256,10 @@ namespace Landis.Library.Climate
                             ecoRecords[rowIndex].StdDevTemp = System.Math.Sqrt(ecoRecords[rowIndex].AvgVarTemp);      // this will set the st dev even if the data file only has one temperature section
                             break;
 
-                        case FileSection.RH:
-                            ecoRecords[rowIndex].AvgRH = mean;
-                            ecoRecords[rowIndex].AvgVarRH = variance;
-                            ecoRecords[rowIndex].StdDevRH = stdev;
+                        case FileSection.Winddirection:
+                            ecoRecords[rowIndex].AvgWindDirection = mean;
+                            ecoRecords[rowIndex].AvgVarWindDirection = variance;
+                            ecoRecords[rowIndex].StdDevWindDirection = stdev;
                             break;
 
                         case FileSection.Windspeed:

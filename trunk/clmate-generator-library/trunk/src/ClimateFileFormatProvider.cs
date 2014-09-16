@@ -15,7 +15,7 @@ namespace Landis.Library.Climate
         private List<string> maxTempTriggerWord;
         private List<string> minTempTriggerWord;
         private List<string> precipTriggerWord;
-        private List<string> rhTriggerWord;
+        private List<string> windDirectionTriggerWord;
         private List<string> windSpeedTriggerWord;
         private List<string> nDepositionTriggerWord;
         private List<string> co2TriggerWord;
@@ -27,7 +27,7 @@ namespace Landis.Library.Climate
         public List<string> MaxTempTriggerWord { get { return this.maxTempTriggerWord; } }
         public List<string> MinTempTriggerWord { get { return this.minTempTriggerWord; } }
         public List<string> PrecipTriggerWord { get { return this.precipTriggerWord; } }
-        public List<string> RhTriggerWord { get { return this.rhTriggerWord; } }
+        public List<string> WindDirectionTriggerWord { get { return this.windDirectionTriggerWord; } }
         public List<string> WindSpeedTriggerWord { get { return this.windSpeedTriggerWord; } }
         public List<string> NDepositionTriggerWord { get { return this.nDepositionTriggerWord; } }
         public List<string> Co2TriggerWord { get { return this.co2TriggerWord; } }
@@ -46,7 +46,7 @@ namespace Landis.Library.Climate
             this.maxTempTriggerWord = new List<string>() { "maxTemp", "Tmax" };
             this.minTempTriggerWord = new List<string>() { "minTemp", "Tmin"};
             this.precipTriggerWord = new List<string>() { "ppt", "precip", "Prcp" };
-            this.rhTriggerWord = new List<string>() { "rh", "relativehumidity" };
+            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd" };
             this.windSpeedTriggerWord = new List<string>() { "windSpeed", "ws" };
             this.nDepositionTriggerWord = new List<string>() { "Ndeposition", "Ndep" };
             this.co2TriggerWord = new List<string>() { "CO2", "CO2conc" };
