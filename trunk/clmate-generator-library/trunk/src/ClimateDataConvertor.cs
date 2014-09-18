@@ -20,9 +20,9 @@ namespace Landis.Library.Climate
             Precipitation = 1,
             MaxTemperature = 2,
             MinTemperature = 3,
+            NDeposition = 6,
             Winddirection = 4,
             Windspeed = 5,
-            NDeposition = 6,
             CO2 = 7
         }
 
@@ -141,10 +141,14 @@ namespace Landis.Library.Climate
                         section = FileSection.MaxTemperature;
                     else if (format.MinTempTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
                         section = FileSection.MinTemperature;
+                    else if (format.NDepositionTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
+                        section = FileSection.NDeposition;
                     else if (format.WindDirectionTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
                         section = FileSection.Winddirection;
                     else if (format.WindSpeedTriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
                         section = FileSection.Windspeed;
+                    else if (format.CO2TriggerWord.FindIndex(x => x.Equals(triggerWord, StringComparison.OrdinalIgnoreCase)) >= 0)
+                        section = FileSection.CO2;
                     else
                         throw new ApplicationException(string.Format("Error in ClimateDataConvertor: Unrecognized trigger word '{0}' in climate file '{1}'.", triggerWord, climateFile));
 
@@ -265,19 +269,19 @@ namespace Landis.Library.Climate
                         case FileSection.Windspeed:
                             ecoRecords[rowIndex].AvgWindSpeed = mean;
                             ecoRecords[rowIndex].AvgVarWindSpeed = variance;
-                            ecoRecords[rowIndex].AvgVarWindSpeed = stdev;
+                            ecoRecords[rowIndex].StdDevWindSpeed = stdev;
                             break;
 
                         case FileSection.NDeposition:
                             ecoRecords[rowIndex].AvgNDeposition = mean;
                             ecoRecords[rowIndex].AvgVarNDeposition = variance;
-                            ecoRecords[rowIndex].AvgVarNDeposition = stdev;
+                            ecoRecords[rowIndex].StdDevNDeposition = stdev;
                             break;
 
                         case FileSection.CO2:
                             ecoRecords[rowIndex].AvgCO2 = mean;
                             ecoRecords[rowIndex].AvgVarCO2 = variance;
-                            ecoRecords[rowIndex].AvgVarCO2 = stdev;
+                            ecoRecords[rowIndex].StdDevCO2 = stdev;
                             break;
                     }
                 }                

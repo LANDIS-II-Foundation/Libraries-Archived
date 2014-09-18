@@ -165,7 +165,7 @@ namespace Landis.Library.Climate
                 this.DailyDayLength[d] = (3600.0 * hr);                  // seconds of daylight/day
                 this.DailyNightLength[d] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
                 var avgTemp = (this.DailyMinTemp[d] + this.DailyMaxTemp[d])/2;
-                this.DailyRH[d] = 100* ((6.1078 * (Math.Exp((17.269 * this.DailyMinTemp[d])/(273.3 + this.DailyMinTemp[d]))))/(6.1078 * (Math.Exp((17.269 * avgTemp)/(273.3 + avgTemp)))));
+                this.DailyRH[d] = 100 * Math.Exp((17.269 * this.DailyMinTemp[d]) / (273.15 + this.DailyMinTemp[d]) - (17.269 * avgTemp) / (273.15 + avgTemp));
             }
         }
 

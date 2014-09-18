@@ -30,7 +30,7 @@ namespace Landis.Library.Climate
         public List<string> WindDirectionTriggerWord { get { return this.windDirectionTriggerWord; } }
         public List<string> WindSpeedTriggerWord { get { return this.windSpeedTriggerWord; } }
         public List<string> NDepositionTriggerWord { get { return this.nDepositionTriggerWord; } }
-        public List<string> Co2TriggerWord { get { return this.co2TriggerWord; } }
+        public List<string> CO2TriggerWord { get { return this.co2TriggerWord; } }
         public string SelectedFormat { get { return format; } }
   
         // JM: properties for transformations
@@ -46,7 +46,7 @@ namespace Landis.Library.Climate
             this.maxTempTriggerWord = new List<string>() { "maxTemp", "Tmax" };
             this.minTempTriggerWord = new List<string>() { "minTemp", "Tmin"};
             this.precipTriggerWord = new List<string>() { "ppt", "precip", "Prcp" };
-            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd" };
+            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd" , "winddirection"};
             this.windSpeedTriggerWord = new List<string>() { "windSpeed", "ws" };
             this.nDepositionTriggerWord = new List<string>() { "Ndeposition", "Ndep" };
             this.co2TriggerWord = new List<string>() { "CO2", "CO2conc" };

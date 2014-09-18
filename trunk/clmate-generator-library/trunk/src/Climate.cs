@@ -350,6 +350,8 @@ namespace Landis.Library.Climate
                         sil.std_temp = TimestepData[ecoregion.Index][timestep].StdDevTemp;
                         sil.ppt = TimestepData[ecoregion.Index][timestep].AvgPpt;
                         sil.std_ppt = TimestepData[ecoregion.Index][timestep].StdDevPpt;
+                        sil.ndeposition = TimestepData[ecoregion.Index][timestep].AvgNDeposition;
+                        sil.co2 = TimestepData[ecoregion.Index][timestep].AvgCO2;
 
 
                         SpinupInputLog.AddObject(sil);
