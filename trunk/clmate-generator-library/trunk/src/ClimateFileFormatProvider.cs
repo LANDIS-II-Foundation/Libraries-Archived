@@ -36,6 +36,8 @@ namespace Landis.Library.Climate
         // JM: properties for transformations
         public double PrecipTransformation { get; private set; }
         public double TemperatureTransformation { get; private set; }
+        public double WindSpeedTransformation { get; private set; }
+        public double WindDirectionTransformation { get; private set; }
 
         //------
         public ClimateFileFormatProvider(string format)
@@ -59,6 +61,8 @@ namespace Landis.Library.Climate
             // Transformations used for all formats that have temps in C and precip in mm
             this.PrecipTransformation = 0.1;        // Assumes data is in mm and so it converts the data from mm to cm.  
             this.TemperatureTransformation = 0.0;   // Assumes data is in degrees Celsius so no transformation is needed.
+            this.WindSpeedTransformation = 3.6;  //Assumes datas is in m/s so it converts the data to km/h
+            this.WindDirectionTransformation = 180;  //Assumes datas is expressed as the direction the wind comes FROM so it converts it to the direction where wind is blowing TO.
 
             //this.timeStep = ((this.format == "PRISM") ? TemporalGranularity.Monthly : TemporalGranularity.Daily);
             switch (this.format.ToLower())

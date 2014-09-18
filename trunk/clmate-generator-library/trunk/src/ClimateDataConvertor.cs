@@ -261,13 +261,17 @@ namespace Landis.Library.Climate
                             break;
 
                         case FileSection.Winddirection:
+
                             ecoRecords[rowIndex].AvgWindDirection = mean;
+                            if (mean < 180) mean += (format.WindDirectionTransformation);
+                            else mean -= (format.WindDirectionTransformation);
+                                                       
                             ecoRecords[rowIndex].AvgVarWindDirection = variance;
                             ecoRecords[rowIndex].StdDevWindDirection = stdev;
                             break;
 
                         case FileSection.Windspeed:
-                            ecoRecords[rowIndex].AvgWindSpeed = mean;
+                            ecoRecords[rowIndex].AvgWindSpeed = mean * format.WindSpeedTransformation;
                             ecoRecords[rowIndex].AvgVarWindSpeed = variance;
                             ecoRecords[rowIndex].StdDevWindSpeed = stdev;
                             break;
