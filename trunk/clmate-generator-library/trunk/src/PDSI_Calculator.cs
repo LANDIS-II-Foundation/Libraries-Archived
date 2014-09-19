@@ -287,7 +287,7 @@ namespace Landis.Library.Climate
                 PE = 0;
             else
             {
-                Dum = Phi[(month + offset) % 12] * TLA;
+                Dum = Phi[(month + offset) % 12] * TLA;  // This is the only calculation that uses the TLA correction factor
                 Dk = Math.Atan(Math.Sqrt(1 - Dum * Dum) / Dum);
                 if (Dk < 0)
                     Dk += 3.141593;
@@ -327,12 +327,12 @@ namespace Landis.Library.Climate
 
         //===============================================================================================================
         /// <summary>
-        /// Calculates original PDSI (NOT Self-Calibrating PDSI) for a given month (1-12)
+        /// Calculates original PDSI (NOT Self-Calibrating PDSI) for every month in a year
         /// </summary>
         /// <param name="annualClimate"></param>
         /// <param name="month"></param>
         /// <returns></returns>
-        public static double CalculatePDSI(AnnualClimate_Monthly oneClimate, double[] mon_T_normal, double awc, double latitude, UnitSystem arsUnitSystem, IEcoregion ecoregion)
+        public static double CalculateEcoregion_PDSI(AnnualClimate_Monthly oneClimate, double[] mon_T_normal, double awc, double latitude, UnitSystem arsUnitSystem, IEcoregion ecoregion)
         {
             TLA = latitude;
 
@@ -360,9 +360,8 @@ namespace Landis.Library.Climate
                         Precip[month] = oneClimate.MonthlyPrecip[month] * 0.39370;
                 }
 
-                //awt is passed and used in GetParam(awt)
-                double awc_temp = AWC;
-                AWC = awc_temp * 0.39370;
+                //double awc_temp = AWC;
+                AWC = awc * 0.39370;
                 //TLA = TLA * 0.39370;  //WHY IS TLA TRANSFORMED??
             } else
             {
@@ -378,7 +377,7 @@ namespace Landis.Library.Climate
             //--------------------------------------------------
 
             //Set fieldCapacity and TLA
-            SetSoilMoisture(awc);  //awc = available water content
+            SetSoilMoisture();  //awc = available water content converted to inches
             SetTLA();
 
             I = CalcMonThornI(corrected_mon_T_normal);
@@ -408,14 +407,14 @@ namespace Landis.Library.Climate
                 DSSqr[i] = 0;
             }
 
-            // CalcWBCoef is then called to calculate alpha, beta, gamma, and delta
-            CalcWBCoef();
+            // Calculate alpha, beta, gamma, and delta:
+            CalcWaterBalanceCoefficients();
 
             // Next calculate the monthly departures from normal
             CalcMonthlyDepartures();
             
             // Finally C ompute the K and Z values.  CalcX is called within CalcK.
-            CalcOrigK();
+            CalcOriginalK();
 
             double annualPDSI = 0.0;
             //double ecoAverage = 0;
@@ -616,11 +615,11 @@ namespace Landis.Library.Climate
 
 
         //-----------------------------------------------------------------------------
-        // This function reads in the 2 initializing values of Su and TLA
+        // This function divides AWC into two components: surface and sub-surface moisture.
         //-----------------------------------------------------------------------------
-        private static void SetSoilMoisture(double awc)
+        private static void SetSoilMoisture()
         {
-            AWC = awc;
+            //AWC = awc;
 
             //if (metric == 1)
             //    AWC = AWC / 25.4;
@@ -669,7 +668,7 @@ namespace Landis.Library.Climate
         // ------------------------------------------------
         // Calculates alpha, beta, gamma, and delta
         // ------------------------------------------------
-        private static void CalcWBCoef()
+        private static void CalcWaterBalanceCoefficients()
         {
             // The coefficients are calculated by per month
             for (int per = 0; per < num_of_periods; per++)
@@ -792,22 +791,17 @@ namespace Landis.Library.Climate
                     Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month={0} Gamma={1} PROSum={2} Delta={3} PLSum={4}", i+1, Gamma[i], PROSum[i], Delta[i], PLSum[i]);
                     Climate.ModelCore.UI.WriteLine("      PDSI Calculator: Month={0} SPhat={1} DSAct={2}", i+1, SPhat[i], DSAct[i]);
                 }
-                // D becomes the mean of D_sum
-                /* SG 6/5/06: changed totalyears to nCalibrationYears to support
-                **            user defined calibration intervals. When not used
-                **            nCalibrationYears==totalyears; hence no change then
-                */
 
-                D[i] = D_sum[i]; // / 1; // totalyears;//111// nCalibrationYears;
+                D[i] = D_sum[i]; 
             }
         }
 
         // ------------------------------------------------
         //Computes the K and Z values.  CalcX is called within CalcK.
         // ------------------------------------------------
-        private static void CalcOrigK()
+        private static void CalcOriginalK()
         {
-            int month; //, year;
+            //int month; //, year;
             double sums;        //used to calc k
             //float dtemp;
             DKSum = 0;
@@ -847,13 +841,13 @@ namespace Landis.Library.Climate
             // Reads in all previously calclulated d values and calculates Z
             // then calls CalcX to compute the corresponding PDSI value
 
-            for (int per = 0; per < num_of_periods; per++)
-                {
-                    month = per; //Since we assumed each period is one month
+            for (int month = 0; month < 12; month++)
+            {
+                    //month = per; //Since we assumed each period is one month
                     //                PeriodList.insert(month);
                     //                YearList.insert(year);
 
-                    d = potential.d[per];//d = dtemp;
+                    d = potential.d[month];//d = dtemp;
                     K = (17.67 / DKSum) * k[month];
 
                     if (Verbose > 0)
@@ -874,6 +868,12 @@ namespace Landis.Library.Climate
 
         }
 
+        //-----------------------------------------------------------------------------
+        // Function added by RMScheller to use Palmer's original without the self corrections introduced by Wells et al. 2004
+        //-----------------------------------------------------------------------------
+        private static void CalcMonthlyPDSI_Original()
+        {
+        }
 
         //-----------------------------------------------------------------------------
         // This function calculates X, X1, X2, and X3
@@ -924,13 +924,14 @@ namespace Landis.Library.Climate
                 else wd = -1;
                 // If X3 is 0 then there is no reason to calculate Q or ZE, V and Prob
                 // are reset to 0;
-                if (X3 == 0)
+                if (X3 == 0)  // this would be the case in the first month
                 {
                     newX3 = 0;
                     newV = 0;
                     newProb = 0;
                     ChooseX(ref newPDSI, ref newX1, ref newX2, ref newX3, bug);
                 }
+
                 // Otherwise all calculations are needed.
                 else
                 {
@@ -1062,7 +1063,7 @@ namespace Landis.Library.Climate
 
             if ((newX1 >= 0.5) && (newX3 == 0))
             {
-                //Backtrack(newX1, newX2);
+                Backtrack(newX1, newX2);
                 newPDSI = newX1;
                 newX3 = newX1;
                 newX1 = 0;
@@ -1077,7 +1078,7 @@ namespace Landis.Library.Climate
 
                 if ((newX2 <= -0.5) && (newX3 == 0))
                 {
-                    //Backtrack(newX2, newX1);
+                    Backtrack(newX2, newX1);
                     newPDSI = newX2;
                     newX3 = newX2;
                     newX2 = 0;
@@ -1088,22 +1089,22 @@ namespace Landis.Library.Climate
                 {
                     if (newX1 == 0)
                     {
-                        //Backtrack(newX2, newX1);
+                        Backtrack(newX2, newX1);
                         newPDSI = newX2;
                         if (Verbose > 0)
                             Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX2 = {0:0.00} (newX1/X3=0)", newX2);
                     }
                     else if (newX2 == 0)
                     {
-                        //Backtrack(newX1, newX2);
+                        Backtrack(newX1, newX2);
                         newPDSI = newX1;
                         if (Verbose > 0)
                             Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX1 = {0:0.00} (newX2/X3=0)", newX1);
                     }
                     else
                     {
-                        //altX1.AddFirst(newX1);//altX1.insert(newX1);
-                        //altX2.AddFirst(newX2);//altX2.insert(newX2);
+                        altX1.AddFirst(newX1);//altX1.insert(newX1);
+                        altX2.AddFirst(newX2);//altX2.insert(newX2);
                         newPDSI = newX3;
                         if (Verbose > 0)
                             Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX3 = 0.0");
@@ -1113,8 +1114,8 @@ namespace Landis.Library.Climate
                 else
                 {
                     //store X1 and X2 in their linked lists for possible use later
-                    //altX1.AddFirst(newX1);//altX1.insert(newX1);
-                    //altX2.AddFirst(newX2);//altX2.insert(newX2);
+                    altX1.AddFirst(newX1);//altX1.insert(newX1);
+                    altX2.AddFirst(newX2);//altX2.insert(newX2);
                     newPDSI = newX3;
                     if (Verbose > 0)
                         Climate.ModelCore.UI.WriteLine("      PDSI Calculator: PDSI set to newX3 = {0:0.00}", newX3);
