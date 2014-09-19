@@ -261,10 +261,9 @@ namespace Landis.Library.Climate
                             break;
 
                         case FileSection.Winddirection:
-
+                            mean += format.WindDirectionTransformation;
+                            if (mean > 360.0) mean -= 360;
                             ecoRecords[rowIndex].AvgWindDirection = mean;
-                            if (mean < 180) mean += (format.WindDirectionTransformation);
-                            else mean -= (format.WindDirectionTransformation);
                                                        
                             ecoRecords[rowIndex].AvgVarWindDirection = variance;
                             ecoRecords[rowIndex].StdDevWindDirection = stdev;
