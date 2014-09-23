@@ -53,6 +53,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.NSC = NSC;
             this.Root = Root;
             this.YearOfBirth = year_of_birth;
+            this.Fwater = new System.Collections.Generic.List<float>();
         }
         public Cohort(Cohort cohort)
         {
@@ -68,6 +69,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.MaxBiomass = cohort.MaxBiomass;
             this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
+            this.Fwater = new System.Collections.Generic.List<float>(cohort.Fwater);
         }
 
 

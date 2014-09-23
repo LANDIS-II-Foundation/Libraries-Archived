@@ -30,5 +30,8 @@ namespace Landis.Library.BiomassCohortsPnET
             November,
             December
         }
+
+        public static int NrOfMonths = Enum.GetValues(typeof(Months)).GetLength(0);
+         
     }
 }
