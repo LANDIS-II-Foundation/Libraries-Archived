@@ -108,7 +108,7 @@ namespace Landis.Library.Climate
 
             if (!climateFileFormat_PossibleValues.ToLower().Contains(parameters.ClimateFileFormat.ToLower()) || !climateFileFormat_PossibleValues.ToLower().Contains(parameters.SpinUpClimateFileFormat.ToLower()))
             {
-                throw new ApplicationException("Error in parsing climate-generator input file: invalid value for File Format provided. Possible values are: " + climateTimeSeries_PossibleValues);
+                throw new ApplicationException("Error in parsing climate-generator input file: invalid value for File Format provided. Possible values are: " + climateFileFormat_PossibleValues);
             }
 
             if (parameters.ClimateTimeSeries.ToLower().Contains("daily") && !parameters.ClimateFileFormat.ToLower().Contains("daily"))
