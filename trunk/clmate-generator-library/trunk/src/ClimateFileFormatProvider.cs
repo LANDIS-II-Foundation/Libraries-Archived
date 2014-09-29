@@ -76,13 +76,13 @@ namespace Landis.Library.Climate
                     this.timeStep = TemporalGranularity.Monthly;
                     break;
 
-                case "monthly_temp-k_precip-mmsec":
+                case "monthly_temp-k_precip-kgm2sec":
                     this.timeStep = TemporalGranularity.Monthly;
                     this.TemperatureTransformation = ABS_ZERO;      // ipcc5 temp. data are in Kelvin.
                     this.PrecipTransformation = 262974.6;            // ipcc5 precip. data are in kg / m2 / sec -> convert to cm / month
                     break;
 
-                case "daily_temp-k_precip-mmsec":  //add
+                case "daily_temp-k_precip-kgm2sec":  //add
                     this.timeStep = TemporalGranularity.Daily;
                     this.TemperatureTransformation = ABS_ZERO;      // ipcc5 temp. data are in Kelvin.
                     this.PrecipTransformation = 8640.0;             // ipcc5 precip. data are in kg / m2 / sec -> convert to cm / day
