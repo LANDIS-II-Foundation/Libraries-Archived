@@ -61,7 +61,7 @@ namespace Landis.Library.Climate
                 Type = OutputType.Table,
                 Name = "Annual-Log",
                 FilePath = Climate.AnnualLog.FilePath,
-                Visualize = true,
+                Visualize = false,
             };
             tblOut_annual.RetriveFields(typeof(AnnualLog));
             Extension.OutputMetadatas.Add(tblOut_annual);
