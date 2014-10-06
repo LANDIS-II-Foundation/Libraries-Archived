@@ -11,6 +11,7 @@ namespace Landis.Library.BiomassCohorts
     public interface ICohort
         : Landis.Library.AgeOnlyCohorts.ICohort
     {
+        //---------------------------------------------------------------------
         /// <summary>
         /// The cohort's biomass (g m-2).
         /// </summary>
@@ -18,8 +19,22 @@ namespace Landis.Library.BiomassCohorts
         {
             get;
         }
-
-
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// The cohort's current foliage (g m-2).
+        /// </summary>
+        int CurrentFoliage
+        {
+            get;
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// The cohort's total foliage (g m-2).
+        /// </summary>
+        int TotalFoliage
+        {
+            get;
+        }
         //---------------------------------------------------------------------
 
         /// <summary>

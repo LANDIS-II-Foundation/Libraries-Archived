@@ -44,6 +44,24 @@ namespace Landis.Library.BiomassCohorts
         }
 
         //---------------------------------------------------------------------
+        public int CurrentFoliage
+        {
+            get
+            {
+                return data.CurrentFoliage;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public int TotalFoliage
+        {
+            get
+            {
+                return data.TotalFoliage;
+            }
+        }
+
+        //---------------------------------------------------------------------
 
         public double[] DefoliationHistory
         {
@@ -71,12 +89,16 @@ namespace Landis.Library.BiomassCohorts
         public Cohort(ISpecies species,
                       ushort   age,
                       int   biomass,
-                       double [] defoliationHistory)
+                       double [] defoliationHistory,
+            int currentFoliage,
+            int totalFoliage)
         {
             this.species = species;
             this.data.Age = age;
             this.data.Biomass = biomass;
             this.data.DefoliationHistory = defoliationHistory;
+            this.data.CurrentFoliage = currentFoliage;
+            this.data.TotalFoliage = totalFoliage;
         }
 
         //---------------------------------------------------------------------

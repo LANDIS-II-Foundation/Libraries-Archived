@@ -129,7 +129,8 @@ namespace Landis.Library.BiomassCohorts
         public void AddNewCohort(ushort age, int initialBiomass)
         {
             double []defolHistory = new double[10];
-            this.cohortData.Add(new CohortData(age, initialBiomass,defolHistory));
+            int currentFoliage = (int)(initialBiomass * 0.35);
+            this.cohortData.Add(new CohortData(age, initialBiomass,defolHistory,currentFoliage,currentFoliage));
         }
 
         //---------------------------------------------------------------------
@@ -169,6 +170,8 @@ namespace Landis.Library.BiomassCohorts
 
             int youngCount = 0;
             int totalBiomass = 0;
+            int combinedCurrentFoliage = 0;
+            int combinedTotalFoliage = 0;
             //Budworm
             // Defoliation History is averaged across cohorts by year
             double[] defolSum = new double[10];
@@ -178,6 +181,8 @@ namespace Landis.Library.BiomassCohorts
                 if (data.Age <= Cohorts.SuccessionTimeStep) {
                     youngCount++;
                     totalBiomass += data.Biomass;
+                    combinedCurrentFoliage += data.CurrentFoliage;
+                    combinedTotalFoliage += data.TotalFoliage;
                     for (int d = 0; d < 10; d++)
                     {
                         double cohortDefol = data.DefoliationHistory[d];
@@ -195,7 +200,7 @@ namespace Landis.Library.BiomassCohorts
             if (youngCount > 0) {
                 cohortData.RemoveRange(cohortData.Count - youngCount, youngCount);
                 cohortData.Add(new CohortData((ushort) (Cohorts.SuccessionTimeStep - 1),
-                                              totalBiomass, defolHistory));
+                                              totalBiomass, defolHistory,combinedCurrentFoliage,combinedTotalFoliage));
             }
         }
 
