@@ -13,6 +13,11 @@ namespace Landis.Library.SiteHarvest
     interface ICohortCutter
     {
         /// <summary>
+        /// The object responsible for selecting which cohorts to be cut.
+        /// </summary>
+        ICohortSelector CohortSelector { get; }
+
+        /// <summary>
         /// Cut cohorts at an individual site.
         /// </summary>
         void Cut(ActiveSite site);
