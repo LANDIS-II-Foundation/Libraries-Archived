@@ -13,7 +13,7 @@ namespace Landis.Library.SiteHarvest
     /// A harvest where each selected cohort is completely cut.
     /// </summary>
     class WholeCohortHarvest
-        : AgeCohortHarvest, ICohortHarvest
+        : AgeCohortHarvest, ICohortCutter
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(WholeCohortHarvest));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
@@ -29,7 +29,7 @@ namespace Landis.Library.SiteHarvest
 
         //---------------------------------------------------------------------
 
-        void ICohortHarvest.Cut(ActiveSite site)
+        void ICohortCutter.Cut(ActiveSite site)
         {
             if (isDebugEnabled)
                 log.DebugFormat("    {0} is cutting site {1}:",

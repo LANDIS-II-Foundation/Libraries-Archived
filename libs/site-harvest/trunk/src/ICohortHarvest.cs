@@ -8,9 +8,9 @@ using Landis.SpatialModeling;
 namespace Landis.Library.SiteHarvest
 {
     /// <summary>
-    /// Interface for cutting cohorts at a site.
+    /// Interface for cutting selected cohorts at a site.
     /// </summary>
-    interface ICohortHarvest
+    interface ICohortCutter
     {
         /// <summary>
         /// Cut cohorts at an individual site.
