@@ -56,7 +56,7 @@ namespace Landis.Library.SiteHarvest
         /// <summary>
         /// Cut cohorts at an individual site.
         /// </summary>
-        public void Cut(ActiveSite site)
+        public virtual void Cut(ActiveSite site)
         {
             if (isDebugEnabled)
                 log.DebugFormat("    {0} is cutting site {1}:",
