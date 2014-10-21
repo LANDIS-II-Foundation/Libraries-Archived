@@ -1,4 +1,4 @@
-Harvest Library for LANDIS-II
+Site Harvest Library for LANDIS-II
 
 Copyright 2005 University of Wisconsin
 Copyright 2009-2012 Portland State University
