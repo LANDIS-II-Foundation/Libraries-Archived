@@ -13,10 +13,10 @@ namespace Landis.Library.SiteHarvest
     /// <summary>
     /// A disturbance where each selected cohort is completely cut.
     /// </summary>
-    class WholeCohortHarvest
+    class WholeCohortCutter
         : ISpeciesCohortsDisturbance, ICohortCutter
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(WholeCohortHarvest));
+        private static readonly ILog log = LogManager.GetLogger(typeof(WholeCohortCutter));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
         //---------------------------------------------------------------------
@@ -70,7 +70,7 @@ namespace Landis.Library.SiteHarvest
 
         //---------------------------------------------------------------------
 
-        public WholeCohortHarvest(ICohortSelector cohortSelector)
+        public WholeCohortCutter(ICohortSelector cohortSelector)
         {
             CohortSelector = cohortSelector;
         }

@@ -49,12 +49,12 @@
     <Compile Include="cohort-selection\MultiSpeciesCohortSelector.cs" />
     <Compile Include="cohort-selection\SelectCohorts.cs" />
     <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
-    <Compile Include="ICohortHarvest.cs" />
+    <Compile Include="ICohortCutter.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ParameterNames.cs" />
     <Compile Include="SiteVars.cs" />
-    <Compile Include="WholeCohortHarvest.cs" />
+    <Compile Include="WholeCohortCutter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
