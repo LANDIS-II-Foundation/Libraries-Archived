@@ -4,7 +4,7 @@ using Edu.Wisc.Forest.Flel.Util;
 
 using FormatException = System.FormatException;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Methods for parsing cohort age ranges.

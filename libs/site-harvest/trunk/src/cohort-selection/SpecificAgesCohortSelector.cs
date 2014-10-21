@@ -3,7 +3,7 @@
 using Landis.Library.AgeOnlyCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Selects specific ages and ranges of ages among a species' cohorts

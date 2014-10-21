@@ -6,7 +6,7 @@ using Landis.Core;
 using Landis.Library.Succession;
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// An extended base class for text parsers that need to parse basic

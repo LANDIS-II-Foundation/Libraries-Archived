@@ -2,7 +2,7 @@
 
 using Landis.Library.AgeOnlyCohorts;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Selects every Nth cohort among a species' cohorts for harvesting.

@@ -4,7 +4,7 @@ using Landis.Core;
 using Landis.Library.AgeOnlyCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Removes certain cohorts of one or more species from a site.

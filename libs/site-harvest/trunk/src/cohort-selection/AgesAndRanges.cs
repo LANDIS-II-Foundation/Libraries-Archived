@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// A set of specific ages and ranges of ages for one species' cohorts.

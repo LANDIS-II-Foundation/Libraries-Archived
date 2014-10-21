@@ -6,7 +6,7 @@
 using Landis.Core;
 using Landis.SpatialModeling;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Main interface for initializing and configuring the library.

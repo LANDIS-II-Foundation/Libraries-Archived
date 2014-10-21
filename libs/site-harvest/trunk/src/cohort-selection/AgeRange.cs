@@ -1,6 +1,6 @@
 // Copyright 2005 University of Wisconsin
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// A range of cohort ages.

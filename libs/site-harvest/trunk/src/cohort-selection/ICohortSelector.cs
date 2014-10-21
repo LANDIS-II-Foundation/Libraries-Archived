@@ -2,7 +2,7 @@
 
 using Landis.Library.AgeOnlyCohorts;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Selects which cohorts at a site are removed by a harvest event.
