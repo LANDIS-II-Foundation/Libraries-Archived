@@ -5,10 +5,8 @@
 
 using Landis.Core;
 using Landis.Library.BiomassCohorts;
-using Landis.SpatialModeling;
 using log4net;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Landis.Library.BiomassHarvest
 {
@@ -17,42 +15,36 @@ namespace Landis.Library.BiomassHarvest
     /// </summary>
     public static class SiteBiomass
     {
-        public static bool Enabled { get; private set; }
-        private static StreamWriter logFile;
         private static IDictionary<ISpecies, int> biomassHarvested;
         private static readonly ILog log = LogManager.GetLogger(typeof(SiteBiomass));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
         //---------------------------------------------------------------------
 
-        static SiteBiomass()
+        /// <summary>
+        /// The biomass harvested for each species at the site currently being
+        /// cut by a disturbance extension.
+        /// </summary>
+        public static IDictionary<ISpecies, int> Harvested
         {
-            Enabled = false;
+            get { return biomassHarvested; }
         }
 
         //---------------------------------------------------------------------
 
-        public static void Initialize(string path)
+        static SiteBiomass()
         {
-            Model.Core.UI.WriteLine("  Opening log file \"{0}\"...", path);
-            logFile = Landis.Data.CreateTextFile(path);
-            logFile.Write("timestep,row,column");
-            foreach (ISpecies species in Model.Core.Species)
-                logFile.Write(",{0}", species.Name);
-            logFile.WriteLine();
-            Enabled = true;
-            
             biomassHarvested = new Dictionary<ISpecies, int>(Model.Core.Species.Count);
-            ResetSiteTotals();
+            ResetHarvestTotals();
         }
 
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Prepare the log file for the extension's execution during current
-        /// timestep.
+        /// Enable the recording of biomass harvested for the extension's
+        /// execution during current timestep.
         /// </summary>
-        public static void TimestepSetUp()
+        public static void EnableRecordingForHarvest()
         {
             Cohort.AgeOnlyDeathEvent += CohortDied;
         }
@@ -60,10 +52,10 @@ namespace Landis.Library.BiomassHarvest
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// Clean up at the end of the extension's execution during the current
-        /// timestep.
+        /// Disable the recording of biomass harvested at the end of the
+        /// extension's execution during the current timestep.
         /// </summary>
-        public static void TimestepTearDown()
+        public static void DisableRecordingForHarvest()
         {
             Cohort.AgeOnlyDeathEvent -= CohortDied;
         }
@@ -84,7 +76,7 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
-        public static void ResetSiteTotals()
+        public static void ResetHarvestTotals()
         {
             foreach (ISpecies species in Model.Core.Species)
             {
@@ -98,24 +90,6 @@ namespace Landis.Library.BiomassHarvest
                                          int      biomass)
         {
             biomassHarvested[species] += biomass;
-        }
-
-        //---------------------------------------------------------------------
-
-        public static void WriteTotalsFor(ActiveSite site)
-        {
-            logFile.Write("{0},{1},{2}", Model.Core.CurrentTime, site.Location.Row, site.Location.Column);
-            foreach (ISpecies species in Model.Core.Species)
-                logFile.Write(",{0}", biomassHarvested[species]);
-            logFile.WriteLine();
-            ResetSiteTotals();
-        }
-
-        //---------------------------------------------------------------------
-
-        public static void Close()
-        {
-            logFile.Close();
         }
     }
 }
