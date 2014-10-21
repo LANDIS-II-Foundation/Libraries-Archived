@@ -10,7 +10,7 @@ namespace Landis.Library.SiteHarvest
     /// <summary>
     /// Interface for cutting selected cohorts at a site.
     /// </summary>
-    interface ICohortCutter
+    public interface ICohortCutter
     {
         /// <summary>
         /// The object responsible for selecting which cohorts to be cut.
