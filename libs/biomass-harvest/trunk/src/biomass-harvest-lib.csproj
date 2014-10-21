@@ -36,6 +36,7 @@
     <Compile Include="BiomassCohortHarvest.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="PartialCohortHarvest.cs" />
     <Compile Include="PartialCohortSelectors.cs" />
     <Compile Include="PartialThinning.cs" />
     <Compile Include="SiteVars.cs" />
@@ -64,6 +65,9 @@
     <Reference Include="Landis.SpatialModeling, Version=1.0.4815.34359, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

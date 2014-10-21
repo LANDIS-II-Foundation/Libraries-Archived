@@ -1,21 +1,21 @@
-﻿// This file is part of the Land Use extension for LANDIS-II.
+﻿// This file is part of the Biomass Harvest library for LANDIS-II.
 // For copyright and licensing information, see the NOTICE and LICENSE
 // files in this project's top-level directory, and at:
-//   http://landis-extensions.googlecode.com/svn/exts/land-use/trunk/
+//   http://landis-extensions.googlecode.com/svn/libs/biomass-harvest/trunk/
 
 using Landis.Library.BiomassCohorts;
 using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
 using log4net;
 
-namespace Landis.Extension.LandUse.LandCover
+namespace Landis.Library.BiomassHarvest
 {
     /// <summary>
     /// A harvest where at least one species is partially thinned (i.e.,
     /// a percentage of one or more cohorts are harvested).
     /// </summary>
     public class PartialCohortHarvest
-        : BiomassCohortHarvest, ICohortHarvest
+        : BiomassCohortHarvest, ICohortCutter
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(PartialCohortHarvest));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
@@ -31,7 +31,7 @@ namespace Landis.Extension.LandUse.LandCover
 
         //---------------------------------------------------------------------
 
-        void ICohortHarvest.Cut(ActiveSite site)
+        void ICohortCutter.Cut(ActiveSite site)
         {
             if (isDebugEnabled)
             {
