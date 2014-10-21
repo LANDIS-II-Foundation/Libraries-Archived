@@ -5,7 +5,7 @@
 
 using Landis.SpatialModeling;
 
-namespace Landis.Extension.LandUse.LandCover
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// Interface for cutting cohorts at a site.

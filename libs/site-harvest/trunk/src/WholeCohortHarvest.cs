@@ -3,11 +3,11 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/exts/land-use/trunk/
 
-using Landis.Library.Harvest;
+using Landis.Core;
 using Landis.SpatialModeling;
 using log4net;
 
-namespace Landis.Extension.LandUse.LandCover
+namespace Landis.Library.SiteHarvest
 {
     /// <summary>
     /// A harvest where each selected cohort is completely cut.
@@ -20,10 +20,11 @@ namespace Landis.Extension.LandUse.LandCover
 
         //---------------------------------------------------------------------
 
-        public WholeCohortHarvest(ICohortSelector cohortSelector)
+        public WholeCohortHarvest(ICohortSelector cohortSelector,
+                                  ExtensionType   extensionType)
             : base(cohortSelector)
         {
-            base.Type = Main.ExtType;
+            base.Type = extensionType;
         }
 
         //---------------------------------------------------------------------
