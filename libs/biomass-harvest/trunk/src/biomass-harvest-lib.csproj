@@ -33,7 +33,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="BiomassCohortHarvest.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="PartialCohortCutter.cs" />
