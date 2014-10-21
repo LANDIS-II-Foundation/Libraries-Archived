@@ -90,16 +90,13 @@ namespace Landis.Library.BiomassHarvest
         protected void Record(int     reduction,
                               ICohort cohort)
         {
-            if (SiteLog.Enabled)
-            {
-                SiteLog.RecordHarvest(cohort.Species, reduction);
-                if (isDebugEnabled)
-                    log.DebugFormat("    {0}, age {1}, biomass {2} : reduction = {3}",
-                                    cohort.Species.Name,
-                                    cohort.Age,
-                                    cohort.Biomass,
-                                    reduction);
-            }
+            SiteBiomass.RecordHarvest(cohort.Species, reduction);
+            if (isDebugEnabled)
+                log.DebugFormat("    {0}, age {1}, biomass {2} : reduction = {3}",
+                                cohort.Species.Name,
+                                cohort.Age,
+                                cohort.Biomass,
+                                reduction);
         }
     }
 }
