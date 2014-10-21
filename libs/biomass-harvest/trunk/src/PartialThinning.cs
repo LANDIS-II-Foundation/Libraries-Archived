@@ -16,7 +16,7 @@
 
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Core;
-using Landis.Library.Harvest;
+using Landis.Library.SiteHarvest;
 using System.Collections.Generic;
 using System.Text;
 

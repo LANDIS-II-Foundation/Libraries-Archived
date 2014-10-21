@@ -4,7 +4,7 @@
 //   http://landis-extensions.googlecode.com/svn/exts/land-use/trunk/
 
 using Landis.Library.BiomassCohorts;
-using Landis.Library.BiomassHarvest;
+using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
 using log4net;
 
@@ -22,8 +22,8 @@ namespace Landis.Extension.LandUse.LandCover
 
         //---------------------------------------------------------------------
 
-        public PartialCohortHarvest(Landis.Library.Harvest.ICohortSelector cohortSelector,
-                                    PartialCohortSelectors                 partialCohortSelectors)
+        public PartialCohortHarvest(Landis.Library.SiteHarvest.ICohortSelector cohortSelector,
+                                    PartialCohortSelectors                     partialCohortSelectors)
             : base(cohortSelector, partialCohortSelectors)
         {
             base.Type = Main.ExtType;

@@ -17,7 +17,7 @@
 
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Library.BiomassCohorts;
-using Landis.Library.Harvest;
+using Landis.Library.SiteHarvest;
 using System.Collections.Generic;
 
 namespace Landis.Library.BiomassHarvest

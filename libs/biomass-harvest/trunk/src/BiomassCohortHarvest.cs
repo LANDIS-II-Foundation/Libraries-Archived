@@ -6,7 +6,7 @@
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Core;
 using Landis.Library.BiomassCohorts;
-using Landis.Library.Harvest;
+using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
 
 namespace Landis.Library.BiomassHarvest
