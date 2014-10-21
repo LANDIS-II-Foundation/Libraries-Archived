@@ -36,7 +36,7 @@
     <Compile Include="BiomassCohortHarvest.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Model.cs" />
-    <Compile Include="PartialCohortHarvest.cs" />
+    <Compile Include="PartialCohortCutter.cs" />
     <Compile Include="PartialCohortSelectors.cs" />
     <Compile Include="PartialThinning.cs" />
     <Compile Include="SiteVars.cs" />

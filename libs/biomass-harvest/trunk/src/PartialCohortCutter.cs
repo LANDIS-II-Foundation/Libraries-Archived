@@ -3,6 +3,7 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/libs/biomass-harvest/trunk/
 
+using Landis.Core;
 using Landis.Library.BiomassCohorts;
 using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
@@ -14,24 +15,24 @@ namespace Landis.Library.BiomassHarvest
     /// A harvest where at least one species is partially thinned (i.e.,
     /// a percentage of one or more cohorts are harvested).
     /// </summary>
-    public class PartialCohortHarvest
-        : BiomassCohortHarvest, ICohortCutter
+    public class PartialCohortCutter
+        : WholeCohortCutter
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(PartialCohortHarvest));
+        private static readonly ILog log = LogManager.GetLogger(typeof(PartialCohortCutter));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
         //---------------------------------------------------------------------
 
-        public PartialCohortHarvest(Landis.Library.SiteHarvest.ICohortSelector cohortSelector,
-                                    PartialCohortSelectors                     partialCohortSelectors)
-            : base(cohortSelector, partialCohortSelectors)
+        public PartialCohortCutter(Landis.Library.SiteHarvest.ICohortSelector cohortSelector,
+                                   PartialCohortSelectors                     partialCohortSelectors,
+                                   ExtensionType                              extensionType)
+            : base(cohortSelector, extensionType)
         {
-            base.Type = Main.ExtType;
         }
 
         //---------------------------------------------------------------------
 
-        void ICohortCutter.Cut(ActiveSite site)
+        public override void Cut(ActiveSite site)
         {
             if (isDebugEnabled)
             {
