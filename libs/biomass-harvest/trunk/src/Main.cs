@@ -14,7 +14,7 @@ namespace Landis.Library.BiomassHarvest
         /// </summary>
         public static void InitializeLib(ICore modelCore)
         {
-            Landis.Library.Harvest.Main.InitializeLib(modelCore);
+            Landis.Library.SiteHarvest.Main.InitializeLib(modelCore);
 
             Model.Core = modelCore;
             SiteVars.Initialize();
