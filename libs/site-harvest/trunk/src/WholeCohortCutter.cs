@@ -21,7 +21,7 @@ namespace Landis.Library.SiteHarvest
 
         //---------------------------------------------------------------------
 
-        #region ISpeciesCohortsDisturbance members
+        #region IDisturbance members
 
         /// <summary>
         /// What type of disturbance is this.
@@ -32,6 +32,12 @@ namespace Landis.Library.SiteHarvest
         /// The site currently that the disturbance is impacting.
         /// </summary>
         public ActiveSite CurrentSite { get; protected set; }
+
+        #endregion
+
+        //---------------------------------------------------------------------
+
+        #region ISpeciesCohortsDisturbance members
 
         /// <summary>
         /// Mark which cohorts for a species are to be cut (harvested).
