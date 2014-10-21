@@ -76,8 +76,13 @@ namespace Landis.Library.SiteHarvest
 
         //---------------------------------------------------------------------
 
-        public WholeCohortCutter(ICohortSelector cohortSelector)
+        /// <summary>
+        /// Create a new instance.
+        /// </summary>
+        public WholeCohortCutter(ICohortSelector cohortSelector,
+                                 ExtensionType   extensionType)
         {
+            Type = extensionType;
             CohortSelector = cohortSelector;
         }
     }
