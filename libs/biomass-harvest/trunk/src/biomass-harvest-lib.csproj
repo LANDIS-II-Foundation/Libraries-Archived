@@ -39,6 +39,7 @@
     <Compile Include="PartialCohortCutter.cs" />
     <Compile Include="PartialCohortSelectors.cs" />
     <Compile Include="PartialThinning.cs" />
+    <Compile Include="SiteBiomass.cs" />
     <Compile Include="SiteVars.cs" />
     <Compile Include="SpecificAgesCohortSelector.cs" />
   </ItemGroup>

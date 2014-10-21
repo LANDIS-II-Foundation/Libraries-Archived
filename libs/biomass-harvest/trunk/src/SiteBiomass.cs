@@ -1,7 +1,7 @@
-﻿// This file is part of the Land Use extension for LANDIS-II.
+﻿// This file is part of the Biomass Harvest library for LANDIS-II.
 // For copyright and licensing information, see the NOTICE and LICENSE
 // files in this project's top-level directory, and at:
-//   http://landis-extensions.googlecode.com/svn/exts/land-use/trunk/
+//   http://landis-extensions.googlecode.com/svn/libs/biomass-harvest/trunk/
 
 using Landis.Core;
 using Landis.Library.BiomassCohorts;
@@ -10,22 +10,22 @@ using log4net;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Landis.Extension.LandUse
+namespace Landis.Library.BiomassHarvest
 {
     /// <summary>
-    /// A log file with details about the biomass removed at each site.
+    /// Records the biomass harvested for each species at the current site.
     /// </summary>
-    public static class SiteLog
+    public static class SiteBiomass
     {
         public static bool Enabled { get; private set; }
         private static StreamWriter logFile;
         private static IDictionary<ISpecies, int> biomassHarvested;
-        private static readonly ILog log = LogManager.GetLogger(typeof(SiteLog));
+        private static readonly ILog log = LogManager.GetLogger(typeof(SiteBiomass));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
         //---------------------------------------------------------------------
 
-        static SiteLog()
+        static SiteBiomass()
         {
             Enabled = false;
         }
