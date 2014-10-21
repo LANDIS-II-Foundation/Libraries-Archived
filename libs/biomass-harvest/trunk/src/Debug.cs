@@ -1,13 +1,13 @@
-﻿// This file is part of the Land Use extension for LANDIS-II.
+﻿// This file is part of the Biomass Harvest library for LANDIS-II.
 // For copyright and licensing information, see the NOTICE and LICENSE
 // files in this project's top-level directory, and at:
-//   http://landis-extensions.googlecode.com/svn/exts/land-use/trunk/
+//   http://landis-extensions.googlecode.com/svn/libs/biomass-harvest/trunk/
 
 using Landis.Library.BiomassCohorts;
 using Landis.SpatialModeling;
 using log4net;
 
-namespace Landis.Extension.LandUse
+namespace Landis.Library.BiomassHarvest
 {
     /// <summary>
     /// Helper methods for logging debug information
