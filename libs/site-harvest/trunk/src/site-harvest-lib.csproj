@@ -39,7 +39,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AgeCohortHarvest.cs" />
-    <Compile Include="AppliedPrescription.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BasicParameterParser.cs" />
     <Compile Include="cohort-selection\AgeRange.cs" />
@@ -51,58 +50,10 @@
     <Compile Include="cohort-selection\MultiSpeciesCohortSelector.cs" />
     <Compile Include="cohort-selection\SelectCohorts.cs" />
     <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
-    <Compile Include="EventId.cs" />
-    <Compile Include="HarvestExtensionMain.cs" />
-    <Compile Include="IInputParameters.cs" />
-    <Compile Include="IManagementAreaDataset.cs" />
-    <Compile Include="InputParameters.cs" />
-    <Compile Include="InputParametersParser.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="ManagementArea.cs" />
-    <Compile Include="ManagementAreaDataset.cs" />
-    <Compile Include="ManagementAreas.cs" />
-    <Compile Include="MapNames.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ParameterNames.cs" />
-    <Compile Include="Prescription.cs" />
-    <Compile Include="PrescriptionMaps.cs" />
-    <Compile Include="repeat-harvest\AppliedRepeatHarvest.cs" />
-    <Compile Include="repeat-harvest\RepeatHarvest.cs" />
-    <Compile Include="repeat-harvest\ReservedStand.cs" />
-    <Compile Include="repeat-harvest\RoundedInterval.cs" />
-    <Compile Include="repeat-harvest\SingleRepeatHarvest.cs" />
-    <Compile Include="ShortPixel.cs" />
-    <Compile Include="site-selection\CompleteStand.cs" />
-    <Compile Include="site-selection\CompleteStandSpreading.cs" />
-    <Compile Include="site-selection\ISiteSelector.cs" />
-    <Compile Include="site-selection\PartialStandSpreading.cs" />
-    <Compile Include="site-selection\PatchCutting.cs" />
-    <Compile Include="site-selection\StandSpreading.cs" />
     <Compile Include="SiteVars.cs" />
-    <Compile Include="stand-ranking\EconomicRank.cs" />
-    <Compile Include="stand-ranking\EconomicRankParameters.cs" />
-    <Compile Include="stand-ranking\EconomicRankTable.cs" />
-    <Compile Include="stand-ranking\FireRiskParameters.cs" />
-    <Compile Include="stand-ranking\FireRiskRank.cs" />
-    <Compile Include="stand-ranking\FireRiskTable.cs" />
-    <Compile Include="stand-ranking\InclusionRequirement.cs" />
-    <Compile Include="stand-ranking\InclusionRule.cs" />
-    <Compile Include="stand-ranking\IRankingRequirement.cs" />
-    <Compile Include="stand-ranking\IRequirement.cs" />
-    <Compile Include="stand-ranking\IStandRankingMethod.cs" />
-    <Compile Include="stand-ranking\MaxCohortAge.cs" />
-    <Compile Include="stand-ranking\MaximumAge.cs" />
-    <Compile Include="stand-ranking\MinimumAge.cs" />
-    <Compile Include="stand-ranking\MinTimeSinceLastHarvest.cs" />
-    <Compile Include="stand-ranking\RandomRank.cs" />
-    <Compile Include="stand-ranking\RegulateAgesRank.cs" />
-    <Compile Include="stand-ranking\SpatialArrangement.cs" />
-    <Compile Include="stand-ranking\StandAdjacency.cs" />
-    <Compile Include="stand-ranking\StandRanking.cs" />
-    <Compile Include="stand-ranking\StandRankingMethod.cs" />
-    <Compile Include="Stand.cs" />
-    <Compile Include="Stands.cs" />
-    <Compile Include="UIntPixel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
