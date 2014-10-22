@@ -1,4 +1,4 @@
-Harvest library for LANDIS-II
+Harvest Management library for LANDIS-II
 
 Prerequisite for Building
 -------------------------
