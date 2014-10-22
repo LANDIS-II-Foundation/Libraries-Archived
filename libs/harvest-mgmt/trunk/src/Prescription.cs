@@ -3,10 +3,11 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/libs/harvest/trunk/
 
-using Landis.Library.AgeOnlyCohorts;
-using Landis.SpatialModeling;
 using Landis.Core;
+using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.SiteHarvest;
 using Landis.Library.Succession;
+using Landis.SpatialModeling;
 
 namespace Landis.Library.Harvest
 {

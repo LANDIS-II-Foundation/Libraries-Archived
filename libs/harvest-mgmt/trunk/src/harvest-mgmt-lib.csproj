@@ -38,19 +38,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AgeCohortHarvest.cs" />
     <Compile Include="AppliedPrescription.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="BasicParameterParser.cs" />
-    <Compile Include="cohort-selection\AgeRange.cs" />
-    <Compile Include="cohort-selection\AgeRangeParsing.cs" />
-    <Compile Include="cohort-selection\AgesAndRanges.cs" />
-    <Compile Include="cohort-selection\Clearcut.cs" />
-    <Compile Include="cohort-selection\EveryNthCohort.cs" />
-    <Compile Include="cohort-selection\ICohortSelector.cs" />
-    <Compile Include="cohort-selection\MultiSpeciesCohortSelector.cs" />
-    <Compile Include="cohort-selection\SelectCohorts.cs" />
-    <Compile Include="cohort-selection\SpecificAgesCohortSelector.cs" />
     <Compile Include="EventId.cs" />
     <Compile Include="HarvestExtensionMain.cs" />
     <Compile Include="IInputParameters.cs" />
@@ -116,6 +105,9 @@
     </Reference>
     <Reference Include="Landis.Library.Cohorts">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
+    </Reference>
+    <Reference Include="Landis.Library.SiteHarvest-v0">
+      <HintPath>C:\Program Files\LANDIS-II\v6\bin\build\Landis.Library.SiteHarvest-v0.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Succession.dll</HintPath>

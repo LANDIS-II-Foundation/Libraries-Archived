@@ -3,6 +3,7 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/libs/harvest/trunk/
 
+using Landis.Library.SiteHarvest;
 using System;
 using System.Collections.Generic;
 

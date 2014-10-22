@@ -4,6 +4,7 @@
 //   http://landis-extensions.googlecode.com/svn/libs/harvest/trunk/
 
 using Landis.Core;
+using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
 
 namespace Landis.Library.Harvest
