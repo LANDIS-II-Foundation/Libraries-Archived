@@ -245,7 +245,7 @@ namespace Landis.Library.Climate
             double availableWaterCapacity = fieldCapacity - wiltingPoint;
 
             Climate.ModelCore.UI.WriteLine("   Core.StartTime = {0}, Core.EndTime = {1}.", ModelCore.StartTime, ModelCore.EndTime);
-            Climate.ModelCore.UI.WriteLine("   Climate.LandscapeAnnualPDSI.Length = {0}.", Climate.LandscapeAnnualPDSI.Length);
+            //Climate.ModelCore.UI.WriteLine("   Climate.LandscapeAnnualPDSI.Length = {0}.", Climate.LandscapeAnnualPDSI.Length);
 
             //First Calculate Climate Normals from Spin-up data
             int timeStepIndex = 0;
@@ -284,7 +284,7 @@ namespace Landis.Library.Climate
                 //Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI = PDSI_Calculator.CalculatePDSI(annualClimateMonthly, temperature_normals, availableWaterCapacity, latitude, UnitSystem.metrics, ecoregion);
                 // Climate.LandscapeAnnualPDSI[timeStepIndex] += (Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI / Climate.ModelCore.Ecoregions.Count);
 
-                Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timeStepIndex, timeStep.Key, Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI);
+                //Climate.ModelCore.UI.WriteLine("Calculated PDSI for Ecoregion {0}, timestep {1}, PDSI Year {2}; PDSI={3:0.00}.", ecoregion.Name, timeStepIndex, timeStep.Key, Future_MonthlyData[startYear + timeStep.Key][ecoregion.Index].PDSI);
                 timeStepIndex++;
 
                 WriteAnnualLog(ecoregion, startYear + timeStep.Key, annualClimateMonthly);
