@@ -3,7 +3,7 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/libs/harvest-mgmt/trunk/
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A stand ranking method where the oldest stands are harvested first.

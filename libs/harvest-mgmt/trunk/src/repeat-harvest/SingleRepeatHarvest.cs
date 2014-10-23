@@ -6,7 +6,7 @@
 using Landis.Library.SiteHarvest;
 using Landis.Library.Succession;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A single repeat-harvest harvests stands and then sets them aside for

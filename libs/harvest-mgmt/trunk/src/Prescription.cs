@@ -7,7 +7,7 @@ using Landis.Library.SiteHarvest;
 using Landis.Library.Succession;
 using Landis.SpatialModeling;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A prescription describes how stands are ranked, how sites are selected,

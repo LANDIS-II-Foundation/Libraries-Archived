@@ -6,7 +6,7 @@
 using Landis.SpatialModeling;
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A site-selection method that harvests all the sites in a stand.

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using log4net;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// The application of a prescription to a management area.

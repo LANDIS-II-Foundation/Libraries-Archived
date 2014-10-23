@@ -5,7 +5,7 @@
 
 using Landis.SpatialModeling;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A stand ranking method based on economic ranks

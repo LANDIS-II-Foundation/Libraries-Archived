@@ -8,7 +8,7 @@ using Edu.Wisc.Forest.Flel.Util;
 using System;
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// The application of a repeat-harvest to a management area.

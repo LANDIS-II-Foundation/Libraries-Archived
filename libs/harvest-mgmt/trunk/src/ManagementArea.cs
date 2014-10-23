@@ -9,7 +9,7 @@ using System.Reflection;
 
 using log4net;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// Management area is a collection of stands to which specific harvesting
