@@ -25,7 +25,6 @@ namespace Landis.Library.HarvestManagement
         private ISpeciesDataset speciesDataset;
         private IStandRankingMethod rankingMethod;  //made global because of re-use
         private InputVar<string> speciesName;
-        private Dictionary<string, int> speciesLineNumbers;
         private List<RoundedInterval> roundedIntervals;
         private static int scenarioStart = 0;
         private static int scenarioEnd = Model.Core.EndTime;
@@ -151,7 +150,6 @@ namespace Landis.Library.HarvestManagement
             this.extensionName = extensionName;
             this.speciesDataset = speciesDataset;
             this.speciesName = new InputVar<string>("Species");
-            this.speciesLineNumbers = new Dictionary<string, int>();
             this.roundedIntervals = new List<RoundedInterval>();
         }
 
@@ -437,7 +435,7 @@ namespace Landis.Library.HarvestManagement
 
         protected EconomicRankTable ReadEconomicRankTable()
         {
-            speciesLineNumbers.Clear();  // in case parser re-used
+            SpeciesLineNumbers.Clear();  // in case parser re-used
 
             InputVar<byte> rank = new InputVar<byte>("Economic Rank");
             InputVar<ushort> minAge = new InputVar<ushort>("Minimum Age");
@@ -467,7 +465,7 @@ namespace Landis.Library.HarvestManagement
                 GetNextLine();
             }
 
-            if (speciesLineNumbers.Count == 0)
+            if (SpeciesLineNumbers.Count == 0)
                 throw NewParseException("Expected a line starting with a species name");
 
             return table;
@@ -536,7 +534,7 @@ namespace Landis.Library.HarvestManagement
 
         protected void ReadForestTypeTable() {
 
-            speciesLineNumbers.Clear();  // in case parser re-used
+            SpeciesLineNumbers.Clear();  // in case parser re-used
 
             int optionalStatements = 0;
 
