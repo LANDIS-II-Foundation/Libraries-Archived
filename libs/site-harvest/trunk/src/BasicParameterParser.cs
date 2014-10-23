@@ -18,7 +18,7 @@ namespace Landis.Library.SiteHarvest
         private bool keywordsEnabled;
         private ISpeciesDataset speciesDataset;
         private InputVar<string> speciesName;
-        private Dictionary<string, int> speciesLineNumbers;
+        protected Dictionary<string, int> SpeciesLineNumbers { get; private set; }
         private MultiSpeciesCohortSelector cohortSelector;
 
         //---------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace Landis.Library.SiteHarvest
             this.keywordsEnabled = keywordsEnabled;
             this.speciesDataset = speciesDataset;
             this.speciesName = new InputVar<string>("Species");
-            this.speciesLineNumbers = new Dictionary<string, int>();
+            this.SpeciesLineNumbers = new Dictionary<string, int>();
         }
 
         //---------------------------------------------------------------------
@@ -65,12 +65,12 @@ namespace Landis.Library.SiteHarvest
         {
             ISpecies species = ReadAndValidateSpeciesName(currentLine);
             int lineNumber;
-            if (speciesLineNumbers.TryGetValue(species.Name, out lineNumber))
+            if (SpeciesLineNumbers.TryGetValue(species.Name, out lineNumber))
                 throw new InputValueException(speciesName.Value.String,
                                               "The species {0} was previously used on line {1}",
                                               speciesName.Value.String, lineNumber);
             else
-                speciesLineNumbers[species.Name] = LineNumber;
+                SpeciesLineNumbers[species.Name] = LineNumber;
 
             return species;
         }
@@ -108,7 +108,7 @@ namespace Landis.Library.SiteHarvest
                 namesThatFollow = new List<string>(names);
 
             cohortSelector = new MultiSpeciesCohortSelector();
-            speciesLineNumbers.Clear();
+            SpeciesLineNumbers.Clear();
 
             while (! AtEndOfInput && ! namesThatFollow.Contains(CurrentName)) {
                 StringReader currentLine = new StringReader(CurrentLine);
@@ -177,7 +177,7 @@ namespace Landis.Library.SiteHarvest
                 GetNextLine();
             }
 
-            if (speciesLineNumbers.Count == 0)
+            if (SpeciesLineNumbers.Count == 0)
                 throw NewParseException("Expected a line starting with a species name");
 
             return cohortSelector;
