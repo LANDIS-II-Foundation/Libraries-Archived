@@ -242,13 +242,11 @@ namespace Landis.Library.Harvest
                     minTimeSinceDamage = minTimeSinceDamageVar.Value;
                 }
 
-                //get preventEstablishment
                 bool preventEstablishment  = ReadPreventEstablishment();
 
-                //get cohort selection method
                 ICohortSelector cohortSelector = ReadCohortSelector(false);
+                ICohortCutter cohortCutter = CreateCohortCutter(cohortSelector);
 
-                //get list of species
                 Planting.SpeciesList speciesToPlant = ReadSpeciesToPlant();
 
                 //  Repeat harvest?
@@ -258,14 +256,15 @@ namespace Landis.Library.Harvest
                                                           repeatParamLineNumber,
                                                           harvestTimestep);
                     ICohortSelector additionalCohortSelector = ReadCohortSelector(true);
+                    ICohortCutter additionalCohortCutter = CreateCohortCutter(additionalCohortSelector);
                     Planting.SpeciesList additionalSpeciesToPlant = ReadSpeciesToPlant();
                     ISiteSelector additionalSiteSelector = new CompleteStand();
                     prescriptions.Add(new SingleRepeatHarvest(name,
                                                               rankingMethod,
                                                               siteSelector,
-                                                              cohortSelector,
+                                                              cohortCutter,
                                                               speciesToPlant,
-                                                              additionalCohortSelector,
+                                                              additionalCohortCutter,
                                                               additionalSpeciesToPlant,
                                                               additionalSiteSelector,
                                                               minTimeSinceDamage,
@@ -280,7 +279,7 @@ namespace Landis.Library.Harvest
                     prescriptions.Add(new RepeatHarvest(name,
                                                         rankingMethod,
                                                         siteSelector,
-                                                        cohortSelector,
+                                                        cohortCutter,
                                                         speciesToPlant,
                                                         additionalSiteSelector,
                                                         minTimeSinceDamage,
@@ -291,7 +290,7 @@ namespace Landis.Library.Harvest
                     prescriptions.Add(new Prescription(name,
                                                        rankingMethod,
                                                        siteSelector,
-                                                       cohortSelector,
+                                                       cohortCutter,
                                                        speciesToPlant,
                                                        minTimeSinceDamage,
                                                        preventEstablishment));
@@ -752,6 +751,22 @@ namespace Landis.Library.Harvest
             throw new InputValueException(cohortSelection.Value.String,
                                           cohortSelection.Value.String + " is not a valid cohort selection",
                                           new MultiLineText("Valid values: ClearCut or SpeciesList"));
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Creates a new cohort cutter for a cohort selector.
+        /// </summary>
+        /// <remarks>
+        /// By default, this method creates a WholeCohortCutter instance.  But
+        /// the parser class for Biomass Harvest extension overrides this method
+        /// so it can determine whether to create a PartialCohortCutter or a
+        /// WholeCohortCutter.
+        /// </remarks>
+        protected virtual ICohortCutter CreateCohortCutter(ICohortSelector cohortSelector)
+        {
+            return new WholeCohortCutter(cohortSelector, HarvestExtensionMain.ExtType);
         }
 
         //---------------------------------------------------------------------

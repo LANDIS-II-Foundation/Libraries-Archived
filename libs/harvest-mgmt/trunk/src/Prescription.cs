@@ -3,8 +3,6 @@
 // files in this project's top-level directory, and at:
 //   http://landis-extensions.googlecode.com/svn/libs/harvest-mgmt/trunk/
 
-using Landis.Core;
-using Landis.Library.AgeOnlyCohorts;
 using Landis.Library.SiteHarvest;
 using Landis.Library.Succession;
 using Landis.SpatialModeling;
@@ -16,16 +14,14 @@ namespace Landis.Library.Harvest
     /// and which cohorts are harvested.
     /// </summary>
     public class Prescription
-        : ISpeciesCohortsDisturbance
     {
         private static int nextNumber = 1;
         private int number;
         private string name;
         private IStandRankingMethod rankingMethod;
         private ISiteSelector siteSelector;
-        private ICohortSelector cohortSelector;
+        private ICohortCutter cohortCutter;
         private Planting.SpeciesList speciesToPlant;
-        private ActiveSite currentSite;
         private Stand currentStand;
         private int minTimeSinceDamage;
         private bool preventEstablishment;
@@ -106,10 +102,10 @@ namespace Landis.Library.Harvest
         /// the cohort selector; for example, a single repeat-harvest switching
         /// between its two cohort selectors.
         /// </remarks>
-        protected ICohortSelector CohortSelector
+        protected ICohortCutter CohortCutter
         {
             set {
-                cohortSelector = value;
+                cohortCutter = value;
             }
         }
 
@@ -141,25 +137,6 @@ namespace Landis.Library.Harvest
             }
         }
         
-
-        //---------------------------------------------------------------------
-
-        ExtensionType IDisturbance.Type
-        {
-            get {
-                return HarvestExtensionMain.ExtType;
-            }
-        }
-
-        //---------------------------------------------------------------------
-
-        ActiveSite IDisturbance.CurrentSite
-        {
-            get {
-                return currentSite;
-            }
-        }
-
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -188,7 +165,7 @@ namespace Landis.Library.Harvest
         public Prescription(string               name,
                             IStandRankingMethod  rankingMethod,
                             ISiteSelector        siteSelector,
-                            ICohortSelector      cohortSelector,
+                            ICohortCutter        cohortCutter,
                             Planting.SpeciesList speciesToPlant,
                             int                  minTimeSinceDamage,
                             bool                 preventEstablishment)
@@ -199,7 +176,7 @@ namespace Landis.Library.Harvest
             this.name = name;
             this.rankingMethod = rankingMethod;
             this.siteSelector = siteSelector;
-            this.cohortSelector = cohortSelector;
+            this.cohortCutter = cohortCutter;
             this.speciesToPlant = speciesToPlant;
             this.minTimeSinceDamage = minTimeSinceDamage;
             this.preventEstablishment = preventEstablishment;
@@ -235,9 +212,7 @@ namespace Landis.Library.Harvest
            
 
             foreach (ActiveSite site in siteSelector.SelectSites(stand)) {
-                currentSite = site;
-
-                SiteVars.Cohorts[site].RemoveMarkedCohorts(this);         
+                cohortCutter.Cut(site);
                 
                 if (SiteVars.CohortsDamaged[site] > 0)
                 {
@@ -251,26 +226,5 @@ namespace Landis.Library.Harvest
             } 
             return; 
         } 
-
-        //---------------------------------------------------------------------
-        void ISpeciesCohortsDisturbance.MarkCohortsForDeath(ISpeciesCohorts cohorts,
-                                                         ISpeciesCohortBoolArray isDamaged)
-        {
-            cohortSelector.Harvest(cohorts, isDamaged);
-
-            int cohortsDamaged = 0;
-            for (int i = 0; i < isDamaged.Count; i++) {
-                if (isDamaged[i]) {
-                    
-                    //if this cohort is killed, update the damage table (for the stand of this site) with this species name
-                    SiteVars.Stand[currentSite].UpdateDamageTable(cohorts.Species.Name);
-                    //Model.Core.UI.WriteLine("Damaged:  {0}.", cohorts.Species.Name);
-                    
-                    //and increment the cohortsDamaged
-                    cohortsDamaged++;
-                }
-            }
-            SiteVars.CohortsDamaged[currentSite] += cohortsDamaged;
-        }
     }
 }

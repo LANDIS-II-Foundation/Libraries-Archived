@@ -16,10 +16,10 @@ namespace Landis.Library.Harvest
     public class SingleRepeatHarvest
         : RepeatHarvest
     {
-        private ICohortSelector initialCohortSelector;
+        private ICohortCutter initialCohortSelector;
         private Planting.SpeciesList initialSpeciesToPlant;
 
-        private ICohortSelector additionalCohortSelector;
+        private ICohortCutter additionalCohortCutter;
         private Planting.SpeciesList additionalSpeciesToPlant;
         private ISiteSelector additionalSiteSelector;
 
@@ -28,20 +28,22 @@ namespace Landis.Library.Harvest
         public SingleRepeatHarvest(string               name,
                                    IStandRankingMethod  rankingMethod,
                                    ISiteSelector        siteSelector,
-                                   ICohortSelector      cohortSelector,
+                                   ICohortCutter        cohortCutter,
                                    Planting.SpeciesList speciesToPlant,
-                                   ICohortSelector      additionalCohortSelector,
+                                   ICohortCutter        additionalCohortCutter,
                                    Planting.SpeciesList additionalSpeciesToPlant,
                                    ISiteSelector        additionalSiteSelector,
                                    int                  minTimeSinceDamage,
                                    bool                 preventEstablishment,
                                    int                  interval)
-            : base(name, rankingMethod, siteSelector, cohortSelector, speciesToPlant,additionalSiteSelector, minTimeSinceDamage, preventEstablishment, interval)
+            : base(name, rankingMethod, siteSelector, cohortCutter, speciesToPlant,
+                   additionalSiteSelector, minTimeSinceDamage, preventEstablishment,
+                   interval)
         {
-            this.initialCohortSelector = cohortSelector;
+            this.initialCohortSelector = cohortCutter;
             this.initialSpeciesToPlant = speciesToPlant;
 
-            this.additionalCohortSelector = additionalCohortSelector;
+            this.additionalCohortCutter = additionalCohortCutter;
             this.additionalSpeciesToPlant = additionalSpeciesToPlant;
             this.additionalSiteSelector = additionalSiteSelector;
         }
@@ -58,7 +60,7 @@ namespace Landis.Library.Harvest
         public override void Harvest(Stand stand)
         {
             if (stand.IsSetAside) {
-                CohortSelector = additionalCohortSelector;
+                CohortCutter = additionalCohortCutter;
                 SpeciesToPlant = additionalSpeciesToPlant;
                 SiteSelector = additionalSiteSelector; // new CompleteStand();
                 //
@@ -67,14 +69,12 @@ namespace Landis.Library.Harvest
                 
             }
             else {
-                CohortSelector = initialCohortSelector;
+                CohortCutter = initialCohortSelector;
                 SpeciesToPlant = initialSpeciesToPlant;
             }
             base.Harvest(stand);
 
             return; 
-
-
         }
     }
 }

@@ -55,13 +55,13 @@ namespace Landis.Library.Harvest
         public RepeatHarvest(string               name,
                              IStandRankingMethod  rankingMethod,
                              ISiteSelector        siteSelector,
-                             ICohortSelector      cohortSelector,
+                             ICohortCutter        cohortCutter,
                              Planting.SpeciesList speciesToPlant,
                              ISiteSelector        additionalSiteSelector,
                              int                  minTimeSinceDamage,
                              bool                 preventEstablishment,
                              int                  interval)
-            : base(name, rankingMethod, siteSelector, cohortSelector, speciesToPlant, minTimeSinceDamage, preventEstablishment)
+            : base(name, rankingMethod, siteSelector, cohortCutter, speciesToPlant, minTimeSinceDamage, preventEstablishment)
         {
             this.interval = interval;
             this.spreadingSiteSelector = siteSelector as StandSpreading;
