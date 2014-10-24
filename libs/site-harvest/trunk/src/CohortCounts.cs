@@ -51,6 +51,22 @@ namespace Landis.Library.SiteHarvest
         }
 
         /// <summary>
+        /// Increment the counts for all the species.
+        /// </summary>
+        /// <param name="increments">
+        /// The increment for each species.
+        /// </param>
+        public void IncrementCounts(CohortCounts increments)
+        {
+            foreach (ISpecies species in Model.Core.Species)
+            {
+                int increment = increments[species];
+                counts[species] += increment;
+                allSpecies += increment;
+            }
+        }
+
+        /// <summary>
         /// Reset all the counts to 0.
         /// </summary>
         public void Reset()
