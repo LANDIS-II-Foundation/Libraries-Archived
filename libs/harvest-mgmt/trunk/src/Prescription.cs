@@ -6,6 +6,7 @@
 using Landis.Library.SiteHarvest;
 using Landis.Library.Succession;
 using Landis.SpatialModeling;
+using log4net;
 
 namespace Landis.Library.HarvestManagement
 {
@@ -15,6 +16,9 @@ namespace Landis.Library.HarvestManagement
     /// </summary>
     public class Prescription
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(Prescription));
+        private static readonly bool isDebugEnabled = log.IsDebugEnabled;
+
         private static int nextNumber = 1;
         private int number;
         private string name;
@@ -195,6 +199,9 @@ namespace Landis.Library.HarvestManagement
         // This is called by AppliedPrescription
         public virtual void Harvest(Stand stand)
         {
+            if (isDebugEnabled)
+                log.DebugFormat("  Harvesting stand {0} by {1} ...", stand.MapCode, Name);
+
             //set prescription name for stand
             stand.PrescriptionName = this.Name;
             stand.HarvestedRank = AppliedPrescription.CurrentRank;
@@ -212,13 +219,20 @@ namespace Landis.Library.HarvestManagement
            
 
             foreach (ActiveSite site in siteSelector.SelectSites(stand)) {
-                cohortCutter.Cut(site);
+                if (isDebugEnabled)
+                    log.DebugFormat("  Cutting cohorts at {0}", site);
+                int numCohortsDamaged = cohortCutter.Cut(site);
                 
-                if (SiteVars.CohortsDamaged[site] > 0)
+                if (numCohortsDamaged > 0)
                 {
+                    SiteVars.CohortsDamaged[site] = numCohortsDamaged;
                     stand.LastAreaHarvested += Model.Core.CellArea;
                     SiteVars.Prescription[site] = this;
-                }    
+                    if (isDebugEnabled)
+                        log.DebugFormat("    # of cohorts damaged = {0}; stand.LastAreaHarvested = {1}",
+                                        SiteVars.CohortsDamaged[site],
+                                        stand.LastAreaHarvested);
+                }
 
                 if (speciesToPlant != null)
                     Reproduction.ScheduleForPlanting(speciesToPlant, site);
