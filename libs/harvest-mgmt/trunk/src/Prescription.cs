@@ -220,15 +220,25 @@ namespace Landis.Library.HarvestManagement
             // tjs - This is what gets the sites that will be harvested
            
 
-            foreach (ActiveSite site in siteSelector.SelectSites(stand)) {
+            foreach (ActiveSite site in siteSelector.SelectSites(stand))
+            {
+                // Site selection may have spread to other stands beyond the
+                // original stand.
+                Stand standForCurrentSite = SiteVars.Stand[site];
+
                 if (isDebugEnabled)
-                    log.DebugFormat("  Cutting cohorts at {0}", site);
+                    log.DebugFormat("  Cutting cohorts at {0} in stand {1}{2}", site,
+                                    SiteVars.Stand[site].MapCode,
+                                    (standForCurrentSite == stand)
+                                        ? ""
+                                        : string.Format(" (initial stand {0})",
+                                                        stand.MapCode));
                 cohortCutter.Cut(site, cohortCounts);
 
                 if (cohortCounts.AllSpecies > 0)
                 {
                     SiteVars.CohortsDamaged[site] = cohortCounts.AllSpecies;
-                    stand.DamageTable.IncrementCounts(cohortCounts);
+                    standForCurrentSite.DamageTable.IncrementCounts(cohortCounts);
                     stand.LastAreaHarvested += Model.Core.CellArea;
                     SiteVars.Prescription[site] = this;
                     if (isDebugEnabled)
