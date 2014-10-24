@@ -13,7 +13,7 @@
 
   <PropertyGroup>
     <AssemblyBuildDir>..\src\bin\Debug</AssemblyBuildDir>
-	<AssemblyName>Landis.Library.Harvest</AssemblyName>
+	<AssemblyName>Landis.Library.SiteHarvest</AssemblyName>
 	<AssemblyNameWithVer>$(AssemblyName)-v0</AssemblyNameWithVer>
     <LibAssembly>$(AssemblyBuildDir)\$(AssemblyNameWithVer).dll</LibAssembly>
     <LibXmlDoc>$(AssemblyBuildDir)\$(AssemblyNameWithVer).xml</LibXmlDoc>
