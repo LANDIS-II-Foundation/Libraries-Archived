@@ -20,6 +20,9 @@ namespace Landis.Library.SiteHarvest
         /// <summary>
         /// Cut cohorts at an individual site.
         /// </summary>
-        void Cut(ActiveSite site);
+        /// <returns>
+        /// The number of cohorts cut at the site.
+        /// </returns>
+        int Cut(ActiveSite site);
     }
 }

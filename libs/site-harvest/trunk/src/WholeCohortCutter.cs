@@ -19,6 +19,9 @@ namespace Landis.Library.SiteHarvest
         private static readonly ILog log = LogManager.GetLogger(typeof(WholeCohortCutter));
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
+        // # of cohorts cut at a site
+        private int numCohortsCut;
+
         //---------------------------------------------------------------------
 
         #region IDisturbance members
@@ -46,6 +49,12 @@ namespace Landis.Library.SiteHarvest
                                         ISpeciesCohortBoolArray isKilled)
         {
             CohortSelector.Harvest(cohorts, isKilled);
+
+            for (int i = 0; i < isKilled.Count; i++)
+            {
+                if (isKilled[i])
+                    numCohortsCut++;
+            }
         }
 
         #endregion
@@ -62,14 +71,16 @@ namespace Landis.Library.SiteHarvest
         /// <summary>
         /// Cut cohorts at an individual site.
         /// </summary>
-        public virtual void Cut(ActiveSite site)
+        public virtual int Cut(ActiveSite site)
         {
             if (isDebugEnabled)
                 log.DebugFormat("    {0} is cutting site {1}:",
                                 GetType().Name,
                                 site.Location);
             CurrentSite = site;
+            numCohortsCut = 0;
             SiteVars.Cohorts[site].RemoveMarkedCohorts(this);
+            return numCohortsCut;
         }
 
         #endregion
