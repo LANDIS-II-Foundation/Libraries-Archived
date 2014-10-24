@@ -4,6 +4,7 @@
 //   http://landis-extensions.googlecode.com/svn/libs/harvest-mgmt/trunk/
 
 using Edu.Wisc.Forest.Flel.Util;
+using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,9 +36,6 @@ namespace Landis.Library.HarvestManagement
         private double rank;  // for log
         //harvested_rank, used in log
         private double harvested_rank; // for log
-        //dictionary for keeping number of damaged sites.
-        // key = species, value = number of occurrences
-        private Dictionary<string, int> damage_table;
 
         // tjs 2009.02.07 - Set by prescription to prevent recently
         // damaged sites from being harvested
@@ -50,7 +48,6 @@ namespace Landis.Library.HarvestManagement
         // prescription name is put on the list
         List<string> rejectedPrescriptionNames;
         public double LastAreaHarvested;
-
 
         //---------------------------------------------------------------------
 
@@ -314,11 +311,12 @@ namespace Landis.Library.HarvestManagement
         }
 
         //---------------------------------------------------------------------
-        public Dictionary<string, int> DamageTable {
-            get {
-                return damage_table;
-            }
-        }
+
+        /// <summary>
+        /// The # of cohorts cut in the stand during its most recent harvest.
+        /// </summary>
+        public CohortCounts DamageTable { get; private set; }
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -335,8 +333,7 @@ namespace Landis.Library.HarvestManagement
             this.yearAgeComputed = Model.Core.StartTime;
             this.setAsideUntil = Model.Core.StartTime;
             this.timeLastHarvested = -1;
-            //initialize damage_table dictionary
-            damage_table = new Dictionary<string, int>();
+            this.DamageTable = new CohortCounts();
             this.rejectedPrescriptionNames = new List<string>();
         }
 
@@ -494,22 +491,20 @@ namespace Landis.Library.HarvestManagement
         /// <summary>
         /// Update the damage_table for this stand
         /// </summary>
-        public void UpdateDamageTable(string species) {
-            try {
-                //add this species to the dictionary, with initial value = 1
-                damage_table.Add(species, 1);
-            }
-            //if an ArguementException is caught, increment this key's value
-            catch (System.ArgumentException) {
-                damage_table[species]++;
-            }
+        /// <param name="siteCounts">
+        /// The number of cohorts cut for each species at the site that was
+        /// just harvested.
+        /// </param>
+        public void UpdateDamageTable(CohortCounts siteCounts)
+        {
+            DamageTable.IncrementCounts(siteCounts);
         }
 
         /// <summary>
         ///Clear the damage table of all data.
         /// </summary>
         public void ClearDamageTable() {
-            damage_table.Clear();
+            DamageTable.Reset();
         }
 
 

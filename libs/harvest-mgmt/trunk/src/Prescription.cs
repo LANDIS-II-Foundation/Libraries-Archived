@@ -29,6 +29,7 @@ namespace Landis.Library.HarvestManagement
         private Stand currentStand;
         private int minTimeSinceDamage;
         private bool preventEstablishment;
+        private CohortCounts cohortCounts;
         
         //---------------------------------------------------------------------
 
@@ -184,7 +185,8 @@ namespace Landis.Library.HarvestManagement
             this.speciesToPlant = speciesToPlant;
             this.minTimeSinceDamage = minTimeSinceDamage;
             this.preventEstablishment = preventEstablishment;
-            
+
+            cohortCounts = new CohortCounts();
         }
 
         //---------------------------------------------------------------------
@@ -221,11 +223,12 @@ namespace Landis.Library.HarvestManagement
             foreach (ActiveSite site in siteSelector.SelectSites(stand)) {
                 if (isDebugEnabled)
                     log.DebugFormat("  Cutting cohorts at {0}", site);
-                int numCohortsDamaged = cohortCutter.Cut(site);
-                
-                if (numCohortsDamaged > 0)
+                cohortCutter.Cut(site, cohortCounts);
+
+                if (cohortCounts.AllSpecies > 0)
                 {
-                    SiteVars.CohortsDamaged[site] = numCohortsDamaged;
+                    SiteVars.CohortsDamaged[site] = cohortCounts.AllSpecies;
+                    stand.DamageTable.IncrementCounts(cohortCounts);
                     stand.LastAreaHarvested += Model.Core.CellArea;
                     SiteVars.Prescription[site] = this;
                     if (isDebugEnabled)
