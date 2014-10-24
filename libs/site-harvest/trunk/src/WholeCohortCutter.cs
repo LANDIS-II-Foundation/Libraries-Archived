@@ -50,10 +50,30 @@ namespace Landis.Library.SiteHarvest
         {
             CohortSelector.Harvest(cohorts, isKilled);
 
+            int numKilled = 0;
             for (int i = 0; i < isKilled.Count; i++)
             {
                 if (isKilled[i])
+                {
                     cohortCounts.IncrementCount(cohorts.Species);
+                    numKilled++;
+                }
+            }
+
+            if (isDebugEnabled)
+            {
+                if (numKilled > 0)
+                {
+                    string ageList = "";
+                    int i = 0;
+                    foreach (ICohort cohort in cohorts)
+                    {
+                        if (isKilled[i])
+                            ageList += string.Format(" {0}", cohort.Age);
+                        i++;
+                    }
+                    log.DebugFormat("      Cut {0} :{1}", cohorts.Species.Name, ageList);
+                }
             }
         }
 
