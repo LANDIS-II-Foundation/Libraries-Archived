@@ -20,7 +20,7 @@ namespace Landis.Library.SiteHarvest
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
         // # of cohorts cut at a site
-        private int numCohortsCut;
+        private CohortCounts cohortCounts;
 
         //---------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ namespace Landis.Library.SiteHarvest
             for (int i = 0; i < isKilled.Count; i++)
             {
                 if (isKilled[i])
-                    numCohortsCut++;
+                    cohortCounts.IncrementCount(cohorts.Species);
             }
         }
 
@@ -71,16 +71,17 @@ namespace Landis.Library.SiteHarvest
         /// <summary>
         /// Cut cohorts at an individual site.
         /// </summary>
-        public virtual int Cut(ActiveSite site)
+        public virtual void Cut(ActiveSite site,
+                                CohortCounts cohortCounts)
         {
             if (isDebugEnabled)
                 log.DebugFormat("    {0} is cutting site {1}:",
                                 GetType().Name,
                                 site.Location);
             CurrentSite = site;
-            numCohortsCut = 0;
+            this.cohortCounts = cohortCounts;
+            cohortCounts.Reset();
             SiteVars.Cohorts[site].RemoveMarkedCohorts(this);
-            return numCohortsCut;
         }
 
         #endregion
