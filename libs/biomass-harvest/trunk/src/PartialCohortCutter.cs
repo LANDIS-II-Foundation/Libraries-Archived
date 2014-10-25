@@ -31,6 +31,7 @@ namespace Landis.Library.BiomassHarvest
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
 
         private PartialCohortSelectors partialCohortSelectors;
+        private CohortCounts cohortCounts;
 
         //---------------------------------------------------------------------
 
@@ -54,13 +55,16 @@ namespace Landis.Library.BiomassHarvest
                 if (specificAgeCohortSelector.Selects(cohort, out percentage))
                     reduction = (int)(percentage * cohort.Biomass);
             }
+            if (reduction > 0)
+                cohortCounts.IncrementCount(cohort.Species);
             Record(reduction, cohort);
             return reduction;
         }
 
         //---------------------------------------------------------------------
 
-        public override void Cut(ActiveSite site)
+        public override void Cut(ActiveSite   site,
+                                 CohortCounts cohortCounts)
         {
             if (isDebugEnabled)
             {
@@ -71,10 +75,12 @@ namespace Landis.Library.BiomassHarvest
             }
 
             // Use age-only cohort selectors to harvest whole cohorts
-            // Note: the base method sets the CurrentSite property
-            base.Cut(site);
+            // Note: the base method sets the CurrentSite property, and resets
+            // the counts to 0 before cutting.
+            base.Cut(site, cohortCounts);
 
             // Then do any partial harvesting with the partial cohort selectors.
+            this.cohortCounts = cohortCounts;
             SiteVars.Cohorts[site].ReduceOrKillBiomassCohorts(this);
 
             if (isDebugEnabled)
