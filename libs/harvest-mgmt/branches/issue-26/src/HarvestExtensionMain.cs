@@ -5,7 +5,7 @@
 
 using Landis.Core;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// Base class for the main class of a harvest extension.

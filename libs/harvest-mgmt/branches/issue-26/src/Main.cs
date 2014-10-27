@@ -4,10 +4,9 @@
 //   http://landis-extensions.googlecode.com/svn/libs/harvest-mgmt/trunk/
 
 using Landis.Core;
-using Landis.Library.SiteHarvest;
 using Landis.SpatialModeling;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// Main interface for initializing and configuring the library.
@@ -22,9 +21,9 @@ namespace Landis.Library.Harvest
         /// </param>
         public static void InitializeLib(ICore modelCore)
         {
+            Landis.Library.SiteHarvest.Main.InitializeLib(modelCore);
             Model.Core = modelCore;
             SiteVars.Initialize();
-            AgeRangeParsing.InitializeClass();
         }
 
         /// <summary>

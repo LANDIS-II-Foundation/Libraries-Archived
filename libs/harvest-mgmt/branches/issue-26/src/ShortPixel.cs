@@ -5,7 +5,7 @@
 
 using Landis.SpatialModeling;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     public class ShortPixel : Pixel
     {

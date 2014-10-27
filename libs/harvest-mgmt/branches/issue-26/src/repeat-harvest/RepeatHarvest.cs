@@ -7,7 +7,7 @@ using Landis.Library.SiteHarvest;
 using Landis.Library.Succession;
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A repeat harvest is a variation of a prescription that harvests stands
@@ -55,13 +55,13 @@ namespace Landis.Library.Harvest
         public RepeatHarvest(string               name,
                              IStandRankingMethod  rankingMethod,
                              ISiteSelector        siteSelector,
-                             ICohortSelector      cohortSelector,
+                             ICohortCutter        cohortCutter,
                              Planting.SpeciesList speciesToPlant,
                              ISiteSelector        additionalSiteSelector,
                              int                  minTimeSinceDamage,
                              bool                 preventEstablishment,
                              int                  interval)
-            : base(name, rankingMethod, siteSelector, cohortSelector, speciesToPlant, minTimeSinceDamage, preventEstablishment)
+            : base(name, rankingMethod, siteSelector, cohortCutter, speciesToPlant, minTimeSinceDamage, preventEstablishment)
         {
             this.interval = interval;
             this.spreadingSiteSelector = siteSelector as StandSpreading;

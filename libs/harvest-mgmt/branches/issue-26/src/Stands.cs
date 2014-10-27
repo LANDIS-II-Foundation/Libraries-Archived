@@ -7,7 +7,7 @@ using Landis.SpatialModeling;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// Utility methods for stands.

@@ -5,7 +5,7 @@
 
 using Landis.Core;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A collection of parameters for computing the economic ranks of species.

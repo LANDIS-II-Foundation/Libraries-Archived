@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using Edu.Wisc.Forest.Flel.Util;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// The parameters for harvest.

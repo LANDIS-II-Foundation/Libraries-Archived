@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     /// <summary>
     /// A base class that represents a method for computing stand rankings.

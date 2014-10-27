@@ -5,7 +5,7 @@
 
 using Landis.Core;
 
-namespace Landis.Library.Harvest
+namespace Landis.Library.HarvestManagement
 {
     internal static class Model
     {
