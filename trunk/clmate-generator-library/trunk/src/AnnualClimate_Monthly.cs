@@ -204,7 +204,8 @@ namespace  Landis.Library.Climate
 
             }
 
-            this.MonthlyPET = CalculatePotentialEvapotranspiration(); 
+            //this.MonthlyPET = CalculatePotentialEvapotranspiration();
+            this.MonthlyPET = CalculatePotentialEvapotranspirationThornwaite(); 
             this.MonthlyVPD = CalculateVaporPressureDeficit();
             this.MonthlyGDD = CalculatePnETGDD(); 
 
@@ -637,6 +638,7 @@ namespace  Landis.Library.Climate
             double elev = 1.0;       
             double sitlat = this.Latitude; 
 
+
             double highest = -40.0;
             double lowest = 100.0;
 
@@ -645,6 +647,7 @@ namespace  Landis.Library.Climate
                 double avgTemp = this.MonthlyTemp[i]; // (annualClimate[i].AvgMinTemp + annualClimate[i].AvgMaxTemp) / 2.0;
                 highest = System.Math.Max(highest, avgTemp);
                 lowest = System.Math.Min(lowest, avgTemp);
+                Climate.ModelCore.UI.WriteLine("PET Calcs. AvgTemp={0},HighestTemp={1}, LowestTemp={2:0.0},", avgTemp, highest, lowest);
             }
 
             lowest = System.Math.Max(lowest, -10.0);
@@ -652,8 +655,10 @@ namespace  Landis.Library.Climate
             //...Determine average temperature range
             double avgTempRange = System.Math.Abs(highest - lowest);
 
+            Climate.ModelCore.UI.WriteLine("AfterLoop in PET CalcuLater. lowestTemp={0:0.000},AvgTempRange={1},",  lowest, avgTempRange);
             double[] monthlyPET = new double[12];
 
+            
 
             for (int month = 0; month < 12; month++)
             {
@@ -675,6 +680,52 @@ namespace  Landis.Library.Climate
                 //...fwloss(4) is a modifier for PET loss.   vek may90
                 monthlyPET[month] = monthPET * waterLossFactor4;
                 //Climate.ModelCore.UI.WriteLine("Year={0}, Month={1}, PET={2:0.00}.", this.Year, month, monthlyPET[month]);
+                //Climate.ModelCore.UI.WriteLine("FinalLoop in PET CalcuLater. tr={0}, t={1}, tm={2}, td={3}, e={4}, monthPET={5}, maxtemp={6}, mintemp={7},finalPET={7}", tr, t, tm, td, e, monthPET, MonthlyMaxTemp[month], this.MonthlyMinTemp[month], monthlyPET[month]);
+
+            }
+
+            return monthlyPET;
+        }
+
+        private double[] CalculatePotentialEvapotranspirationThornwaite()//ClimateRecord[] annualClimate)
+        {
+            //Calculate potential evapotranspiration using the Thornwaite method.
+
+           
+            //Calculate Heat index first because it depends on monthly mean temps throughout the entire year at a given location
+            double heatIndex = 0.0;
+
+            for (int i = 0; i < 12; i++)
+            {
+                
+                double avgTemp = this.MonthlyTemp[i]; // (annualClimate[i].AvgMinTemp + annualClimate[i].AvgMaxTemp) / 2.0;
+                avgTemp = Math.Max(0.0, avgTemp);
+                double heatIndexpermonth = System.Math.Pow((avgTemp / 5), 1.514);
+                heatIndexpermonth = Math.Max(0.0, heatIndexpermonth);
+                heatIndex += (heatIndexpermonth);
+                //Climate.ModelCore.UI.WriteLine("PET Calcs1. AvgTemp={0},heatIndexpermonth={1}", avgTemp, heatIndexpermonth);
+            }
+            //Climate.ModelCore.UI.WriteLine("PET Calcs2. heatindex={0}", heatIndex);
+            double alpha = (.000000675 * System.Math.Pow(heatIndex, 3) - (0.0000771 * System.Math.Pow(heatIndex, 2)) + (0.01792 * heatIndex) + 0.49239);
+            
+            //Then need to calculate PET for each month using the heat index from above.
+
+            double[] monthlyPET = new double[12];
+            for (int month = 0; month < 12; month++)
+            {
+
+                double MeanDayLength = this.MonthlyDayLength[month] / 3600;  //take day length from above in sec and convert to hours
+                int totalDays = (DaysInMonth(month, this.Year));
+                double AvgTemp = this.MonthlyTemp[month];
+
+                AvgTemp = Math.Max(0.0, AvgTemp);
+                
+                //alpha term in Thornwaite equation that depends solely on the heat index
+                
+                                                            
+                monthlyPET[month] = (16 * (MeanDayLength / 12) * (totalDays/30)* (System.Math.Pow(((10 * AvgTemp )/ heatIndex), alpha))/10);// equation by Thornthwaite divided by 10 to get cm/month
+                //Climate.ModelCore.UI.WriteLine("Year={0}, Month={1}, PET={2:0.00}.", this.Year, month, monthlyPET[month]);
+                //Climate.ModelCore.UI.WriteLine("FinalLoop in PET CalcuLator. DayLength={0}, TotalDaysMonth={1}, AvgTemp={2}, alpha={3}, monthPET={4}", MeanDayLength, totalDays, AvgTemp, alpha, monthlyPET[month]);
 
             }
 
@@ -685,6 +736,9 @@ namespace  Landis.Library.Climate
         //---------------------------------------------------------------------------
         public static double CalculateAnnualActualEvapotranspiration(AnnualClimate_Monthly annualClimate, double fieldCapacity)
         {
+            
+            //I don't think this method is every called.
+            
             // field capacity input as cm
             // variable with xVariableName indicate conversion to mm
 
@@ -751,6 +805,8 @@ namespace  Landis.Library.Climate
                 }
 
                 oldWaterAvail = waterAvail;
+
+                //Climate.ModelCore.UI.WriteLine("Actual ET Calcs. Rain={0},PET={1}, potWaterLoss={2:0.0},,fieldcapacity={3:0.000}, oldwaterAvail={4:0.000}, actualET={5:0.000}", monthlyRain, potentialET, potWaterLoss, fieldCapacity, oldWaterAvail, actualET);
             }
 
             return actualET;
