@@ -30,11 +30,11 @@ namespace Landis.Library.Climate
 
         //public int tempEcoIndex = -1;
 
-        public double[] DailyPET = new double[366];  // Potential Evapotranspiration
-        public double[] DailyVPD = new double[366];  // Vapor Pressure Deficit
-        public double[] DailyDayLength = new double[366];
-        public double[] DailyNightLength = new double[366];
-        public int[] DailyGDD = new int[366];
+        //public double[] DailyPET = new double[366];  // Potential Evapotranspiration
+        //public double[] DailyVPD = new double[366];  // Vapor Pressure Deficit
+        //public double[] DailyDayLength = new double[366];
+        //public double[] DailyNightLength = new double[366];
+        //public int[] DailyGDD = new int[366];
 
         //For Sequenced and Random timeStep arg should be passed
         public AnnualClimate_Daily(IEcoregion ecoregion, double latitude, Climate.Phase spinupOrfuture, int timeStep, int timeStepIndex)
@@ -161,9 +161,9 @@ namespace Landis.Library.Climate
 
                 this.TotalAnnualPrecip += this.DailyPrecip[d];
 
-                var hr = CalculateDayNightLength(d, latitude);
-                this.DailyDayLength[d] = (3600.0 * hr);                  // seconds of daylight/day
-                this.DailyNightLength[d] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
+                //var hr = CalculateDayLength(d, latitude);
+                //this.DailyDayLength[d] = (3600.0 * hr);                  // seconds of daylight/day
+                //this.DailyNightLength[d] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
                 var avgTemp = (this.DailyMinTemp[d] + this.DailyMaxTemp[d])/2;
                 this.DailyRH[d] = 100 * Math.Exp((17.269 * this.DailyMinTemp[d]) / (273.15 + this.DailyMinTemp[d]) - (17.269 * avgTemp) / (273.15 + avgTemp));
             }

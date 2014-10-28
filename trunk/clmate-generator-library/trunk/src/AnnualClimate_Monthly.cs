@@ -243,7 +243,7 @@ namespace  Landis.Library.Climate
                 this.MonthlyWindDirection[mo] = monthlyClimateRecords[mo].AvgWindDirection;
                 this.MonthlyWindSpeed[mo] = monthlyClimateRecords[mo].AvgWindSpeed;
                 this.MonthlyNDeposition[mo] = monthlyClimateRecords[mo].AvgNDeposition;
-                var hr = CalculateDayNightLength(mo, latitude);
+                var hr = CalculateDayLength(mo, latitude);
                 this.MonthlyDayLength[mo] = (3600.0 * hr);                  // seconds of daylight/day
                 this.MonthlyNightLength[mo] = (3600.0 * (24.0 - hr));         // seconds of nighttime/day
             }
@@ -283,7 +283,7 @@ namespace  Landis.Library.Climate
                 if (this.MonthlyPrecip[mo] < 0)
                     this.MonthlyPrecip[mo] = 0;
 
-                double hr = CalculateDayNightLength(mo, latitude);
+                double hr = CalculateDayLength(mo, latitude);
                 this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
                 this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
@@ -321,7 +321,7 @@ namespace  Landis.Library.Climate
                 if (this.MonthlyPrecip[mo] < 0)
                     this.MonthlyPrecip[mo] = 0;
 
-                double hr = CalculateDayNightLength(mo, latitude);
+                double hr = CalculateDayLength(mo, latitude);
                 this.MonthlyDayLength[mo] = (60.0 * 60.0 * hr);                  // seconds of daylight/day
                 this.MonthlyNightLength[mo] = (60.0 * 60.0 * (24 - hr));         // seconds of nighttime/day
 
@@ -687,9 +687,9 @@ namespace  Landis.Library.Climate
             return monthlyPET;
         }
 
-        private double[] CalculatePotentialEvapotranspirationThornwaite()//ClimateRecord[] annualClimate)
+        //  Calculate potential evapotranspiration using the Thornwaite method.
+        private double[] CalculatePotentialEvapotranspirationThornwaite()
         {
-            //Calculate potential evapotranspiration using the Thornwaite method.
 
            
             //Calculate Heat index first because it depends on monthly mean temps throughout the entire year at a given location
