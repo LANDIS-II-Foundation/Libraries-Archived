@@ -12,52 +12,58 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort, Landis.Library.BiomassCohorts.ICohort  
     {
-        public System.Collections.Generic.List<float> Fwater { get; set; }
-        public System.Collections.Generic.List<float> SubLayerDominance { get; set; }   
+        public System.Collections.Generic.List<float> Fwater;// { get; set; }
+        public System.Collections.Generic.List<float> Frad;// { get; set; }
+        public System.Collections.Generic.List<float> SubLayerDominance;// { get; set; }   
 
-        public float Rootsenescence {get;set;}
-        public float Woodsenescence { get; set; }
-        public float Folalloc { get; set; }
-        public float WoodAlloc { get; set; }
-        public float RootAlloc { get; set; }
-        public float FActiveBiom { get; set; }
-        public float ReleasedNSC { get; set; }
-        public float FolResp{ get; set; }
-        public float Transpiration { get; set; }
-        public float Netpsn { get; set; }
-        public int MaxBiomass { get; set; }
-        public float Fage { get; set; }
-        public float Dominance { get; set; }
-        public float MaintenanceRespiration { get; set; }
-        public float Grosspsn{ get; set; }
-        public float LAI{ get; set; }
-        public ushort Age { get; set; }
-        public float Fol{ get; set; }
-        public float Wood{ get; set; }
-        public float Root{ get; set; }
-        public float NSC{ get; set; }
-        public float NSCfrac { get; set; }
-        public bool IsAlive { get; set; }
+        public float Rootsenescence;// {get;set;}
+        public float Woodsenescence;// { get; set; }
+        public float Folalloc;// { get; set; }
+        public float WoodAlloc;// { get; set; }
+        public float RootAlloc;// { get; set; }
+        public float FActiveBiom;// { get; set; }
+        public float ReleasedNSC;// { get; set; }
+        public float FolResp;//{ get; set; }
+        public float Transpiration;// { get; set; }
+        public float Netpsn;// { get; set; }
+        public int MaxBiomass;// { get; set; }
+        public float Fage;// { get; set; }
+        public float Dominance;// { get; set; }
+        public float MaintenanceRespiration;// { get; set; }
+        public float Grosspsn;//{ get; set; }
+        public float LAI;//{ get; set; }
+        public ushort Age{ get; set; }
+        public float Fol;//{ get; set; }
+        public float Wood;//{ get; set; }
+        public float Root;//{ get; set; }
+        public float NSC;//{ get; set; }
+        public float NSCfrac;// { get; set; }
+        public bool IsAlive;// { get; set; }
         public int YearOfBirth { get; private set; }
         public ISpecies Species { get; private set; }
-      
+       
+        
           
         public Cohort(ISpecies species, ActiveSite site, float NSC, int year_of_birth)
              
         {
             this.SubLayerDominance = new System.Collections.Generic.List<float>();
+            this.Fwater = new System.Collections.Generic.List<float>();
+            this.Frad = new System.Collections.Generic.List<float>();
             this.NSCfrac = 0.1F;
             this.Species = species;
             this.Age = 1;
             this.Wood = 10;
             this.NSC = NSC;
-            this.Root = Root;
+            //this.Root = Root;
             this.YearOfBirth = year_of_birth;
-            this.Fwater = new System.Collections.Generic.List<float>();
         }
         public Cohort(Cohort cohort)
         {
             this.SubLayerDominance = new System.Collections.Generic.List<float>(cohort.SubLayerDominance);
+            this.Fwater = new System.Collections.Generic.List<float>(cohort.Fwater);
+            this.Frad = new System.Collections.Generic.List<float>(cohort.Frad);
+
             this.NSCfrac = cohort.NSCfrac;
             this.Species = cohort.Species;
             this.Age = cohort.Age;
@@ -69,17 +75,11 @@ namespace Landis.Library.BiomassCohortsPnET
             this.MaxBiomass = cohort.MaxBiomass;
             this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
-            this.Fwater = new System.Collections.Generic.List<float>(cohort.Fwater);
+            
         }
 
-
-        public float AverageFwater()
-        {
-            if (Fwater.Count == 0) return 1;
-            return Fwater.Average();
-        }
         
-
+ 
         /// <summary>
         /// Occurs when a cohort dies either due to senescence or disturbances.
         /// </summary>
