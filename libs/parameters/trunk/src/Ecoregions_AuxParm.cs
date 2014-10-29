@@ -11,6 +11,13 @@ namespace Landis.Library.Parameters.Ecoregions
     {
         private T[] values;
 
+        public T[] Values
+        {
+            get
+            {
+                return values;
+            }
+        }
         //---------------------------------------------------------------------
 
         ///<Summary>

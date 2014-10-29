@@ -27,6 +27,14 @@ namespace Landis.Library.Parameters.Species
             }
         }
 
+        public T[] Values
+        { 
+            get
+            {
+                return values;
+            }
+        }
+
         //---------------------------------------------------------------------
 
         ///<Summary>
