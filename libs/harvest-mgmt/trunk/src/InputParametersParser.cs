@@ -104,7 +104,7 @@ namespace Landis.Library.HarvestManagement
 
             ReadLandisDataVar();
 
-            InputParameters parameters = new InputParameters();
+            InputParameters parameters = CreateEmptyParameters();
 
             InputVar<int> timestep = new InputVar<int>("Timestep");
             ReadVar(timestep);
@@ -139,6 +139,22 @@ namespace Landis.Library.HarvestManagement
 
             CheckNoDataAfter("the " + summaryLogFile.Name + " parameter");
             return parameters; //.GetComplete();
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Creates a new instance of a parameter object with no values in it.
+        /// </summary>
+        /// <remarks>
+        /// This is a hook to allow a derived class (e.g., the parser in a
+        /// harvest extension) to override it, and return an instance of a
+        /// derived parameter class that extends the InputParameters class
+        /// with additional parameters.
+        /// </remarks>
+        protected virtual InputParameters CreateEmptyParameters()
+        {
+            return new InputParameters();
         }
 
         //---------------------------------------------------------------------
