@@ -129,6 +129,9 @@ namespace Landis.Library.HarvestManagement
             ReadVar(prescriptionMapNames);
             parameters.PrescriptionMapNames = prescriptionMapNames.Value;
 
+            // A hook for a parameter used by Biomass Harvest extension.
+            ReadBiomassMaps();
+
             InputVar<string> eventLogFile = new InputVar<string>("EventLog");
             ReadVar(eventLogFile);
             parameters.EventLog = eventLogFile.Value;
@@ -155,6 +158,21 @@ namespace Landis.Library.HarvestManagement
         protected virtual InputParameters CreateEmptyParameters()
         {
             return new InputParameters();
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Reads the Biomass Maps parameter.
+        /// </summary>
+        /// <remarks>
+        /// This is a hook to allow the derived parser class in the Biomass
+        /// Harvest extension to read an additional parameter.  By default,
+        /// this method does nothing (i.e., the behavior required by the Base
+        /// Harvest extension).
+        /// </remarks>
+        protected virtual void ReadBiomassMaps()
+        {
         }
 
         //---------------------------------------------------------------------
