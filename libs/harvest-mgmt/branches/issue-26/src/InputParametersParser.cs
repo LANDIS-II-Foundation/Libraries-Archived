@@ -20,7 +20,6 @@ namespace Landis.Library.HarvestManagement
     public class InputParametersParser
         : BasicParameterParser<IInputParameters>
     {
-        private static ParseMethod<ushort> uShortParse;
         private string extensionName;
         private ISpeciesDataset speciesDataset;
         private IStandRankingMethod rankingMethod;  //made global because of re-use
@@ -76,62 +75,6 @@ namespace Landis.Library.HarvestManagement
         {
             // FIXME: Hack to ensure that Percentage is registered with InputValues
             Edu.Wisc.Forest.Flel.Util.Percentage p = new Edu.Wisc.Forest.Flel.Util.Percentage();
-
-            //  Register the local method for parsing a cohort age or age range.
-            InputValues.Register<AgeRange>(ParseAgeOrRange);
-            Type.SetDescription<AgeRange>("cohort age or age range");
-            uShortParse = InputValues.GetParseMethod<ushort>();
-        }
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Parses a word for a cohort age or an age range (format: age-age).
-        /// </summary>
-        public static AgeRange ParseAgeOrRange(string word)
-        {
-            int delimiterIndex = word.IndexOf('-');
-            if (delimiterIndex == -1) {
-                ushort age = ParseAge(word);
-                if (age == 0)
-                    throw new FormatException("Cohort age must be > 0");
-                return new AgeRange(age, age);
-            }
-
-            string startAge = word.Substring(0, delimiterIndex);
-            string endAge = word.Substring(delimiterIndex + 1);
-            if (endAge.Contains("-"))
-                throw new FormatException("Valid format for age range: #-#");
-            if (startAge == "") {
-                if (endAge == "")
-                    throw new FormatException("The range has no start and end ages");
-                else
-                    throw new FormatException("The range has no start age");
-            }
-            ushort start = ParseAge(startAge);
-            if (start == 0)
-                throw new FormatException("The start age in the range must be > 0");
-            if (endAge == "")
-                    throw new FormatException("The range has no end age");
-            ushort end = ParseAge(endAge);
-            if (start > end)
-                throw new FormatException("The start age in the range must be <= the end age");
-            return new AgeRange(start, end);
-        }
-
-        //---------------------------------------------------------------------
-
-        public static ushort ParseAge(string text)
-        {
-            try {
-                return uShortParse(text);
-            }
-            catch (System.OverflowException) {
-                throw new FormatException(text + " is too large for an age; max = 65,535");
-            }
-            catch (System.Exception) {
-                throw new FormatException(text + " is not a valid integer");
-            }
         }
 
         //---------------------------------------------------------------------
@@ -161,7 +104,7 @@ namespace Landis.Library.HarvestManagement
 
             ReadLandisDataVar();
 
-            InputParameters parameters = new InputParameters();
+            InputParameters parameters = CreateEmptyParameters();
 
             InputVar<int> timestep = new InputVar<int>("Timestep");
             ReadVar(timestep);
@@ -186,6 +129,9 @@ namespace Landis.Library.HarvestManagement
             ReadVar(prescriptionMapNames);
             parameters.PrescriptionMapNames = prescriptionMapNames.Value;
 
+            // A hook for a parameter used by Biomass Harvest extension.
+            ReadBiomassMaps();
+
             InputVar<string> eventLogFile = new InputVar<string>("EventLog");
             ReadVar(eventLogFile);
             parameters.EventLog = eventLogFile.Value;
@@ -196,6 +142,37 @@ namespace Landis.Library.HarvestManagement
 
             CheckNoDataAfter("the " + summaryLogFile.Name + " parameter");
             return parameters; //.GetComplete();
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Creates a new instance of a parameter object with no values in it.
+        /// </summary>
+        /// <remarks>
+        /// This is a hook to allow a derived class (e.g., the parser in a
+        /// harvest extension) to override it, and return an instance of a
+        /// derived parameter class that extends the InputParameters class
+        /// with additional parameters.
+        /// </remarks>
+        protected virtual InputParameters CreateEmptyParameters()
+        {
+            return new InputParameters();
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Reads the Biomass Maps parameter.
+        /// </summary>
+        /// <remarks>
+        /// This is a hook to allow the derived parser class in the Biomass
+        /// Harvest extension to read an additional parameter.  By default,
+        /// this method does nothing (i.e., the behavior required by the Base
+        /// Harvest extension).
+        /// </remarks>
+        protected virtual void ReadBiomassMaps()
+        {
         }
 
         //---------------------------------------------------------------------
