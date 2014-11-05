@@ -82,9 +82,12 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             foreach (Cohort cohort in cohorts)
             {
-                if (cohort.Species == species && cohort.Age > species.Maturity)
+                if (cohort.Species.Name == species.Name)
                 {
-                    return true;
+                    if (cohort.Age > species.Maturity)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -168,6 +171,7 @@ namespace Landis.Library.BiomassCohortsPnET
             cohorts.Add(cohort);  
             return true;
         }
+       
         public void RemoveCohort(Cohort cohort, ActiveSite site)
         {
             cohorts.Remove(cohort);
