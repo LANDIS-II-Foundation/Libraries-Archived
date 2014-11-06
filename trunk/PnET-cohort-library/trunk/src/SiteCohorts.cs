@@ -17,6 +17,7 @@ namespace Landis.Library.BiomassCohortsPnET
         List<Cohort> cohorts = new List<Cohort>();
         public  IEcoregion Ecoregion { get; private set; }
         public ActiveSite Site { get; private set; }
+        public float WaterMin;
 
         public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {

@@ -12,7 +12,7 @@ namespace Landis.Library.BiomassCohortsPnET
     /// <summary>
     /// The cohorts for a particular species at a site.
     /// </summary>
-    public class SpeciesCohorts : BiomassCohorts.ISpeciesCohorts, AgeOnlyCohorts.ISpeciesCohorts, IEnumerable<Cohort>
+    public class SpeciesCohorts :  BiomassCohorts.ISpeciesCohorts, AgeOnlyCohorts.ISpeciesCohorts, IEnumerable<Cohort>
     {
         private static Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged;
        
@@ -27,8 +27,6 @@ namespace Landis.Library.BiomassCohortsPnET
                 return cohorts.Count;
             }
         }
-       
- 
         public void RemoveCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             isSpeciesCohortDamaged.SetAllFalse(Count);
@@ -47,7 +45,14 @@ namespace Landis.Library.BiomassCohortsPnET
                 }
             }
         }
-        
+        //---------------------------------------------------------------------
+        public void RemoveCohort(Cohort cohort,
+                                  ActiveSite site,
+                                  ExtensionType disturbanceType)
+        {
+            cohorts.Remove(cohort);
+            Cohort.Died(this, cohort, site, disturbanceType);
+        }
         public bool IsMaturePresent 
         {
             get
@@ -78,14 +83,7 @@ namespace Landis.Library.BiomassCohortsPnET
            
         }
         
-        //---------------------------------------------------------------------
-        public void RemoveCohort(Cohort cohort,
-                                  ActiveSite site,
-                                  ExtensionType disturbanceType)
-        {
-            cohorts.Remove(cohort);
-            Cohort.Died(this, cohort, site, disturbanceType);
-        }
+       
         public int MarkCohorts(AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             isSpeciesCohortDamaged.SetAllFalse(Count);
@@ -108,36 +106,6 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             return totalReduction;
         }
-        /*
-        public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
-        {
-            //  Go backwards through list of cohort data, so the removal of an
-            //  item doesn't mess up the loop.
-            int totalReduction = 0;
-            for (int i = cohorts.Count - 1; i >= 0; i--)
-            {
-                Cohort cohort = cohorts[i];
-                int reduction = disturbance.ReduceOrKillMarkedCohort(cohort);
-                if (reduction > 0)
-                {
-                    totalReduction += reduction;
-                    if (reduction < cohort.Biomass)
-                    {
-                        float fRed = reduction / cohort.Biomass;
-                        cohort.Wood *= fRed;
-                        cohort.Fol *= fRed;
-                    }
-                    else
-                    {
-                        RemoveCohort(cohort, disturbance.CurrentSite, disturbance.Type);
-                        cohort = null;
-                    }
-                }
-                 
-            }
-            return totalReduction;
-        }
-        */
         public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
             //  Go backwards through list of cohort data, so the removal of an

@@ -38,7 +38,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public float NSC ;
         public float NSCfrac;  
         public bool IsAlive;
-        public ushort Age { get; set; }
+        public ushort Age  { get; set; }
         public int YearOfBirth { get; private set; }
         public Species species { get; private set; }
 
@@ -52,7 +52,7 @@ namespace Landis.Library.BiomassCohortsPnET
         
 
 
-        public Cohort(Species species, ActiveSite site,  int year_of_birth)
+        public Cohort(Species species,  int year_of_birth)
              
         {
             this.FActiveBiom = 1;
@@ -61,7 +61,8 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Frad = new System.Collections.Generic.List<float>();
             this.NSCfrac = 0.1F;
             this.species = species;
-            this.Age = 1;
+            this.Age = 0;
+            this.Fage = 1;
             this.Wood = 10;
             this.NSC = species.InitialNSC;
             this.YearOfBirth = year_of_birth;
