@@ -22,6 +22,7 @@ namespace Landis.Library.HarvestManagement
         private double percent;      // percent of stand to harvest
         private double patch_size;   // harvest patch sizes
         private double areaSelected; // total area selected
+        private string priority;     // patch cutting priority (optional)
         
         //collect all 8 relative neighbor locations in array
         private RelativeLocation[] all_neighbor_locations = new RelativeLocation[]
@@ -51,11 +52,24 @@ namespace Landis.Library.HarvestManagement
                 throw new InputValueException(size.String,
                     "Patch size cannot be negative");
         }
+
+        private static class PatchCutPriority {
+            //Names for each acceptable patch cut priority
+            public const string PatchSize = "PatchSize";    //preserve 1 cell buffer between patches; Disregard PercentCut minimum
+            public const string PercentCut = "PercentCut";  //no buffer between patches
+            public const string NoPriority = "NoPriority";  //Patch size and percent cut are equal
+        }
         
         //constructor
-        public PatchCutting(Percentage percentage, double size) {
+        public PatchCutting(Percentage percentage, double size, string priority) {
             this.percent = (double) percentage;
             this.patch_size = size;
+            if (string.IsNullOrEmpty(priority)) {
+                this.priority = PatchCutPriority.NoPriority;
+            }
+            else {
+                this.priority = priority;
+            }
         }
         
         //---------------------------------------------------------------------
@@ -113,6 +127,9 @@ namespace Landis.Library.HarvestManagement
             
             standTargetArea = Model.Core.CellArea * stand.SiteCount * percent;
 
+            //@ToDo: Debug statement for priority
+            Model.Core.UI.WriteLine("Priority: {0}", priority);
+            
             // loop through stand, harvesting patches of size patch_size at a time
             while (areaSelected < standTargetArea && sites.Count > 0) 
             {
@@ -194,6 +211,13 @@ namespace Landis.Library.HarvestManagement
 
                 //Model.Core.UI.WriteLine("Done with a patch.");
 
+                //If priority is PercentCut, put the unused sitesToConsider back 
+                //into the sites list before clearing sitesToConsider
+                if (priority == PatchCutPriority.PercentCut && sitesToConsider.Count > 0)
+                {
+                    ActiveSite[] remainingSitesToConsider = sitesToConsider.ToArray();
+                    sites.AddRange(remainingSitesToConsider);
+                }
                 //clear the sitesToConsider queue to get rid of old sites
                 sitesToConsider.Clear();
                 // get a new random site to start at (one that hasn't been 
@@ -247,8 +271,9 @@ namespace Landis.Library.HarvestManagement
             // if the stand met the criteria for the harvest, mark it
             // as harvested otherwise add the prescription name to the
             // stands rejected prescription list
+            // if priority = PatchSize that overrides targetArea as priority for the harvest
 
-            if (areaSelected >= standTargetArea) {
+            if (areaSelected >= standTargetArea || priority == PatchCutPriority.PatchSize) {
                 stand.MarkAsHarvested();
                 stand.EventId = EventId.MakeNewId();
             } else {
@@ -256,8 +281,9 @@ namespace Landis.Library.HarvestManagement
                 stand.RejectPrescriptionName(stand.PrescriptionName);
             }
 
-            // if harvest criteria met, yield the sites, else, don't
-            if (areaSelected >= standTargetArea) {
+            // if harvest criteria met (includes priority), yield the sites, else, don't
+            if (areaSelected >= standTargetArea || priority == PatchCutPriority.PatchSize)
+            {
                 while (sitesToHarvest.Count > 0) {
                     yield return sitesToHarvest.Dequeue();
                 }
