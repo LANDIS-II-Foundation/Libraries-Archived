@@ -43,7 +43,10 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 foreach(SpeciesCohorts s in Speciescohorts)
                 {
-                    if(s.Species == species)return s;
+                    if (s.Species.Name == species.Name)
+                    {
+                        return s;
+                    }
                 }
                 return null;
 //                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
@@ -55,7 +58,7 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 foreach (SpeciesCohorts s in Speciescohorts)
                 {
-                    if (s.Species == species) return s;
+                    if (s.Species.Name == species.Name) return s;
                 }
                 return null;
                 

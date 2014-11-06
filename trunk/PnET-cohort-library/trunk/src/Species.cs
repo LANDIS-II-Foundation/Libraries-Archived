@@ -12,7 +12,7 @@ namespace Landis.Library.BiomassCohortsPnET
     public class Species :  ISpecies
     {
         private Landis.Core.ISpecies species;
-        
+         
         public float VegReprodProb 
         {
             get

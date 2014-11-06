@@ -42,17 +42,17 @@ namespace Landis.Library.BiomassCohortsPnET
         public int YearOfBirth { get; private set; }
         public Species species { get; private set; }
 
-        public ISpecies Species 
+        public Species Species 
         {
             get
             {
                 return species;
             }
         }
-        
 
 
-        public Cohort(Species species,  int year_of_birth)
+
+        public Cohort(Species species, int year_of_birth)
              
         {
             this.FActiveBiom = 1;
