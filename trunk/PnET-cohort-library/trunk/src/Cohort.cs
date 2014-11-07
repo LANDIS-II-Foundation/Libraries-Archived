@@ -42,7 +42,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public int YearOfBirth { get; private set; }
         public Species species { get; private set; }
 
-        public Species Species 
+        public Landis.Core.ISpecies Species 
         {
             get
             {
