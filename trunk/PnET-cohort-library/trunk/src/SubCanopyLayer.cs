@@ -29,11 +29,11 @@ namespace Landis.Library.BiomassCohortsPnET
         public int i;
         public Cohort cohort;
 
-        public Species Species
+        public ISpecies Species
         {
             get
             {
-                return cohort.species;
+                return cohort.Species;
             }
         }
 
@@ -42,7 +42,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohort = cohort;
             this.LayerIndex = LayerIndex;
         }
-        static float GetFWater(Species species, float pressurehead)
+        static float GetFWater(PnETSpecies species, float pressurehead)
         {
             if (pressurehead < 0 || pressurehead > species.H4) return 0;
             else if (pressurehead > species.H3) return 1 - ((pressurehead - species.H3) / (species.H4 - species.H3));

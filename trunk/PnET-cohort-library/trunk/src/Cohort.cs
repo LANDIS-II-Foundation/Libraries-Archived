@@ -32,7 +32,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public bool IsAlive;
         public ushort Age  { get; set; }
         public int YearOfBirth { get; private set; }
-        public Species species { get; private set; }
+        public PnETSpecies pnetspecies { get; private set; }
 
         public  float Fwater
         {
@@ -116,7 +116,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get
             {
-                return species;
+                return pnetspecies.Species;
             }
         }
 
@@ -131,7 +131,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
 
 
-        public Cohort(Species species, int year_of_birth, int IMAX)
+        public Cohort(PnETSpecies pnetspecies, int year_of_birth, int IMAX)
              
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
@@ -144,11 +144,11 @@ namespace Landis.Library.BiomassCohortsPnET
             this.SubLayerDominanceSum = 0;
              
             this.NSCfrac = 0.1F;
-            this.species = species;
+            this.pnetspecies = pnetspecies;
             this.Age = 0;
             this.Fage = 1;
             this.Wood = 10;
-            this.NSC = species.InitialNSC;
+            this.NSC = pnetspecies.InitialNSC;
             this.YearOfBirth = year_of_birth;
             this.MaxBiomass = this.Biomass;
         }
@@ -165,7 +165,7 @@ namespace Landis.Library.BiomassCohortsPnET
              
             this.MaxBiomass = cohort.MaxBiomass;
             this.NSCfrac = cohort.NSCfrac;
-            this.species = cohort.species;
+            this.pnetspecies = cohort.pnetspecies;
             this.Age = cohort.Age;
             this.Wood = cohort.Wood;
             this.NSC = cohort.NSC;
