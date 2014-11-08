@@ -17,10 +17,9 @@ namespace Landis.Library.BiomassCohortsPnET
         public float Rootsenescence;  
         public float Woodsenescence;
         
-        public float WoodAlloc ; 
-        public float RootAlloc ;
-        public float FActiveBiom;  
-        public float ReleasedNSC ; 
+        
+        public float FActiveBiom;
+        
         public int MaxBiomass;  
         public float Fage  ;
         public float Dominance;
@@ -54,6 +53,27 @@ namespace Landis.Library.BiomassCohortsPnET
             get
             {
                 return SubCanopyLayers.Sum(o => o.Folalloc);
+            }
+        }
+        public float WoodAlloc
+        {
+            get
+            {
+                return SubCanopyLayers.Sum(o => o.WoodAlloc);
+            }
+        }
+        public float RootAlloc
+        {
+            get
+            {
+                return SubCanopyLayers.Sum(o => o.RootAlloc);
+            }
+        }
+        public float ReleasedNSC
+        {
+            get
+            {
+                return Folalloc + RootAlloc + WoodAlloc;
             }
         }
         public float MaintenanceRespiration
