@@ -76,6 +76,7 @@
     <Compile Include="SiteCohorts.cs" />
     <Compile Include="Species.cs" />
     <Compile Include="SpeciesCohorts.cs" />
+    <Compile Include="SubCanopyLayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
