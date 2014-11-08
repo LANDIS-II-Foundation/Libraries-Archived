@@ -120,6 +120,15 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
+        public float WaterUseEfficiency 
+        {
+            get
+            {
+                if (Transpiration > 0) return Netpsn / Transpiration;
+                return 0;
+            }
+            
+        }
 
 
         public Cohort(Species species, int year_of_birth, int IMAX)
