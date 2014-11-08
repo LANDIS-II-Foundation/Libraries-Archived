@@ -14,7 +14,8 @@ namespace Landis.Library.BiomassCohortsPnET
         public static float MCO2 = 44; // Molecular weight of CO2
         public static int SecondsPerHour = 60 * 60;
         public static int billion = 1000000000;
-        
+        public static  float MCO2_MC = MCO2 / MC;
+         
         public enum Months
         {
             January = 1,
