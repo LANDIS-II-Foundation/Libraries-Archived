@@ -21,13 +21,9 @@ namespace Landis.Library.BiomassCohortsPnET
         public float RootAlloc ;
         public float FActiveBiom;  
         public float ReleasedNSC ; 
-        
-        public float Transpiration;  
-        public float Netpsn ;
         public int MaxBiomass;  
         public float Fage  ;
-        public float Dominance;  
-        public float Grosspsn ;
+        public float Dominance;
         public float LAI ;
         public float Fol ;
         public float Wood ;
@@ -74,7 +70,28 @@ namespace Landis.Library.BiomassCohortsPnET
                 return SubCanopyLayers.Sum(o => o.FolResp);
             }
         }
-         
+        public float Transpiration
+        {
+            get
+            {
+                return SubCanopyLayers.Sum(o => o.Transpiration);
+            }
+        }
+        public float Netpsn
+        {
+            get
+            {
+                return SubCanopyLayers.Sum(o => o.NetPsn);
+            }
+        }
+        public float Grosspsn
+        {
+            get
+            {
+                return SubCanopyLayers.Sum(o => o.GrossPsn);
+            }
+        }
+       
         public Landis.Core.ISpecies Species 
         {
             get
