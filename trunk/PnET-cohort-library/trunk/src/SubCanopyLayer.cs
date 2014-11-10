@@ -42,12 +42,15 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohort = cohort;
             this.LayerIndex = LayerIndex;
         }
-        static float GetFWater(PnETSpecies species, float pressurehead)
+        public void Reset()
         {
-            if (pressurehead < 0 || pressurehead > species.H4) return 0;
-            else if (pressurehead > species.H3) return 1 - ((pressurehead - species.H3) / (species.H4 - species.H3));
-            else if (pressurehead < species.H2) return pressurehead / species.H2;
-            else return 1;
+            Transpiration = 0;
+            GrossPsn = 0;
+            NetPsn = 0;
+            Folalloc = 0;
+            MaintenanceRespiration = 0;
+            WoodAlloc = 0;
+            FolResp = 0;
         }
         
     }
