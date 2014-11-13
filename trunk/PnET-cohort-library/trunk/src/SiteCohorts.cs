@@ -14,6 +14,10 @@ namespace Landis.Library.BiomassCohortsPnET
     public class SiteCohorts :  BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts 
     {
         List<Cohort> cohorts = new List<Cohort>();
+
+        
+        
+
         public  IEcoregion Ecoregion { get; private set; }
         public ActiveSite Site { get; private set; }
         public float WaterMin;

@@ -12,18 +12,16 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort  , Landis.Library.BiomassCohorts.ICohort  
     {
+        //public static float SumSubCanopyRanking;
+
         public SubCanopyLayer[] SubCanopyLayers;
-        public int SubLayerDominanceSum; 
+        
         public float Rootsenescence;  
         public float Woodsenescence;
-        
-        
         public float FActiveBiom;
-        
         public int MaxBiomass;  
         public float Fage  ;
-        public float Dominance;
-        public float LAI ;
+         
         public float Fol ;
         public float Wood ;
         public float Root ;
@@ -34,6 +32,21 @@ namespace Landis.Library.BiomassCohortsPnET
         public int YearOfBirth { get; private set; }
         public PnETSpecies pnetspecies { get; private set; }
 
+        public int Layer
+        {
+            get
+            {
+                return SubCanopyLayers.Max(o => o.CanopyLayer);
+            }
+        }
+
+        public float Radiation
+        {
+            get
+            {
+                return SubCanopyLayers.Average(o => o.Radiation);
+            }
+        }
         public  float Fwater
         {
             get
@@ -55,6 +68,14 @@ namespace Landis.Library.BiomassCohortsPnET
                 return SubCanopyLayers.Sum(o => o.Folalloc);
             }
         }
+        public float LAI
+        {
+            get
+            {
+                return SubCanopyLayers.Sum(o => o.LAI);
+            }
+        }
+
         public float WoodAlloc
         {
             get
@@ -141,7 +162,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
             }
             this.FActiveBiom = 1;
-            this.SubLayerDominanceSum = 0;
+            //this.SubLayerDominanceSum = 0;
              
             this.NSCfrac = 0.1F;
             this.pnetspecies = pnetspecies;
@@ -161,7 +182,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
             }
             this.FActiveBiom = cohort.FActiveBiom;
-            this.SubLayerDominanceSum = cohort.SubLayerDominanceSum;
+            //this.SubLayerDominanceSum = cohort.SubLayerDominanceSum;
              
             this.MaxBiomass = cohort.MaxBiomass;
             this.NSCfrac = cohort.NSCfrac;
@@ -173,7 +194,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Fol = cohort.Fol;
             this.YearOfBirth = cohort.YearOfBirth;//
             this.MaxBiomass = cohort.MaxBiomass;
-            this.LAI = cohort.LAI;
+           
             this.Fage = cohort.Fage;
             
         }

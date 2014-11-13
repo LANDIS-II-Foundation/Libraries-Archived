@@ -23,12 +23,13 @@ namespace Landis.Library.BiomassCohortsPnET
         public float RootAlloc;
         public float WoodAlloc;
         public int LayerIndex;
+        public int CanopyLayer;
+
         public float CumCohortBiomass;
         public float ReleasedNSC;
         public float RootPlusWoodAlloc;
-        public int i;
         public Cohort cohort;
-
+       
         public ISpecies Species
         {
             get
