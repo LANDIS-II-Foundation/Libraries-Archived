@@ -11,20 +11,16 @@ namespace Landis.Library.BiomassCohortsPnET
 {
 
     // THERE SHOULD NOT BE INHERITANCE OF BiomassCohorts.SiteCohorts HERE. Cannot get rid of it because it gets stuck on the 'this' pointer
-    public class SiteCohorts :  BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts 
+    public class SiteCohorts :  BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts//BiomassCohorts.SiteCohorts,
     {
+
         List<Cohort> cohorts = new List<Cohort>();
-
-        
-        
-
         public  IEcoregion Ecoregion { get; private set; }
         public ActiveSite Site { get; private set; }
         public float WaterMin;
 
         public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
-              
             int totalReduction = 0;
             
             foreach(SpeciesCohorts s in Speciescohorts)
@@ -109,20 +105,13 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             
         }
-        private List<SpeciesCohorts> speciescohorts =null;
+
 
         public List<SpeciesCohorts> Speciescohorts
         {
-            set 
-            {
-                speciescohorts = value;
-            }
             get
             {
-                if (speciescohorts != null) return speciescohorts;
-
-
-                speciescohorts  = new List<SpeciesCohorts>();
+                List<SpeciesCohorts> speciescohorts  = new List<SpeciesCohorts>();
 
                 List<Cohort> RankedCohorts = new List<Cohort>(cohorts.OrderByDescending(o => o.Species.Name));
 
@@ -169,19 +158,9 @@ namespace Landis.Library.BiomassCohortsPnET
                 totalReduction += speciescohort.MarkCohorts(disturbance);
             }   
         }
-        public void ResetSpeciesCohorts()
-        {
-            // This is a time saver; setting the speciescohorts to null 
-            // when I want to add/ remove a cohort.
-            // when other modules ask for speciescohorts, they will be signalled 
-            // that cohorts have changed so they will gather the cohorts in speices cohorts anew
-            Speciescohorts = null;
-        }
+
         public bool AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
-
-            ResetSpeciesCohorts();
-
             foreach (Cohort mycohort in cohorts)
             {
                 if (mycohort.Age <= SuccessionTimeStep && cohort.Species == mycohort.Species)
@@ -196,12 +175,9 @@ namespace Landis.Library.BiomassCohortsPnET
             cohorts.Add(cohort);  
             return true;
         }
-        
+       
         public void RemoveCohort(Cohort cohort, ActiveSite site)
         {
-            ResetSpeciesCohorts();
-
-            Speciescohorts = null; 
             cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, null);
             
@@ -209,9 +185,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in Speciescohorts)
-            {
                 yield return speciesCohorts;
-            }
         }
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -221,16 +195,12 @@ namespace Landis.Library.BiomassCohortsPnET
         IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.BiomassCohorts.ISpeciesCohorts>.GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohort in Speciescohorts)
-            {
                 yield return speciesCohort;
-            }
         }
         IEnumerator<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts> IEnumerable<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohort in Speciescohorts)
-            {
                 yield return speciesCohort;
-            }
         }
        
 

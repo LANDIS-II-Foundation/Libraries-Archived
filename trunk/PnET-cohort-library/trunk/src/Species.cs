@@ -9,19 +9,10 @@ using System.Linq;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class PnETSpecies  
+    public class Species :  ISpecies
     {
         private Landis.Core.ISpecies species;
-
-        public Landis.Core.ISpecies Species
-        {
-            get
-            {
-                return species;
-            }
-        }
          
-
         public float VegReprodProb 
         {
             get
@@ -134,7 +125,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public int H4 { get; private set; }
         
         
-        public PnETSpecies(ISpecies species, 
+        public Species(ISpecies species, 
                        float CFracBiomass, 
                        float SLWDel, 
                        float SLWmax, 

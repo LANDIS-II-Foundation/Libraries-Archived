@@ -9,7 +9,6 @@ namespace Landis.Library.BiomassCohortsPnET
     public class SubCanopyLayer
     {
         static float log2 = (float)System.Math.Log(2);
-        public float Fol;
         public float Fwater; 
         public float Frad;
         public float MaintenanceRespiration;
@@ -23,18 +22,16 @@ namespace Landis.Library.BiomassCohortsPnET
         public float RootAlloc;
         public float WoodAlloc;
         public int LayerIndex;
-        public int CanopyLayer;
-
         public float CumCohortBiomass;
         public float ReleasedNSC;
-        public float RootPlusWoodAlloc;
-        public Cohort cohort;
-       
-        public ISpecies Species
+
+        Cohort cohort;
+
+        public Species Species
         {
             get
             {
-                return cohort.Species;
+                return cohort.species;
             }
         }
 
@@ -43,15 +40,12 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohort = cohort;
             this.LayerIndex = LayerIndex;
         }
-        public void Reset()
+        static float GetFWater(Species species, float pressurehead)
         {
-            Transpiration = 0;
-            GrossPsn = 0;
-            NetPsn = 0;
-            Folalloc = 0;
-            MaintenanceRespiration = 0;
-            WoodAlloc = 0;
-            FolResp = 0;
+            if (pressurehead < 0 || pressurehead > species.H4) return 0;
+            else if (pressurehead > species.H3) return 1 - ((pressurehead - species.H3) / (species.H4 - species.H3));
+            else if (pressurehead < species.H2) return pressurehead / species.H2;
+            else return 1;
         }
         
     }

@@ -12,16 +12,28 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort  , Landis.Library.BiomassCohorts.ICohort  
     {
-        //public static float SumSubCanopyRanking;
-
         public SubCanopyLayer[] SubCanopyLayers;
-        
+
+        public System.Collections.Generic.List<float> Fwater;// { get; set; }
+        public System.Collections.Generic.List<float> Frad;// { get; set; }
+        public int SubLayerDominanceSum; 
+
         public float Rootsenescence;  
         public float Woodsenescence;
-        public float FActiveBiom;
+        public float Folalloc ;
+        public float WoodAlloc ; 
+        public float RootAlloc ;
+        public float FActiveBiom;  
+        public float ReleasedNSC ; 
+        public float FolResp ;
+        public float Transpiration;  
+        public float Netpsn ;
         public int MaxBiomass;  
         public float Fage  ;
-         
+        public float Dominance;  
+        public float MaintenanceRespiration  ;
+        public float Grosspsn ;
+        public float LAI ;
         public float Fol ;
         public float Wood ;
         public float Root ;
@@ -30,163 +42,57 @@ namespace Landis.Library.BiomassCohortsPnET
         public bool IsAlive;
         public ushort Age  { get; set; }
         public int YearOfBirth { get; private set; }
-        public PnETSpecies pnetspecies { get; private set; }
+        public Species species { get; private set; }
 
-        public int Layer
-        {
-            get
-            {
-                return SubCanopyLayers.Max(o => o.CanopyLayer);
-            }
-        }
-
-        public float Radiation
-        {
-            get
-            {
-                return SubCanopyLayers.Average(o => o.Radiation);
-            }
-        }
-        public  float Fwater
-        {
-            get
-            {
-                return SubCanopyLayers.Average(o => o.Fwater);
-            }
-        }
-        public  float Frad
-        {
-            get
-            {
-                return SubCanopyLayers.Average(o => o.Frad);
-            }
-        }
-        public float Folalloc
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.Folalloc);
-            }
-        }
-        public float LAI
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.LAI);
-            }
-        }
-
-        public float WoodAlloc
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.WoodAlloc);
-            }
-        }
-        public float RootAlloc
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.RootAlloc);
-            }
-        }
-        public float ReleasedNSC
-        {
-            get
-            {
-                return Folalloc + RootAlloc + WoodAlloc;
-            }
-        }
-        public float MaintenanceRespiration
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.MaintenanceRespiration);
-            }
-        }
-        public float FolResp
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.FolResp);
-            }
-        }
-        public float Transpiration
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.Transpiration);
-            }
-        }
-        public float Netpsn
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.NetPsn);
-            }
-        }
-        public float Grosspsn
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.GrossPsn);
-            }
-        }
-       
         public Landis.Core.ISpecies Species 
         {
             get
             {
-                return pnetspecies.Species;
+                return species;
             }
         }
 
-        public float WaterUseEfficiency 
-        {
-            get
-            {
-                if (Transpiration > 0) return Netpsn / Transpiration;
-                return 0;
-            }
-            
-        }
 
 
-        public Cohort(PnETSpecies pnetspecies, int year_of_birth, int IMAX)
+        public Cohort(Species species, int year_of_birth)
              
         {
-            SubCanopyLayers = new SubCanopyLayer[IMAX];
-            for (int i = 0; i < IMAX; i++)
+            SubCanopyLayers = new SubCanopyLayer[5];
+
+            for (int i = 0; i < 5; i++)
             {
                 SubCanopyLayers[i] = new SubCanopyLayer(this, i);
-
             }
+
             this.FActiveBiom = 1;
-            //this.SubLayerDominanceSum = 0;
-             
+            this.SubLayerDominanceSum = 0;
+            this.Fwater = new System.Collections.Generic.List<float>();
+            this.Frad = new System.Collections.Generic.List<float>();
             this.NSCfrac = 0.1F;
-            this.pnetspecies = pnetspecies;
+            this.species = species;
             this.Age = 0;
             this.Fage = 1;
             this.Wood = 10;
-            this.NSC = pnetspecies.InitialNSC;
+            this.NSC = species.InitialNSC;
             this.YearOfBirth = year_of_birth;
             this.MaxBiomass = this.Biomass;
         }
-        public Cohort(Cohort cohort, int IMAX)
+        public Cohort(Cohort cohort)
         {
-            SubCanopyLayers = new SubCanopyLayer[IMAX];
-            for (int i = 0; i < IMAX; i++)
+            SubCanopyLayers = new SubCanopyLayer[5];
+
+            for (int i = 0; i < 5; i++)
             {
                 SubCanopyLayers[i] = new SubCanopyLayer(this, i);
-
             }
+
             this.FActiveBiom = cohort.FActiveBiom;
-            //this.SubLayerDominanceSum = cohort.SubLayerDominanceSum;
-             
+            this.SubLayerDominanceSum = cohort.SubLayerDominanceSum;
+            this.Fwater = new System.Collections.Generic.List<float>(cohort.Fwater);
+            this.Frad = new System.Collections.Generic.List<float>(cohort.Frad);
             this.MaxBiomass = cohort.MaxBiomass;
             this.NSCfrac = cohort.NSCfrac;
-            this.pnetspecies = cohort.pnetspecies;
+            this.species = cohort.species;
             this.Age = cohort.Age;
             this.Wood = cohort.Wood;
             this.NSC = cohort.NSC;
@@ -194,7 +100,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Fol = cohort.Fol;
             this.YearOfBirth = cohort.YearOfBirth;//
             this.MaxBiomass = cohort.MaxBiomass;
-           
+            this.LAI = cohort.LAI;
             this.Fage = cohort.Fage;
             
         }
