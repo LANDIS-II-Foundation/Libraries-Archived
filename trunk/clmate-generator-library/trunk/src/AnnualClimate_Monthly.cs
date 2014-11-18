@@ -700,13 +700,13 @@ namespace  Landis.Library.Climate
                 
                 double avgTemp = this.MonthlyTemp[i]; // (annualClimate[i].AvgMinTemp + annualClimate[i].AvgMaxTemp) / 2.0;
                 avgTemp = Math.Max(0.0, avgTemp);
-                double heatIndexpermonth = System.Math.Pow((avgTemp / 5), 1.514);
+                double heatIndexpermonth = System.Math.Pow((avgTemp / 5.0), 1.514);
                 heatIndexpermonth = Math.Max(0.0, heatIndexpermonth);
                 heatIndex += (heatIndexpermonth);
                 //Climate.ModelCore.UI.WriteLine("PET Calcs1. AvgTemp={0},heatIndexpermonth={1}", avgTemp, heatIndexpermonth);
             }
             //Climate.ModelCore.UI.WriteLine("PET Calcs2. heatindex={0}", heatIndex);
-            double alpha = (.000000675 * System.Math.Pow(heatIndex, 3) - (0.0000771 * System.Math.Pow(heatIndex, 2)) + (0.01792 * heatIndex) + 0.49239);
+            double alpha = (0.000000675 * System.Math.Pow(heatIndex, 3.0) - (0.0000771 * System.Math.Pow(heatIndex, 2.0)) + (0.01792 * heatIndex) + 0.49239);
             
             //Then need to calculate PET for each month using the heat index from above.
 
@@ -714,18 +714,17 @@ namespace  Landis.Library.Climate
             for (int month = 0; month < 12; month++)
             {
 
-                double MeanDayLength = this.MonthlyDayLength[month] / 3600;  //take day length from above in sec and convert to hours
+                double MeanDayLength = this.MonthlyDayLength[month] / 3600.0;  //take day length from above in sec and convert to hours
                 int totalDays = (DaysInMonth(month, this.Year));
                 double AvgTemp = this.MonthlyTemp[month];
 
                 AvgTemp = Math.Max(0.0, AvgTemp);
                 
                 //alpha term in Thornwaite equation that depends solely on the heat index
-                
-                                                            
-                monthlyPET[month] = (16 * (MeanDayLength / 12) * (totalDays/30)* (System.Math.Pow(((10 * AvgTemp )/ heatIndex), alpha))/10);// equation by Thornthwaite divided by 10 to get cm/month
+                                                                           
+                monthlyPET[month] = (16.0 * (MeanDayLength / 12.0) * (totalDays / 30.0) * (System.Math.Pow(((10.0 * AvgTemp )/ heatIndex), alpha))/10.0);// equation by Thornthwaite divided by 10 to get cm/month
                 //Climate.ModelCore.UI.WriteLine("Year={0}, Month={1}, PET={2:0.00}.", this.Year, month, monthlyPET[month]);
-                //Climate.ModelCore.UI.WriteLine("FinalLoop in PET CalcuLator. DayLength={0}, TotalDaysMonth={1}, AvgTemp={2}, alpha={3}, monthPET={4}", MeanDayLength, totalDays, AvgTemp, alpha, monthlyPET[month]);
+                //Climate.ModelCore.UI.WriteLine("FinalLoop in PET CalcuLator. DayLength={0}, TotalDaysMonth={1}, AvgTemp={2}, alpha={3}, heatIndex={4}, PET={5:0.0000}, Month={6}", MeanDayLength, totalDays, AvgTemp, alpha, heatIndex, monthlyPET[month], month);
 
             }
 
