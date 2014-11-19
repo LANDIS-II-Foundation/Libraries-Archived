@@ -50,7 +50,8 @@ namespace Landis.Library.BiomassCohortsPnET
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
         {
-            cohorts.Remove(cohort);
+            //cohorts.Remove(cohort);
+            cohort.IsAlive = false;
             Cohort.Died(this, cohort, site, disturbanceType);
         }
         public bool IsMaturePresent 
@@ -70,17 +71,15 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         
        
-        public SpeciesCohorts(Cohort c)
+        public SpeciesCohorts(ISpecies Species)
         {
-            this.Species = c.Species;
+            this.Species = Species;
             this.cohorts = new List<Cohort>();
-            AddCohort(c);
             isSpeciesCohortDamaged = new Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray();
         }
         public void AddCohort(Cohort c)
         {
              this.cohorts.Add(c);
-           
         }
         
        
