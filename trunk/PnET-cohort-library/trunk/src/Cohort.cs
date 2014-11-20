@@ -12,8 +12,34 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort  , Landis.Library.BiomassCohorts.ICohort  
     {
-        //public static float SumSubCanopyRanking;
+        /// <summary>
+        /// Occurs when a cohort dies either due to senescence or disturbances.
+        /// </summary>
+        public static event Landis.Library.AgeOnlyCohorts.DeathEventHandler<Landis.Library.AgeOnlyCohorts.DeathEventArgs> DeathEvent;
 
+        public delegate void AllocateLitters(Landis.Library.BiomassCohortsPnET.Cohort cohort, ActiveSite site, ExtensionType disturbanceType);
+
+        public static event AllocateLitters allocatelitters;
+
+        /// <summary>
+        /// Raises a Cohort.DeathEvent.
+        /// </summary>
+        
+        public static void Died(object sender,
+                                Landis.Library.BiomassCohortsPnET.Cohort cohort,
+                                ActiveSite site,
+                                ExtensionType disturbanceType)
+        {
+            if (DeathEvent != null)
+            {
+                DeathEvent(sender, new Landis.Library.AgeOnlyCohorts.DeathEventArgs(cohort, site, disturbanceType));
+            }
+            if (allocatelitters != null)
+            {
+                allocatelitters(cohort, site, disturbanceType);
+            }
+        }
+        
         public SubCanopyLayer[] SubCanopyLayers;
         
         public float Rootsenescence;  
@@ -196,25 +222,7 @@ namespace Landis.Library.BiomassCohortsPnET
             
         }
          
-        /// <summary>
-        /// Occurs when a cohort dies either due to senescence or disturbances.
-        /// </summary>
-        public static event Landis.Library.AgeOnlyCohorts.DeathEventHandler<Landis.Library.AgeOnlyCohorts.DeathEventArgs> DeathEvent;
-
-
-        //---------------------------------------------------------------------
-
-        /// <summary>
-        /// Raises a Cohort.DeathEvent.
-        /// </summary>
-        public static void Died(object sender,
-                                Landis.Library.AgeOnlyCohorts.ICohort cohort,
-                                ActiveSite site,
-                                ExtensionType disturbanceType)
-        {
-            if (DeathEvent != null)
-                DeathEvent(sender, new Landis.Library.AgeOnlyCohorts.DeathEventArgs(cohort, site, disturbanceType));
-        }
+        
 
         
         public int Biomass

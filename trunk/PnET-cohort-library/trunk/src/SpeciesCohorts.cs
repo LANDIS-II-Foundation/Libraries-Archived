@@ -27,33 +27,9 @@ namespace Landis.Library.BiomassCohortsPnET
                 return cohorts.Count;
             }
         }
-        public void RemoveCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
-        {
-            isSpeciesCohortDamaged.SetAllFalse(Count);
-            disturbance.MarkCohortsForDeath(this, isSpeciesCohortDamaged);
-
-            //  Go backwards through list of ages, so the removal of an age
-            //  doesn't mess up the loop.
-             
-            for (int i = cohorts.Count - 1; i >= 0; i--)
-            {
-                if (isSpeciesCohortDamaged[i])
-                {
-                    cohorts.RemoveAt(i);
-                    Cohort.Died(this, cohorts[i], disturbance.CurrentSite, disturbance.Type);
-                                
-                }
-            }
-        }
+        
         //---------------------------------------------------------------------
-        public void RemoveCohort(Cohort cohort,
-                                  ActiveSite site,
-                                  ExtensionType disturbanceType)
-        {
-            //cohorts.Remove(cohort);
-            cohort.IsAlive = false;
-            Cohort.Died(this, cohort, site, disturbanceType);
-        }
+        
         public bool IsMaturePresent 
         {
             get
@@ -99,36 +75,15 @@ namespace Landis.Library.BiomassCohortsPnET
 
                     Landis.Library.BiomassCohorts.Cohort.KilledByAgeOnlyDisturbance(this, cohorts[i], disturbance.CurrentSite, disturbance.Type);
 
-                    RemoveCohort(cohorts[i], disturbance.CurrentSite, disturbance.Type);
+                     
+                    cohorts[i].IsAlive = false;
+                    Cohort.Died(this, cohorts[i], disturbance.CurrentSite, disturbance.Type);
 
                 }
             }
             return totalReduction;
         }
-        public int MarkCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
-        {
-            //  Go backwards through list of cohort data, so the removal of an
-            //  item doesn't mess up the loop.
-            int totalReduction = 0;
-            for (int i = cohorts.Count - 1; i >= 0; i--)
-            {
-                int reduction = disturbance.ReduceOrKillMarkedCohort(cohorts[i]);
-                if (reduction > 0)
-                {
-                    totalReduction += reduction;
-                    if (reduction < cohorts[i].Biomass)
-                    {
-                        cohorts[i].Wood -= reduction;
-                    }
-                    else
-                    {
-                        RemoveCohort(cohorts[i], disturbance.CurrentSite, null);
-                    }
-                }
-
-            }
-            return totalReduction;
-        }
+        
         IEnumerator<Landis.Library.BiomassCohortsPnET.Cohort> IEnumerable<Landis.Library.BiomassCohortsPnET.Cohort>.GetEnumerator()
         {
             foreach (Cohort data in cohorts)

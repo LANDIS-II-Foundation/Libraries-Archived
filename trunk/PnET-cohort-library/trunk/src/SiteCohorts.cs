@@ -9,14 +9,9 @@ using System.Linq;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-
-    // THERE SHOULD NOT BE INHERITANCE OF BiomassCohorts.SiteCohorts HERE. Cannot get rid of it because it gets stuck on the 'this' pointer
     public class SiteCohorts :  BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts 
     {
         List<Cohort> cohorts = new List<Cohort>();
-
-        
-        
 
         public  IEcoregion Ecoregion { get; private set; }
         public ActiveSite Site { get; private set; }
@@ -24,23 +19,31 @@ namespace Landis.Library.BiomassCohortsPnET
 
         public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
-              
             int totalReduction = 0;
-            
-            foreach(SpeciesCohorts s in Speciescohorts)
+            for (int i = cohorts.Count - 1; i >= 0; i--)
             {
-                totalReduction += s.MarkCohorts(disturbance);
-            }
+                int reduction = disturbance.ReduceOrKillMarkedCohort(cohorts[i]);
+                if (reduction > 0)
+                {
+                    totalReduction += reduction;
+                    if (reduction < cohorts[i].Biomass)
+                    {
+                        cohorts[i].Wood -= reduction;
+                    }
+                    else
+                    {
+                        //cohorts[i].IsAlive = false;
+                        Cohort.Died(this, cohorts[i], disturbance.CurrentSite, disturbance.Type);
+                        cohorts.Remove(cohorts[i]);
+                    }
+                }
 
+            }
             return totalReduction;
         }
-        void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ICohortDisturbance disturbance)
-        {
-            if (AgeOnlyDisturbanceEvent != null)
-                AgeOnlyDisturbanceEvent(this, new  Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,
-                                                                       disturbance.Type));
-            ReduceOrKillBiomassCohorts(new Landis.Library.BiomassCohorts.WrappedDisturbance(disturbance));
-        }
+         
+
+        
         public Landis.Library.BiomassCohorts.ISpeciesCohorts this[ISpecies species]
         {
             get
@@ -101,14 +104,7 @@ namespace Landis.Library.BiomassCohortsPnET
             return false;
         }
 
-        public virtual void RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
-        {
-            foreach (SpeciesCohorts speciescohort in Speciescohorts)
-            { 
-                speciescohort.RemoveCohorts(disturbance);
-            }
-            
-        }
+        
         private List<SpeciesCohorts> speciescohorts =null;
 
         public List<SpeciesCohorts> Speciescohorts
@@ -147,19 +143,17 @@ namespace Landis.Library.BiomassCohortsPnET
         /// </summary>
         public static event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
 
-        void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
+        
+        void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ICohortDisturbance disturbance)
         {
+             
             if (AgeOnlyDisturbanceEvent != null)
-                AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,disturbance.Type));
-                                                                       
-
-            //  Go through list of species cohorts from back to front so that
-            //  a removal does not mess up the loop.
-            int totalReduction = 0;
-            foreach (SpeciesCohorts speciescohort in Speciescohorts)
             {
-                totalReduction += speciescohort.MarkCohorts(disturbance);
-            }   
+                AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,
+                                                                       disturbance.Type));
+            }
+            ReduceOrKillBiomassCohorts(new Landis.Library.BiomassCohorts.WrappedDisturbance(disturbance));
+             
         }
         public void ResetSpeciesCohorts()
         {
@@ -192,12 +186,57 @@ namespace Landis.Library.BiomassCohortsPnET
         public void RemoveCohort(Cohort cohort, ActiveSite site)
         {
             ResetSpeciesCohorts();
+            Speciescohorts = null;
 
-            Speciescohorts = null; 
+            
             cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, null);
-            
+
         }
+        void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
+        {
+            throw new System.Exception("RemoveMarkedCohorts is used after all!!");
+            /*
+            if (AgeOnlyDisturbanceEvent != null)
+                AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,disturbance.Type));
+                                                                       
+
+            //  Go through list of species cohorts from back to front so that
+            //  a removal does not mess up the loop.
+            int totalReduction = 0;
+            foreach (SpeciesCohorts speciescohort in Speciescohorts)
+            {
+                totalReduction += MarkCohorts(speciescohort, disturbance);
+            }   
+             */
+        }
+        /* 
+        public int MarkCohorts(SpeciesCohorts speciescohort, AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
+        {
+            Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged = new AgeOnlyCohorts.SpeciesCohortBoolArray();
+
+            isSpeciesCohortDamaged.SetAllFalse(speciescohort.Count);
+            disturbance.MarkCohortsForDeath(speciescohort, isSpeciesCohortDamaged);
+
+            //  Go backwards through list of cohort data, so the removal of an
+            //  item doesn't mess up the loop.
+            int totalReduction = 0;
+            for (int i = speciescohort.Count  - 1; i >= 0; i--)
+            {
+                if (isSpeciesCohortDamaged[i])
+                {
+                    totalReduction += speciescohort.Cohorts[i].Biomass;
+
+                    Landis.Library.BiomassCohorts.Cohort.KilledByAgeOnlyDisturbance(speciescohort, speciescohort.Cohorts[i], disturbance.CurrentSite, disturbance.Type);
+
+                    Cohort.Died(speciescohort, speciescohort.Cohorts[i], disturbance.CurrentSite, disturbance.Type);
+
+                    cohorts.Remove(speciescohort.Cohorts[i]);
+                }
+            }
+            return totalReduction;
+        }
+          */
         public IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in Speciescohorts)
