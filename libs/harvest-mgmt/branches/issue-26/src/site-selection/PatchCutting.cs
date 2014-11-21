@@ -126,9 +126,6 @@ namespace Landis.Library.HarvestManagement
             sites.Remove(crntSite);
             
             standTargetArea = Model.Core.CellArea * stand.SiteCount * percent;
-
-            //@ToDo: Debug statement for priority
-            Model.Core.UI.WriteLine("Priority: {0}", priority);
             
             // loop through stand, harvesting patches of size patch_size at a time
             while (areaSelected < standTargetArea && sites.Count > 0) 
