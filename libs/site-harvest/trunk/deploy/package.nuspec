@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+	<title>LANDIS-II Site Harvest</title>
+    <id>Landis.Library.SiteHarvest</id>
+    <version>0.5.1</version>
+	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
+    <description>Code for selecting and cutting whole cohorts at individual sites.  Selection is based on cohort ages.</description>
+    <releaseNotes>First version released as a NuGet package.  Functionally identical to version 0.5 on BinTray</releaseNotes>
+	<projectUrl>https://code.google.com/p/landis-extensions/source/browse/#svn%2Flibs%2Fsite-harvest%2Ftrunk</projectUrl>
+	<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<tags>LANDIS-II harvest</tags>
+  </metadata>
+  <files>
+    <file src="..\src\bin\Debug\Landis.Library.SiteHarvest-v0.dll" target="lib\net35" />
+    <file src="..\src\bin\Debug\Landis.Library.SiteHarvest-v0.xml" target="lib\net35" />
+  </files>
+</package>
