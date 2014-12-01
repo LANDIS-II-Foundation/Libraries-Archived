@@ -74,6 +74,15 @@
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemDefinitionGroup>
+    <Reference>
+      <!-- Do not copy any of referenced assemblies to the output directory during a build.
+	       We only want the libraries that are fetched as NuGet packages to be copied to
+		   that directory.  In order to make it easier to stage them (without dealing without
+		   the version #s in their package paths -->
+      <Private>False</Private>
+    </Reference>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
