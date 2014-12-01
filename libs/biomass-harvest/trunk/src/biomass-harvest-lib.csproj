@@ -63,6 +63,7 @@
     </Reference>
     <Reference Include="Landis.Library.SiteHarvest-v0, Version=0.5.5410.18051, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+	  <Private>True</Private>
       <HintPath>..\packages\Landis.Library.SiteHarvest.0.5.1\lib\net35\Landis.Library.SiteHarvest-v0.dll</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4815.34359, Culture=neutral, processorArchitecture=MSIL">
