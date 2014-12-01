@@ -1,0 +1,2 @@
+{OutDir}\Landis.Library.BiomassHarvest-v0.dll
+{OutDir}\Landis.Library.BiomassHarvest-v0.pdb
