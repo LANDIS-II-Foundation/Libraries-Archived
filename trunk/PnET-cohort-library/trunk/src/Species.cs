@@ -9,10 +9,54 @@ using System.Linq;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
-    public class Species :  ISpecies
+    public class PnETSpecies  
     {
-        private Landis.Core.ISpecies species;
+        public Landis.Core.ISpecies species;
+        public readonly float CFracBiomass;
+        public readonly float SLWDel;
+        public readonly float SLWmax;
+        public readonly float FracFol;
+        public readonly float DNSC;
+        public readonly float FracBelowG;
+        public readonly float TOroot;
+        public readonly float TOwood;
+        public readonly float TOfol;
+        public readonly float PsnAgeRed;
+        public readonly float BFolResp;
+        public readonly float KWdLit;
+        public readonly float FrActWd;
+        public readonly float InitialNSC;
+        public readonly bool PreventEstablishment;
+        public readonly float EstRad;
+        public readonly float EstMoist;
+        public readonly float PsnTMin;
+        public readonly float HalfSat;
+        public readonly float FolLignin;
+        public readonly float K;
          
+        public readonly int H2;
+        public readonly int H3;
+        public readonly int H4;
+        public readonly float FolN;
+        public readonly float MaintResp;
+        public readonly float PsnTOpt;
+        public readonly float DVPD1;
+        public readonly float DVPD2;
+
+        public readonly float WUEcnst;
+        public readonly float AmaxA;
+        public readonly float AmaxB;
+        public readonly float Q10;
+                     
+        public Landis.Core.ISpecies Species
+        {
+            get
+            {
+                return species;
+            }
+        }
+         
+
         public float VegReprodProb 
         {
             get
@@ -98,34 +142,24 @@ namespace Landis.Library.BiomassCohortsPnET
                 return species.PostFireRegeneration;
             }
         }
-        
-        public float CFracBiomass { get; private set; }
-        public float SLWDel { get; private set; }
-        public float SLWmax { get; private set; }
-        public float FracFol { get; private set; }
-        public float DNSC { get; private set; }
-        public float FracBelowG { get; private set; }
-        public float TOroot { get; private set; }
-        public float TOwood { get; private set; }
-        public float TOfol { get; private set; }
-        public float PsnAgeRed { get; private set; }
-        public float BFolResp { get; private set; }
-        public float KWdLit { get; private set; }
-        public float FrActWd { get; private set; }
-        public float InitialNSC { get; private set; }
-        public bool PreventEstablishment { get; private set; }
-        public float EstRad { get; private set; }
-        public float EstMoist { get; private set; }
-        public float PsnTMin { get; private set; }
-        public float HalfSat { get; private set; }
-        public float FolLignin { get; private set; }
-        public float K { get; private set; }
-        public int H2 { get; private set; }
-        public int H3 { get; private set; }
-        public int H4 { get; private set; }
-        
-        
-        public Species(ISpecies species, 
+        public static List<string> ParameterNames
+        {
+            get
+            {
+                return typeof(PnETSpecies).GetFields().Select(x => x.Name).ToList();
+            }
+        }
+       
+        public PnETSpecies(ISpecies species, 
+                       float FolN,
+                        float MaintResp,
+                        float PsnTOpt,
+                        float DVPD1,
+                        float DVPD2,
+                        float WUEcnst,
+                        float AmaxA,
+                        float AmaxB,
+                        float Q10,
                        float CFracBiomass, 
                        float SLWDel, 
                        float SLWmax, 
@@ -152,7 +186,17 @@ namespace Landis.Library.BiomassCohortsPnET
                        int H4
                      )
         {
+            
             this.species = species;
+             this.FolN = FolN;
+            this.MaintResp =MaintResp ;
+            this.PsnTOpt =PsnTOpt;
+            this.DVPD1 =DVPD1;
+            this.DVPD2 =DVPD2;
+            this.WUEcnst =WUEcnst ;
+            this.AmaxA =AmaxA ;
+            this.AmaxB = AmaxB;
+            this.Q10 =Q10;
             this.CFracBiomass=CFracBiomass;
             this.SLWDel = SLWDel;
             this.SLWmax = SLWmax;
