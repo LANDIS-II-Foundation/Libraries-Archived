@@ -195,8 +195,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
-            throw new System.Exception("RemoveMarkedCohorts is used after all!!");
-            /*
+            
             if (AgeOnlyDisturbanceEvent != null)
                 AgeOnlyDisturbanceEvent(this, new Landis.Library.BiomassCohorts.DisturbanceEventArgs(disturbance.CurrentSite,disturbance.Type));
                                                                        
@@ -208,9 +207,9 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 totalReduction += MarkCohorts(speciescohort, disturbance);
             }   
-             */
+             
         }
-        /* 
+         
         public int MarkCohorts(SpeciesCohorts speciescohort, AgeOnlyCohorts.ISpeciesCohortsDisturbance disturbance)
         {
             Landis.Library.AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged = new AgeOnlyCohorts.SpeciesCohortBoolArray();
@@ -225,18 +224,18 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 if (isSpeciesCohortDamaged[i])
                 {
-                    totalReduction += speciescohort.Cohorts[i].Biomass;
+                    totalReduction += speciescohort[i].Biomass;
 
-                    Landis.Library.BiomassCohorts.Cohort.KilledByAgeOnlyDisturbance(speciescohort, speciescohort.Cohorts[i], disturbance.CurrentSite, disturbance.Type);
+                    Landis.Library.BiomassCohorts.Cohort.KilledByAgeOnlyDisturbance(speciescohort, speciescohort[i], disturbance.CurrentSite, disturbance.Type);
 
-                    Cohort.Died(speciescohort, speciescohort.Cohorts[i], disturbance.CurrentSite, disturbance.Type);
+                    Cohort.Died(speciescohort, speciescohort[i], disturbance.CurrentSite, disturbance.Type);
 
-                    cohorts.Remove(speciescohort.Cohorts[i]);
+                    cohorts.Remove(speciescohort[i]);
                 }
             }
             return totalReduction;
         }
-          */
+         
         public IEnumerator<Landis.Library.BiomassCohorts.ISpeciesCohorts> GetEnumerator()
         {
             foreach (SpeciesCohorts speciesCohorts in Speciescohorts)

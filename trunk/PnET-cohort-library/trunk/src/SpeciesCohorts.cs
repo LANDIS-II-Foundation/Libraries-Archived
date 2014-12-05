@@ -18,6 +18,14 @@ namespace Landis.Library.BiomassCohortsPnET
        
         private List<Cohort> cohorts;
 
+        public Cohort this[int i]
+        {
+            get
+            {
+                return cohorts[i];
+            }
+        }
+
         public ISpecies Species { get; private set; }
 
         public int Count
