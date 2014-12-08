@@ -182,7 +182,7 @@ namespace Landis.Library.BiomassCohortsPnET
              
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
-            for (int i = 0; i < IMAX; i++)
+            for (byte i = 0; i < IMAX; i++)
             {
                 SubCanopyLayers[i] = new SubCanopyLayer(this, i);
 
@@ -201,7 +201,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public Cohort(Cohort cohort, int IMAX)
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
-            for (int i = 0; i < IMAX; i++)
+            for (byte i = 0; i < IMAX; i++)
             {
                 SubCanopyLayers[i] = new SubCanopyLayer(this, i);
 

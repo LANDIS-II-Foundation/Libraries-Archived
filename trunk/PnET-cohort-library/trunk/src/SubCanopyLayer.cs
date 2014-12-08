@@ -22,8 +22,8 @@ namespace Landis.Library.BiomassCohortsPnET
         public float Folalloc;
         public float RootAlloc;
         public float WoodAlloc;
-        public int LayerIndex;
-        public int CanopyLayer;
+        public byte LayerIndex;
+        public byte CanopyLayer;
 
         public float CumCohortBiomass;
         public float ReleasedNSC;
@@ -38,7 +38,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
-        public SubCanopyLayer(Cohort cohort, int LayerIndex)
+        public SubCanopyLayer(Cohort cohort, byte LayerIndex)
         {
             this.cohort = cohort;
             this.LayerIndex = LayerIndex;
