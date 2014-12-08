@@ -85,10 +85,6 @@ namespace Landis.Library.HarvestManagement
             CohortsDamaged   = Model.Core.Landscape.NewSiteVar<int>();
             TimeOfLastEvent  = Model.Core.Landscape.NewSiteVar<int>();
 
-            LandUseAllowHarvest = Model.Core.Landscape.NewSiteVar<bool>();
-            // All active sites start out eligible for harvesting.
-            LandUseAllowHarvest.ActiveSiteValues = true;
-
             Model.Core.RegisterSiteVar(SiteVars.PrescriptionName, "Harvest.PrescriptionName");
             Model.Core.RegisterSiteVar(SiteVars.TimeOfLastEvent, "Harvest.TimeOfLastEvent");
             Model.Core.RegisterSiteVar(SiteVars.CohortsDamaged, "Harvest.CohortsDamaged");
@@ -134,6 +130,17 @@ namespace Landis.Library.HarvestManagement
             TimeOfLastFire = Model.Core.GetSiteVar<int>("Fire.TimeOfLastEvent");
             TimeOfLastWind = Model.Core.GetSiteVar<int>("Wind.TimeOfLastEvent");
             CFSFuelType = Model.Core.GetSiteVar<int>("Fuels.CFSFuelType");
+
+            LandUseAllowHarvest = Model.Core.GetSiteVar<bool>("LandUse.AllowHarvest");
+            // If Land Use extension is not in the scenario, then create a local
+            // site variable for use by the library's implementation of land use
+            // (development) with the PreventEstablishment keyword.
+            if (LandUseAllowHarvest == null)
+            {
+                LandUseAllowHarvest = Model.Core.Landscape.NewSiteVar<bool>();
+                // All active sites start out eligible for harvesting.
+                LandUseAllowHarvest.ActiveSiteValues = true;
+            }
         }
 
         //---------------------------------------------------------------------
