@@ -46,8 +46,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public float Woodsenescence;
         public float FActiveBiom;
         public int MaxBiomass;  
-        public float Fage  ;
-         
+        
         public float Fol ;
         public float Wood ;
         public float Root ;
@@ -55,8 +54,24 @@ namespace Landis.Library.BiomassCohortsPnET
         public float NSCfrac;  
         public bool IsAlive;
         public ushort Age  { get; set; }
-        public int YearOfBirth { get; private set; }
+        public ushort YearOfBirth { get; private set; }
         public ISpecies species { get; private set; }
+
+        byte fage;
+        public float Fage
+        {
+            get
+            {
+                return  (1F / 100F * fage);
+            }
+
+            set
+            {
+                fage = (byte)(100F * value);
+            }
+        }
+
+       
 
         public int Layer
         {
@@ -178,7 +193,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
 
 
-        public Cohort(ISpecies species, int year_of_birth, int IMAX, float InitialNSC)
+        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC)
              
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
