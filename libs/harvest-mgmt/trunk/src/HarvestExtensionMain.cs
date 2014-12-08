@@ -4,6 +4,7 @@
 //   http://landis-extensions.googlecode.com/svn/libs/harvest-mgmt/trunk/
 
 using Landis.Core;
+using Landis.SpatialModeling;
 
 namespace Landis.Library.HarvestManagement
 {
@@ -21,6 +22,22 @@ namespace Landis.Library.HarvestManagement
         public HarvestExtensionMain(string name)
             : base(name, ExtType)
         {
+        }
+
+        /// <summary>
+        /// Raised when an individual site has been harvested.  Handlers
+        /// can be added that do additional bookkeeping for the site.
+        /// </summary>
+        public static event SiteHarvestedEvent.Handler SiteHarvestedEvent;
+
+        /// <summary>
+        /// Signals that a site has just been harvested.
+        /// </summary>
+        public static void OnSiteHarvest(object sender,
+                                         ActiveSite site)
+        {
+            if (SiteHarvestedEvent != null)
+                SiteHarvestedEvent(sender, new SiteHarvestedEvent.Args(site));
         }
     }
 }

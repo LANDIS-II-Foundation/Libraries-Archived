@@ -245,6 +245,7 @@ namespace Landis.Library.HarvestManagement
                         log.DebugFormat("    # of cohorts damaged = {0}; stand.LastAreaHarvested = {1}",
                                         SiteVars.CohortsDamaged[site],
                                         stand.LastAreaHarvested);
+                    HarvestExtensionMain.OnSiteHarvest(this, site);
                 }
 
                 if (speciesToPlant != null)

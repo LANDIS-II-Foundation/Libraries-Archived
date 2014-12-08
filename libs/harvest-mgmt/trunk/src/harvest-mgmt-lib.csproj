@@ -67,6 +67,7 @@
     <Compile Include="site-selection\PartialStandSpreading.cs" />
     <Compile Include="site-selection\PatchCutting.cs" />
     <Compile Include="site-selection\StandSpreading.cs" />
+    <Compile Include="SiteHarvestedEvent.cs" />
     <Compile Include="SiteVars.cs" />
     <Compile Include="stand-ranking\EconomicRank.cs" />
     <Compile Include="stand-ranking\EconomicRankParameters.cs" />
