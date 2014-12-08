@@ -64,6 +64,11 @@ namespace Landis.Library.HarvestManagement
         /// </summary>
         public static ISiteVar<int> CFSFuelType { get; private set; }
 
+        /// <summary>
+        /// Does a site's land use allow harvesting?
+        /// </summary>
+        public static ISiteVar<bool> LandUseAllowHarvest { get; private set; }
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -79,6 +84,10 @@ namespace Landis.Library.HarvestManagement
             PrescriptionName = Model.Core.Landscape.NewSiteVar<string>();
             CohortsDamaged   = Model.Core.Landscape.NewSiteVar<int>();
             TimeOfLastEvent  = Model.Core.Landscape.NewSiteVar<int>();
+
+            LandUseAllowHarvest = Model.Core.Landscape.NewSiteVar<bool>();
+            // All active sites start out eligible for harvesting.
+            LandUseAllowHarvest.ActiveSiteValues = true;
 
             Model.Core.RegisterSiteVar(SiteVars.PrescriptionName, "Harvest.PrescriptionName");
             Model.Core.RegisterSiteVar(SiteVars.TimeOfLastEvent, "Harvest.TimeOfLastEvent");

@@ -64,8 +64,16 @@ namespace Landis.Library.HarvestManagement
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// All the site locations in the stand, as specified in the stand map.
+        /// </summary>
+        public List<Location> AllLocations { get; private set; }
+
+        //---------------------------------------------------------------------
+
         /// <summar>
-        /// The list of locations in this stand at which there exist a site.
+        /// The list of locations in this stand where a site's land use allows
+        /// harvesting at the current timestep.
         /// </summary>
         public List<Location> SiteLocations {
             get {
@@ -325,6 +333,7 @@ namespace Landis.Library.HarvestManagement
         public Stand(uint mapCode)
         {
             this.mapCode = mapCode;
+            this.AllLocations = new List<Location>();
             this.siteLocations = new List<Location>();
             this.activeArea = Model.Core.CellArea;
             this.mgmtArea = null;
@@ -347,8 +356,8 @@ namespace Landis.Library.HarvestManagement
          public void Add(ActiveSite site) 
          {
 
-            siteLocations.Add(site.Location);
-            this.activeArea = siteLocations.Count * Model.Core.CellArea;
+            AllLocations.Add(site.Location);
+            this.activeArea = AllLocations.Count * Model.Core.CellArea;
             //set site var
             SiteVars.Stand[site] = this;
 
@@ -401,8 +410,7 @@ namespace Landis.Library.HarvestManagement
         //---------------------------------------------------------------------
 
         public void DelistActiveSite(ActiveSite site) {
-            siteLocations.Remove(site.Location);
-            this.activeArea = siteLocations.Count * Model.Core.CellArea;
+            SiteVars.LandUseAllowHarvest[site] = false;
         } 
 
         //---------------------------------------------------------------------
@@ -445,8 +453,15 @@ namespace Landis.Library.HarvestManagement
             harvested = false;
             rejectedPrescriptionNames.Clear();
             LastAreaHarvested = 0.0;
-            foreach(Site site in this)
+            siteLocations.Clear();
+            foreach (Location location in AllLocations)
+            {
+                ActiveSite site = Model.Core.Landscape[location];
                 SiteVars.CohortsDamaged[site] = 0;
+                if (SiteVars.LandUseAllowHarvest[site])
+                    siteLocations.Add(location);
+            }
+            activeArea = siteLocations.Count * Model.Core.CellArea;
         }
 
         //---------------------------------------------------------------------
