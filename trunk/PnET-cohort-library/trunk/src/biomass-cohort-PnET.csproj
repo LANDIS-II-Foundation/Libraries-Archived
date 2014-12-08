@@ -72,7 +72,6 @@
   <ItemGroup>
     <Compile Include="Cohort.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="PnETEcoregion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteCohorts.cs" />
     <Compile Include="SpeciesCohorts.cs" />
