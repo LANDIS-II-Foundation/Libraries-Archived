@@ -41,20 +41,17 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         
         public SubCanopyLayer[] SubCanopyLayers;
-
-        public ushort maxbiomass;
-        public int MaxBiomass
-        {
-            get
-            {
-                return (int)(1F / 100F * maxbiomass);
-            }
-
-            set
-            {
-                maxbiomass = (byte)(100F * value);
-            }
-        }
+        public ushort MaxBiomass;
+        public bool IsAlive;
+        public ushort Age { get; set; }
+        public ushort YearOfBirth { get; private set; }
+        public ISpecies species { get; private set; }
+        public byte fActiveBiom;
+        ushort wood;
+        ushort root;
+        ushort nsc;
+        ushort fol;
+        byte fage;
        
         public float NSCfrac
         {
@@ -63,12 +60,7 @@ namespace Landis.Library.BiomassCohortsPnET
                return NSC / (FActiveBiom * (Wood + Root) + Fol);
             }
         }
-        public bool IsAlive;
-        public ushort Age  { get; set; }
-        public ushort YearOfBirth { get; private set; }
-        public ISpecies species { get; private set; }
-
-        public byte fActiveBiom;
+        
         public float FActiveBiom
         {
             get
@@ -82,7 +74,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
-        ushort wood;
+        
         public float Wood
         {
             get
@@ -95,7 +87,6 @@ namespace Landis.Library.BiomassCohortsPnET
                 wood = (byte)(100F * value);
             }
         }
-        ushort root;
         public float Root
         {
             get
@@ -108,7 +99,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 root = (byte)(100F * value);
             }
         }
-        ushort nsc;
+        
         public float NSC
         {
             get
@@ -122,8 +113,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
-        ushort fol;
-        public float Fol
+         public float Fol
         {
             get
             {
@@ -135,8 +125,6 @@ namespace Landis.Library.BiomassCohortsPnET
                 fol = (byte)(100F * value);
             }
         }
-
-        byte fage;
         public float Fage
         {
             get
@@ -288,7 +276,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Wood = 10;
             this.NSC = InitialNSC;
             this.YearOfBirth = year_of_birth;
-            this.MaxBiomass = this.Biomass;
+            this.MaxBiomass = (ushort)this.Biomass;
             this.IsAlive = true;
         }
         public Cohort(Cohort cohort, int IMAX)
