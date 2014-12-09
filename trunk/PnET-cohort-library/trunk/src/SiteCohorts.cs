@@ -182,8 +182,8 @@ namespace Landis.Library.BiomassCohortsPnET
             cohorts.Add(cohort);  
             return true;
         }
-        
-        public void RemoveCohort(Cohort cohort, ActiveSite site)
+
+        public void RemoveCohort(Cohort cohort, Landis.SpatialModeling.ActiveSite site)
         {
             ResetSpeciesCohorts();
             Speciescohorts = null;
