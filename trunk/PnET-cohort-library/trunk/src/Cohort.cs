@@ -5,6 +5,8 @@ using Landis.Core;
 using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
 using System.Linq;
+using System.Collections.Generic;
+using System;
 namespace Landis.Library.BiomassCohortsPnET
 {
     /// <summary>
@@ -12,6 +14,8 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort  , Landis.Library.BiomassCohorts.ICohort  
     {
+        SiteOutput cohortoutput;
+
         /// <summary>
         /// Occurs when a cohort dies either due to senescence or disturbances.
         /// </summary>
@@ -44,13 +48,10 @@ namespace Landis.Library.BiomassCohortsPnET
         public ushort MaxBiomass;
         public bool IsAlive;
         public ushort Age { get; set; }
-        public ushort YearOfBirth { get; private set; }
+       
         public ISpecies species { get; private set; }
         public byte fActiveBiom;
-        ushort wood;
-        ushort root;
-        ushort nsc;
-        ushort fol;
+         
         byte fage;
        
         public float NSCfrac
@@ -60,86 +61,14 @@ namespace Landis.Library.BiomassCohortsPnET
                return NSC / (FActiveBiom * (Wood + Root) + Fol);
             }
         }
+
+        public float FActiveBiom;
+        public float Wood;
+        public float Root;
+        public float NSC;
+        public float Fol;
+        public float Fage;
         
-        public float FActiveBiom
-        {
-            get
-            {
-                return 1F / 100F * fActiveBiom;
-            }
-
-            set
-            {
-                fActiveBiom = (byte)(100F * value);
-            }
-        }
-
-        
-        public float Wood
-        {
-            get
-            {
-                return (1F / 100F * wood);
-            }
-
-            set
-            {
-                wood = (byte)(100F * value);
-            }
-        }
-        public float Root
-        {
-            get
-            {
-                return (1F / 100F * root);
-            }
-
-            set
-            {
-                root = (byte)(100F * value);
-            }
-        }
-        
-        public float NSC
-        {
-            get
-            {
-                return (1F / 100F * nsc);
-            }
-
-            set
-            {
-                nsc = (byte)(100F * value);
-            }
-        }
-
-         public float Fol
-        {
-            get
-            {
-                return (1F / 100F * fol);
-            }
-
-            set
-            {
-                fol = (byte)(100F * value);
-            }
-        }
-        public float Fage
-        {
-            get
-            {
-                return  (1F / 100F * fage);
-            }
-
-            set
-            {
-                fage = (byte)(100F * value);
-            }
-        }
-
-       
-
         public int Layer
         {
             get
@@ -260,7 +189,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
 
 
-        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC)
+        public Cohort(ISpecies species,  byte IMAX, float InitialNSC)
              
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
@@ -274,8 +203,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Age = 0;
             this.Fage = 1;
             this.Wood = 10;
-            this.NSC = InitialNSC;
-            this.YearOfBirth = year_of_birth;
+            this.NSC = (ushort)InitialNSC;
             this.MaxBiomass = (ushort)this.Biomass;
             this.IsAlive = true;
         }
@@ -295,7 +223,6 @@ namespace Landis.Library.BiomassCohortsPnET
             this.NSC = cohort.NSC;
             this.Root = cohort.Root;
             this.Fol = cohort.Fol;
-            this.YearOfBirth = cohort.YearOfBirth;//
             this.MaxBiomass = cohort.MaxBiomass;
             this.IsAlive = true;
             this.Fage = cohort.Fage;
@@ -316,6 +243,40 @@ namespace Landis.Library.BiomassCohortsPnET
         public static Percentage ComputeNonWoodyPercentage(Landis.Library.BiomassCohortsPnET.Cohort cohort, ActiveSite site)
         {
             return new Percentage(cohort.Fol / (cohort.Wood + cohort.Fol));
+        }
+        
+        public void InitializeOutput(string SiteName, ushort YearOfBirth)
+        {
+            cohortoutput = new SiteOutput(SiteName, "Cohort_" + Species.Name + "_" + YearOfBirth + ".csv", OutputHeader);
+        }
+
+        public void UpdateCohortData(DateTime date, ActiveSite site, float FTempPSN, float FTempResp, bool Leaf_On)
+        {
+            string s = date.Year + "," + date.Month + "," + date.ToString("yyyy/MM") + "," + Age + "," + Layer + "," + LAI + "," + Grosspsn + "," +
+                       FolResp + "," + MaintenanceRespiration + "," + Netpsn + "," + ReleasedNSC + "," + Folalloc + "," + RootAlloc + "," +
+                       WoodAlloc + "," + WaterUseEfficiency + "," + Fol + "," + Root + "," + Wood + "," + NSC + "," +
+                       NSCfrac + "," + Fwater + "," + Radiation + "," + Frad + "," + FTempPSN + "," + FTempResp + "," + Fage + "," + Leaf_On + "," +
+                       FActiveBiom;
+
+            cohortoutput.Add(s);
+        }
+
+        public string OutputHeader
+        {
+            get
+            {
+                string hdr = OutputHeaders.Year + "," + OutputHeaders.Month + "," + OutputHeaders.date + "," + OutputHeaders.Age + "," + OutputHeaders.Layer + "," + OutputHeaders.LAI + "," +
+                OutputHeaders.GrossPsn + "," + OutputHeaders.FolResp + "," + OutputHeaders.MaintResp + "," + OutputHeaders.NetPsn + "," + OutputHeaders.ReleasedNSC + "," + OutputHeaders.Folalloc + "," +
+                OutputHeaders.RootAlloc + "," + OutputHeaders.WoodAlloc + "," + OutputHeaders.WUE + "," + OutputHeaders.Fol + "," + OutputHeaders.Root + "," + OutputHeaders.Wood + "," +
+                OutputHeaders.NSC + "," + OutputHeaders.NSCfrac + "," + OutputHeaders.fWater + "," + OutputHeaders.Radiation + "," + OutputHeaders.fRad + "," + OutputHeaders.fTemp_psn + "," +
+                OutputHeaders.fTemp_resp + "," + OutputHeaders.fage + "," + OutputHeaders.LeafOn + "," + OutputHeaders.FActiveBiom + ",";
+
+                return hdr;
+            }
+        }
+        public void WriteCohortData()
+        {
+            cohortoutput.Write();
         }
         
         

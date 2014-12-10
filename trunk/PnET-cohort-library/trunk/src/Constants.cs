@@ -7,7 +7,6 @@ namespace Landis.Library.BiomassCohortsPnET
 {
     public class Constants 
     {
-        //public static float MaxNscFrac = 0.035F;
         public static float MC = 12;    // Molecular weight of C
         public static float MCO2 = 44; // Molecular weight of CO2
         public static int SecondsPerHour = 60 * 60;
