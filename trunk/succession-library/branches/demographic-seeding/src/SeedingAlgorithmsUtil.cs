@@ -63,7 +63,7 @@ namespace Landis.Library.Succession
                     break;
 
                 case SeedingAlgorithms.DemographicSeeding:
-                    algorithm = DemographicSeeding.Algorithm;
+                    algorithm = new DemographicSeeding().Algorithm;
                     break;
 
                 default:

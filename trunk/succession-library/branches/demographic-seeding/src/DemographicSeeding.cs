@@ -4,11 +4,11 @@ using Seed_Dispersal;
 
 namespace Landis.Library.Succession
 {
-    public static class DemographicSeeding
+    public class DemographicSeeding
     {
-        private static Seed_Dispersal.Map seedDispersalMap;
+        private Seed_Dispersal.Map seedDispersalMap;
 
-        static DemographicSeeding()
+        public DemographicSeeding()
         {
             seedDispersalMap = new Seed_Dispersal.Map();
         }
@@ -18,8 +18,8 @@ namespace Landis.Library.Succession
         /// <param name="species"></param>
         /// <param name="site">Site that may be seeded.</param>
         /// <returns>true if the species seeds the site.</returns>
-        public static bool Algorithm(ISpecies   species,
-                                     ActiveSite site)
+        public bool Algorithm(ISpecies   species,
+                              ActiveSite site)
         {
             throw new System.NotImplementedException();
         }
