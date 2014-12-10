@@ -1,7 +1,6 @@
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Library.InitialCommunities;
 using Landis.Core;
-using Landis.Library.AgeOnlyCohorts;
 
 using log4net;
 using System;
@@ -73,25 +72,7 @@ namespace Landis.Library.Succession
             disturbedSites = new DisturbedSiteEnumerator(Model.Core.Landscape,
                                                          SiteVars.Disturbed);
 
-            SeedingAlgorithm algorithm;
-            switch (seedAlg)
-            {
-                case SeedingAlgorithms.NoDispersal:
-                    algorithm = NoDispersal.Algorithm;
-                    break;
-
-                case SeedingAlgorithms.UniversalDispersal:
-                    algorithm = UniversalDispersal.Algorithm;
-                    break;
-
-                case SeedingAlgorithms.WardSeedDispersal:
-                    algorithm = WardSeedDispersal.Algorithm;
-                    break;
-
-                default:
-                    throw new ArgumentException(string.Format("Unknown seeding algorithm: {0}", seedAlg));
-            }
-
+            SeedingAlgorithm algorithm = SeedingAlgorithmsUtil.GetAlgorithm(seedAlg);
             Reproduction.Initialize(algorithm);
         }
 
