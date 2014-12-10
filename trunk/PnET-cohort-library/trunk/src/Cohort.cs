@@ -15,7 +15,6 @@ namespace Landis.Library.BiomassCohortsPnET
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort  , Landis.Library.BiomassCohorts.ICohort  
     {
         SiteOutput cohortoutput;
-
         /// <summary>
         /// Occurs when a cohort dies either due to senescence or disturbances.
         /// </summary>
@@ -45,30 +44,25 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         
         public SubCanopyLayer[] SubCanopyLayers;
-        public ushort MaxBiomass;
-        public bool IsAlive;
-        public ushort Age { get; set; }
-       
-        public ISpecies species { get; private set; }
-        public byte fActiveBiom;
-         
-        byte fage;
-       
-        public float NSCfrac
-        {
-            get
-            {
-               return NSC / (FActiveBiom * (Wood + Root) + Fol);
-            }
-        }
-
-        public float FActiveBiom;
-        public float Wood;
-        public float Root;
-        public float NSC;
-        public float Fol;
-        public float Fage;
         
+        
+        public float FActiveBiom;
+        public int MaxBiomass;  
+        
+        public float Fol ;
+        public float Wood ;
+        public float Root ;
+        public float NSC ;
+        public float NSCfrac;  
+        public bool IsAlive;
+        public ushort Age  { get; set; }
+        public ushort YearOfBirth { get; private set; }
+        public ISpecies species { get; private set; }
+
+
+        public float Fage;
+         
+
         public int Layer
         {
             get
@@ -88,14 +82,14 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get
             {
-                return SubCanopyLayers.Min(o => o.Fwater);
+                return SubCanopyLayers.Average(o => o.Fwater);
             }
         }
         public  float Frad
         {
             get
             {
-                return SubCanopyLayers.Min(o => o.Frad);
+                return SubCanopyLayers.Average(o => o.Frad);
             }
         }
         public float Folalloc
@@ -189,7 +183,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
 
 
-        public Cohort(ISpecies species,  byte IMAX, float InitialNSC)
+        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC)
              
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
@@ -199,12 +193,14 @@ namespace Landis.Library.BiomassCohortsPnET
 
             }
             this.FActiveBiom = 1;
+            this.NSCfrac = 0.1F;
             this.species = species;
             this.Age = 0;
             this.Fage = 1;
             this.Wood = 10;
-            this.NSC = (ushort)InitialNSC;
-            this.MaxBiomass = (ushort)this.Biomass;
+            this.NSC = InitialNSC;
+            this.YearOfBirth = year_of_birth;
+            this.MaxBiomass = this.Biomass;
             this.IsAlive = true;
         }
         public Cohort(Cohort cohort, int IMAX)
@@ -217,18 +213,23 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             this.FActiveBiom = cohort.FActiveBiom;
             this.MaxBiomass = cohort.MaxBiomass;
+            this.NSCfrac = cohort.NSCfrac;
             this.species = cohort.species;
             this.Age = cohort.Age;
             this.Wood = cohort.Wood;
             this.NSC = cohort.NSC;
             this.Root = cohort.Root;
             this.Fol = cohort.Fol;
+            this.YearOfBirth = cohort.YearOfBirth;//
             this.MaxBiomass = cohort.MaxBiomass;
             this.IsAlive = true;
             this.Fage = cohort.Fage;
             
         }
+         
+        
 
+        
         public int Biomass
         {
             get
