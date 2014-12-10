@@ -9,4 +9,4 @@
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyVersion("4.0.*")]
+[assembly: AssemblyVersion("4.1.*")]
