@@ -62,6 +62,10 @@ namespace Landis.Library.Succession
                     algorithm = WardSeedDispersal.Algorithm;
                     break;
 
+                case SeedingAlgorithms.DemographicSeeding:
+                    algorithm = DemographicSeeding.Algorithm;
+                    break;
+
                 default:
                     throw new System.ArgumentException(string.Format("Unknown seeding algorithm: {0}", seedAlg));
             }

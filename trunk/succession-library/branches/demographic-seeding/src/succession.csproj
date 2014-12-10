@@ -8,7 +8,7 @@
     <ProjectGuid>{DE8FD469-F80C-4B11-9E55-F99D001E563F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>succession</RootNamespace>
+    <RootNamespace>Landis.Library.Succession</RootNamespace>
     <AssemblyName>Landis.Library.Succession</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,9 +55,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CohortSiteVar.cs" />
+    <Compile Include="DemographicSeeding.cs" />
     <Compile Include="DisturbedSiteEnumerator.cs" />
     <Compile Include="ExtensionBase.cs" />
     <Compile Include="FormOfReproduction.cs" />
