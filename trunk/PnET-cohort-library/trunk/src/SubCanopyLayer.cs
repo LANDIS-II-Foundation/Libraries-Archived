@@ -2,228 +2,175 @@
 using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
 using System.Linq;
- 
+using System.Diagnostics;
 
 namespace Landis.Library.BiomassCohortsPnET
 {
+    
+
     public class SubCanopyLayer
     {
+        
         static float log2 = (float)System.Math.Log(2);
+        
         byte fwater;
-        public float Fwater
-        {
-            get
-            {
-                return 1F/100F * fwater;
-            }
-
-            set
-            {
-                fwater = (byte)(100F * value);
-            }
-        }
         byte frad;
-        public float Frad
-        {
-            get
-            {
-                return 1F / 100F * frad;
-            }
-
-            set
-            {
-                frad = (byte)(100F * value);
-            }
-        }
         public byte lai;
-        public float LAI
-        {
-            get
-            {
-                return 1F / 100F * lai;
-            }
-
-            set
-            {
-                lai = (byte)(100F * value);
-            }
-        }
-        ushort woodAlloc;
-        public float WoodAlloc
-        {
-            get
-            {
-                return 1F / 100F * woodAlloc;
-            }
-
-            set
-            {
-                woodAlloc = (ushort)(100F * value);
-            }
-        }
-
         public ushort maintenancerespiration;
-        public float MaintenanceRespiration
-        {
-            get
-            {
-                return 1F / 100F * maintenancerespiration;
-            }
+        public byte LayerIndex;
+        public byte CanopyLayer;
+        public Cohort cohort;
+        ushort netPsn;
+        ushort radiation;
+        ushort folResp;
+        ushort grossPsn;
+        ushort transpiration;
+        ushort cumCohortBiomass;
 
-            set
-            {
-                maintenancerespiration = (ushort)(100F * value);
-            }
-        }
-        public ushort fol;
-        public float Fol
-        {
-            get
-            {
-                return 1F / 100F * fol;
-            }
-
-            set
-            {
-                fol = (ushort)(100F * value);
-            }
-        }
-
-
-        public ushort radiation;
         public float Radiation
         {
             get
             {
-                return 1F / 100F * radiation;
+                return 0.1F * (float)radiation;
+            }
+            set
+            {
+                Debug.Assert(10 * value < ushort.MaxValue && value >= 0, "Radiation out of range" + value);
+                radiation = (ushort)(10 * value);
+            }
+        }
+
+
+        public float Fwater
+        {
+            get
+            {
+                return 0.01F * fwater;
             }
 
             set
             {
-                radiation = (ushort)(100F * value);
+                Debug.Assert(100 * value < byte.MaxValue && value >= 0, "Fwater out of range " + value);
+                fwater = (byte)(100F * value);
             }
         }
-        public ushort netPsn;
+        
+        public float Frad
+        {
+            get
+            {
+                return 0.01F * frad;
+            }
+
+            set
+            {
+                Debug.Assert(100 * value < byte.MaxValue && value >= 0, "Frad out of range " + value);
+                frad = (byte)(100F * value);
+            }
+        }
+        
+        public float LAI
+        {
+            get
+            {
+                return 0.01F * lai;
+            }
+
+            set
+            {
+                Debug.Assert(100 * value < byte.MaxValue && value >= 0, "LAI out of range " + value);
+                lai = (byte)(100F * value);
+            }
+        }
+        public float MaintenanceRespiration
+        {
+            get
+            {
+                return 0.01F * maintenancerespiration;
+            }
+
+            set
+            {
+                Debug.Assert(100 * value < ushort.MaxValue && value >= 0, "MaintenanceRespiration out of range " + value);
+                maintenancerespiration = (ushort)(100F * value);
+            }
+        }
+
+        
         public float NetPsn
         {
             get
             {
-                return 1F / 100F * netPsn;
+                return 0.01F * netPsn;
             }
 
             set
             {
+                Debug.Assert(100 * value < ushort.MaxValue && value >= 0, "NetPsn out of range " + value);
                 netPsn = (ushort)(100F * value);
             }
         }
 
-        public ushort folResp;
+       
         public float FolResp
         {
             get
             {
-                return 1F / 100F * folResp;
+                return 0.01F * folResp;
             }
 
             set
             {
+                Debug.Assert(100 * value < ushort.MaxValue && value >= 0, "FolResp out of range " + value);
                 folResp = (ushort)(100F * value);
             }
         }
 
 
-        public ushort grossPsn;
+       
         public float GrossPsn
         {
             get
             {
-                return 1F / 100F * grossPsn;
+                return 0.01F * grossPsn;
             }
 
             set
             {
+                Debug.Assert(100 * value < ushort.MaxValue && value >= 0, "GrossPsn out of range " + value);
                 grossPsn = (ushort)(100F * value);
             }
         }
 
-        public ushort transpiration;
+        
         public float Transpiration
         {
             get
             {
-                return 1F / 100F * transpiration;
+                return 0.01F * transpiration;
             }
 
             set
             {
+                Debug.Assert(100 * value < ushort.MaxValue && value >= 0, "GrossPsn out of range " + value);
                 transpiration = (ushort)(100F * value);
             }
         }
-
-        public ushort folalloc;
-        public float Folalloc
-        {
-            get
-            {
-                return 1F / 100F * folalloc;
-            }
-
-            set
-            {
-                folalloc = (ushort)(100F * value);
-            }
-        }
-
-
-        public ushort rootAlloc;
-        public float RootAlloc
-        {
-            get
-            {
-                return 1F / 100F * rootAlloc;
-            }
-
-            set
-            {
-                rootAlloc = (ushort)(100F * value);
-            }
-        }
-
-        public ushort cumCohortBiomass;
+         
         public float CumCohortBiomass
         {
             get
             {
-                return 1F / 100F * cumCohortBiomass;
+                return cumCohortBiomass;
             }
 
             set
             {
-                cumCohortBiomass = (ushort)(100F * value);
+                Debug.Assert(value < ushort.MaxValue && value >= 0, "CumCohortBiomass out of range " + value);
+                cumCohortBiomass = (ushort)(value);
             }
         }
 
-
-        public ushort releasedNSC;
-        public float ReleasedNSC
-        {
-            get
-            {
-                return 1F / 100F * releasedNSC;
-            }
-
-            set
-            {
-                releasedNSC = (ushort)(100F * value);
-            }
-        }
-
-
-        
-        public byte LayerIndex;
-        public byte CanopyLayer;
-        public Cohort cohort;
-       
         public ISpecies Species
         {
             get
@@ -237,16 +184,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.cohort = cohort;
             this.LayerIndex = LayerIndex;
         }
-        public void Reset()
-        {
-            Transpiration = 0;
-            GrossPsn = 0;
-            NetPsn = 0;
-            Folalloc = 0;
-            MaintenanceRespiration = 0;
-            WoodAlloc = 0;
-            FolResp = 0;
-        }
+         
         
     }
 }
