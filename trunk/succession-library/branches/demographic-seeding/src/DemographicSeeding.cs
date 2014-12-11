@@ -8,9 +8,31 @@ namespace Landis.Library.Succession
     {
         private Seed_Dispersal.Map seedDispersalMap;
 
-        public DemographicSeeding()
+        /// <summary>
+        /// Initializes the demographic seeding algorithm
+        /// </summary>
+        /// <param name="successionTimestep">
+        /// The length of the succession extension's timestep (units: years).
+        /// </param>
+        public DemographicSeeding(int successionTimestep)
         {
-            seedDispersalMap = new Seed_Dispersal.Map();
+            int numTimeSteps;  // the number of succession time steps to loop over
+            int maxCohortAge;  // maximum age allowed for any species, in years
+
+            numTimeSteps = (Model.Core.EndTime - Model.Core.StartTime) / successionTimestep;
+            maxCohortAge = 0;
+            foreach (ISpecies species in Model.Core.Species)
+                if (species.Longevity > maxCohortAge)
+                    maxCohortAge = species.Longevity;
+
+            seedDispersalMap = new Seed_Dispersal.Map(
+                Model.Core.Landscape.Columns,
+                Model.Core.Landscape.Rows,
+                Model.Core.Species.Count,
+                numTimeSteps,
+                successionTimestep,
+                Model.Core.Ecoregions.Count,
+                maxCohortAge);
         }
 
         /// <summary>

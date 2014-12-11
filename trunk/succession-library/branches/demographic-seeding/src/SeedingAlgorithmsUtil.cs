@@ -45,7 +45,8 @@ namespace Landis.Library.Succession
         /// Gets the seeding algorithm identified by a particular value of the
         /// SeedingAlgorithms type.
         /// </summary>
-        public static SeedingAlgorithm GetAlgorithm(SeedingAlgorithms seedAlg)
+        public static SeedingAlgorithm GetAlgorithm(SeedingAlgorithms seedAlg,
+                                                    int               successionTimestep)
         {
             SeedingAlgorithm algorithm;
             switch (seedAlg)
@@ -63,7 +64,7 @@ namespace Landis.Library.Succession
                     break;
 
                 case SeedingAlgorithms.DemographicSeeding:
-                    algorithm = new DemographicSeeding().Algorithm;
+                    algorithm = new DemographicSeeding(successionTimestep).Algorithm;
                     break;
 
                 default:

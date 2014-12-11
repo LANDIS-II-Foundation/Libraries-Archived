@@ -72,7 +72,8 @@ namespace Landis.Library.Succession
             disturbedSites = new DisturbedSiteEnumerator(Model.Core.Landscape,
                                                          SiteVars.Disturbed);
 
-            SeedingAlgorithm algorithm = SeedingAlgorithmsUtil.GetAlgorithm(seedAlg);
+            SeedingAlgorithm algorithm = SeedingAlgorithmsUtil.GetAlgorithm(seedAlg,
+                                                                            Timestep);
             Reproduction.Initialize(algorithm);
         }
 
