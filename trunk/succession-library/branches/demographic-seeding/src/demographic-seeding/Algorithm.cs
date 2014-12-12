@@ -6,7 +6,7 @@ namespace Landis.Library.Succession.DemographicSeeding
 {
     public class Algorithm
     {
-        private Seed_Dispersal.Map seedDispersalMap;
+        private Seed_Dispersal.Map seedingData;
 
         /// <summary>
         /// Initializes the demographic seeding algorithm
@@ -25,7 +25,7 @@ namespace Landis.Library.Succession.DemographicSeeding
                 if (species.Longevity > maxCohortAge)
                     maxCohortAge = species.Longevity;
 
-            seedDispersalMap = new Seed_Dispersal.Map(
+            seedingData = new Seed_Dispersal.Map(
                 Model.Core.Landscape.Columns,
                 Model.Core.Landscape.Rows,
                 Model.Core.Species.Count,
