@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CohortSiteVar.cs" />
-    <Compile Include="DemographicSeeding.cs" />
+    <Compile Include="demographic-seeding\Algorithm.cs" />
     <Compile Include="DisturbedSiteEnumerator.cs" />
     <Compile Include="ExtensionBase.cs" />
     <Compile Include="FormOfReproduction.cs" />

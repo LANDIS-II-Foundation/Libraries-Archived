@@ -2,9 +2,9 @@
 using Landis.SpatialModeling;
 using Seed_Dispersal;
 
-namespace Landis.Library.Succession
+namespace Landis.Library.Succession.DemographicSeeding
 {
-    public class DemographicSeeding
+    public class Algorithm
     {
         private Seed_Dispersal.Map seedDispersalMap;
 
@@ -14,7 +14,7 @@ namespace Landis.Library.Succession
         /// <param name="successionTimestep">
         /// The length of the succession extension's timestep (units: years).
         /// </param>
-        public DemographicSeeding(int successionTimestep)
+        public Algorithm(int successionTimestep)
         {
             int numTimeSteps;  // the number of succession time steps to loop over
             int maxCohortAge;  // maximum age allowed for any species, in years
@@ -40,8 +40,8 @@ namespace Landis.Library.Succession
         /// <param name="species"></param>
         /// <param name="site">Site that may be seeded.</param>
         /// <returns>true if the species seeds the site.</returns>
-        public bool Algorithm(ISpecies   species,
-                              ActiveSite site)
+        public bool DoesSpeciesSeedSite(ISpecies   species,
+                                        ActiveSite site)
         {
             throw new System.NotImplementedException();
         }
