@@ -33,6 +33,14 @@ namespace Landis.Library.Succession.DemographicSeeding
                 successionTimestep,
                 Model.Core.Ecoregions.Count,
                 maxCohortAge);
+            seedingData.pixel_size = Model.Core.CellLength;
+
+            // Initialize some species parameters from the core.
+            foreach (ISpecies species in Model.Core.Species)
+            {
+                seedingData.all_species[species.Index].shade_tolerance = species.ShadeTolerance;
+                seedingData.all_species[species.Index].reproductive_age = species.Maturity;
+            }
         }
 
         /// <summary>
