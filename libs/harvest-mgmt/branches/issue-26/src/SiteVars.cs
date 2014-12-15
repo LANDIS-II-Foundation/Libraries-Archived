@@ -64,6 +64,11 @@ namespace Landis.Library.HarvestManagement
         /// </summary>
         public static ISiteVar<int> CFSFuelType { get; private set; }
 
+        /// <summary>
+        /// Does a site's land use allow harvesting?
+        /// </summary>
+        public static ISiteVar<bool> LandUseAllowHarvest { get; private set; }
+
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -86,10 +91,6 @@ namespace Landis.Library.HarvestManagement
 
             SiteVars.TimeOfLastEvent.ActiveSiteValues = -100;
             SiteVars.Prescription.SiteValues = null;
-
-            TimeOfLastFire = Model.Core.GetSiteVar<int>("Fire.TimeOfLastEvent");
-            TimeOfLastWind = Model.Core.GetSiteVar<int>("Wind.TimeOfLastEvent");
-            CFSFuelType    = Model.Core.GetSiteVar<int>("Fuels.CFSFuelType");
         }
 
         //---------------------------------------------------------------------
@@ -99,12 +100,47 @@ namespace Landis.Library.HarvestManagement
         /// the core's registry at the start of each timestep?  Left it here
         /// because it was in Base Extension; really need to re-assess this
         /// some day...)
+        /// (Update -- finally figured out why they wrote this -- because the
+        /// calls to GetSiteVar in the Initialize method above didn't work if
+        /// the extensions were loaded in a particular order (i.e., harvest
+        /// extension before wind, fire, fuels exts).  See the GetExternalVars
+        /// method below.)
         /// </summary>
+        [System.Obsolete("Use the GetExternalVars method instead.")]
         public static void ReInitialize()
+        {
+            GetExternalVars();
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Get references to external site variables defined by non-harvest
+        /// extensions.
+        /// </summary>
+        /// <remarks>
+        /// This needs to be called after all the extensions in a scenario
+        /// have created and registered their site variables.  They should do
+        /// that in the LoadParameters method of their PlugIn classes.  So
+        /// this method needs to be called in the PlugIn.Initialize method of
+        /// harvest extensions.
+        /// </remarks>
+        public static void GetExternalVars()
         {
             TimeOfLastFire = Model.Core.GetSiteVar<int>("Fire.TimeOfLastEvent");
             TimeOfLastWind = Model.Core.GetSiteVar<int>("Wind.TimeOfLastEvent");
             CFSFuelType = Model.Core.GetSiteVar<int>("Fuels.CFSFuelType");
+
+            LandUseAllowHarvest = Model.Core.GetSiteVar<bool>("LandUse.AllowHarvest");
+            // If Land Use extension is not in the scenario, then create a local
+            // site variable for use by the library's implementation of land use
+            // (development) with the PreventEstablishment keyword.
+            if (LandUseAllowHarvest == null)
+            {
+                LandUseAllowHarvest = Model.Core.Landscape.NewSiteVar<bool>();
+                // All active sites start out eligible for harvesting.
+                LandUseAllowHarvest.ActiveSiteValues = true;
+            }
         }
 
         //---------------------------------------------------------------------
