@@ -63,6 +63,17 @@ namespace Landis.Library.Succession.DemographicSeeding
                 seedingData.all_species[species.Index].shade_tolerance = species.ShadeTolerance;
                 seedingData.all_species[species.Index].reproductive_age = species.Maturity;
             }
+
+            // Load user-specified parameters
+            string path = "demographic-seeding.txt";  // hard-wired for now, so no changes required to succession extensions
+            Model.Core.UI.WriteLine("Reading demographic seeding parameters from {0} ...", path);
+            ParameterParser parser = new ParameterParser();
+            Parameters parameters = Landis.Data.Load<Parameters>(path, parser);
+
+            seedingData.dispersal_model  = parameters.Kernel;
+            seedingData.mc_draws         = parameters.MonteCarloDraws;
+            seedingData.max_leaf_area    = parameters.MaxLeafArea;
+            seedingData.cohort_threshold = parameters.CohortThreshold;
         }
 
         /// <summary>
