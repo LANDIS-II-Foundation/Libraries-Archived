@@ -30,6 +30,14 @@ namespace Landis.Library.BiomassCohortsPnET
         float wood;
         float nsc;
 
+        public byte NrOfSublayers
+        {
+            get
+            {
+                return (byte) SubCanopyLayers.Count();
+            }
+        }
+
         public SubCanopyLayer this[int ly]
         {
             get
@@ -73,17 +81,11 @@ namespace Landis.Library.BiomassCohortsPnET
 
             set
             {
-                Debug.Assert(value < ushort.MaxValue && value >= 0, "Root out of range " + value);
+                //Debug.Assert(value < ushort.MaxValue && value >= 0, "Root out of range " + value);
                 root = (ushort)(value);
             }
         }
-        
-       
-        
-        
-        
-
-
+         
         public float NSCfrac
         {
             get
@@ -235,7 +237,7 @@ namespace Landis.Library.BiomassCohortsPnET
         }
 
 
-        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC)
+        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC, float DNSC)
              
         {
             SubCanopyLayers = new SubCanopyLayer[IMAX];
@@ -249,9 +251,8 @@ namespace Landis.Library.BiomassCohortsPnET
             this.species = species;
             this.Age = 0;
             this.Fage = 1;
-            this.Wood = 10;
             this.NSC = InitialNSC;
-           
+            this.Wood = (float)(1F / DNSC * InitialNSC);
             this.MaxBiomass = this.Biomass;
             this.IsAlive = true;
         }
@@ -265,14 +266,12 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             this.FActiveBiom = cohort.FActiveBiom;
             this.MaxBiomass = cohort.MaxBiomass;
-            //this.NSCfrac = cohort.NSCfrac;
             this.species = cohort.species;
             this.Age = cohort.Age;
             this.Wood = cohort.Wood;
             this.NSC = cohort.NSC;
             this.Root = cohort.Root;
             this.Fol = cohort.Fol;
-            
             this.MaxBiomass = cohort.MaxBiomass;
             this.IsAlive = true;
             this.Fage = cohort.Fage;
