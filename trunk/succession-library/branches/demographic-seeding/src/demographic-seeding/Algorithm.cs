@@ -67,14 +67,26 @@ namespace Landis.Library.Succession.DemographicSeeding
             // Load user-specified parameters
             string path = "demographic-seeding.txt";  // hard-wired for now, so no changes required to succession extensions
             Model.Core.UI.WriteLine("Reading demographic seeding parameters from {0} ...", path);
-            ParameterParser parser = new ParameterParser();
+            ParameterParser parser = new ParameterParser(Model.Core.Species);
             Parameters parameters = Landis.Data.Load<Parameters>(path, parser);
 
             seedingData.dispersal_model  = parameters.Kernel;
             seedingData.mc_draws         = parameters.MonteCarloDraws;
             seedingData.max_leaf_area    = parameters.MaxLeafArea;
             seedingData.cohort_threshold = parameters.CohortThreshold;
+
+            foreach (ISpecies species in Model.Core.Species)
+            {
+                SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index]; 
+                seedingData.all_species[species.Index].min_seed  = speciesParameters.MinSeedsProduced;
+                seedingData.all_species[species.Index].max_seed  = speciesParameters.MaxSeedsProduced;
+                seedingData.all_species[species.Index].leaf_area = speciesParameters.LeafArea;
+                for (int i = 0; i < speciesParameters.DispersalParameters.Length; i++)
+                    seedingData.all_species[species.Index].dispersal_parameters[i] = speciesParameters.DispersalParameters[i];
+            }
         }
+
+        //---------------------------------------------------------------------
 
         /// <summary>
         /// Seeding algorithm: determines if a species seeds a site.

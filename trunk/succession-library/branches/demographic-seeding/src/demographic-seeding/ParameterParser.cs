@@ -14,6 +14,7 @@
 
 using Edu.Wisc.Forest.Flel.Util;
 using Landis.Core;
+using System.Collections.Generic;
 
 namespace Landis.Library.Succession.DemographicSeeding
 {
@@ -24,6 +25,11 @@ namespace Landis.Library.Succession.DemographicSeeding
     public class ParameterParser
         : TextParser<Parameters>
     {
+        private ISpeciesDataset speciesDataset;
+        private Dictionary<string, int> speciesLineNumbers;
+
+        //---------------------------------------------------------------------
+
         static ParameterParser()
         {
             ParsingUtils.RegisterForInputValues();
@@ -43,8 +49,10 @@ namespace Landis.Library.Succession.DemographicSeeding
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public ParameterParser()
+        public ParameterParser(ISpeciesDataset speciesDataset)
         {
+            this.speciesDataset = speciesDataset;
+            this.speciesLineNumbers = new Dictionary<string, int>();
         }
 
         //---------------------------------------------------------------------
@@ -73,7 +81,92 @@ namespace Landis.Library.Succession.DemographicSeeding
             ReadVar(cohortThreshold);
             parameters.CohortThreshold = cohortThreshold.Value;
 
+            parameters.SpeciesParameters = ReadSpeciesParameters();
+
             return parameters;
+        }
+
+        //---------------------------------------------------------------------
+
+        protected SpeciesParameters[] ReadSpeciesParameters()
+        {
+            speciesLineNumbers.Clear();  // for re-use during unit testing
+
+            SpeciesParameters[] allSpeciesParameters = new SpeciesParameters[speciesDataset.Count];
+
+            InputVar<string> speciesName = new InputVar<string>("Species");
+            InputVar<int> minSeeds = new InputVar<int>("Minimum Seeds Produced");
+            InputVar<int> maxSeeds = new InputVar<int>("Maximum Seeds Produced");
+            InputVar<double> leafArea = new InputVar<double>("Seedling Leaf Area");
+            InputVar<double> dispersalMean1 = new InputVar<double>("Dispersal Mean1");
+            InputVar<double> dispersalMean2 = new InputVar<double>("Dispersal Mean2");
+            InputVar<double> dispersalWeight1 = new InputVar<double>("Dispersal Weight1");
+
+            string lastColumn = "the " + dispersalWeight1.Name + " column";
+
+            while (! AtEndOfInput)
+            {
+                StringReader currentLine = new StringReader(CurrentLine);
+
+                ReadValue(speciesName, currentLine);
+                ISpecies species = ValidateSpeciesName(speciesName);
+
+                SpeciesParameters parameters = new SpeciesParameters();
+
+                ReadValue(minSeeds, currentLine);
+                parameters.MinSeedsProduced = minSeeds.Value;
+
+                ReadValue(maxSeeds, currentLine);
+                parameters.MaxSeedsProduced = maxSeeds.Value;
+
+                ReadValue(leafArea, currentLine);
+                parameters.LeafArea = leafArea.Value;
+
+                ReadValue(dispersalMean1, currentLine);
+                parameters.DispersalMean1 = dispersalMean1.Value;
+
+                ReadValue(dispersalMean2, currentLine);
+                parameters.DispersalMean2 = dispersalMean2.Value;
+
+                ReadValue(dispersalWeight1, currentLine);
+                parameters.DispersalWeight1 = dispersalWeight1.Value;
+
+                CheckNoDataAfter(lastColumn, currentLine);
+                allSpeciesParameters[species.Index] = parameters;
+                GetNextLine();
+            }
+
+            if (speciesLineNumbers.Count == 0)
+                throw NewParseException("Expected a line starting with a species name");
+
+            return allSpeciesParameters;
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Validates a species name read from the current input line.
+        /// </summary>
+        /// <exception cref="InputValueException">
+        /// Thrown if the species name is not valid, or if the species name
+        /// was previously used on an earlier line in the input file.
+        /// </exception>
+        protected ISpecies ValidateSpeciesName(InputVar<string> name)
+        {
+            ISpecies species = speciesDataset[name.Value.Actual];
+            if (species == null)
+                throw new InputValueException(name.Value.String,
+                                              "{0} is not a species name",
+                                              name.Value.String);
+            int lineNumber;
+            if (speciesLineNumbers.TryGetValue(species.Name, out lineNumber))
+                throw new InputValueException(name.Value.String,
+                                              "The species {0} was previously used on line {1}",
+                                              name.Value.String, lineNumber);
+            else
+                speciesLineNumbers[species.Name] = LineNumber;
+
+            return species;
         }
     }
 }

@@ -66,6 +66,7 @@
     <Compile Include="demographic-seeding\ParameterParser.cs" />
     <Compile Include="demographic-seeding\Parameters.cs" />
     <Compile Include="demographic-seeding\ParsingUtils.cs" />
+    <Compile Include="demographic-seeding\SpeciesParameters.cs" />
     <Compile Include="DisturbedSiteEnumerator.cs" />
     <Compile Include="ExtensionBase.cs" />
     <Compile Include="FormOfReproduction.cs" />

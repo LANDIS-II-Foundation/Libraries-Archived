@@ -95,5 +95,12 @@ namespace Landis.Library.Succession.DemographicSeeding
                 cohortThreshold = value;
             }
         }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Species parameters related to demographic seeding.
+        /// </summary>
+        public SpeciesParameters[] SpeciesParameters { get; set; }
     }
 }
