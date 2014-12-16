@@ -29,6 +29,7 @@ namespace Landis.Library.BiomassCohortsPnET
         float fol;
         float wood;
         float nsc;
+        public float MaintenanceRespiration;
 
         public byte NrOfSublayers
         {
@@ -158,6 +159,7 @@ namespace Landis.Library.BiomassCohortsPnET
             {
                 return (float)SubCanopyLayers.Average(o => o.Radiation);
             }
+
         }
         public  float Fwater
         {
@@ -182,13 +184,8 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
        
-        public float MaintenanceRespiration
-        {
-            get
-            {
-                return SubCanopyLayers.Sum(o => o.MaintenanceRespiration);
-            }
-        }
+       
+        
         public float FolResp
         {
             get
@@ -214,7 +211,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get
             {
-                return SubCanopyLayers.Sum(o => o.GrossPsn);
+                return Netpsn + FolResp;
             }
         }
        
