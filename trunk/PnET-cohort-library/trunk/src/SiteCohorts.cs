@@ -190,7 +190,6 @@ namespace Landis.Library.BiomassCohortsPnET
             ResetSpeciesCohorts();
             Speciescohorts = null;
 
-            
             cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, null);
 

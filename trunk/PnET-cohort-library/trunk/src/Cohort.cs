@@ -16,7 +16,16 @@ namespace Landis.Library.BiomassCohortsPnET
     /// </summary>
     public class Cohort : Landis.Library.AgeOnlyCohorts.ICohort  , Landis.Library.BiomassCohorts.ICohort  
     {
-        SiteOutput cohortoutput;
+        LocalOutput cohortoutput;
+
+        public string outputfilename
+        {
+            get
+            {
+                return cohortoutput.FileName;
+            }
+        }
+
         public ushort Age { get; set; }
         public bool IsAlive;
         SubCanopyLayer[] SubCanopyLayers;
@@ -157,7 +166,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get
             {
-                return (float)SubCanopyLayers.Average(o => o.Radiation);
+                return (float)SubCanopyLayers.Max(o => o.Radiation);
             }
 
         }
@@ -232,7 +241,7 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             
         }
-
+       
 
         public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC, float DNSC)
              
@@ -296,7 +305,7 @@ namespace Landis.Library.BiomassCohortsPnET
         
         public void InitializeOutput(string SiteName, ushort YearOfBirth)
         {
-            cohortoutput = new SiteOutput(SiteName, "Cohort_" + Species.Name + "_" + YearOfBirth + ".csv", OutputHeader);
+            cohortoutput = new LocalOutput(SiteName, "Cohort_" + Species.Name + "_" + YearOfBirth + ".csv", OutputHeader);
         }
 
         public void UpdateCohortData(DateTime date, ActiveSite site, float FTempPSN, float FTempResp, bool Leaf_On)
@@ -345,6 +354,12 @@ namespace Landis.Library.BiomassCohortsPnET
                                 ActiveSite site,
                                 ExtensionType disturbanceType)
         {
+
+            if (cohort.cohortoutput != null)
+            {
+                cohort.cohortoutput.Write();
+            }
+
             if (DeathEvent != null)
             {
                 DeathEvent(sender, new Landis.Library.AgeOnlyCohorts.DeathEventArgs(cohort, site, disturbanceType));
