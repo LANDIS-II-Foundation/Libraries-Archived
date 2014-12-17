@@ -14,13 +14,19 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
+using log4net;
 using Seed_Dispersal;
+using System.Reflection;
 
 namespace Landis.Library.Succession.DemographicSeeding
 {
     public class Algorithm
     {
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly bool isDebugEnabled = log.IsDebugEnabled;
+
         private Seed_Dispersal.Map seedingData;
+        private int timeAtLastCall = -99999;
 
         /// <summary>
         /// Initializes the demographic seeding algorithm
@@ -112,7 +118,54 @@ namespace Landis.Library.Succession.DemographicSeeding
         public bool DoesSpeciesSeedSite(ISpecies   species,
                                         ActiveSite site)
         {
-            throw new System.NotImplementedException();
+            // Is this the first site for the current timestep?
+            if (Model.Core.CurrentTime != timeAtLastCall)
+                SimulateOneTimestep();
+            timeAtLastCall = Model.Core.CurrentTime;
+
+            int x = site.Location.Column - 1;
+            int y = site.Location.Row - 1;
+            int s = species.Index;
+            int seedlingCount = seedingData.seedlings[s][x][y];
+
+            return seedlingCount > seedingData.cohort_threshold;
+        }
+
+        //---------------------------------------------------------------------
+
+        protected void SimulateOneTimestep()
+        {
+            if (isDebugEnabled)
+                log.DebugFormat("Starting DemographicSeeding.Algorithm.SimulateOneTimestep() ...");
+
+            foreach (ActiveSite site in Model.Core.Landscape)
+            {
+                int x = site.Location.Column - 1;
+                int y = site.Location.Row - 1;
+
+                // seedling count high enough to be considered a cohort by the
+                // SimOneTimestep method.
+                int cohortThresholdPlus1 = seedingData.cohort_threshold + 1;
+
+                foreach (ISpecies species in Model.Core.Species)
+                {
+                    int s = species.Index;
+                    int a = seedingData.all_species[s].reproductive_age - 1;
+                    int seedlingCount = 0;
+                    if (Reproduction.MaturePresent(species, site))
+                        // This will cause SimOneTimestep to consider the
+                        // species as reproductive at this site.
+                        seedlingCount = cohortThresholdPlus1;
+                    seedingData.cohorts[s][x][y][a] = seedlingCount;
+                }
+            }
+
+            if (isDebugEnabled)
+                log.DebugFormat("  Calling seedingData.SimOneTimeStep() ...");
+            seedingData.SimOneTimeStep();
+
+            if (isDebugEnabled)
+                log.DebugFormat("Exiting SimulateOneTimestep()");
         }
     }
 }
