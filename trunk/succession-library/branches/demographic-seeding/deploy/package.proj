@@ -12,9 +12,10 @@
   <!--  ===============================================================  -->
 
   <PropertyGroup>
-    <AssemblyBuildDir>..\src\bin\Release</AssemblyBuildDir>
+    <AssemblyBuildDir>..\src\bin\Debug</AssemblyBuildDir>
     <LibAssembly>$(AssemblyBuildDir)\Landis.Library.Succession.dll</LibAssembly>
     <LibXmlDoc>$(AssemblyBuildDir)\Landis.Library.Succession.xml</LibXmlDoc>
+	<SeedDispersalLib>$(AssemblyBuildDir)\Seed Dipsersal.dll</SeedDispersalLib>
   </PropertyGroup>
 
   <Target Name="zip-file">
@@ -30,13 +31,18 @@
     </RegexReplace>
     <PropertyGroup>
       <LibVersion>@(MajorMinor)</LibVersion>
+	  <ReleaseAbbr>a1</ReleaseAbbr>
+	  <LibVersionRelease>$(LibVersion)-$(ReleaseAbbr)</LibVersionRelease>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageContents Include="$(LibAssembly)" />
-      <PackageContents Include="$(LibXmlDoc)" />
+      <!-- <PackageContents Include="$(LibXmlDoc)" />  -->
+	  <PackageContents Include="$(SeedDispersalLib)" />
+	  <PackageContents Include="README.txt" />
+	  <PackageContents Include="demographic-seeding.txt" />
     </ItemGroup>
-    <Zip ZipFileName="Landis.Library.Succession-$(LibVersion).zip"
+    <Zip ZipFileName="Landis.Library.Succession-$(LibVersionRelease).zip"
          Files="@(PackageContents)"
          Flatten="true" />
   </Target>
