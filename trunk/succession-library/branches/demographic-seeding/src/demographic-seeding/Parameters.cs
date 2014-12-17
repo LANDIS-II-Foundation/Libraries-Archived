@@ -35,6 +35,13 @@ namespace Landis.Library.Succession.DemographicSeeding
         //---------------------------------------------------------------------
 
         /// <summary>
+        /// Identifies a particular seed production model
+        /// </summary>
+        public Seed_Dispersal.Seed_Model SeedProductionModel { get; set; }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
         /// The number of Monte Carlo draws to use when estimating dispersal
         /// probabilities.
         /// </summary>

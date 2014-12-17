@@ -71,6 +71,7 @@ namespace Landis.Library.Succession.DemographicSeeding
             Parameters parameters = Landis.Data.Load<Parameters>(path, parser);
 
             seedingData.dispersal_model  = parameters.Kernel;
+            seedingData.seed_model       = parameters.SeedProductionModel;
             seedingData.mc_draws         = parameters.MonteCarloDraws;
             seedingData.max_leaf_area    = parameters.MaxLeafArea;
             seedingData.cohort_threshold = parameters.CohortThreshold;

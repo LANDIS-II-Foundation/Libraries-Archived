@@ -67,6 +67,10 @@ namespace Landis.Library.Succession.DemographicSeeding
             ReadVar(kernel);
             parameters.Kernel = kernel.Value;
 
+            InputVar<Seed_Dispersal.Seed_Model> seedProduction = new InputVar<Seed_Dispersal.Seed_Model>("SeedProduction");
+            ReadVar(seedProduction);
+            parameters.SeedProductionModel = seedProduction.Value;
+
             InputVar<int> monteCarloDraws = new InputVar<int>("MonteCarloDraws");
             ReadVar(monteCarloDraws);
             parameters.MonteCarloDraws = monteCarloDraws.Value;
