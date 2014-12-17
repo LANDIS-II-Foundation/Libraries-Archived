@@ -31,6 +31,7 @@ namespace Landis.Library.Succession.DemographicSeeding
         public static class Names
         {
             public const string EmergenceProbabilities = "EmergenceProbabilities";
+            public const string SurvivalProbabilities = "SurvivalProbabilities";
         }
 
         //---------------------------------------------------------------------
@@ -93,6 +94,7 @@ namespace Landis.Library.Succession.DemographicSeeding
             parameters.SpeciesParameters = ReadSpeciesParameters();
 
             ReadEmergenceProbabilities(parameters.SpeciesParameters);
+            ReadSurvivalProbabilities(parameters.SpeciesParameters);
 
             return parameters;
         }
@@ -186,11 +188,25 @@ namespace Landis.Library.Succession.DemographicSeeding
         {
             ReadProbabilities(Names.EmergenceProbabilities,
                               "Emergence Probability",
-                              "", // Means end-of-input only since name can never be empty
+                              Names.SurvivalProbabilities,
                               allSpeciesParameters,
                               delegate(SpeciesParameters speciesParameters)
                               {
                                   return speciesParameters.EmergenceProbabilities;
+                              });
+        }
+
+        //---------------------------------------------------------------------
+
+        protected void ReadSurvivalProbabilities(SpeciesParameters[] allSpeciesParameters)
+        {
+            ReadProbabilities(Names.SurvivalProbabilities,
+                              "Survival Probability",
+                              "", // Means end-of-input only since name can never be empty
+                              allSpeciesParameters,
+                              delegate(SpeciesParameters speciesParameters)
+                              {
+                                  return speciesParameters.SurvivalProbabilities;
                               });
         }
 

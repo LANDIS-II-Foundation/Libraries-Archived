@@ -86,6 +86,8 @@ namespace Landis.Library.Succession.DemographicSeeding
                           seedingData.all_species[species.Index].dispersal_parameters);
                 CopyArray(speciesParameters.EmergenceProbabilities,
                           seedingData.emergence_probability[species.Index]);
+                CopyArray(speciesParameters.SurvivalProbabilities,
+                          seedingData.survival_probability[species.Index]);
             }
         }
 
