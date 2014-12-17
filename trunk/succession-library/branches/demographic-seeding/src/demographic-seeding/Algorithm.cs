@@ -82,9 +82,18 @@ namespace Landis.Library.Succession.DemographicSeeding
                 seedingData.all_species[species.Index].min_seed  = speciesParameters.MinSeedsProduced;
                 seedingData.all_species[species.Index].max_seed  = speciesParameters.MaxSeedsProduced;
                 seedingData.all_species[species.Index].leaf_area = speciesParameters.LeafArea;
-                for (int i = 0; i < speciesParameters.DispersalParameters.Length; i++)
-                    seedingData.all_species[species.Index].dispersal_parameters[i] = speciesParameters.DispersalParameters[i];
+                CopyArray(speciesParameters.DispersalParameters,
+                          seedingData.all_species[species.Index].dispersal_parameters);
             }
+        }
+
+        //---------------------------------------------------------------------
+
+        private void CopyArray<TItem>(TItem[] source,
+                                      TItem[] destination)
+        {
+            for (int i = 0; i < source.Length; i++)
+                destination[i] = source[i];
         }
 
         //---------------------------------------------------------------------
