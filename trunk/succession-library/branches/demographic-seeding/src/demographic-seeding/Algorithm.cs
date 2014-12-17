@@ -89,6 +89,8 @@ namespace Landis.Library.Succession.DemographicSeeding
                 CopyArray(speciesParameters.SurvivalProbabilities,
                           seedingData.survival_probability[species.Index]);
             }
+
+            seedingData.Initialize();
         }
 
         //---------------------------------------------------------------------
