@@ -28,6 +28,11 @@ namespace Landis.Library.Succession.DemographicSeeding
         private ISpeciesDataset speciesDataset;
         private Dictionary<string, int> speciesLineNumbers;
 
+        public static class Names
+        {
+            public const string EmergenceProbabilities = "EmergenceProbabilities";
+        }
+
         //---------------------------------------------------------------------
 
         static ParameterParser()
@@ -87,6 +92,8 @@ namespace Landis.Library.Succession.DemographicSeeding
 
             parameters.SpeciesParameters = ReadSpeciesParameters();
 
+            ReadEmergenceProbabilities(parameters.SpeciesParameters);
+
             return parameters;
         }
 
@@ -108,7 +115,7 @@ namespace Landis.Library.Succession.DemographicSeeding
 
             string lastColumn = "the " + dispersalWeight1.Name + " column";
 
-            while (! AtEndOfInput)
+            while (! AtEndOfInput && CurrentName != Names.EmergenceProbabilities)
             {
                 StringReader currentLine = new StringReader(CurrentLine);
 
@@ -171,6 +178,44 @@ namespace Landis.Library.Succession.DemographicSeeding
                 speciesLineNumbers[species.Name] = LineNumber;
 
             return species;
+        }
+
+        //---------------------------------------------------------------------
+
+        protected void ReadEmergenceProbabilities(SpeciesParameters[] allSpeciesParameters)
+        {
+            ReadName(Names.EmergenceProbabilities);
+
+            speciesLineNumbers.Clear();
+
+            InputVar<string> speciesName = new InputVar<string>("Species");
+            InputVar<double> emergenceProbability = new InputVar<double>("Emergence Probability");
+
+            IEcoregion lastEcoregion = Model.Core.Ecoregions[Model.Core.Ecoregions.Count-1];
+            string lastColumn = "the " + lastEcoregion.Name + " ecoregion column";
+
+            while (!AtEndOfInput)
+            {
+                StringReader currentLine = new StringReader(CurrentLine);
+
+                ReadValue(speciesName, currentLine);
+                ISpecies species = ValidateSpeciesName(speciesName);
+
+                SpeciesParameters parameters = allSpeciesParameters[species.Index];
+                double[] emergenceProbabilities = parameters.EmergenceProbabilities;
+
+                foreach (IEcoregion ecoregion in Model.Core.Ecoregions)
+                {
+                    ReadValue(emergenceProbability, currentLine);
+                    if (emergenceProbability.Value < 0.0 || emergenceProbability.Value > 1.0)
+                        throw new InputValueException(emergenceProbability.Value.String,
+                                                      "Probability for ecoregion " + ecoregion.Name + " is not between 0.0 and 1.0");
+                    emergenceProbabilities[ecoregion.Index] = emergenceProbability.Value;
+                }
+
+                CheckNoDataAfter(lastColumn, currentLine);
+                GetNextLine();
+            }
         }
     }
 }

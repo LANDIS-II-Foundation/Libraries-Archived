@@ -25,6 +25,7 @@ namespace Landis.Library.Succession.DemographicSeeding
         private int maxSeedsProduced;
         private double leafArea;
         public double[] DispersalParameters { get; private set; }
+        public double[] EmergenceProbabilities { get; private set; }
 
         // Indexes for dispersal parameters
         public const int DoubleExponential_Mean1   = 0;
@@ -36,6 +37,7 @@ namespace Landis.Library.Succession.DemographicSeeding
         public SpeciesParameters()
         {
             DispersalParameters = new double[3];
+            EmergenceProbabilities = new double[Model.Core.Ecoregions.Count];
         }
 
         //---------------------------------------------------------------------
