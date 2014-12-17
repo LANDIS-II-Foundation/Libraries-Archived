@@ -184,17 +184,41 @@ namespace Landis.Library.Succession.DemographicSeeding
 
         protected void ReadEmergenceProbabilities(SpeciesParameters[] allSpeciesParameters)
         {
-            ReadName(Names.EmergenceProbabilities);
+            ReadProbabilities(Names.EmergenceProbabilities,
+                              "Emergence Probability",
+                              "", // Means end-of-input only since name can never be empty
+                              allSpeciesParameters,
+                              delegate(SpeciesParameters speciesParameters)
+                              {
+                                  return speciesParameters.EmergenceProbabilities;
+                              });
+        }
+
+        //---------------------------------------------------------------------
+
+        // A delegate for accessing a particular array of probabilities for a
+        // species.
+        protected delegate double[] GetProbabilities(SpeciesParameters speciesParameters);
+
+        //---------------------------------------------------------------------
+
+        protected void ReadProbabilities(string              tableName,
+                                         string              probabilityName,
+                                         string              nameAfterTable,
+                                         SpeciesParameters[] allSpeciesParameters,
+                                         GetProbabilities    getProbabilities)
+        {
+            ReadName(tableName);
 
             speciesLineNumbers.Clear();
 
             InputVar<string> speciesName = new InputVar<string>("Species");
-            InputVar<double> emergenceProbability = new InputVar<double>("Emergence Probability");
+            InputVar<double> probability = new InputVar<double>(probabilityName);
 
             IEcoregion lastEcoregion = Model.Core.Ecoregions[Model.Core.Ecoregions.Count-1];
             string lastColumn = "the " + lastEcoregion.Name + " ecoregion column";
 
-            while (!AtEndOfInput)
+            while (!AtEndOfInput && CurrentName != nameAfterTable)
             {
                 StringReader currentLine = new StringReader(CurrentLine);
 
@@ -202,15 +226,15 @@ namespace Landis.Library.Succession.DemographicSeeding
                 ISpecies species = ValidateSpeciesName(speciesName);
 
                 SpeciesParameters parameters = allSpeciesParameters[species.Index];
-                double[] emergenceProbabilities = parameters.EmergenceProbabilities;
+                double[] probabilities = getProbabilities(parameters);
 
                 foreach (IEcoregion ecoregion in Model.Core.Ecoregions)
                 {
-                    ReadValue(emergenceProbability, currentLine);
-                    if (emergenceProbability.Value < 0.0 || emergenceProbability.Value > 1.0)
-                        throw new InputValueException(emergenceProbability.Value.String,
+                    ReadValue(probability, currentLine);
+                    if (probability.Value < 0.0 || probability.Value > 1.0)
+                        throw new InputValueException(probability.Value.String,
                                                       "Probability for ecoregion " + ecoregion.Name + " is not between 0.0 and 1.0");
-                    emergenceProbabilities[ecoregion.Index] = emergenceProbability.Value;
+                    probabilities[ecoregion.Index] = probability.Value;
                 }
 
                 CheckNoDataAfter(lastColumn, currentLine);
