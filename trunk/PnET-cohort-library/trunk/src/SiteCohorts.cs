@@ -11,11 +11,18 @@ namespace Landis.Library.BiomassCohortsPnET
 {
     public class SiteCohorts :  BiomassCohorts.ISiteCohorts, AgeOnlyCohorts.ISiteCohorts 
     {
+        /// <summary>
+        /// Occurs when a site is disturbed by an age-only disturbance.
+        /// </summary>
+        public static event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
+
         List<Cohort> cohorts = new List<Cohort>();
+        //private List<SpeciesCohorts> speciescohorts = null;
 
         public  IEcoregion Ecoregion { get; private set; }
         public ActiveSite Site { get; private set; }
-        public float WaterMin;
+        
+
 
         public int ReduceOrKillBiomassCohorts(Landis.Library.BiomassCohorts.IDisturbance disturbance)
         {
@@ -28,7 +35,7 @@ namespace Landis.Library.BiomassCohortsPnET
                     totalReduction += reduction;
                     if (reduction < cohorts[i].Biomass)
                     {
-                        cohorts[i].Wood -= reduction;
+                        cohorts[i].Wood -= (ushort)reduction;
                     }
                     else
                     {
@@ -56,7 +63,6 @@ namespace Landis.Library.BiomassCohortsPnET
                     }
                 }
                 return null;
-//                throw new System.Exception("Cannot retrieve speciescohort " + species.Name);
             }
         }
         Landis.Library.AgeOnlyCohorts.ISpeciesCohorts Landis.Library.Cohorts.ISiteCohorts<Landis.Library.AgeOnlyCohorts.ISpeciesCohorts>.this[ISpecies species]
@@ -104,18 +110,16 @@ namespace Landis.Library.BiomassCohortsPnET
             return false;
         }
 
-        
-        private List<SpeciesCohorts> speciescohorts =null;
-
         public List<SpeciesCohorts> Speciescohorts
         {
-            set 
-            {
-                speciescohorts = value;
-            }
+            
+
+            
             get
             {
-                if (speciescohorts != null) return speciescohorts;
+                List<SpeciesCohorts> speciescohorts;
+
+                //if (speciescohorts != null) return speciescohorts;
 
 
                 speciescohorts  = new List<SpeciesCohorts>();
@@ -138,12 +142,6 @@ namespace Landis.Library.BiomassCohortsPnET
                 return speciescohorts;
             }
         }
-        /// <summary>
-        /// Occurs when a site is disturbed by an age-only disturbance.
-        /// </summary>
-        public static event Landis.Library.BiomassCohorts.DisturbanceEventHandler AgeOnlyDisturbanceEvent;
-
-        
         void Landis.Library.AgeOnlyCohorts.ISiteCohorts.RemoveMarkedCohorts(Landis.Library.AgeOnlyCohorts.ICohortDisturbance disturbance)
         {
              
@@ -155,6 +153,7 @@ namespace Landis.Library.BiomassCohortsPnET
             ReduceOrKillBiomassCohorts(new Landis.Library.BiomassCohorts.WrappedDisturbance(disturbance));
              
         }
+        /*
         public void ResetSpeciesCohorts()
         {
             // This is a time saver; setting the speciescohorts to null 
@@ -163,11 +162,9 @@ namespace Landis.Library.BiomassCohortsPnET
             // that cohorts have changed so they will gather the cohorts in speices cohorts anew
             Speciescohorts = null;
         }
+         */
         public bool AddNewCohort(Cohort cohort, int SuccessionTimeStep)
         {
-
-            ResetSpeciesCohorts();
-
             foreach (Cohort mycohort in cohorts)
             {
                 if (mycohort.Age <= SuccessionTimeStep && cohort.Species == mycohort.Species)
@@ -180,15 +177,14 @@ namespace Landis.Library.BiomassCohortsPnET
                 }
             }
 
-     
             cohorts.Add(cohort);
             return true;
         }
 
         public void RemoveCohort(Cohort cohort, Landis.SpatialModeling.ActiveSite site)
         {
-            ResetSpeciesCohorts();
-            Speciescohorts = null;
+            //ResetSpeciesCohorts();
+            //Speciescohorts = null;
 
             cohorts.Remove(cohort);
             Cohort.Died(this, cohort, site, null);

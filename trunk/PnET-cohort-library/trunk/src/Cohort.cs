@@ -18,6 +18,18 @@ namespace Landis.Library.BiomassCohortsPnET
     {
         LocalOutput cohortoutput;
 
+        public delegate void AllocateLitters(Landis.Library.BiomassCohortsPnET.Cohort cohort, ActiveSite site, ExtensionType disturbanceType);
+
+        public static event AllocateLitters allocatelitters;
+
+        public delegate float Fage(Landis.Library.BiomassCohortsPnET.Cohort cohort);
+
+        public static event Fage calculate_fage;
+
+        public delegate float FActiveBiom(Landis.Library.BiomassCohortsPnET.Cohort cohort);
+
+        public static event FActiveBiom calculate_factivebiom;
+
         public string outputfilename
         {
             get
@@ -25,22 +37,18 @@ namespace Landis.Library.BiomassCohortsPnET
                 return cohortoutput.FileName;
             }
         }
-
         public ushort Age { get; set; }
         public bool IsAlive;
         List<SubCanopyLayer> SubCanopyLayers;
         public ISpecies species { get; private set; }
-
-        byte fActiveBiom;
-        byte fage;
         ushort maxbiomass;
-        ushort root;
-        float fol;
-        float wood;
-        float nsc;
-        public float MaintenanceRespiration;
+        public ushort Root;
+        public ushort Wood;
+        public ushort Fol;  
+        
+        public ushort NSC;
+        public ushort MaintenanceRespiration;
 
-     
         public SubCanopyLayer this[int ly]
         {
             get
@@ -49,92 +57,15 @@ namespace Landis.Library.BiomassCohortsPnET
             }
         }
 
-        public float Fol
-        {
-            get
-            {
-                return fol;
-            }
-
-            set
-            {
-                //Debug.Assert(value < ushort.MaxValue && value >= 0, "Root out of range " + value);
-                fol = value;
-            }
-        }
-        public float Wood
-        {
-            get
-            {
-                return wood;
-            }
-
-            set
-            {
-                //Debug.Assert(value < ushort.MaxValue && value >= 0, "Root out of range " + value);
-                wood = value;
-            }
-        }
-        public float Root
-        {
-            get
-            {
-                return   root;
-            }
-
-            set
-            {
-                //Debug.Assert(value < ushort.MaxValue && value >= 0, "Root out of range " + value);
-                root = (ushort)(value);
-            }
-        }
-         
         public float NSCfrac
         {
             get
             {
-                return NSC / (FActiveBiom * (Wood + Root) + Fol);
+                return NSC / (calculate_factivebiom(this) * (Wood + Root) + Fol);
             }
         }
-        public float FActiveBiom
-        {
-            get
-            {
-                return 0.01F * fActiveBiom;
-            }
-
-            set
-            {
-                Debug.Assert(100 * value < byte.MaxValue && value >= 0, "FActiveBiom out of range " + value);
-                fActiveBiom = (byte)(100F * value);
-            }
-        }
-        public float Fage
-        {
-            get
-            {
-                return 0.01F * fage;
-            }
-
-            set
-            {
-                Debug.Assert(100 * value < byte.MaxValue && value >= 0, "Fage out of range " + value);
-                fage = (byte)(100F * value);
-            }
-        }
-        public float NSC
-        {
-            get
-            {
-                return  nsc;
-            }
-
-            set
-            {
-                //Debug.Assert(10 * value < ushort.MaxValue && value >= 0, "NSC out of range " + value);
-                nsc =  value;
-            }
-        }
+         
+       
         public float MaxBiomass
         {
             get
@@ -236,36 +167,30 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public void ClearSubLayers()
         {
-            SubCanopyLayers.Clear();
+            SubCanopyLayers = null;
         }
         public void AddSubLayers(int NrOfSublayers)
         {
+            SubCanopyLayers = new List<SubCanopyLayer>();
             for (byte i = 0; i < NrOfSublayers; i++)
             {
                 SubCanopyLayers.Add(new SubCanopyLayer(this, i));
             }
         }
 
-        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC, float DNSC)
+        public Cohort(ISpecies species, ushort year_of_birth, byte IMAX,float  InitialNSC, float DNSC)
              
         {
-            SubCanopyLayers = new List<SubCanopyLayer>();
-              
-            this.FActiveBiom = 1;
-            
             this.species = species;
             this.Age = 0;
-            this.Fage = 1;
-            this.NSC = InitialNSC;
-            this.Wood = (float)(1F / DNSC * InitialNSC);
+            this.NSC = (ushort) InitialNSC;
+            this.Wood = (ushort)(1F / DNSC * (ushort) InitialNSC);
             this.MaxBiomass = this.Biomass;
             this.IsAlive = true;
         }
         public Cohort(Cohort cohort, int IMAX)
         {
             SubCanopyLayers = new List<SubCanopyLayer>();
-             
-            this.FActiveBiom = cohort.FActiveBiom;
             this.MaxBiomass = cohort.MaxBiomass;
             this.species = cohort.species;
             this.Age = cohort.Age;
@@ -275,8 +200,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.Fol = cohort.Fol;
             this.MaxBiomass = cohort.MaxBiomass;
             this.IsAlive = true;
-            this.Fage = cohort.Fage;
-            
+         
         }
          
         
@@ -307,8 +231,8 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             string s = date.Year + "," + date.Month + "," + date.ToString("yyyy/MM") + "," + Age + "," + Layer + "," + LAI + "," + Grosspsn + "," +
                        FolResp + "," + MaintenanceRespiration + "," + Netpsn  + "," +  WaterUseEfficiency + "," + Fol + "," + Root + "," + Wood + "," + NSC + "," +
-                       NSCfrac + "," + Fwater + "," + Radiation + "," + Frad + "," + FTempPSN + "," + FTempResp + "," + Fage + "," + Leaf_On + "," +
-                       FActiveBiom;
+                       NSCfrac + "," + Fwater + "," + Radiation + "," + Frad + "," + FTempPSN + "," + FTempResp + "," + calculate_fage(this) + "," + Leaf_On + "," +
+                       calculate_factivebiom(this);
 
             cohortoutput.Add(s);
         }
@@ -331,19 +255,11 @@ namespace Landis.Library.BiomassCohortsPnET
             cohortoutput.Write();
         }
 
-        /// <summary>
-        /// Occurs when a cohort dies either due to senescence or disturbances.
-        /// </summary>
         public static event Landis.Library.AgeOnlyCohorts.DeathEventHandler<Landis.Library.AgeOnlyCohorts.DeathEventArgs> DeathEvent;
-
-        public delegate void AllocateLitters(Landis.Library.BiomassCohortsPnET.Cohort cohort, ActiveSite site, ExtensionType disturbanceType);
-
-        public static event AllocateLitters allocatelitters;
 
         /// <summary>
         /// Raises a Cohort.DeathEvent.
         /// </summary>
-
         public static void Died(object sender,
                                 Landis.Library.BiomassCohortsPnET.Cohort cohort,
                                 ActiveSite site,
