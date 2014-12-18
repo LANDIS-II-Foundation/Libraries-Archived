@@ -28,7 +28,7 @@ namespace Landis.Library.BiomassCohortsPnET
 
         public ushort Age { get; set; }
         public bool IsAlive;
-        SubCanopyLayer[] SubCanopyLayers;
+        List<SubCanopyLayer> SubCanopyLayers;
         public ISpecies species { get; private set; }
 
         byte fActiveBiom;
@@ -40,14 +40,7 @@ namespace Landis.Library.BiomassCohortsPnET
         float nsc;
         public float MaintenanceRespiration;
 
-        public byte NrOfSublayers
-        {
-            get
-            {
-                return (byte) SubCanopyLayers.Count();
-            }
-        }
-
+     
         public SubCanopyLayer this[int ly]
         {
             get
@@ -241,17 +234,23 @@ namespace Landis.Library.BiomassCohortsPnET
             }
             
         }
-       
+        public void ClearSubLayers()
+        {
+            SubCanopyLayers.Clear();
+        }
+        public void AddSubLayers(int NrOfSublayers)
+        {
+            for (byte i = 0; i < NrOfSublayers; i++)
+            {
+                SubCanopyLayers.Add(new SubCanopyLayer(this, i));
+            }
+        }
 
         public Cohort(ISpecies species, ushort year_of_birth, byte IMAX, float InitialNSC, float DNSC)
              
         {
-            SubCanopyLayers = new SubCanopyLayer[IMAX];
-            for (byte i = 0; i < IMAX; i++)
-            {
-                SubCanopyLayers[i] = new SubCanopyLayer(this, i);
-
-            }
+            SubCanopyLayers = new List<SubCanopyLayer>();
+              
             this.FActiveBiom = 1;
             
             this.species = species;
@@ -264,12 +263,8 @@ namespace Landis.Library.BiomassCohortsPnET
         }
         public Cohort(Cohort cohort, int IMAX)
         {
-            SubCanopyLayers = new SubCanopyLayer[IMAX];
-            for (byte i = 0; i < IMAX; i++)
-            {
-                SubCanopyLayers[i] = new SubCanopyLayer(this, i);
-
-            }
+            SubCanopyLayers = new List<SubCanopyLayer>();
+             
             this.FActiveBiom = cohort.FActiveBiom;
             this.MaxBiomass = cohort.MaxBiomass;
             this.species = cohort.species;
