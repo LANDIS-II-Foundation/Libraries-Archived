@@ -150,7 +150,9 @@ namespace Landis.Library.Succession.DemographicSeeding
                 foreach (ISpecies species in Model.Core.Species)
                 {
                     int s = species.Index;
-                    int a = seedingData.all_species[s].reproductive_age - 1;
+                    int a = seedingData.all_species[s].reproductive_age_steps - 1;
+                    if (a < 0)
+                        a = 0;
                     int seedlingCount = 0;
                     if (Reproduction.MaturePresent(species, site))
                         // This will cause SimOneTimestep to consider the
