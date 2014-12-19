@@ -512,40 +512,76 @@ namespace  Landis.Library.Climate
         //---------------------------------------------------------------------------
         // Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C):
         // This method assumes you do not have daily data, which would be far more accurate.
+        // Revised in Dec 2014 by M. Lucash
         private int CalculateBeginGrowingSeason() 
         {
-             //Climate.ModelCore.UI.WriteLine("  Calculating monthly growing season....");
-
-
-            double lastMonthMinTemp = this.MonthlyMinTemp[11]; 
-            int dayCnt = 15;  //the middle of February
-            int beginGrowingSeason = 0;
-
-            for (int month = 0; month < 5; month++)  //Begin looking in February (1).  Should be safe for at least 100 years.
-            {
-
-                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;
-                double MonthlyMinTemp = this.MonthlyMinTemp[month]; 
-
-                //Now interpolate between days:
-                double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;
-                double Tnight = MonthlyMinTemp;  //start from warmer month
-                double TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-
-                for (int day = 1; day <= totalDays; day++)
-                {
-                    if (TnightRandom <= 0)
-                        beginGrowingSeason = (dayCnt + day);
-                    Tnight += degreeIncrement;  //work backwards to find last frost day.
-                    TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
-                }
-
-                lastMonthMinTemp = MonthlyMinTemp;
-                dayCnt += totalDays;  //new monthly mid-point
-            }
+            double lastMonthMinTemp = this.MonthlyMinTemp[11];
+            int beginGrowingSeasonMonth = 0;  //"Month" when growing season starts, units are actually in days though.  For example, it returns 29 in Feb, 60(29+31) in March, etc.
+            int beginGrowingSeason = 0;  //Returns that actual day when the growing season starts.
             
+            for (int month = 1; month < 5; month++)  //Begin looking in February (month=1).  Should be safe for at least 100 years.
+            {
+                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2; 
+                double MonthlyMinTemp = this.MonthlyMinTemp[month];
+                
+                beginGrowingSeasonMonth = ((month * totalDays) + 15);  //you need to add 15 because your temps are "recorded" at day 15 of the month.
+
+                //Now interpolate between days because you don't know which day you switched to positive temps.
+                double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;                
+                double InterpolatedTemp = MonthlyMinTemp;  //start from current (warmer) month
+
+                if (MonthlyMinTemp > 0.0 && lastMonthMinTemp < 0.0)  // Only loop through days if you passed the threshold from negative to postive temps between months.
+                {
+                    for (int day = 1; day <= totalDays; day++)
+                    {
+                        if (InterpolatedTemp > 0.0)  // Stop loop if you temps > 0.  That's when you want the growing season to start.
+                        {
+                        InterpolatedTemp -= degreeIncrement;  // This works back to find first frost day (temp < 0) from the current month.                                               
+                        beginGrowingSeason = day;
+                        }
+                    }
+                    beginGrowingSeason = (beginGrowingSeasonMonth - beginGrowingSeason);        //Takes the days associated with the month loop and subtracts them.
+                }                   
+                lastMonthMinTemp = MonthlyMinTemp;
+                Climate.ModelCore.UI.WriteLine("Final Answer. beginGrowingSeason = {0}.", beginGrowingSeason);
+            }
             return beginGrowingSeason;
         }
+        //private int CalculateBeginGrowingSeason()  Original method for calculating when the growing season starts.  
+            //ML discovered this allowed the growing season to start WAY too early for MN.  Revised method above.
+        //{
+        //    //Climate.ModelCore.UI.WriteLine("  Calculating monthly growing season....");
+
+
+        //    double lastMonthMinTemp = this.MonthlyMinTemp[11];
+        //    int dayCnt = 15;  //the middle of February
+        //    int beginGrowingSeason = 0;
+
+        //    for (int month = 0; month < 5; month++)  //Begin looking in February (1).  Should be safe for at least 100 years.
+        //    {
+
+        //        int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;
+        //        double MonthlyMinTemp = this.MonthlyMinTemp[month];
+
+        //        //Now interpolate between days:
+        //        double degreeIncrement = System.Math.Abs(MonthlyMinTemp - lastMonthMinTemp) / (double)totalDays;
+        //        double Tnight = MonthlyMinTemp;  //start from warmer month
+        //        double TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+
+        //        for (int day = 1; day <= totalDays; day++)
+        //        {
+        //            if (TnightRandom <= 0)
+        //                beginGrowingSeason = (dayCnt + day);
+        //            Tnight += degreeIncrement;  //work backwards to find last frost day.
+        //            TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
+        //        }
+
+        //        lastMonthMinTemp = MonthlyMinTemp;
+        //        dayCnt += totalDays;  //new monthly mid-point
+        //    }
+
+        //    return beginGrowingSeason;
+        //}
 
         //---------------------------------------------------------------------------
         // Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
@@ -554,18 +590,20 @@ namespace  Landis.Library.Climate
         {
 
             //Defaults for the middle of July:
-            double lastMonthTemp = this.MonthlyMinTemp[6]; // annualClimate[6].AvgMinTemp;
+            double lastMonthMinTemp = this.MonthlyMinTemp[6]; // annualClimate[6].AvgMinTemp;
             int dayCnt = 198;
+            int endGrowingSeason = 365;
             //int endGrowingSeason = 198;
 
             for (int month = 7; month < 12; month++)  //Begin looking in August.  Should be safe for at least 100 years.
             {
-                int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;
+                //int totalDays = (DaysInMonth(month, this.Year) + DaysInMonth(month - 1, this.Year)) / 2;  //See line 527 for explanation
+                int totalDays = (DaysInMonth(month, this.Year)); 
                 double MonthlyMinTemp = this.MonthlyMinTemp[month]; // annualClimate[i].AvgMinTemp;
 
                 //Now interpolate between days:
-                double degreeIncrement = System.Math.Abs(lastMonthTemp - MonthlyMinTemp) / (double)totalDays;
-                double Tnight = lastMonthTemp;  //start from warmer month
+                double degreeIncrement = System.Math.Abs(lastMonthMinTemp - MonthlyMinTemp) / (double)totalDays;
+                double Tnight = MonthlyMinTemp;  //start from warmer month.  ML used to be last month but changed it to be consistent with beginning growing season
 
                 double TnightRandom = Tnight + (this.MonthlyVarTemp[month] * (Climate.ModelCore.GenerateUniform() * 2 - 1));
 
@@ -578,10 +616,13 @@ namespace  Landis.Library.Climate
                     //Climate.ModelCore.UI.WriteLine("Tnight = {0}.", TnightRandom);
                 }
 
-                lastMonthTemp = MonthlyMinTemp;
+                lastMonthMinTemp = MonthlyMinTemp;
                 dayCnt += totalDays;  //new monthly mid-point
+                
             }
-            return 365;
+            //Climate.ModelCore.UI.WriteLine("  Calculating monthly ending growing season day...endGrowingSeason={0}", endGrowingSeason);
+            return endGrowingSeason;
+            //return 365; ML revised it so it didn't always return 365
         }
 
 
