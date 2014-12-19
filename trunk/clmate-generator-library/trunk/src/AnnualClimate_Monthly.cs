@@ -543,7 +543,6 @@ namespace  Landis.Library.Climate
                     beginGrowingSeason = (beginGrowingSeasonMonth - beginGrowingSeason);        //Takes the days associated with the month loop and subtracts them.
                 }                   
                 lastMonthMinTemp = MonthlyMinTemp;
-                Climate.ModelCore.UI.WriteLine("Final Answer. beginGrowingSeason = {0}.", beginGrowingSeason);
             }
             return beginGrowingSeason;
         }
