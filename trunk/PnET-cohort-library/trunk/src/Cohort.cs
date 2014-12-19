@@ -30,6 +30,8 @@ namespace Landis.Library.BiomassCohortsPnET
 
         public static event FActiveBiom calculate_factivebiom;
 
+        public float MaxBiomass;
+
         public string outputfilename
         {
             get
@@ -41,13 +43,12 @@ namespace Landis.Library.BiomassCohortsPnET
         public bool IsAlive;
         List<SubCanopyLayer> SubCanopyLayers;
         public ISpecies species { get; private set; }
-        ushort maxbiomass;
         public ushort Root;
         public ushort Wood;
         public ushort Fol;  
         
-        public ushort NSC;
-        public ushort MaintenanceRespiration;
+        public float NSC;
+        public float MaintenanceRespiration;
 
         public SubCanopyLayer this[int ly]
         {
@@ -64,20 +65,7 @@ namespace Landis.Library.BiomassCohortsPnET
                 return NSC / (calculate_factivebiom(this) * (Wood + Root) + Fol);
             }
         }
-         
-       
-        public float MaxBiomass
-        {
-            get
-            {
-                return (float)maxbiomass;
-            }
-            set
-            {
-                Debug.Assert(value < ushort.MaxValue && value >= 0, "MaxBiomass out of range" + value);
-                maxbiomass = (ushort)value;
-            }
-        }
+
         public int Layer
         {
             get
