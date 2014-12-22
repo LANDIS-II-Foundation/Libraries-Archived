@@ -471,7 +471,8 @@ namespace  Landis.Library.Climate
         {
             //degDayBase is temperature (C) above which degree days (Degree_Day)
             //are counted
-            double degDayBase = 5.56;      // 42F.
+            //double degDayBase = 5.56;      // 42F.
+            double degDayBase = 4.44;      // 40F used as base in Botkin reference.
             double Deg_Days = 0.0;
 
             //Calc monthly temperatures (mean +/- normally distributed
@@ -481,8 +482,9 @@ namespace  Landis.Library.Climate
             {
                 if (this.MonthlyTemp[month] > degDayBase)
                     Deg_Days += (MonthlyTemp[month] - degDayBase) * DaysInMonth(month, this.Year);
+                //Climate.ModelCore.UI.WriteLine("MonthlyTemp = {0:0.00}, Deg_DayBase = {1:0.0}, Deg_Days = {2}.", MonthlyTemp[month], degDayBase, Deg_Days);
             }
-
+            //Climate.ModelCore.UI.WriteLine("AnnualGDD = {0}.", Deg_Days);
             this.growingDegreeDays = (int)Deg_Days;
             return (int) Deg_Days;
         }
