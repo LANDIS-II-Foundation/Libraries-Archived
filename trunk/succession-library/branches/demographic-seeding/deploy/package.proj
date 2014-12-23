@@ -33,6 +33,7 @@
       <LibVersion>@(MajorMinor)</LibVersion>
 	  <ReleaseAbbr>a3</ReleaseAbbr>
 	  <LibVersionRelease>$(LibVersion)-$(ReleaseAbbr)</LibVersionRelease>
+      <LibZipFile>Landis.Library.Succession-$(LibVersionRelease).zip</LibZipFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -42,9 +43,12 @@
 	  <PackageContents Include="README.txt" />
 	  <PackageContents Include="demographic-seeding.txt" />
     </ItemGroup>
-    <Zip ZipFileName="Landis.Library.Succession-$(LibVersionRelease).zip"
+    <Zip Condition=" !Exists($(LibZipFile)) "
+	     ZipFileName="$(LibZipFile)"
          Files="@(PackageContents)"
          Flatten="true" />
+	<Message Condition=" Exists($(LibZipFile)) "
+	         Text='The file "$(LibZipFile)" already exists.' />
   </Target>
 
 </Project>
