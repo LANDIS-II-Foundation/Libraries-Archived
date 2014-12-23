@@ -91,6 +91,14 @@ namespace Landis.Library.Succession.DemographicSeeding
             ReadVar(cohortThreshold);
             parameters.CohortThreshold = cohortThreshold.Value;
 
+            InputVar<string> seedRainMaps = new InputVar<string>("SeedRainMaps");
+            if (ReadOptionalVar(seedRainMaps))
+                parameters.SeedRainMaps = seedRainMaps.Value;
+
+            InputVar<string> seedlingEmergenceMaps = new InputVar<string>("SeedlingEmergenceMaps");
+            if (ReadOptionalVar(seedlingEmergenceMaps))
+                parameters.SeedlingEmergenceMaps = seedlingEmergenceMaps.Value;
+
             parameters.SpeciesParameters = ReadSpeciesParameters();
 
             ReadEmergenceProbabilities(parameters.SpeciesParameters);

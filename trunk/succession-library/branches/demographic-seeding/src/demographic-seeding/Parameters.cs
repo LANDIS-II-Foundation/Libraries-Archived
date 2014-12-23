@@ -24,6 +24,8 @@ namespace Landis.Library.Succession.DemographicSeeding
         public int monteCarloDraws;
         private double maxLeafArea;
         private int cohortThreshold;
+        private string seedRainMaps;
+        private string seedlingEmergenceMaps;
 
         //---------------------------------------------------------------------
 
@@ -100,6 +102,54 @@ namespace Landis.Library.Succession.DemographicSeeding
                     throw new InputValueException(value.ToString(),
                                                   "Cohort threshold must be > 0");
                 cohortThreshold = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Template for the paths to output maps of seed rain.
+        /// </summary>
+        public string SeedRainMaps
+        {
+            get
+            {
+                return seedRainMaps;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    MapPaths.CheckTemplateVars(value);
+                }
+                if (value == seedlingEmergenceMaps)
+                    throw new InputValueException(value.ToString(),
+                                                  "Same template for seedling emergence maps");
+                seedRainMaps = value;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Template for the paths to output maps of seedling emergence.
+        /// </summary>
+        public string SeedlingEmergenceMaps
+        {
+            get
+            {
+                return seedlingEmergenceMaps;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    MapPaths.CheckTemplateVars(value);
+                }
+                if (value == seedRainMaps)
+                    throw new InputValueException(value.ToString(),
+                                                  "Same template for seed rain maps");
+                seedlingEmergenceMaps = value;
             }
         }
 

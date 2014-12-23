@@ -28,6 +28,11 @@ namespace Landis.Library.Succession.DemographicSeeding
         private Seed_Dispersal.Map seedingData;
         private int timeAtLastCall = -99999;
 
+        private string seedRainMaps;
+        private string seedlingEmergenceMaps;
+
+        //---------------------------------------------------------------------
+
         /// <summary>
         /// Initializes the demographic seeding algorithm
         /// </summary>
@@ -82,6 +87,9 @@ namespace Landis.Library.Succession.DemographicSeeding
             seedingData.max_leaf_area    = parameters.MaxLeafArea;
             seedingData.cohort_threshold = parameters.CohortThreshold;
 
+            seedRainMaps          = parameters.SeedRainMaps;
+            seedlingEmergenceMaps = parameters.SeedlingEmergenceMaps;
+
             foreach (ISpecies species in Model.Core.Species)
             {
                 SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index]; 
@@ -120,7 +128,10 @@ namespace Landis.Library.Succession.DemographicSeeding
         {
             // Is this the first site for the current timestep?
             if (Model.Core.CurrentTime != timeAtLastCall)
+            {
                 SimulateOneTimestep();
+                WriteOutputMaps();
+            }
             timeAtLastCall = Model.Core.CurrentTime;
 
             int x = site.Location.Column - 1;
@@ -168,6 +179,92 @@ namespace Landis.Library.Succession.DemographicSeeding
 
             if (isDebugEnabled)
                 log.DebugFormat("Exiting SimulateOneTimestep()");
+        }
+
+        //---------------------------------------------------------------------
+
+        protected void WriteOutputMaps()
+        {
+            if (seedRainMaps != null)
+            {
+                WriteMapsForSuccessionTimestep(
+                    "seed rain",
+                    seedRainMaps,
+                    delegate(int x, int y, int s, int t)
+                    {
+                        return System.Convert.ToInt32(seedingData.seed_shadow[s][x][y][t]);
+                    });
+            }
+            if (seedlingEmergenceMaps != null)
+            {
+                WriteMapsForSuccessionTimestep(
+                    "seedling emergence",
+                    seedlingEmergenceMaps,
+                    delegate(int x, int y, int s, int t)
+                    {
+                        return System.Convert.ToInt32(seedingData.seed_emergence[s][x][y][t]);
+                    });
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Get the data value for a particular species at a site for an output
+        /// map.
+        /// </summary>
+        /// <param name="x">site's column (0-based)</param>
+        /// <param name="y">site's row (0-based)</param>
+        /// <param name="s">species' index</param>
+        /// <param name="t">year in current succession timestep (0-based)</param>
+        public delegate int GetSpeciesValueAt(int x,
+                                              int y,
+                                              int s,
+                                              int t);
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Write species maps for each year in the succession timestep.
+        /// </summary>
+        protected void WriteMapsForSuccessionTimestep(string            mapType,
+                                                      string            pathTemplate,
+                                                      GetSpeciesValueAt getSpeciesValueAt)
+        {
+            int successionTimestep = seedingData.time_step;
+            int firstYearInTimestep = Model.Core.CurrentTime - successionTimestep + 1;
+            for (int t = 0; t < successionTimestep; t++)
+                WriteMapsForYear(mapType, pathTemplate, t, getSpeciesValueAt);
+        }
+
+        //---------------------------------------------------------------------
+
+        protected void WriteMapsForYear(string            mapType,
+                                        string            pathTemplate,
+                                        int               yearInTimestep,
+                                        GetSpeciesValueAt getSpeciesValueAt)
+        {
+            int successionTimestep = seedingData.time_step;
+            int firstYearInTimestep = Model.Core.CurrentTime - successionTimestep + 1;
+            int year = firstYearInTimestep + yearInTimestep;
+
+            foreach (ISpecies species in Model.Core.Species)
+            {
+                string path = MapPaths.ReplaceTemplateVars(pathTemplate, year, species.Name);
+                Model.Core.UI.WriteLine("Writing {0} map \"{0}\"...", mapType, path);
+                int s = species.Index;
+                using (IOutputRaster<IntPixel> outputRaster = Model.Core.CreateRaster<IntPixel>(path, Model.Core.Landscape.Dimensions))
+                {
+                    IntPixel pixel = outputRaster.BufferPixel;
+                    foreach (Site site in Model.Core.Landscape.AllSites)
+                    {
+                        int x = site.Location.Column - 1;
+                        int y = site.Location.Row - 1;
+                        pixel.Band0.Value = getSpeciesValueAt(x, y, s, yearInTimestep);
+                        outputRaster.WriteBufferPixel();
+                    }
+                }
+            }
         }
     }
 }
