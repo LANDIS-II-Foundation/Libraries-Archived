@@ -56,7 +56,7 @@
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Seed Dipsersal">
-      <HintPath>libs\seed_dispersal\1.0.2\Seed Dipsersal.dll</HintPath>
+      <HintPath>libs\seed_dispersal\1.1.0\Seed Dipsersal.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
