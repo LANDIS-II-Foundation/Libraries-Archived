@@ -31,7 +31,7 @@
     </RegexReplace>
     <PropertyGroup>
       <LibVersion>@(MajorMinor)</LibVersion>
-	  <ReleaseAbbr>a2</ReleaseAbbr>
+	  <ReleaseAbbr>a3</ReleaseAbbr>
 	  <LibVersionRelease>$(LibVersion)-$(ReleaseAbbr)</LibVersionRelease>
     </PropertyGroup>
 
