@@ -188,7 +188,6 @@ namespace Landis.Library.Succession.DemographicSeeding
             if (seedRainMaps != null)
             {
                 WriteMapsForSuccessionTimestep(
-                    "seed rain",
                     seedRainMaps,
                     delegate(int x, int y, int s, int t)
                     {
@@ -198,7 +197,6 @@ namespace Landis.Library.Succession.DemographicSeeding
             if (seedlingEmergenceMaps != null)
             {
                 WriteMapsForSuccessionTimestep(
-                    "seedling emergence",
                     seedlingEmergenceMaps,
                     delegate(int x, int y, int s, int t)
                     {
@@ -227,20 +225,18 @@ namespace Landis.Library.Succession.DemographicSeeding
         /// <summary>
         /// Write species maps for each year in the succession timestep.
         /// </summary>
-        protected void WriteMapsForSuccessionTimestep(string            mapType,
-                                                      string            pathTemplate,
+        protected void WriteMapsForSuccessionTimestep(string            pathTemplate,
                                                       GetSpeciesValueAt getSpeciesValueAt)
         {
             int successionTimestep = seedingData.time_step;
             int firstYearInTimestep = Model.Core.CurrentTime - successionTimestep + 1;
             for (int t = 0; t < successionTimestep; t++)
-                WriteMapsForYear(mapType, pathTemplate, t, getSpeciesValueAt);
+                WriteMapsForYear(pathTemplate, t, getSpeciesValueAt);
         }
 
         //---------------------------------------------------------------------
 
-        protected void WriteMapsForYear(string            mapType,
-                                        string            pathTemplate,
+        protected void WriteMapsForYear(string            pathTemplate,
                                         int               yearInTimestep,
                                         GetSpeciesValueAt getSpeciesValueAt)
         {
@@ -251,7 +247,6 @@ namespace Landis.Library.Succession.DemographicSeeding
             foreach (ISpecies species in Model.Core.Species)
             {
                 string path = MapPaths.ReplaceTemplateVars(pathTemplate, year, species.Name);
-                Model.Core.UI.WriteLine("Writing {0} map \"{0}\"...", mapType, path);
                 int s = species.Index;
                 using (IOutputRaster<IntPixel> outputRaster = Model.Core.CreateRaster<IntPixel>(path, Model.Core.Landscape.Dimensions))
                 {
