@@ -60,6 +60,11 @@ namespace Landis.Library.HarvestManagement
         public static ISiteVar<int> TimeOfLastWind { get; private set; }
 
         /// <summary>
+        /// The year at which the next BDA outbreak will begin.
+        /// </summary>
+        public static ISiteVar<int> NextBDA { get; private set; }
+
+        /// <summary>
         /// The CFS fuel type of a site.
         /// </summary>
         public static ISiteVar<int> CFSFuelType { get; private set; }
@@ -130,6 +135,8 @@ namespace Landis.Library.HarvestManagement
             TimeOfLastFire = Model.Core.GetSiteVar<int>("Fire.TimeOfLastEvent");
             TimeOfLastWind = Model.Core.GetSiteVar<int>("Wind.TimeOfLastEvent");
             CFSFuelType = Model.Core.GetSiteVar<int>("Fuels.CFSFuelType");
+            NextBDA = Model.Core.GetSiteVar<int>("BDA.TimeOfNext");
+
 
             LandUseAllowHarvest = Model.Core.GetSiteVar<bool>("LandUse.AllowHarvest");
             // If Land Use extension is not in the scenario, then create a local

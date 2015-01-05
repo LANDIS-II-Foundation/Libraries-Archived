@@ -45,6 +45,7 @@ namespace Landis.Library.HarvestManagement
             public const string CohortRemoval = "CohortsRemoved";
             public const string ForestTypeTable = "ForestTypeTable";
             public const string StandAdjacency = "StandAdjacency";
+            public const string PresalvageYears = "PresalvageYears";
         }
 
         //---------------------------------------------------------------------
@@ -317,7 +318,14 @@ namespace Landis.Library.HarvestManagement
             }
 
             //  Read optional ranking requirements
-
+            InputVar<ushort> presalvageYears = new InputVar<ushort>("PresalvageYears");
+            if (ReadOptionalVar(presalvageYears))
+            {
+                //get minAge
+                ushort presalvYears = presalvageYears.Value.Actual;
+                //add the minimumAge ranking requirement to this ranking method.
+                rankingMethod.AddRequirement(new Presalvage(presalvYears));
+            }
             ushort? minAge = null;
             InputVar<ushort> minimumAge = new InputVar<ushort>("MinimumAge");
             if (ReadOptionalVar(minimumAge)) {
@@ -804,6 +812,8 @@ namespace Landis.Library.HarvestManagement
             InputVar<int> beginTimeVar = new InputVar<int>("Begin Time");
             InputVar<int> endTimeVar = new InputVar<int>("End Time");
             InputVar<Percentage> areaToHarvest = new InputVar<Percentage>("Area To Harvest");
+            InputVar<Percentage> standsToHarvest = new InputVar<Percentage>("Stands To Harvest");
+            StringReader sr100 = new StringReader("100%");
 
             while (! AtEndOfInput && CurrentName != Names.PrescriptionMaps) {
                 StringReader currentLine = new StringReader(CurrentLine);
@@ -827,14 +837,37 @@ namespace Landis.Library.HarvestManagement
                                                   prescriptionName.Value.String + " is an unknown prescription name");
 
 
-
+                TextReader.SkipWhitespace(currentLine);
                 //  Area to Harvest column
-                ReadValue(areaToHarvest, currentLine);
+                string strVal = TextReader.ReadWord(currentLine);
+                sr100 = new StringReader("100%");
+                //If the keyword 'Stands' is attached to the area %, then applies to % of stands to harvest instead of area
+                if (strVal.Contains("Stands"))
+                {
+                    char[] trimChar = { 'S', 't', 'a', 'n', 'd', 's' };
+                    string clipText = strVal.TrimEnd(trimChar);
+                    StringReader testRead = new StringReader(clipText);
+                    ReadValue(standsToHarvest, testRead);
+                    ReadValue(areaToHarvest, sr100);
+                }
+                else
+                {
+                    StringReader testRead = new StringReader(strVal);
+                    //  Area to Harvest column
+                    ReadValue(areaToHarvest, testRead);
+                    ReadValue(standsToHarvest, sr100);
+                }
                 //get percentage to harvest (type Percentage ensures that it is in percent format)
                 Percentage percentageToHarvest = areaToHarvest.Value.Actual;
                 //check for valid percentage
                 if (percentageToHarvest <= 0.0 || percentageToHarvest > 1.0)
                     throw new InputValueException(areaToHarvest.Value.String,
+                                                  "Percentage must be between 0% and 100%");
+                //get percentage of stands to harvest (type Percentage ensures that it is in percent format)
+                Percentage percentStandsToHarvest = standsToHarvest.Value.Actual;
+                //check for valid percentage
+                if (percentStandsToHarvest <= 0.0 || percentStandsToHarvest > 1.0)
+                    throw new InputValueException(standsToHarvest.Value.String,
                                                   "Percentage must be between 0% and 100%");
 
                 //  Begin Time and End Time columns
@@ -898,6 +931,7 @@ namespace Landis.Library.HarvestManagement
                 //begin applying prescription to this management area
                 mgmtArea.ApplyPrescription(prescription,
                                            percentageToHarvest,
+                                           percentStandsToHarvest,
                                            beginTime,
                                            endTime);
 

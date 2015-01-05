@@ -31,11 +31,13 @@ namespace Landis.Library.HarvestManagement
         //---------------------------------------------------------------------
 
         public AppliedRepeatHarvest(RepeatHarvest  repeatHarvest,
-                                    Percentage     percentageToHarvest,
+                                    Percentage percentageToHarvest,
+                                    Percentage percentStandsToHarvest,
                                     int            beginTime,
                                     int            endTime)
             : base(repeatHarvest,
                    percentageToHarvest,
+                   percentStandsToHarvest,
                    beginTime,
                    endTime)
         {

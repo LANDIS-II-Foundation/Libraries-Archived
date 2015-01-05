@@ -89,6 +89,7 @@ namespace Landis.Library.HarvestManagement {
             if (SpreadFromStand(initialStand)) {
                 int eventId = EventId.MakeNewId();
 
+                initialStand.LastStandsHarvested = standsToHarvest.Count;
                 // loop through all harvestable stands and update
                 // appropriate items
                 foreach (Stand standToHarvest in standsToHarvest) {

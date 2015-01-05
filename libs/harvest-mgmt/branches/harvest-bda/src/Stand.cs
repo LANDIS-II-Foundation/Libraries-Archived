@@ -48,6 +48,7 @@ namespace Landis.Library.HarvestManagement
         // prescription name is put on the list
         List<string> rejectedPrescriptionNames;
         public double LastAreaHarvested;
+        public int LastStandsHarvested;
 
         //---------------------------------------------------------------------
 
@@ -453,6 +454,7 @@ namespace Landis.Library.HarvestManagement
             harvested = false;
             rejectedPrescriptionNames.Clear();
             LastAreaHarvested = 0.0;
+            LastStandsHarvested = 0;
             siteLocations.Clear();
             foreach (Location location in AllLocations)
             {

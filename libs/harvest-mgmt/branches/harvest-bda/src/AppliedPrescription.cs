@@ -22,12 +22,17 @@ namespace Landis.Library.HarvestManagement
         private Prescription prescription;
         private StandSpreading standSpreadSiteSelector;
         private Percentage percentageToHarvest;  //TODO: change to Percentage0to100 once it's moved to Util lib
+        private Percentage percentStandsToHarvest;
         private int beginTime;
         private int endTime;
         private double areaToHarvest;
         private double areaRemainingToHarvest;
         private double areaRemainingRatio;
         private double areaHarvested;
+        private int standsHarvested;
+        private int standsToHarvest;
+        private int standsRemainingToHarvest;
+        private double standsRemainingRatio;
         private Stand highest_ranked_stand;
 
         private StandRanking[] rankings;
@@ -84,6 +89,19 @@ namespace Landis.Library.HarvestManagement
         {
             get {
                 return percentageToHarvest;
+            }
+        }
+
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// The percentage of the stands in management area to be harvested.
+        /// </summary>
+        public Percentage PercentStandsToHarvest
+        {
+            get
+            {
+                return percentStandsToHarvest;
             }
         }
 
@@ -156,9 +174,32 @@ namespace Landis.Library.HarvestManagement
                 return areaRemainingRatio;
             }
         }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// The ratio of StandsRemainingToHarvest to StandsToHarvest.
+        /// </summary>
+        public double StandsRemainingRatio
+        {
+            get
+            {
+                return standsRemainingRatio;
+            }
+        }
 
         //---------------------------------------------------------------------
+        /// <summary>
+        /// The number of stands to be harvested by this prescription during
+        /// each harvest timestep.
+        /// </summary>
+        public double StandsToHarvest
+        {
+            get
+            {
+                return standsToHarvest;
+            }
+        }
 
+        //---------------------------------------------------------------------
         /// <summary>
         /// The area (hectares) harvested by this prescription during the
         /// current timestep.
@@ -171,7 +212,19 @@ namespace Landis.Library.HarvestManagement
         }
 
         //---------------------------------------------------------------------
+        /// <summary>
+        /// The number of stands harvested by this prescription during the
+        /// current timestep.
+        /// </summary>
+        public double StandsHarvested
+        {
+            get
+            {
+                return standsHarvested;
+            }
+        }
 
+        //---------------------------------------------------------------------
         /// <summary>
         /// Any stands that haven't been harvested yet during the current
         /// timestep ranked > 0?
@@ -211,7 +264,8 @@ namespace Landis.Library.HarvestManagement
         //---------------------------------------------------------------------
 
         public AppliedPrescription(Prescription prescription,
-                                   Percentage   percentageToHarvest,
+                                   Percentage percentageToHarvest,
+                                   Percentage percentStandsToHarvest,
                                    int          beginTime,
                                    int          endTime)
         {
@@ -223,6 +277,9 @@ namespace Landis.Library.HarvestManagement
             
             //set harvest percentage
             this.percentageToHarvest = percentageToHarvest;
+
+            //set harvest stands percentage
+            this.percentStandsToHarvest = percentStandsToHarvest;
             
             //set begin time and end time
             this.beginTime = beginTime;
@@ -248,6 +305,7 @@ namespace Landis.Library.HarvestManagement
             rankings = new StandRanking[standCount];
             //actually determine harvesting area here
             this.areaToHarvest = area * percentageToHarvest;
+            this.standsToHarvest = (int)(standCount * percentStandsToHarvest);
         }
 
         //---------------------------------------------------------------------
@@ -271,7 +329,14 @@ namespace Landis.Library.HarvestManagement
             prescription.StandRankingMethod.RankStands(stands, rankings);
             // Sort rankings highest to lowest
             Array.Sort<StandRanking>(rankings, CompareRankings);
-            
+
+            StandRanking[] eligibleStands = Array.FindAll<StandRanking>(rankings, RankOfZero);
+
+            standsToHarvest = (int)Math.Round(eligibleStands.Length * percentStandsToHarvest);
+            standsRemainingToHarvest = standsToHarvest;
+            standsRemainingRatio = 1.0;
+            standsHarvested = 0;
+
             highestUnharvestedStand = 0;
 
             //if (isDebugEnabled) {
@@ -302,8 +367,21 @@ namespace Landis.Library.HarvestManagement
                 return 0;
         }
 
-        //---------------------------------------------------------------------
 
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Determines if the stand has a rank not equal to 0
+        /// Returns false if rank is 0, else returns true
+        /// </summary>
+        private static bool RankOfZero(StandRanking rank)
+        {
+            if (rank.Rank == 0)
+                return false;
+            else
+                return true;
+
+        }
+        //---------------------------------------------------------------------
         /// <summary>
         /// Harvests the highest-ranked stand which hasn't been harvested yet
         /// during the current timestep.
@@ -327,6 +405,7 @@ namespace Landis.Library.HarvestManagement
                     double harvestedArea = stand.LastAreaHarvested;
                     
                     areaHarvested += harvestedArea;
+                    int harvestedStands = stand.LastStandsHarvested;
                     //if all (or more ??) is harvested, set areaRemainingToHarvest to 0
                     if (harvestedArea >= areaRemainingToHarvest) {
                         areaRemainingToHarvest = 0;
@@ -335,6 +414,16 @@ namespace Landis.Library.HarvestManagement
                         areaRemainingToHarvest -= harvestedArea;
                     }
                     areaRemainingRatio = areaRemainingToHarvest / areaToHarvest;
+
+                    if (standsRemainingToHarvest <= harvestedStands)
+                    {
+                        standsRemainingToHarvest = 0;
+                    }
+                    else
+                    {
+                        standsRemainingToHarvest -= harvestedStands;
+                    }
+                    standsRemainingRatio = (double)standsRemainingToHarvest / (double)standsToHarvest;
                 }
             }
         }

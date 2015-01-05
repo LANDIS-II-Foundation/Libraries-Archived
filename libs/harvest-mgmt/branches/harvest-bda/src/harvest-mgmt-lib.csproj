@@ -84,6 +84,7 @@
     <Compile Include="stand-ranking\MaximumAge.cs" />
     <Compile Include="stand-ranking\MinimumAge.cs" />
     <Compile Include="stand-ranking\MinTimeSinceLastHarvest.cs" />
+    <Compile Include="stand-ranking\Presalvage.cs" />
     <Compile Include="stand-ranking\RandomRank.cs" />
     <Compile Include="stand-ranking\RegulateAgesRank.cs" />
     <Compile Include="stand-ranking\SpatialArrangement.cs" />
@@ -108,7 +109,7 @@
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.SiteHarvest-v0">
-      <HintPath>C:\Program Files\LANDIS-II\v6\bin\build\Landis.Library.SiteHarvest-v0.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.SiteHarvest-v0.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Succession.dll</HintPath>
@@ -122,9 +123,15 @@
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\site-harvest-library\trunk\src\site-harvest-lib.csproj">
+      <Project>{2A73A09A-CB96-413C-A127-7D14EEA4B9A5}</Project>
+      <Name>site-harvest-lib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(LANDIS_SDK)\staging\copy-to-build-dir.cmd" "$(ProjectDir)staging-list.txt" $(OutDir)</PostBuildEvent>
+    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
