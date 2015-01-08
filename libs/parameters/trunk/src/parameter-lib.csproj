@@ -35,7 +35,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="InputValue_ExtensionMethods.cs" />
     <Compile Include="Ecoregions_AuxParm.cs" />
-    <Compile Include="SpeciesEcoregions_AuxParm.cs" />
+    <Compile Include="SpeciesEcoregionAuxParm.cs" />
     <Compile Include="Species_AuxParm.cs" />
   </ItemGroup>
   <ItemGroup>

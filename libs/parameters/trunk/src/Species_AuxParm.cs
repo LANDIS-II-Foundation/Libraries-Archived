@@ -26,15 +26,6 @@ namespace Landis.Library.Parameters.Species
                 values[species.Index] = value;
             }
         }
-
-        public T[] Values
-        { 
-            get
-            {
-                return values;
-            }
-        }
-
         //---------------------------------------------------------------------
 
         ///<Summary>
