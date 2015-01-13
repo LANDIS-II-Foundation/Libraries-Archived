@@ -78,7 +78,7 @@ namespace  Landis.Library.Climate
                         //CalculateMonthlyData_AddVariance(ecoregion, monthlyData, actualTimeStep, latitude);
                         break;
                     }
-                case "Monthly_RandomYear":
+                case "Monthly_RandomYears":
                     {
                         TimeStep = timeStep;
                         Dictionary<int, ClimateRecord[][]> allData;
@@ -138,7 +138,7 @@ namespace  Landis.Library.Climate
                         Climate.ModelCore.UI.WriteLine("  Completed calculations for {0} using Monthly_SequencedYears. Ecoregion = {1}, SimulatedYear = {2}, actualYearUsed={3}.", this.climatePhase, ecoregion.Name, timeStep, actualTimeStep);
                         break;
                     }
-                case "Daily_RandomYear":
+                case "Daily_RandomYears":
                     {
                         TimeStep = timeStep;
                         Dictionary<int, ClimateRecord[][]> allData;
@@ -200,7 +200,7 @@ namespace  Landis.Library.Climate
                     }
                
                 default:
-                    throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
+                    throw new ApplicationException(String.Format("Unknown Climate Time Series: {0}", climateOption));
 
             }
 

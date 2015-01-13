@@ -48,8 +48,8 @@ namespace Landis.Library.Climate
             this.maxTempTriggerWord = new List<string>() { "maxTemp", "Tmax" };
             this.minTempTriggerWord = new List<string>() { "minTemp", "Tmin"};
             this.precipTriggerWord = new List<string>() { "ppt", "precip", "Prcp" };
-            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd" , "winddirection"};
-            this.windSpeedTriggerWord = new List<string>() { "windSpeed", "ws" };
+            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd", "winddirection, wind_from_direction" };
+            this.windSpeedTriggerWord = new List<string>() { "windSpeed", "ws, wind_speed" };
             this.nDepositionTriggerWord = new List<string>() { "Ndeposition", "Ndep" };
             this.co2TriggerWord = new List<string>() { "CO2", "CO2conc" };
 
@@ -68,24 +68,33 @@ namespace Landis.Library.Climate
             switch (this.format.ToLower())
             {
                 case "daily_temp-c_precip-mmday":  //was 'gfdl_a1fi' then ipcc3_daily
-                    this.timeStep = TemporalGranularity.Daily;
+                    this.timeStep = TemporalGranularity.Daily;  //temp data are in oC and precip is in mm. CFFP (climate file format provider, L62) converts them to cm.
                     break;
 
                 case "monthly_temp-c_precip-mmmonth":  // was ipcc3_monthly
-
-                    this.timeStep = TemporalGranularity.Monthly;
+                    this.timeStep = TemporalGranularity.Monthly;    //temp data are in oC and precip is in mm. CFFP converts them to cm.
                     break;
 
-                case "monthly_temp-k_precip-kgm2sec":
+                case "monthly_temp-k_precip-kgm2sec":               //ipcc5 option
                     this.timeStep = TemporalGranularity.Monthly;
                     this.TemperatureTransformation = ABS_ZERO;      // ipcc5 temp. data are in Kelvin.
-                    this.PrecipTransformation = 262974.6;            // ipcc5 precip. data are in kg / m2 / sec -> convert to cm / month
+                    this.PrecipTransformation = 262974.6;            // ipcc5 precip. data are in kg / m2 / sec -> convert to cm / month 
                     break;
 
-                case "daily_temp-k_precip-kgm2sec":  //add
+                case "daily_temp-k_precip-kgm2sec":             //ipcc5 option
                     this.timeStep = TemporalGranularity.Daily;
                     this.TemperatureTransformation = ABS_ZERO;      // ipcc5 temp. data are in Kelvin.
                     this.PrecipTransformation = 8640.0;             // ipcc5 precip. data are in kg / m2 / sec -> convert to cm / day
+                    break;
+
+                case "monthly_temp-k_precip-mmmonth":               //not currently being used on USGS data portal but it's an option nevertheless
+                    this.timeStep = TemporalGranularity.Monthly;    
+                    this.TemperatureTransformation = ABS_ZERO;      // Temp. data in Kelvin. Precip in mm.      CFFP converts them to cm.               
+                    break;
+
+                case "daily_temp-k_precip-mmday":               // U of Idaho data     
+                    this.timeStep = TemporalGranularity.Daily;     //Temp are in Kelvin and precip is in mm.   
+                    this.TemperatureTransformation = ABS_ZERO;                           
                     break;
 
                 //case "prism_monthly":  //was 'prism'

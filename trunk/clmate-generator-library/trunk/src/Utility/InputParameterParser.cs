@@ -69,8 +69,8 @@ namespace Landis.Library.Climate
 
             InputParameters parameters = new InputParameters();
 
-            string climateTimeSeries_PossibleValues = "Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYear, Daily_RandomYear, Daily_AverageAllYears, Daily_SequencedYears, Monthly_SequencedYears";
-            string climateFileFormat_PossibleValues = "Daily_Temp-C_Precip-mmDay, Monthly_Temp-C_Precip-mmMonth, Daily_Temp-K_Precip-kgM2Sec, Monthly_Temp-K_Precip-kgM2Sec, mauer_daily";
+            string climateTimeSeries_PossibleValues = "Monthly_AverageAllYears, Monthly_AverageWithVariation, Monthly_RandomYears, Daily_RandomYears, Daily_AverageAllYears, Daily_SequencedYears, Monthly_SequencedYears";
+            string climateFileFormat_PossibleValues = "Daily_Temp-C_Precip-mmDay, Monthly_Temp-C_Precip-mmMonth, Daily_Temp-K_Precip-kgM2Sec, Monthly_Temp-K_Precip-kgM2Sec, mauer_daily, monthly_temp-k_precip-mmmonth, daily_temp-k_precip-mmday";
 
             //InputVar<string> climateConfigFile = new InputVar<string>(Names.ClimateConfigFile);
             //ReadVar(climateConfigFile);

@@ -56,7 +56,7 @@ namespace Landis.Library.Climate
             //Climate.ModelCore.UI.WriteLine("  Calculating daily data ...  Ecoregion = {0}, Year = {1}, timestep = {2}.", ecoregion.Name, actualYear, timeStep);
             switch (climateOption)
             {
-                case "Daily_RandomYear":
+                case "Daily_RandomYears":
                     {
                         // JM: this code assumes that the constructor for AnnualClimate_Daily is ONLY called from within
                         //  AnnualClimate_Monthly.AnnualClimate_From_AnnualClimate_Daily(), and, for Daily_RandomYear, the
@@ -126,7 +126,7 @@ namespace Landis.Library.Climate
                         break;
                     }
                 default:
-                    throw new ApplicationException(String.Format("Unknown Climate Time Series: {}", climateOption));
+                    throw new ApplicationException(String.Format("Unknown Climate Time Series: {0}", climateOption));
 
             }
 
