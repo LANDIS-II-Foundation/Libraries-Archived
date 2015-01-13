@@ -48,8 +48,8 @@ namespace Landis.Library.Climate
             this.maxTempTriggerWord = new List<string>() { "maxTemp", "Tmax" };
             this.minTempTriggerWord = new List<string>() { "minTemp", "Tmin"};
             this.precipTriggerWord = new List<string>() { "ppt", "precip", "Prcp" };
-            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd", "winddirection, wind_from_direction" };
-            this.windSpeedTriggerWord = new List<string>() { "windSpeed", "ws, wind_speed" };
+            this.windDirectionTriggerWord = new List<string>() { "windDirect", "wd", "winddirection", "wind_from_direction" };
+            this.windSpeedTriggerWord = new List<string>() { "windSpeed", "ws", "wind_speed" };
             this.nDepositionTriggerWord = new List<string>() { "Ndeposition", "Ndep" };
             this.co2TriggerWord = new List<string>() { "CO2", "CO2conc" };
 
