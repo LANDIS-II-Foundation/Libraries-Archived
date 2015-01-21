@@ -3,7 +3,7 @@
   <metadata>
 	<title>LANDIS-II Site Harvest</title>
     <id>Landis.Library.SiteHarvest</id>
-    <version>1.0.0</version>
+    <version>1.0.0-rc1</version>
 	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
     <description>Code for selecting and cutting whole cohorts at individual sites.  Selection is based on cohort ages.</description>
     <releaseNotes>The library's API has stabilized.</releaseNotes>
@@ -13,7 +13,7 @@
 	<tags>LANDIS-II harvest</tags>
   </metadata>
   <files>
-    <file src="..\src\bin\Debug\Landis.Library.SiteHarvest-v1.dll" target="lib\net35" />
-    <file src="..\src\bin\Debug\Landis.Library.SiteHarvest-v1.xml" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.SiteHarvest-v1.dll" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.SiteHarvest-v1.xml" target="lib\net35" />
   </files>
 </package>
