@@ -18,8 +18,13 @@ namespace Landis.Library.SiteHarvest
         private bool keywordsEnabled;
         private ISpeciesDataset speciesDataset;
         private InputVar<string> speciesName;
-        protected Dictionary<string, int> SpeciesLineNumbers { get; private set; }
         private MultiSpeciesCohortSelector cohortSelector;
+
+        /// <summary>
+        /// Line number where each species was found.  Used to check for
+        /// duplicate names in a list.
+        /// </summary>
+        protected Dictionary<string, int> SpeciesLineNumbers { get; private set; }
 
         //---------------------------------------------------------------------
 
