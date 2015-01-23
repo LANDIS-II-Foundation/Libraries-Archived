@@ -9,7 +9,7 @@ Contributors:
                     Green Code LLC
                     University of Notre Dame, Center for Research Computing
   Robert M. Scheller, Portland State University
-  Brian Miranda, US Forest Service
+  Brian R. Miranda, USDA Forest Service, Northern Research Station
 
 This project is licensed under the Apache License, Version 2.0 (the
 "License").  A copy of the License is in the project file "LICENSE.txt",
