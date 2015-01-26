@@ -8,8 +8,8 @@
     <ProjectGuid>{7D4D8E9B-5FE0-499A-8242-3E72D8DBC2D8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Biomass_Library</RootNamespace>
-    <AssemblyName>Landis.Library.Biomass</AssemblyName>
+    <RootNamespace>Landis.Library.Biomass</RootNamespace>
+    <AssemblyName>Landis.Library.Biomass-v1</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Landis.Library.Biomass-v1.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util, Version=1.1.400.0, Culture=neutral, processorArchitecture=MSIL">
@@ -48,6 +49,9 @@
     <Reference Include="Landis.Library.Cohorts">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
+    <Reference Include="Landis.Library.LeafBiomassCohorts">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.LeafBiomassCohorts.dll</HintPath>
+    </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4815.34359, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
@@ -56,12 +60,14 @@
   <ItemGroup>
     <Compile Include="CohortDefoliation.cs" />
     <Compile Include="Pool.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetName).* "C:\Program Files\LANDIS-II\v6\bin\extensions"</PostBuildEvent>
+    <PostBuildEvent>"$(LANDIS_SDK)\staging\copy-to-build-dir.cmd" "$(ProjectDir)staging-list.txt" $(OutDir)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

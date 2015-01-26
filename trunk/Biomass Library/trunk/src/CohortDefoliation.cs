@@ -8,6 +8,9 @@ using Edu.Wisc.Forest.Flel.Util;
 
 namespace Landis.Library.Biomass
 {
+    /// <summary>
+    /// Defoliation of a cohort
+    /// </summary>
     public class CohortDefoliation
     {
         /// <summary>

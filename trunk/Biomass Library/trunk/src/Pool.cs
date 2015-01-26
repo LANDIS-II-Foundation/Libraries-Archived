@@ -16,6 +16,9 @@ namespace Landis.Library.Biomass
 
 
         //---------------------------------------------------------------------
+        /// <summary>
+        /// Dead pool with initial values set to 0
+        /// </summary>
         public Pool()
         {
             this.mass = 0;
@@ -70,7 +73,10 @@ namespace Landis.Library.Biomass
                 initialMass = value;
             }
         }
-
+        /// <summary>
+        /// Clone a copy of the pool
+        /// </summary>
+        /// <returns></returns>
         public Pool Clone()
         {
             Pool newPool = new Pool();
