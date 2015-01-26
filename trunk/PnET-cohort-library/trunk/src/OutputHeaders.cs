@@ -7,9 +7,7 @@ namespace Landis.Library.BiomassCohortsPnET
 {
     public class OutputHeaders
     {
-        public const string Year = "Year";  
-        public const string Month = "Month";  
-        public const string date = "Date";  
+        public const string Time = "Time";  
         public const string NrOfCohorts = "NrOfCohorts";  
         public const string MaxLayerStdev = "MaxLayerStdev";  
         public const string layers = "layers";  

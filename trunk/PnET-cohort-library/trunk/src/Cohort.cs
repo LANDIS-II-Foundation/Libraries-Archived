@@ -210,14 +210,15 @@ namespace Landis.Library.BiomassCohortsPnET
             return new Percentage(cohort.Fol / (cohort.Wood + cohort.Fol));
         }
         
-        public void InitializeOutput(string SiteName, ushort YearOfBirth)
+
+        public void InitializeOutput(string SiteName, ushort YearOfBirth, LocalOutput.SendMsg SendMsg)
         {
-            cohortoutput = new LocalOutput(SiteName, "Cohort_" + Species.Name + "_" + YearOfBirth + ".csv", OutputHeader);
+            cohortoutput = new LocalOutput(SiteName, "Cohort_" + Species.Name + "_" + YearOfBirth + ".csv", OutputHeader, SendMsg);
         }
 
-        public void UpdateCohortData(DateTime date, ActiveSite site, float FTempPSN, float FTempResp, bool Leaf_On)
+        public void UpdateCohortData(float year, ActiveSite site, float FTempPSN, float FTempResp, bool Leaf_On)
         {
-            string s = date.Year + "," + date.Month + "," + date.ToString("yyyy/MM") + "," + Age + "," + Layer + "," + LAI + "," + Grosspsn + "," +
+            string s = Math.Round(year, 2) + "," + Age + "," + Layer + "," + LAI + "," + Grosspsn + "," +
                        FolResp + "," + MaintenanceRespiration + "," + Netpsn  + "," +  WaterUseEfficiency + "," + Fol + "," + Root + "," + Wood + "," + NSC + "," +
                        NSCfrac + "," + Fwater + "," + Radiation + "," + Frad + "," + FTempPSN + "," + FTempResp + "," + calculate_fage(this) + "," + Leaf_On + "," +
                        calculate_factivebiom(this);
@@ -229,7 +230,7 @@ namespace Landis.Library.BiomassCohortsPnET
         {
             get
             {
-                string hdr = OutputHeaders.Year + "," + OutputHeaders.Month + "," + OutputHeaders.date + "," + OutputHeaders.Age + "," + OutputHeaders.Layer + "," + OutputHeaders.LAI + "," +
+                string hdr = OutputHeaders.Time + "," + OutputHeaders.Age + "," + OutputHeaders.Layer + "," + OutputHeaders.LAI + "," +
                 OutputHeaders.GrossPsn + "," + OutputHeaders.FolResp + "," + OutputHeaders.MaintResp + "," + OutputHeaders.NetPsn + "," +  OutputHeaders.WUE + "," 
                 + OutputHeaders.Fol + "," + OutputHeaders.Root + "," + OutputHeaders.Wood + "," +
                 OutputHeaders.NSC + "," + OutputHeaders.NSCfrac + "," + OutputHeaders.fWater + "," + OutputHeaders.Radiation + "," + OutputHeaders.fRad + "," + OutputHeaders.fTemp_psn + "," +
@@ -241,6 +242,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public void WriteCohortData()
         {
             cohortoutput.Write();
+
         }
 
         public static event Landis.Library.AgeOnlyCohorts.DeathEventHandler<Landis.Library.AgeOnlyCohorts.DeathEventArgs> DeathEvent;
