@@ -8,8 +8,8 @@
     <ProjectGuid>{7E7A3557-9BDF-4979-8352-CDE334A1E9DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>age_cohort</RootNamespace>
-    <AssemblyName>Landis.Library.AgeOnlyCohorts</AssemblyName>
+    <RootNamespace>Landis.Library.AgeOnlyCohorts</RootNamespace>
+    <AssemblyName>Landis.Library.AgeOnlyCohorts-v2</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -26,10 +26,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\..\..\..\Program Files\LANDIS-II\6.0\bin\extensions\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Landis.Library.AgeOnlyCohorts-v2.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Landis.Core">
@@ -55,16 +56,18 @@
     <Compile Include="ISpeciesCohortBoolArray.cs" />
     <Compile Include="ISpeciesCohorts.cs" />
     <Compile Include="ISpeciesCohortsDisturbance.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SiteCohorts.cs" />
     <Compile Include="SpeciesCohortBoolArray.cs" />
     <Compile Include="SpeciesCohorts.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(LANDIS_SDK)\staging\copy-to-build-dir.cmd" "$(ProjectDir)staging-list.txt" $(OutDir)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
