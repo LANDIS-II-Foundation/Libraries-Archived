@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+	<title>LANDIS-II Parameters library</title>
+    <id>Landis.Library.Parameters</id>
+    <version>1.0.0-rc1</version>
+	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
+    <description>Functions to read and use parameters, including species, ecoregion, species+ecoregion parameters.</description>
+    <releaseNotes></releaseNotes>
+	<projectUrl>https://landis-extensions.googlecode.com/svn/libs/parameters/trunk</projectUrl>
+	<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<tags>LANDIS-II Parameters</tags>
+	<dependencies>
+	</dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\bin\Release\Landis.Library.Parameters-v1.dll" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.Parameters-v1.pdb" target="lib\net35" />
+  </files>
+</package>

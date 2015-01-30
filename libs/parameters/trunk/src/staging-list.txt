@@ -1,0 +1,2 @@
+{OutDir}\Landis.Library.Parameters-v1.dll
+{OutDir}\Landis.Library.Parameters-v1.pdb
