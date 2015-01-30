@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B9351E11-1659-4988-8E84-2B61E9CCF9AF}</ProjectGuid>
+    <ProjectGuid>{33808160-94BB-488A-B323-67F091EF4840}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>biomass_cohort</RootNamespace>
-    <AssemblyName>Landis.Library.BiomassCohorts</AssemblyName>
+    <RootNamespace>Landis.Library.BiomassCohorts</RootNamespace>
+    <AssemblyName>Landis.Library.BiomassCohorts-v1</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -26,10 +26,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>c:\Program Files\LANDIS-II\6.0\bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Landis.Library.BiomassCohorts-v1.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
@@ -38,9 +39,8 @@
     <Reference Include="Landis.Core">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.AgeOnlyCohorts, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.AgeOnlyCohorts.dll</HintPath>
+    <Reference Include="Landis.Library.AgeOnlyCohorts-v2">
+      <HintPath>packages\Landis.Library.AgeOnlyCohorts.2.1.0-rc1\lib\net35\Landis.Library.AgeOnlyCohorts-v2.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Cohorts, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -54,11 +54,6 @@
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cohort.cs" />
@@ -82,14 +77,21 @@
     <Compile Include="ISpeciesCohorts.cs" />
     <Compile Include="ISpeciesCohortsDisturbance.cs" />
     <Compile Include="OldToYoungIterator.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="SiteCohorts.cs" />
     <Compile Include="SpeciesCohortBoolArray.cs" />
     <Compile Include="SpeciesCohorts.cs" />
     <Compile Include="WrappedDisturbance.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /C Landis.Library.BiomassCohorts.dll "C:\Program Files\LANDIS-II\v6\bin\extensions\"</PostBuildEvent>
+    <PostBuildEvent>"$(LANDIS_SDK)\staging\copy-to-build-dir.cmd" "$(ProjectDir)staging-list.txt" $(OutDir)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
