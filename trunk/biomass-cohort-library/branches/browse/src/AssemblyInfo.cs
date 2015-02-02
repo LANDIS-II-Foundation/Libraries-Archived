@@ -5,7 +5,7 @@
 // associated with an assembly.
 [assembly: AssemblyTitle("Landis.Library.BiomassCohorts")]
 [assembly: AssemblyDescription("Biomass Cohort Library")]
-[assembly: AssemblyVersion("1.3.*")]
+[assembly: AssemblyVersion("1.4.*")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]

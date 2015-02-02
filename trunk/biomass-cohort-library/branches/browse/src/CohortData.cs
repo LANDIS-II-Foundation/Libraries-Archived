@@ -13,12 +13,26 @@ namespace Landis.Library.BiomassCohorts
         //---------------------------------------------------------------------
 
         /// <summary>
-        /// The cohort's biomass (units?).
+        /// The cohort's biomass (g/m2).
         /// </summary>
         public int Biomass;
 
         //---------------------------------------------------------------------
-
+        /// <summary>
+        /// The cohort's annual NPP (g/m2).
+        /// </summary>
+        public int ANPP;
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// The cohort's potential forage (g/m2).
+        /// </summary>
+        public int Forage;
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// The cohort's forage within browse reach (g/m2).
+        /// </summary>
+        public int ForageInReach;
+        //---------------------------------------------------------------------
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
@@ -33,6 +47,9 @@ namespace Landis.Library.BiomassCohorts
         {
             this.Age = age;
             this.Biomass = biomass;
+            this.ANPP = biomass;
+            this.Forage = 0;
+            this.ForageInReach = 0;
         }
     }
 }

@@ -4,6 +4,7 @@
 using Landis.Core;
 using Landis.SpatialModeling;
 using Edu.Wisc.Forest.Flel.Util;
+using System;
 
 namespace Landis.Library.BiomassCohorts
 {
@@ -40,6 +41,33 @@ namespace Landis.Library.BiomassCohorts
         {
             get {
                 return data.Biomass;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public int ANPP
+        {
+            get
+            {
+                return data.ANPP;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public int Forage
+        {
+            get
+            {
+                return data.Forage;
+            }
+        }
+
+        //---------------------------------------------------------------------
+        public int ForageInReach
+        {
+            get
+            {
+                return data.ForageInReach;
             }
         }
 
@@ -96,7 +124,25 @@ namespace Landis.Library.BiomassCohorts
             int newBiomass = data.Biomass + delta;
             data.Biomass = System.Math.Max(0, newBiomass);
         }
+        //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Sets the cohort's Forage.
+        /// </summary>
+        public void ChangeForage(int forage)
+        {
+            int newForage = Math.Min(forage, data.ANPP);
+            data.Forage = Math.Max(0, forage);
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Sets the cohort's ForageInReach.
+        /// </summary>
+        public void ChangeForageInReach(int forageInReach)
+        {
+            int newForageInReach = Math.Min(forageInReach, data.Forage);
+            data.ForageInReach = Math.Max(0, newForageInReach);
+        }
         //---------------------------------------------------------------------
 
         public int ComputeNonWoodyBiomass(ActiveSite site)
