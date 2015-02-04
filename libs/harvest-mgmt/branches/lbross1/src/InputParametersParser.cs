@@ -25,6 +25,7 @@ namespace Landis.Library.HarvestManagement
         private IStandRankingMethod rankingMethod;  //made global because of re-use
         private InputVar<string> speciesName;
         private List<RoundedInterval> roundedIntervals;
+        private List<List<string>> parserNotes;
         private static int scenarioStart = 0;
         private static int scenarioEnd = Model.Core.EndTime;
         private static class Names
@@ -69,6 +70,20 @@ namespace Landis.Library.HarvestManagement
             }
         }
 
+        /// <summary>
+        /// A List of List(s) of strings
+        /// Each list of strings is a note to be passed to the UI/Log
+        /// The indents and formatting are included for each line so
+        /// that the PlugIn only needs to loop through the Lists
+        /// </summary>
+        public List<List<string>> ParserNotes
+        {
+            get
+            {
+                return parserNotes;
+            }
+        }
+
         //---------------------------------------------------------------------
 
         static InputParametersParser()
@@ -94,6 +109,7 @@ namespace Landis.Library.HarvestManagement
             this.speciesDataset = speciesDataset;
             this.speciesName = new InputVar<string>("Species");
             this.roundedIntervals = new List<RoundedInterval>();
+            this.parserNotes = new List<List<string>>();
         }
 
         //---------------------------------------------------------------------
@@ -101,6 +117,7 @@ namespace Landis.Library.HarvestManagement
         protected override IInputParameters Parse()
         {
             roundedIntervals.Clear();
+            parserNotes.Clear();
 
             ReadLandisDataVar();
 
@@ -861,10 +878,18 @@ namespace Landis.Library.HarvestManagement
                                                                     beginTimeVar.Value.String,
                                                                     scenarioStart));
                     if (beginTime > scenarioEnd)
-                        throw new InputValueException(beginTimeVar.Value.String,
-                                                      string.Format("Year {0} is after the scenario' end year ({1})",
-                                                                    beginTimeVar.Value.String,
-                                                                    scenarioEnd));
+                    {
+                        //throw new InputValueException(beginTimeVar.Value.String,
+                        //                              string.Format("Year {0} is after the scenario' end year ({1})",
+                        //                                            beginTimeVar.Value.String,
+                        //                                            scenarioEnd));
+                        string line1 = string.Format("   NOTE: Begin year {0} is after the scenario' end year {1}", beginTimeVar.Value.String, scenarioEnd);
+                        string line2 = string.Format("         on line {0} of the harvest input file...", LineNumber);
+                        List<string> noteList = new List<string>();
+                        noteList.Add(line1);
+                        noteList.Add(line2);
+                        parserNotes.Add(noteList);
+                    }
 
                     TextReader.SkipWhitespace(currentLine);
                     if (currentLine.Peek() != -1) {
@@ -876,10 +901,19 @@ namespace Landis.Library.HarvestManagement
                                                                         endTimeVar.Value.String,
                                                                         beginTimeVar.Value.String));
                         if (endTime > scenarioEnd)
-                            throw new InputValueException(endTimeVar.Value.String,
-                                                          string.Format("Year {0} is after the scenario' end year ({1})",
-                                                                        endTimeVar.Value.String,
-                                                                        scenarioEnd));
+                        {
+                            //    throw new InputValueException(endTimeVar.Value.String,
+                            //                                  string.Format("Year {0} is after the scenario' end year ({1})",
+                            //                                                endTimeVar.Value.String,
+                            //                                                scenarioEnd));
+
+                            string line1 = string.Format("   NOTE: End Year {0} is after the scenario' end year {1}", endTimeVar.Value.String, scenarioEnd);
+                            string line2 = string.Format("         on line {0} of the harvest input file...", LineNumber);
+                            List<string> noteList = new List<string>();
+                            noteList.Add(line1);
+                            noteList.Add(line2);
+                            parserNotes.Add(noteList);
+                        }
 
                         CheckNoDataAfter("the " + endTimeVar.Name + " column",
                                          currentLine);
