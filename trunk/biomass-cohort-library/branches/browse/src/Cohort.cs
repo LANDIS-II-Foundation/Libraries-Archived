@@ -72,7 +72,15 @@ namespace Landis.Library.BiomassCohorts
         }
 
         //---------------------------------------------------------------------
+        public double LastBrowseProp
+        {
+            get
+            {
+                return data.LastBrowseProp;
+            }
+        }
 
+        //---------------------------------------------------------------------
         /// <summary>
         /// The cohort's age and biomass data.
         /// </summary>
@@ -125,7 +133,14 @@ namespace Landis.Library.BiomassCohorts
             data.Biomass = System.Math.Max(0, newBiomass);
         }
         //---------------------------------------------------------------------
-
+        /// <summary>
+        /// Sets the cohort's ANPP.
+        /// </summary>
+        public void ChangeANPP(int anpp)
+        {
+            data.ANPP = Math.Max(0, anpp);
+        }
+        //---------------------------------------------------------------------
         /// <summary>
         /// Sets the cohort's Forage.
         /// </summary>
@@ -144,7 +159,19 @@ namespace Landis.Library.BiomassCohorts
             data.ForageInReach = Math.Max(0, newForageInReach);
         }
         //---------------------------------------------------------------------
-
+        /// <summary>
+        /// Sets the cohort's LastBrowseProp.
+        /// </summary>
+        public void ChangeLastBrowseProp(double lastBrowseProp)
+        {
+            CohortData newData = new CohortData(data.Age, data.Biomass);
+            newData.ANPP = data.ANPP;
+            newData.Forage = data.Forage;
+            newData.ForageInReach = data.ForageInReach;
+            newData.LastBrowseProp = lastBrowseProp;
+            this.data = newData;
+        }
+        //---------------------------------------------------------------------
         public int ComputeNonWoodyBiomass(ActiveSite site)
         {
             Percentage nonWoodyPercentage = Cohorts.BiomassCalculator.ComputeNonWoodyPercentage(this, site);
@@ -193,5 +220,8 @@ namespace Landis.Library.BiomassCohorts
             if (AgeOnlyDeathEvent != null)
                 AgeOnlyDeathEvent(sender, new DeathEventArgs(cohort, site, disturbanceType));
         }
+
+        //---------------------------------------------------------------------
+
     }
 }

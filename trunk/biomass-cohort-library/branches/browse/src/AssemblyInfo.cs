@@ -4,8 +4,8 @@
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Landis.Library.BiomassCohorts")]
-[assembly: AssemblyDescription("Biomass Cohort Library")]
-[assembly: AssemblyVersion("1.4.*")]
+[assembly: AssemblyDescription("Biomass Cohort Library vBrowse")]
+[assembly: AssemblyVersion("1.5.*")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]

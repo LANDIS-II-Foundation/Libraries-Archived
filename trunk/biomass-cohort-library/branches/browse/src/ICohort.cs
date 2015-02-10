@@ -54,6 +54,13 @@ namespace Landis.Library.BiomassCohorts
         int ComputeNonWoodyBiomass(ActiveSite site);
         //---------------------------------------------------------------------
         /// <summary>
+        /// Changes the cohort's ANPP
+        /// </summary>
+        /// <param name="newForage"></param>
+        /// <returns></returns>
+        void ChangeANPP(int anpp);
+        //---------------------------------------------------------------------
+        /// <summary>
         /// Changes the cohort's forage
         /// </summary>
         /// <param name="newForage"></param>
@@ -66,5 +73,19 @@ namespace Landis.Library.BiomassCohorts
         /// <param name="newForage"></param>
         /// <returns></returns>
         void ChangeForageInReach(int newForageInReach);
+        ///---------------------------------------------------------------------
+        /// <summary>
+        /// Changes the cohort's last browse prop
+        /// </summary>
+        /// <param name="newForage"></param>
+        /// <returns></returns>
+        void ChangeLastBrowseProp(double lastBrowseProp);
+        //---------------------------------------------------------------------
+
+        void ChangeBiomass(int delta);
+        CohortData Data
+        {
+            get;
+        }
     }
 }

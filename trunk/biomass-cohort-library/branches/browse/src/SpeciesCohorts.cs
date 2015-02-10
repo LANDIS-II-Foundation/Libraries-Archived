@@ -254,7 +254,7 @@ namespace Landis.Library.BiomassCohorts
 
         //---------------------------------------------------------------------
 
-        private void RemoveCohort(int        index,
+        public void RemoveCohort(int        index,
                                   ICohort    cohort,
                                   ActiveSite site,
                                   ExtensionType disturbanceType)
@@ -329,6 +329,71 @@ namespace Landis.Library.BiomassCohorts
             return totalReduction;
         }
 
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Computes current forage for a cohort
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int UpdateForage(IDisturbance disturbance)
+        {
+            //  Go backwards through list of cohort data, so the removal of an
+            //  item doesn't mess up the loop.
+            int totalForage = 0;
+            for (int i = cohortData.Count - 1; i >= 0; i--)
+            {
+                Cohort cohort = new Cohort(species, cohortData[i]);
+                int forage = disturbance.ChangeForage(cohort);
+                cohort.ChangeForage(forage);
+                cohortData[i] = cohort.Data;
+                totalForage += forage;
+            }
+            return totalForage;
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
+        /// Computes current forage in reach for a cohort
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public int UpdateForageInReach(IDisturbance disturbance)
+        {
+            //  Go backwards through list of cohort data, so the removal of an
+            //  item doesn't mess up the loop.
+            int totalForageInReach = 0;
+            for (int i = cohortData.Count - 1; i >= 0; i--)
+            {
+                Cohort cohort = new Cohort(species, cohortData[i]);
+                int forageInReach = disturbance.ChangeForageInReach(cohort);
+                cohort.ChangeForageInReach(forageInReach);
+                cohortData[i] = cohort.Data;
+                totalForageInReach += forageInReach;
+            }
+            return totalForageInReach;
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Computes last browse prop for a cohort
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public double UpdateLastBrowseProp(IDisturbance disturbance)
+        {
+            //  Go backwards through list of cohort data, so the removal of an
+            //  item doesn't mess up the loop.
+            double totalBrowseProp = 0;
+            for (int i = cohortData.Count - 1; i >= 0; i--)
+            {
+                Cohort cohort = new Cohort(species, cohortData[i]);
+                double lastBrowseProp = disturbance.ChangeLastBrowseProp(cohort);
+                cohort.ChangeLastBrowseProp(lastBrowseProp);
+                cohortData[i] = cohort.Data;
+                totalBrowseProp += lastBrowseProp;
+            }
+            return totalBrowseProp;
+        }
         //---------------------------------------------------------------------
 
         private static AgeOnlyCohorts.SpeciesCohortBoolArray isSpeciesCohortDamaged;

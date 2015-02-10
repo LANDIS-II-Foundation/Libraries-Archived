@@ -20,6 +20,8 @@ namespace Landis.Library.BiomassCohorts
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly bool isDebugEnabled = log.IsDebugEnabled;
         public int InitialBiomass;
+        //  Cohort data is in oldest to youngest order.
+        private List<CohortData> cohortData;
 
         //---------------------------------------------------------------------
 
@@ -67,6 +69,7 @@ namespace Landis.Library.BiomassCohorts
         public SiteCohorts()
         {
             this.cohorts = new List<SpeciesCohorts>();
+            this.cohortData = new List<CohortData>();
         }
         //---------------------------------------------------------------------
         public void Grow(ushort years, ActiveSite site, int? successionTimestep, ICore mCore)
@@ -213,7 +216,42 @@ namespace Landis.Library.BiomassCohorts
 
             return totalReduction;
         }
-
+        //---------------------------------------------------------------------
+        public int UpdateForage(IDisturbance disturbance)
+        {
+            int totalForage = 0;
+            //  Go through list of species cohorts from back to front so that
+            //  a removal does not mess up the loop.
+            for (int i = cohorts.Count - 1; i >= 0; i--)
+            {
+                totalForage += cohorts[i].UpdateForage(disturbance);
+            }
+            return totalForage;
+        }
+        //---------------------------------------------------------------------
+        public int UpdateForageInReach(IDisturbance disturbance)
+        {
+            int totalForageInReach = 0;
+            //  Go through list of species cohorts from back to front so that
+            //  a removal does not mess up the loop.
+            for (int i = cohorts.Count - 1; i >= 0; i--)
+            {
+                totalForageInReach += cohorts[i].UpdateForageInReach(disturbance);
+            }
+            return totalForageInReach;
+        }
+        //---------------------------------------------------------------------
+        public double UpdateLastBrowseProp(IDisturbance disturbance)
+        {
+            double totalBrowseProp = 0;
+            //  Go through list of species cohorts from back to front so that
+            //  a removal does not mess up the loop.
+            for (int i = cohorts.Count - 1; i >= 0; i--)
+            {
+                totalBrowseProp += cohorts[i].UpdateLastBrowseProp(disturbance);
+            }
+            return totalBrowseProp;
+        }
         //---------------------------------------------------------------------
 
         void AgeCohort.ISiteCohorts.RemoveMarkedCohorts(AgeCohort.ICohortDisturbance disturbance)
@@ -277,7 +315,9 @@ namespace Landis.Library.BiomassCohorts
             }
 
             if (!speciesPresent)
+            {
                 cohorts.Add(new SpeciesCohorts(species, age, initialBiomass));
+            }
 
         }
         //---------------------------------------------------------------------

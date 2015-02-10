@@ -34,6 +34,11 @@ namespace Landis.Library.BiomassCohorts
         public int ForageInReach;
         //---------------------------------------------------------------------
         /// <summary>
+        /// The cohort's last proportion browsed.
+        /// </summary>
+        public double LastBrowseProp;
+        //---------------------------------------------------------------------
+        /// <summary>
         /// Initializes a new instance.
         /// </summary>
         /// <param name="age">
@@ -50,6 +55,7 @@ namespace Landis.Library.BiomassCohorts
             this.ANPP = biomass;
             this.Forage = 0;
             this.ForageInReach = 0;
+            this.LastBrowseProp = 0.0;
         }
     }
 }
