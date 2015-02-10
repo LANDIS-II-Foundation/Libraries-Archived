@@ -7,7 +7,9 @@ namespace Landis.Library.BiomassCohortsPnET
 {
     public class OutputHeaders
     {
-        public const string Time = "Time";  
+        public const string PET = "PET(mm)";
+        public const string Time = "Time";
+        public const string PAR0 = "PAR0";  
         public const string NrOfCohorts = "NrOfCohorts";  
         public const string MaxLayerStdev = "MaxLayerStdev";  
         public const string layers = "layers";  
@@ -47,8 +49,11 @@ namespace Landis.Library.BiomassCohortsPnET
         public const string fTemp_resp = "fTemp_resp(-)";                 
         public const string fage = "fage(-)";     
         public const string LeafOn = "LeafOn(-)";          
-        public const string FActiveBiom = "FActiveBiom(gDW_gDW)";           
-             
-         
+        public const string FActiveBiom = "FActiveBiom(gDW_gDW)";
+        public const string Interception = "Interception(mm)";
+        public const string Evaporation = "Evaporation(mm)";
+        public const string DeliveryPotential = "DeliveryPotential";
+        public const string MaxWater = "MaxWater";
+          
     }
 }
