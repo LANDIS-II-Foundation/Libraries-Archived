@@ -1,4 +1,4 @@
-{OutDir}\Landis.Library.BiomassCohorts-v1.dll
-{OutDir}\Landis.Library.BiomassCohorts-v1.pdb
+{OutDir}\Landis.Library.BiomassCohorts.dll
+{OutDir}\Landis.Library.BiomassCohorts.pdb
 --no-overwrite
-{OutDir}\Landis.Library.AgeOnlyCohorts-v2.dll
+{OutDir}\Landis.Library.AgeOnlyCohorts.dll
