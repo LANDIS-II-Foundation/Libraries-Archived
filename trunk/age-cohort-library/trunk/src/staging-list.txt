@@ -1,2 +1,2 @@
-{OutDir}\Landis.Library.AgeOnlyCohorts-v2.dll
-{OutDir}\Landis.Library.AgeOnlyCohorts-v2.pdb
+{OutDir}\Landis.Library.AgeOnlyCohorts.dll
+{OutDir}\Landis.Library.AgeOnlyCohorts.pdb

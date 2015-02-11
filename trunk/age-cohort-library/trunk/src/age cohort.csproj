@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Landis.Library.AgeOnlyCohorts</RootNamespace>
-    <AssemblyName>Landis.Library.AgeOnlyCohorts-v2</AssemblyName>
+    <AssemblyName>Landis.Library.AgeOnlyCohorts</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Landis.Library.AgeOnlyCohorts-v2.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\Landis.Library.AgeOnlyCohorts.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Landis.Core">

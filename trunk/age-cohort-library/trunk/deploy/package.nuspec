@@ -3,7 +3,7 @@
   <metadata>
 	<title>LANDIS-II Age Cohort library</title>
     <id>Landis.Library.AgeOnlyCohorts</id>
-    <version>2.1.0-rc1</version>
+    <version>2.1.0-rc2</version>
 	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
     <description>Data types for cohorts with attributes of species and age.</description>
     <releaseNotes>Now supports cross-compatibility among cohort types</releaseNotes>
@@ -15,7 +15,7 @@
 	</dependencies>
   </metadata>
   <files>
-    <file src="..\src\bin\Release\Landis.Library.AgeOnlyCohorts-v2.dll" target="lib\net35" />
-    <file src="..\src\bin\Release\Landis.Library.AgeOnlyCohorts-v2.pdb" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.AgeOnlyCohorts.dll" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.AgeOnlyCohorts.pdb" target="lib\net35" />
   </files>
 </package>
