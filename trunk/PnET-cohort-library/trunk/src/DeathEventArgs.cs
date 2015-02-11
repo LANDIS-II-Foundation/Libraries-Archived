@@ -24,7 +24,7 @@ namespace Landis.Library.BiomassCohortsPnET
             this.site = site;
             this.disturbanceType = disturbanceType;
         }*/
-        private ICohort cohort;
+        private Cohort cohort;
         private ActiveSite site;
         private ExtensionType disturbanceType;
 
@@ -33,7 +33,7 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// The cohort that died.
         /// </summary>
-        public ICohort Cohort
+        public Cohort Cohort
         {
             get
             {
@@ -75,7 +75,7 @@ namespace Landis.Library.BiomassCohortsPnET
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public DeathEventArgs(ICohort cohort,
+        public DeathEventArgs(Cohort cohort,
                               ActiveSite site,
                               ExtensionType disturbanceType)
         {

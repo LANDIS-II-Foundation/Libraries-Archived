@@ -18,7 +18,8 @@ namespace Landis.Library.BiomassCohortsPnET
         public static float JoulesPerMJ = 1000000;
         public static int sec_per_month = (int)(30.5F * (float)sec_per_day);
         public static int mm_per_m = 1000;
-        
+        public static int days_per_month = 30;
+
         public static int NrOfMonths = Enum.GetValues(typeof(Months)).GetLength(0);
         public static System.Array AllMonths = Enum.GetValues(typeof(Months));
         

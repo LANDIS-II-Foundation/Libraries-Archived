@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Cohort.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DeathEventArgs.cs" />
     <Compile Include="OutputHeaders.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SiteCohorts.cs" />

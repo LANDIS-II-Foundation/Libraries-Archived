@@ -52,6 +52,7 @@ namespace Landis.Library.BiomassCohortsPnET
         public const string FActiveBiom = "FActiveBiom(gDW_gDW)";
         public const string Interception = "Interception(mm)";
         public const string Evaporation = "Evaporation(mm)";
+        public const string Transpiration = "Transpiration(mm)";
         public const string DeliveryPotential = "DeliveryPotential";
         public const string MaxWater = "MaxWater";
           
