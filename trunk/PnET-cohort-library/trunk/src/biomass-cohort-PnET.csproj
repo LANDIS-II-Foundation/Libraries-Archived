@@ -8,7 +8,7 @@
     <ProjectGuid>{33808160-94BB-488A-B323-67F091EF4840}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>biomass_cohort</RootNamespace>
+    <RootNamespace>Landis.Library.BiomassCohortsPnET</RootNamespace>
     <AssemblyName>Landis.Library.BiomassCohortsPnET</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -38,26 +38,25 @@
     <Reference Include="Landis.Core">
       <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Extension.Succession.Biomass">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Extension.Succession.Biomass.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Library.AgeOnlyCohorts, Version=2.1.5344.12667, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Landis.Library.AgeOnlyCohorts, Version=2.1.5520.27428, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.AgeOnlyCohorts.dll</HintPath>
+      <HintPath>packages\Landis.Library.AgeOnlyCohorts.2.1.0-rc2\lib\net35\Landis.Library.AgeOnlyCohorts.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Biomass, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Landis.Library.Biomass-v1, Version=1.0.5521.14523, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Biomass.dll</HintPath>
+      <HintPath>packages\Landis.Library.Biomass.1.0.0-rc2\lib\net35\Landis.Library.Biomass-v1.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.BiomassCohorts">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.BiomassCohorts.dll</HintPath>
+    <Reference Include="Landis.Library.BiomassCohorts, Version=1.3.5520.27608, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Landis.Library.BiomassCohorts.1.3.0-rc2\lib\net35\Landis.Library.BiomassCohorts.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Cohorts, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.Succession">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Succession.dll</HintPath>
+    <Reference Include="Landis.Library.Succession, Version=4.0.5521.15032, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Landis.Library.Succession.4.0.0-rc2\lib\net35\Landis.Library.Succession.dll</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling">
       <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
@@ -79,6 +78,9 @@
     <Compile Include="LocalOutput.cs" />
     <Compile Include="SpeciesCohorts.cs" />
     <Compile Include="SubCanopyLayer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
