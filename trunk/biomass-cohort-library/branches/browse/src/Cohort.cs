@@ -164,12 +164,7 @@ namespace Landis.Library.BiomassCohorts
         /// </summary>
         public void ChangeLastBrowseProp(double lastBrowseProp)
         {
-            CohortData newData = new CohortData(data.Age, data.Biomass);
-            newData.ANPP = data.ANPP;
-            newData.Forage = data.Forage;
-            newData.ForageInReach = data.ForageInReach;
-            newData.LastBrowseProp = lastBrowseProp;
-            this.data = newData;
+            data.LastBrowseProp = lastBrowseProp;
         }
         //---------------------------------------------------------------------
         public int ComputeNonWoodyBiomass(ActiveSite site)
