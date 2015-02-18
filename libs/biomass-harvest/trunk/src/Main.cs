@@ -7,6 +7,9 @@ using Landis.Core;
 
 namespace Landis.Library.BiomassHarvest
 {
+    /// <summary>
+    /// Main entry point for initializing and configuring the library.
+    /// </summary>
     public static class Main
     {
         /// <summary>

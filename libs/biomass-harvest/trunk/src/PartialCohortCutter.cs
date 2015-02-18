@@ -35,6 +35,9 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
         public PartialCohortCutter(Landis.Library.SiteHarvest.ICohortSelector cohortSelector,
                                    PartialCohortSelectors                     partialCohortSelectors,
                                    ExtensionType                              extensionType)
@@ -63,6 +66,9 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Cuts the cohorts at a site.
+        /// </summary>
         public override void Cut(ActiveSite   site,
                                  CohortCounts cohortCounts)
         {
@@ -93,6 +99,9 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Records the amount a cohort's biomass was cut (reduced).
+        /// </summary>
         protected void Record(int     reduction,
                               ICohort cohort)
         {

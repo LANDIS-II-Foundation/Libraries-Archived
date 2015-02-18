@@ -17,6 +17,9 @@ namespace Landis.Library.BiomassHarvest
     public class PartialCohortSelectors
         : Dictionary<ISpecies, SpecificAgesCohortSelector>
     {
+        /// <summary>
+        /// Creates a new instance with no selectors initially.
+        /// </summary>
         public PartialCohortSelectors()
             : base()
         {
@@ -24,6 +27,9 @@ namespace Landis.Library.BiomassHarvest
 
         //----------------------------------------------------------------------
 
+        /// <summary>
+        /// Creates a new instance with a set of selectors.
+        /// </summary>
         public PartialCohortSelectors(PartialCohortSelectors partialCohortSelectors)
             : base(partialCohortSelectors)
         {

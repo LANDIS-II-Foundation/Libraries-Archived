@@ -62,6 +62,10 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Event handler for when a cohort dies because of cutting (i.e., it's
+        /// completely harvested).
+        /// </summary>
         public static void CohortDied(object sender,
                                       DeathEventArgs eventArgs)
         {
@@ -76,6 +80,9 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Resets the harvest totals for all species.
+        /// </summary>
         public static void ResetHarvestTotals()
         {
             foreach (ISpecies species in Model.Core.Species)
@@ -86,6 +93,9 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Records an amount of biomass that has been cut for a species.
+        /// </summary>
         public static void RecordHarvest(ISpecies species,
                                          int      biomass)
         {

@@ -42,6 +42,15 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Creates a new instance.
+        /// </summary>
+        /// <param name="ages">List of individual ages that are selected.</param>
+        /// <param name="ranges">List of age ranges that are selected.</param>
+        /// <param name="percentages">The percentages for each age or range.
+        /// The percentage for a range is indexed by the starting age of the
+        /// range.
+        /// </param>
         public SpecificAgesCohortSelector(IList<ushort>                   ages,
                                           IList<AgeRange>                 ranges,
                                           IDictionary<ushort, Percentage> percentages)

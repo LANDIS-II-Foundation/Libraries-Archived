@@ -9,12 +9,21 @@ using Landis.SpatialModeling;
 
 namespace Landis.Library.BiomassHarvest
 {
+    /// <summary>
+    /// The library's site variables
+    /// </summary>
     public static class SiteVars
     {
+        /// <summary>
+        /// Site variable with biomass cohorts
+        /// </summary>
         public static ISiteVar<ISiteCohorts> Cohorts { get; private set; }
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Initializes the site variables.
+        /// </summary>
         public static void Initialize()
         {
             Cohorts = Model.Core.GetSiteVar<ISiteCohorts>("Succession.BiomassCohorts");

@@ -17,6 +17,6 @@
   </metadata>
   <files>
     <file src="..\src\bin\Release\Landis.Library.BiomassHarvest-v1.dll" target="lib\net35" />
-    <file src="..\src\bin\Release\Landis.Library.BiomassHarvest-v1.pdb" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.BiomassHarvest-v1.xml" target="lib\net35" />
   </files>
 </package>

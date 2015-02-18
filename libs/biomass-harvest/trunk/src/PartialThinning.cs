@@ -27,6 +27,9 @@ namespace Landis.Library.BiomassHarvest
     /// </summary>
     public static class PartialThinning
     {
+        /// <summary>
+        /// The partial cohort selectors that have been read for each species.
+        /// </summary>
         public static PartialCohortSelectors CohortSelectors { get; private set; }
         private static IDictionary<ushort, Percentage> percentages;
 
@@ -59,6 +62,11 @@ namespace Landis.Library.BiomassHarvest
 
         //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Creates a new InputValueException for an invalid percentage input
+        /// value.
+        /// </summary>
+        /// <returns></returns>
         public static InputValueException MakeInputValueException(string value,
                                                                   string message)
         {
