@@ -62,7 +62,7 @@
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.SiteHarvest-v1">
-      <HintPath>..\packages\Landis.Library.SiteHarvest.1.0.0-rc1\lib\net35\Landis.Library.SiteHarvest-v1.dll</HintPath>
+      <HintPath>..\packages\Landis.Library.SiteHarvest.1.0.0\lib\net35\Landis.Library.SiteHarvest-v1.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Landis.SpatialModeling, Version=1.0.4815.34359, Culture=neutral, processorArchitecture=MSIL">
