@@ -25,5 +25,7 @@ namespace Landis.Library.Metadata
          public const string Percentage = "percentage";
          public const string Mg_ha = "Mg ha-1";
          public const string Severity_Rank = "severity (1-5)";
+         public const string m_s = "meters per sec";
+         public const string min = "minutes";
     }
 }
