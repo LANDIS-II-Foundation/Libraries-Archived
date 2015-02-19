@@ -3,7 +3,7 @@
   <metadata>
 	<title>LANDIS-II Harvest Management library</title>
     <id>Landis.Library.HarvestManagement</id>
-    <version>1.0.0-rc1</version>
+    <version>1.0.0</version>
 	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
     <description>Data types for harvesting forests -- management areas, stands, prescriptions. Algorithms for stand ranking, stand selection and site selection.</description>
     <releaseNotes>Now supports interoperability with the Land Use extension.</releaseNotes>
@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>LANDIS-II harvest management</tags>
 	<dependencies>
-	  <dependency id="Landis.Library.SiteHarvest" version="1.0.0-rc1" />
+	  <dependency id="Landis.Library.SiteHarvest" version="1.0.0" />
 	</dependencies>
   </metadata>
   <files>
