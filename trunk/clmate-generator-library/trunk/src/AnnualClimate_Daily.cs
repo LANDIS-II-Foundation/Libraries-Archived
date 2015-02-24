@@ -332,8 +332,10 @@ namespace Landis.Library.Climate
             
             //degDayBase is temperature (C) above which degree days (Degree_Day)
             //are counted
-            double degDayBase = 5.56;      // 42F.
-
+            //In v3.1, we used to use a base of 42F but Botkin et al actually recommends 40oF in his original publication- RS/ML
+            //double degDayBase = 5.56;      // 42F.
+            double degDayBase = 4.44;      // 40F.
+            
             double Deg_Days = 0.0;
 
             //Calc monthly temperatures (mean +/- normally distributed
