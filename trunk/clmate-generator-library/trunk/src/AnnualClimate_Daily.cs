@@ -134,7 +134,7 @@ namespace Landis.Library.Climate
             this.beginGrowing = CalculateBeginGrowingDay_Daily(); //ecoClimate);
             this.endGrowing = CalculateEndGrowingDay_Daily(dailyData);
             this.growingDegreeDays = GrowSeasonDegreeDays();
-            
+
             this.DailyDataIsLeapYear = dailyData.Length == 366;
 
         }
@@ -277,7 +277,8 @@ namespace Landis.Library.Climate
                      
 
         //---------------------------------------------------------------------------
-        private int CalculateBeginGrowingDay_Daily()
+        private int CalculateBeginGrowingDay_Daily()  //Actually only using monthly data to calculate parameter for establishment.
+        
         //Calculate Begin Growing Degree Day (Last Frost; Minimum = 0 degrees C): 
         {
             double nightTemp = 0.0;
@@ -292,14 +293,12 @@ namespace Landis.Library.Climate
                     break;
                 }
             }
-            //Climate.ModelCore.UI.WriteLine("  Calculating daily begin growing season day...{0}", beginGrow);
-
-            return beginGrow;
-           // return MaxDayInYear; // For the time being if no night could be find with the Temp. > 0 then 0 is returned. A result of this could be that no growth would occure.
+            
+            return beginGrow;           
         }
 
         //---------------------------------------------------------------------------
-        private int CalculateEndGrowingDay_Daily(ClimateRecord[] annualClimate)//, Random autoRand)
+        private int CalculateEndGrowingDay_Daily(ClimateRecord[] annualClimate)//, Random autoRand)  //Actually only using monthly data for establishment.
         //Calculate End Growing Degree Day (First frost; Minimum = 0 degrees C):
         {
             double nightTemp = 0.0;
@@ -315,22 +314,19 @@ namespace Landis.Library.Climate
                     //endGrowingDay = i;
                     return day;
                 }
+                //Climate.ModelCore.UI.WriteLine("  Calculating end begin growing season day...{0}", endGrowingDay);
             }
-             
+            
             return 0;
         }
 
        
 
          //---------------------------------------------------------------------------
-        public int GrowSeasonDegreeDays()
-        //Calc growing season degree days (Degree_Day) based on monthly temperatures
-        //normally distributed around a specified mean with a specified standard
-        //deviation.
+        public int GrowSeasonDegreeDays()            //Actually only using only monthly data for establishment.
+        //Method for calculating the growing season degree days (Degree_Day) based on daily temperatures
         {
-           
-            
-            //degDayBase is temperature (C) above which degree days (Degree_Day)
+             //degDayBase is temperature (C) above which degree days (Degree_Day)
             //are counted
             //In v3.1, we used to use a base of 42F but Botkin et al actually recommends 40oF in his original publication- RS/ML
             //double degDayBase = 5.56;      // 42F.
@@ -338,17 +334,20 @@ namespace Landis.Library.Climate
             
             double Deg_Days = 0.0;
 
-            //Calc monthly temperatures (mean +/- normally distributed
-            //random number times standard deviation) and
-            //sum degree days for consecutve months.
-            for (int i = 0; i < 12 ; i++) //12 months in year
+            for (int day = 0; day < 365; day++) //for every day of the year
             {
-                //I talked to Melissa and Alec  and we decided to use the difference between Begin and End growing days for the GrowSeasonDegreeDays. 
-                //if (DailyTemp[i] > degDayBase)
-                    Deg_Days += (DailyTemp[i] - degDayBase);
+                if (DailyTemp[day] > degDayBase)
+                //Deg_Days += (DailyTemp[i] - degDayBase);
+                {
+                    Deg_Days += (DailyTemp[day] - degDayBase);
+                    //Climate.ModelCore.UI.WriteLine("DailyTemp={0:0.0}, Deg_DayBase={1:0.00}, Deg_Days={2:0.00},", DailyTemp[day], degDayBase, Deg_Days);
+                }
+                                    
             }
-            this.growingDegreeDays = (int)Deg_Days;
-            return (int)Deg_Days;
+            this.growingDegreeDays = (int)Deg_Days;            
+            return (int) Deg_Days;
+
+            
         }
 
             
