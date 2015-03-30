@@ -91,6 +91,10 @@ namespace Landis.Library.Succession.DemographicSeeding
             ReadVar(cohortThreshold);
             parameters.CohortThreshold = cohortThreshold.Value;
 
+            InputVar<string> dispersalProbabilitiesLog = new InputVar<string>("DispersalProbabilitiesLog");
+            if (ReadOptionalVar(dispersalProbabilitiesLog))
+                parameters.DispersalProbabilitiesLog = dispersalProbabilitiesLog.Value;
+
             InputVar<string> seedRainMaps = new InputVar<string>("SeedRainMaps");
             if (ReadOptionalVar(seedRainMaps))
                 parameters.SeedRainMaps = seedRainMaps.Value;

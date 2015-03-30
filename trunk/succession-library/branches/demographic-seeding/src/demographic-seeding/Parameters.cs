@@ -159,5 +159,11 @@ namespace Landis.Library.Succession.DemographicSeeding
         /// Species parameters related to demographic seeding.
         /// </summary>
         public SpeciesParameters[] SpeciesParameters { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string DispersalProbabilitiesLog{ get; set; }
+
     }
 }

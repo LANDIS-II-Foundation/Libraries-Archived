@@ -17,6 +17,8 @@ using Landis.SpatialModeling;
 using log4net;
 using Seed_Dispersal;
 using System.Reflection;
+using System.Collections.Generic;
+using System;
 
 namespace Landis.Library.Succession.DemographicSeeding
 {
@@ -30,6 +32,7 @@ namespace Landis.Library.Succession.DemographicSeeding
 
         private string seedRainMaps;
         private string seedlingEmergenceMaps;
+        private string dispersalProbabilitiesFilename;
 
         //---------------------------------------------------------------------
 
@@ -90,6 +93,14 @@ namespace Landis.Library.Succession.DemographicSeeding
             seedRainMaps          = parameters.SeedRainMaps;
             seedlingEmergenceMaps = parameters.SeedlingEmergenceMaps;
 
+            dispersalProbabilitiesFilename = parameters.DispersalProbabilitiesLog;
+            if (dispersalProbabilitiesFilename != null)
+                // Truncate DispersalProbabilitiesLog file and write header
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(dispersalProbabilitiesFilename, false))
+                {
+                    file.WriteLine("Timestep, Species, Distance, Probability");
+                }            
+
             foreach (ISpecies species in Model.Core.Species)
             {
                 SpeciesParameters speciesParameters = parameters.SpeciesParameters[species.Index]; 
@@ -105,6 +116,7 @@ namespace Landis.Library.Succession.DemographicSeeding
             }
 
             seedingData.Initialize();
+            WriteProbabilities();
         }
 
         //---------------------------------------------------------------------
@@ -131,6 +143,7 @@ namespace Landis.Library.Succession.DemographicSeeding
             {
                 SimulateOneTimestep();
                 WriteOutputMaps();
+                WriteProbabilities();
             }
             timeAtLastCall = Model.Core.CurrentTime;
 
@@ -143,6 +156,25 @@ namespace Landis.Library.Succession.DemographicSeeding
         }
 
         //---------------------------------------------------------------------
+        protected void WriteProbabilities()
+        {
+            if (dispersalProbabilitiesFilename == null) 
+                return;
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(dispersalProbabilitiesFilename, true))
+            {
+                foreach (ISpecies species in Model.Core.Species)
+                {
+                    int s = species.Index;
+                    List<double> distances = new List<double>(seedingData.GetProbabilityDistances(s));
+                    distances.Sort();
+                    file.WriteLine("{0}, {1},,", Model.Core.CurrentTime, species.Name);
+                    foreach (double distance in distances)
+                    {
+                        file.WriteLine(",,{0},{1}", distance, seedingData.GetDispersalProbability(s, distance));
+                    }
+                }
+            }
+        }
 
         protected void SimulateOneTimestep()
         {
