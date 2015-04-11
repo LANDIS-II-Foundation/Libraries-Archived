@@ -5,29 +5,30 @@ namespace Landis.Library.InitialCommunities
     public class Dataset
         : IDataset
     {
-        private List<ICommunity> communities;
+        private Dictionary<uint, ICommunity> communities;
 
         //---------------------------------------------------------------------
 
         public Dataset()
         {
-            communities = new List<ICommunity>();
+            communities = new Dictionary<uint, ICommunity>();
         }
 
         //---------------------------------------------------------------------
 
         public void Add(ICommunity community)
         {
-            communities.Add(community);
+            communities.Add(community.MapCode, community);
         }
 
         //---------------------------------------------------------------------
 
         public ICommunity Find(uint mapCode)
         {
-            foreach (ICommunity community in communities)
-                if (community.MapCode == mapCode)
-                    return community;
+            if (communities.ContainsKey(mapCode))
+            {
+                return communities[mapCode];
+            }
             return null;
         }
     }
