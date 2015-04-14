@@ -1,4 +1,4 @@
-{OutDir}\Landis.Library.Succession-v4.dll
-{OutDir}\Landis.Library.Succession-v4.pdb
+{OutDir}\Landis.Library.Succession.dll
+{OutDir}\Landis.Library.Succession.pdb
 --no-overwrite
-{OutDir}\Landis.Library.AgeOnlyCohorts-v2.dll
+{OutDir}\Landis.Library.AgeOnlyCohorts.dll
