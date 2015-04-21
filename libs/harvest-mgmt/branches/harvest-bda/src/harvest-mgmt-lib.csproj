@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Landis.Library.HarvestManagement</RootNamespace>
-    <AssemblyName>Landis.Library.HarvestManagement-v0</AssemblyName>
+    <AssemblyName>Landis.Library.HarvestManagement-v1</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Landis.Library.HarvestManagement-v0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Landis.Library.HarvestManagement-v1.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,7 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Landis.Library.HarvestManagement-v0.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Landis.Library.HarvestManagement-v1.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -108,8 +108,8 @@
     <Reference Include="Landis.Library.Cohorts">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.SiteHarvest-v0">
-      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.SiteHarvest-v0.dll</HintPath>
+    <Reference Include="Landis.Library.SiteHarvest-v1">
+      <HintPath>..\packages\Landis.Library.SiteHarvest.1.0.0\lib\net35\Landis.Library.SiteHarvest-v1.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Succession.dll</HintPath>
@@ -124,10 +124,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\site-harvest-library\trunk\src\site-harvest-lib.csproj">
-      <Project>{2A73A09A-CB96-413C-A127-7D14EEA4B9A5}</Project>
-      <Name>site-harvest-lib</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
