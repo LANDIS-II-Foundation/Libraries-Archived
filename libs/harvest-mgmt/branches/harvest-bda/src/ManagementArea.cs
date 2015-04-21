@@ -192,6 +192,8 @@ namespace Landis.Library.HarvestManagement
             //  its stands.
             area = 0;
             foreach (Stand stand in stands) {
+                // Initialize stands for harvesting to compile ActiveArea and SiteLocations
+                stand.InitializeForHarvesting();
                 area += stand.ActiveArea;
                 stand.TimeLastHarvested = -1 * stand.ComputeAge();
 
