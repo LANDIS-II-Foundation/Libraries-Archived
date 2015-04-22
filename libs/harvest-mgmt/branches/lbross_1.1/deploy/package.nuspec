@@ -12,7 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<tags>LANDIS-II harvest management</tags>
 	<dependencies>
-	  <dependency id="Landis.Library.SiteHarvest" version="1.0.0-rc1" />
+	  <dependency id="Landis.Library.SiteHarvest" version="1.0.0" />
 	</dependencies>
   </metadata>
   <files>
