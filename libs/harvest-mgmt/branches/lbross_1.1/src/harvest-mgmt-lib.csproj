@@ -107,9 +107,8 @@
     <Reference Include="Landis.Library.Cohorts">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Cohorts.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.SiteHarvest-v1, Version=1.0.5498.33971, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Landis.Library.SiteHarvest.1.0.0-rc1\lib\net35\Landis.Library.SiteHarvest-v1.dll</HintPath>
+    <Reference Include="Landis.Library.SiteHarvest-v1">
+      <HintPath>..\packages\Landis.Library.SiteHarvest.1.0.0\lib\net35\Landis.Library.SiteHarvest-v1.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Succession">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\extensions\Landis.Library.Succession.dll</HintPath>
