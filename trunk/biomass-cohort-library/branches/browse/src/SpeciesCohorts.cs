@@ -94,7 +94,20 @@ namespace Landis.Library.BiomassCohorts
             this.isMaturePresent = false;
             AddNewCohort(initialAge, initialBiomass);
         }
+        //---------------------------------------------------------------------
 
+        /// <summary>
+        /// Initializes a new instance with one young cohort (age = 1).
+        /// </summary>
+        public SpeciesCohorts(ISpecies species,
+                              ushort initialAge,
+                              int initialBiomass, int initialANPP)
+        {
+            this.species = species;
+            this.cohortData = new List<CohortData>();
+            this.isMaturePresent = false;
+            AddNewCohort(initialAge, initialBiomass, initialANPP);
+        }
         //---------------------------------------------------------------------
 
         /// <summary>
@@ -120,15 +133,22 @@ namespace Landis.Library.BiomassCohorts
         {
             this.species = species;
         }
-
         //---------------------------------------------------------------------
-
         /// <summary>
         /// Adds a new cohort.
         /// </summary>
         public void AddNewCohort(ushort age, int initialBiomass)
         {
             this.cohortData.Add(new CohortData(age, initialBiomass));
+        }
+
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Adds a new cohort.
+        /// </summary>
+        public void AddNewCohort(ushort age, int initialBiomass, int initialANPP)
+        {
+            this.cohortData.Add(new CohortData(age, initialBiomass, initialANPP));
         }
 
         //---------------------------------------------------------------------

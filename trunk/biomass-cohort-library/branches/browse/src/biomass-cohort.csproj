@@ -39,8 +39,8 @@
     <Reference Include="Landis.Core">
       <HintPath>C:\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Library.AgeOnlyCohorts-v2">
-      <HintPath>packages\Landis.Library.AgeOnlyCohorts.2.1.0-rc1\lib\net35\Landis.Library.AgeOnlyCohorts-v2.dll</HintPath>
+    <Reference Include="Landis.Library.AgeOnlyCohorts">
+      <HintPath>..\..\..\deer-browse\trunk\src\packages\Landis.Library.AgeOnlyCohorts.2.1.0-rc2\lib\net35\Landis.Library.AgeOnlyCohorts.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Library.Cohorts, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -84,10 +84,10 @@
     <Compile Include="WrappedDisturbance.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

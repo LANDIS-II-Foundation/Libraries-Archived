@@ -323,6 +323,38 @@ namespace Landis.Library.BiomassCohorts
         //---------------------------------------------------------------------
 
         /// <summary>
+        /// Adds a new cohort for a particular species.
+        /// </summary>
+
+        public void AddNewCohort(ISpecies species, ushort age, int initialBiomass, int initialANPP)
+        {
+            //if (isDebugEnabled)
+            //    log.DebugFormat("  add cohort: {0}, initial biomass = {1}; site biomass = {2}",
+            //                    species.Name, initialBiomass, totalBiomass);
+            // int initialBiomass = InitialBiomass;
+
+            bool speciesPresent = false;
+            for (int i = 0; i < cohorts.Count; i++)
+            {
+                SpeciesCohorts speciesCohorts = cohorts[i];
+                if (speciesCohorts.Species == species)
+                {
+                    //speciesCohorts.AddNewCohort(age, initialBiomass);
+                    speciesCohorts.AddNewCohort(age, initialBiomass, initialANPP);
+                    speciesPresent = true;
+                    break;
+                }
+            }
+
+            if (!speciesPresent)
+            {
+                cohorts.Add(new SpeciesCohorts(species, age, initialBiomass, initialANPP));
+            }
+
+        }
+        //---------------------------------------------------------------------
+
+        /// <summary>
         /// Add new age-only cohort.  Only used to maintain interface.  .DO NOT USE.
         /// </summary>
         public void AddNewCohort(ISpecies species)

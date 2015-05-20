@@ -57,5 +57,25 @@ namespace Landis.Library.BiomassCohorts
             this.ForageInReach = 0;
             this.LastBrowseProp = 0.0;
         }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// Initializes a new instance.
+        /// </summary>
+        /// <param name="age">
+        /// The cohort's age.
+        /// </param>
+        /// <param name="biomass">
+        /// The cohort's biomass.
+        /// </param>
+        public CohortData(ushort age,
+                          int biomass, int ANPP)
+        {
+            this.Age = age;
+            this.Biomass = biomass;
+            this.ANPP = ANPP;
+            this.Forage = 0;
+            this.ForageInReach = 0;
+            this.LastBrowseProp = 0.0;
+        }
     }
 }
