@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<project name="Landis.Raster-Test">
-    <property name="project-type" value="library"/>
-    <property name="references-file" value="references.txt" />
-
-    <property name="has-NUnit-tests" value="true" />
-
-    <include buildfile="../../module.build" />
-</project>

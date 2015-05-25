@@ -1,3 +1,0 @@
-true-chars =1TtYyX+
-
-row =.

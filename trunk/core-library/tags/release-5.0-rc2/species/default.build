@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<project name="Landis.Species">
-    <property name="project-type"    value="library"/>
-    <property name="references-file" value="references.txt" />
-
-    <include buildfile="../module.build" />
-</project>

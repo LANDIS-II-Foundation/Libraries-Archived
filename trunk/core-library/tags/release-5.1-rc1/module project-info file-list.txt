@@ -1,3 +1,0 @@
-../module project-type.txt
-project-name.txt
-../version-release.txt

@@ -1,3 +1,0 @@
-true-chars =
-
-#  This file has no row data, so the resulting array is [0,0]

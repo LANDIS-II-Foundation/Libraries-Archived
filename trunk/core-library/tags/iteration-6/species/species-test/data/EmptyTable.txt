@@ -1,5 +1,0 @@
-> Example of good input file for species
-
-LandisData  Species
-
-> No species present

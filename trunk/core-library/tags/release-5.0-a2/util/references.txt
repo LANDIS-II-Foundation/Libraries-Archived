@@ -1,4 +1,0 @@
-Edu.Wisc.Forest.Flel.Util.dll
-Landis.Landscape.dll
-Landis.Raster.dll
-Landis.Raster.Erdas74.dll

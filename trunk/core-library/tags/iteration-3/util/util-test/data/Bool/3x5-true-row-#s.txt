@@ -1,7 +1,0 @@
-true-chars =1TtYyX+
-
-#  This file has row #s
-
-row 1 =11111
-row 2 =+++++
-row 3 =YyTyY
