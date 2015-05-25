@@ -1,8 +1,0 @@
->> Example of bad input file
-
-LandisData   Extension
-
-Name         "Foo Bar"
-Description  "Compute foo-bar metrics across landscape"
-UserGuide    "@DATA_INSTALL_DIR@/Foo-Bar_User-Guide.txt"
-Assembly     '  '  << Just whitespace not permitted
