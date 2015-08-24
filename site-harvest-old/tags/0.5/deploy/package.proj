@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <MSBuildCommunityTasksLib>MSBuild\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
+  </PropertyGroup>
+  <UsingTask TaskName="MSBuild.Community.Tasks.RegexReplace"
+             AssemblyFile="$(MSBuildCommunityTasksLib)" />
+  <UsingTask TaskName="MSBuild.Community.Tasks.Zip"
+             AssemblyFile="$(MSBuildCommunityTasksLib)" />
+
+  <!--  ===============================================================  -->
+
+  <PropertyGroup>
+    <AssemblyBuildDir>..\src\bin\Debug</AssemblyBuildDir>
+	<AssemblyName>Landis.Library.SiteHarvest</AssemblyName>
+	<AssemblyNameWithVer>$(AssemblyName)-v0</AssemblyNameWithVer>
+    <LibAssembly>$(AssemblyBuildDir)\$(AssemblyNameWithVer).dll</LibAssembly>
+    <LibXmlDoc>$(AssemblyBuildDir)\$(AssemblyNameWithVer).xml</LibXmlDoc>
+  </PropertyGroup>
+
+  <Target Name="zip-file">
+    <GetAssemblyIdentity AssemblyFiles="$(LibAssembly)">
+      <Output TaskParameter="Assemblies"
+              ItemName="LibAssemblyIdentity" />
+    </GetAssemblyIdentity>
+    <RegexReplace Input="%(LibAssemblyIdentity.Version)"
+                  Expression="\.\d+\.\d+$"
+                  Replacement="">
+      <Output TaskParameter="Output"
+              ItemName="MajorMinor" />
+    </RegexReplace>
+    <PropertyGroup>
+      <LibVersion>@(MajorMinor)</LibVersion>
+	  <ReleaseSuffix></ReleaseSuffix>      <!-- official release -->
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageContents Include="$(LibAssembly)" />
+      <PackageContents Include="$(LibXmlDoc)" />
+    </ItemGroup>
+    <Zip ZipFileName="$(AssemblyName)-$(LibVersion)$(ReleaseSuffix).zip"
+         Files="@(PackageContents)"
+         Flatten="true" />
+  </Target>
+
+</Project>

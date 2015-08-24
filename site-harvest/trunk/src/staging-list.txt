@@ -1,2 +1,0 @@
-{OutDir}\Landis.Library.SiteHarvest-v1.dll
-{OutDir}\Landis.Library.SiteHarvest-v1.pdb

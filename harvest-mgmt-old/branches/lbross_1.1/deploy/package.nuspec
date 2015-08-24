@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+	<title>LANDIS-II Harvest Management library</title>
+    <id>Landis.Library.HarvestManagement</id>
+    <version>1.1.0-a1</version>
+	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
+    <description>Data types for harvesting forests -- management areas, stands, prescriptions. Algorithms for stand ranking, stand selection and site selection.</description>
+    <releaseNotes>Now supports interoperability with the Land Use extension.</releaseNotes>
+	<projectUrl>https://code.google.com/p/landis-extensions/source/browse/#svn%2Flibs%2Fharvest-mgmt%2Ftrunk</projectUrl>
+	<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<tags>LANDIS-II harvest management</tags>
+	<dependencies>
+	  <dependency id="Landis.Library.SiteHarvest" version="1.0.0" />
+	</dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\bin\Release\Landis.Library.HarvestManagement-v1.dll" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.HarvestManagement-v1.pdb" target="lib\net35" />
+  </files>
+</package>

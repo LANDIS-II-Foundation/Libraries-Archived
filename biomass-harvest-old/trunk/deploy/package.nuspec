@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+	<title>LANDIS-II Biomass Harvest</title>
+    <id>Landis.Library.BiomassHarvest</id>
+    <version>1.0.0</version>
+	<authors>LANDIS-II developers (see Contributors in NOTICE.txt)</authors>
+    <description>Code for cutting biomass cohorts.  Includes functionality for partial harvesting.</description>
+    <releaseNotes>Includes XML documentation file.</releaseNotes>
+	<projectUrl>https://code.google.com/p/landis-extensions/source/browse/#svn%2Flibs%2Fbiomass-harvest%2Ftrunk</projectUrl>
+	<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<tags>LANDIS-II harvest biomass</tags>
+	<dependencies>
+	  <dependency id="Landis.Library.SiteHarvest" version="[1.0.0,2.0)" />
+	</dependencies>
+  </metadata>
+  <files>
+    <file src="..\src\bin\Release\Landis.Library.BiomassHarvest-v1.dll" target="lib\net35" />
+    <file src="..\src\bin\Release\Landis.Library.BiomassHarvest-v1.xml" target="lib\net35" />
+  </files>
+</package>
