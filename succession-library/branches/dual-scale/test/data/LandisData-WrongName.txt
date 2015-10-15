@@ -1,3 +1,0 @@
->> Example of bad input file for initial communities
-
-Landis    << This name should be "LandisData"

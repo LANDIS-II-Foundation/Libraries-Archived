@@ -1,6 +1,0 @@
-#  project information
-
-project-name	Landis.Succession
-project-type	library
-version		2.1
-release		official

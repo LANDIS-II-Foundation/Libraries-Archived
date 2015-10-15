@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-
-<project name="Succession Library - Tests">
-    <property name="Landis-core"
-              value="5.0" />
-    <include buildfile="${edu.wisc.forest.flel.build}/NUnit-project.build" />
-</project>

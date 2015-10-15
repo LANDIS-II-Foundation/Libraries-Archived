@@ -1,3 +1,0 @@
->> Example of bad input file for initial communities
-
-LandisData    << Missing value after name

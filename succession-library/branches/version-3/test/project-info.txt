@@ -1,6 +1,0 @@
-#  project information
-
-project-name	Landis.Test.Succession_v3
-project-type	library
-version		3.0
-release		alpha 3

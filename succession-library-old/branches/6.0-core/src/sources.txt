@@ -1,0 +1,2 @@
+*.cs
+initial-communities/*.cs

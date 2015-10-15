@@ -1,6 +1,0 @@
-#  project information
-
-project-name	Landis.Test.Succession
-project-type	library
-version		2.2
-release		official

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<project name="project settings">
-
-    <property name="version"      value="3.0" />
-
-    <property name="Landis-core"  value="6.0" />
-
-</project>
