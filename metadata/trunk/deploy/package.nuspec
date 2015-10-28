@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+	<title>LANDIS-II Metadata library</title>
+    <id>Landis.Library.Metadata</id>
+    <version>1.0.1</version>
+	<authors>LANDIS-II developers</authors>
+    <description>Library provides can be used to format output to be used by tools such as Landis VizTool</description>
+    <releaseNotes></releaseNotes>
+	<projectUrl>https://github.com/LANDIS-II-Foundation/Libraries</projectUrl>
+	<licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<tags>LANDIS-II Metadata</tags>
+  </metadata>
+  <files>
+    <file src="..\src\bin\Debug\Landis.Library.Metadata.dll" target="lib\net35" />
+    <file src="..\src\bin\Debug\Landis.Library.Metadata.pdb" target="lib\net35" />
+  </files>
+</package>
