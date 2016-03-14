@@ -1,3 +1,0 @@
-Edu.Wisc.Forest.Flel.Util.dll
-Wisc.Flel.GeospatialModeling.dll
-Wisc.Flel.ModuleAttributes.dll

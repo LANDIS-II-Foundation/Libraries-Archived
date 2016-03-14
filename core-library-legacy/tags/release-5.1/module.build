@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright 2005, University of Wisconsin-Madison
+  Author: James Domingo, UW-Madison, FLEL
+-->
+
+<project name="Landis-II Core Framework - Module">
+    <description>
+    	Common build file shared by all the modules in the core framework.
+    </description>
+
+    <!--  ================================================================  -->
+
+    <!--  property "module-name__file" : the name of the file with the
+                                          module's project name  -->
+    <property name="module-name__file"
+              value="project-name.txt" />
+
+    <fail if="${not file::exists(module-name__file)}" >
+        Error:  The file "${module-name__file}" does not exist
+    </fail>
+
+    <!--  ================================================================  -->
+
+    <!--  property "module-project-info__file-list" : the file that contains
+                                                      the list of files which
+                                                      in turn contain various
+                                                      parts of the module's
+                                                      project info (name, type,
+                                                      version and release)  -->
+    <property name="module-project-info__file-list"
+              value="../module project-info file-list.txt" />
+
+    <!--  property "module-project-info__file" : the name of the file with
+                                                 all the project info for the
+                                                 module  -->
+    <property name="module-project-info__file"
+              value="project-info.txt" />
+
+    <!--  property "module-project-info__uptodate" : true if the file with the
+                                                     module's project info is
+                                                     up-to-date  -->
+    <uptodate property="module-project-info__uptodate">
+        <targetfiles>
+            <include name="${module-project-info__file}" />
+        </targetfiles>
+        <sourcefiles>
+            <includesfile name="${module-project-info__file-list}" />
+        </sourcefiles>
+    </uptodate>
+
+    <if test="${not module-project-info__uptodate}">
+        <call target="update-module-project-info" />
+    </if>
+
+    <!--  ================================================================  -->
+
+    <!--  Internal target to update the file with the module's project
+          information  -->
+    <target name="update-module-project-info">
+        <foreach item="Line"
+                 in="${module-project-info__file-list}"
+                 property="filename">
+            <do>
+                <property name="append-file-contents"
+                          value="${property::exists('file-contents')}" />
+                <loadfile file="${filename}"
+                          property="file-contents" />
+                <echo message="${file-contents}"
+                      file="${module-project-info__file}"
+                      append="${append-file-contents}" />
+            </do>
+        </foreach>
+        <echo message="Updated file: ${module-project-info__file}" />
+    </target>
+
+    <!--  ================================================================  -->
+
+    <include buildfile="${edu.wisc.forest.flel.build}/project.build" />
+
+</project>

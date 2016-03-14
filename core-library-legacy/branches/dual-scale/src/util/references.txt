@@ -1,0 +1,4 @@
+Edu.Wisc.Forest.Flel.Util.dll
+log4net.dll
+Wisc.Flel.GeospatialModeling.DualScale.dll
+Wisc.Flel.ModuleAttributes.dll

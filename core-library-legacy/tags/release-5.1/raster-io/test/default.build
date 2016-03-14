@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<!--
+  Copyright 2005, University of Wisconsin-Madison
+  Author: James Domingo, UW-Madison, FLEL
+-->
+
+<project name="Tests for Raster I/O module">
+    <include buildfile="../../module-tests.build" />
+</project>

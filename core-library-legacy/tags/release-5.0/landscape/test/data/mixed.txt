@@ -1,0 +1,23 @@
+true-chars =1TtYyX+
+
+#  This file has mixed data.
+
+
+      #          1         2
+      # 12345678901234567890123456
+row  1 =....|....|....|....|....|.
+row  2 =....|XXXX|....|....|....|.
+row  3 =...X+XXXX+....|XXXX+X...|.
+row  4 =...X+XXXX+XX.X+XXXX+XX..|.
+row  5 =....+XXXX+....|.XXX+X...|.
+row  6 =....|....|....|....|....|.
+row  7 =....|.XXX+....|....|.....X
+row  8 =....|XX..+X...|....|.XXX+X
+row  9 =....|.X.X+XXXX+XXXX+XXXX|.
+row 10 =....|.XXX+XX..+X..X+.XX.|.
+row 11 =....|....|....|....|....|.
+row 12 =....|....|....|....|....|.
+row 13 =X...|....|....|....|....|.
+row 14 =.XXX+XXXX+XX..|....|...X|.
+row 15 =XX.X+.XX.+XX..+X..X+.XXX+.
+row 16 =.XX.|...X+XXXX+XXXX+XX..|.

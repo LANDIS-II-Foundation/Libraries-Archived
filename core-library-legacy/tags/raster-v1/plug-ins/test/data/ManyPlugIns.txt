@@ -1,0 +1,14 @@
+>> Example of a good plug-in database
+
+LandisData   "Plug-ins Database"
+
+
+>>  Name                   Type           Implementation Name
+>>  ----                   ----           -------------------
+
+    Null.Succession        Succession     Landis.Null.Succession,Landis.Null.dll
+    "Age-Only Succession"  Succession     Landis.AgeOnly.Succession.PlugIn,Landis.AgeOnly.Succession.dll
+
+    Null.Disturbance       disturbance    Landis.Null.Disturbance,Landis.Null.dll
+
+    "Test.DumpEcoregions"  output         Landis.Testing.DumpEcoregions.PlugIn,Landis.Testing.DumpEcoregions.dll

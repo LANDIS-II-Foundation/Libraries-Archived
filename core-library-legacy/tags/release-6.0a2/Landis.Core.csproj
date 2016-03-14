@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8A0D0C37-D896-4724-B6DA-1BF3EB76C4C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Landis</RootNamespace>
+    <AssemblyName>Landis.Core</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="../third-party/FLEL/geospatial/copy-modules.sh ${TargetDir}" />
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="../third-party/FLEL/geospatial/copy-modules.sh ${TargetDir}" />
+      </CustomCommands>
+    </CustomCommands>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="util\Data.cs" />
+    <Compile Include="util\Log.cs" />
+    <Compile Include="util\Random.cs" />
+    <Compile Include="util\TextParser.cs" />
+    <Compile Include="util\UI.cs" />
+    <Compile Include="species\Dataset.cs" />
+    <Compile Include="species\DatasetParser.cs" />
+    <Compile Include="species\EditableDataset.cs" />
+    <Compile Include="species\EditableParameters.cs" />
+    <Compile Include="species\EffectiveSeedDist.cs" />
+    <Compile Include="species\IDataset.cs" />
+    <Compile Include="species\IEditableDataset.cs" />
+    <Compile Include="species\IEditableParameters.cs" />
+    <Compile Include="species\IParameters.cs" />
+    <Compile Include="species\ISpecies.cs" />
+    <Compile Include="species\Parameters.cs" />
+    <Compile Include="species\PostFireRegeneration.cs" />
+    <Compile Include="species\PostFireRegenerationUtil.cs" />
+    <Compile Include="species\Species.cs" />
+    <Compile Include="plug-ins\I2PhaseInitialization.cs" />
+    <Compile Include="plug-ins\ICleanUp.cs" />
+    <Compile Include="plug-ins\ICore.cs" />
+    <Compile Include="plug-ins\IDataset.cs" />
+    <Compile Include="plug-ins\PlugIn.cs" />
+    <Compile Include="plug-ins\PlugInInfo.cs" />
+    <Compile Include="plug-ins\PlugInType.cs" />
+    <Compile Include="plug-ins\SuccessionPlugIn.cs" />
+    <Compile Include="ecoregions\Dataset.cs" />
+    <Compile Include="ecoregions\DatasetParser.cs" />
+    <Compile Include="ecoregions\Ecoregion.cs" />
+    <Compile Include="ecoregions\EditableDataset.cs" />
+    <Compile Include="ecoregions\EditableParameters.cs" />
+    <Compile Include="ecoregions\IDataset.cs" />
+    <Compile Include="ecoregions\IEcoregion.cs" />
+    <Compile Include="ecoregions\IEditableDataset.cs" />
+    <Compile Include="ecoregions\IEditableParameters.cs" />
+    <Compile Include="ecoregions\InputGrid.cs" />
+    <Compile Include="ecoregions\IParameters.cs" />
+    <Compile Include="ecoregions\Map.cs" />
+    <Compile Include="ecoregions\Parameters.cs" />
+    <Compile Include="ecoregions\Pixel.cs" />
+    <Compile Include="cohorts\type-independent\CohortAttribute.cs" />
+    <Compile Include="cohorts\type-independent\ICohort.cs" />
+    <Compile Include="cohorts\type-independent\ILandscapeCohorts.cs" />
+    <Compile Include="cohorts\type-independent\ISiteCohorts.cs" />
+    <Compile Include="cohorts\type-independent\ISpeciesCohorts.cs" />
+    <Compile Include="cohorts\DeathEventArgs.cs" />
+    <Compile Include="cohorts\DeathEventHandler.cs" />
+    <Compile Include="cohorts\ICohort.cs" />
+    <Compile Include="cohorts\ILandscapeCohorts.cs" />
+    <Compile Include="cohorts\ISiteCohorts.cs" />
+    <Compile Include="cohorts\ISpeciesCohorts.cs" />
+    <Compile Include="main\EditablePlugIn.cs" />
+    <Compile Include="main\EditablePlugInList.cs" />
+    <Compile Include="main\EditableScenario.cs" />
+    <Compile Include="main\ListOfEditable.cs" />
+    <Compile Include="main\Model.cs" />
+    <Compile Include="main\PlugInAndInitFile.cs" />
+    <Compile Include="main\PlugInInfo.cs" />
+    <Compile Include="main\Scenario.cs" />
+    <Compile Include="main\ScenarioParser.cs" />
+    <Compile Include="main\SiteVarRegistry.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Edu.Wisc.Forest.Flel.Util, Version=1.1.400.0, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\third-party\FLEL\util\bin\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.9.0, Culture=neutral, PublicKeyToken=b32731d11ce58905">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\third-party\log4net\bin\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Wisc.Flel.GeospatialModeling, Version=1.0.7.314, Culture=neutral, PublicKeyToken=null">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\third-party\FLEL\geospatial\bin\Wisc.Flel.GeospatialModeling.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

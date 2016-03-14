@@ -1,0 +1,3 @@
+nunit.framework.dll
+Edu.Wisc.Forest.Flel.Util.dll
+Wisc.Flel.GeospatialModeling.DualScale.dll

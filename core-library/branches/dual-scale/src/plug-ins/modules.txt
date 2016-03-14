@@ -1,4 +1,0 @@
-Landis.Cohorts.netmodule
-Landis.Ecoregions.netmodule
-Landis.Species.netmodule
-Landis.Util.netmodule

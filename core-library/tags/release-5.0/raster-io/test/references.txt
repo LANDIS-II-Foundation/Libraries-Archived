@@ -1,3 +1,0 @@
-nunit.framework.dll
-Landis.RasterIO.dll
-Edu.Wisc.Forest.Flel.Util.dll

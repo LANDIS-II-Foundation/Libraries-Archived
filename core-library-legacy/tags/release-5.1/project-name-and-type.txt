@@ -1,0 +1,2 @@
+project-name	Landis.Core
+project-type	library
