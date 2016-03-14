@@ -1,6 +1,0 @@
-#  project information
-
-project-name	Landis.Console
-project-type	program
-version		5.1
-release		official

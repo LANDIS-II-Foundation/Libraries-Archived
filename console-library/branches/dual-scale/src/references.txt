@@ -1,5 +1,0 @@
-Edu.Wisc.Forest.Flel.Util.dll
-Landis.Core.dll
-Landis.PlugIns.Admin.exe
-log4net.dll
-Wisc.Flel.GeospatialModeling.DualScale.dll
