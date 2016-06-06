@@ -15,6 +15,7 @@ namespace Landis.Library.Metadata
         public ScenarioReplicationMetadata ScenarioReplicationMetadata { get; set; }
         public List<OutputMetadata> OutputMetadatas { get; set; }
         private static ICore modelCore;
+        public static string[] ColumnNames { get; set; }
         //---------------------------------------------------------------------
 
         public static ICore ModelCore

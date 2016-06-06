@@ -13,6 +13,7 @@ namespace Landis.Library.Metadata
         public string Desc;
         public string Format;
         public bool SppList;
+        public bool ColumnList;
     }
 
 }

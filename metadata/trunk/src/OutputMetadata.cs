@@ -44,6 +44,8 @@ namespace Landis.Library.Metadata
                         if (property.CanRead)
                         {
                             bool sppString = ((DataFieldAttribute)attributes[0]).SppList;
+                            bool columnList = ((DataFieldAttribute)attributes[0]).ColumnList;
+
                             if (sppString)
                             {
                                 //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding XML for Species ...");
@@ -51,7 +53,13 @@ namespace Landis.Library.Metadata
                                 {
                                     //ExtensionMetadata.ModelCore.UI.WriteLine("   Adding XML for {0} ...", species.Name);
                                     Fields.Add(new FieldMetadata { Name = (property.Name + species.Name), Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
-                                    //tbl.Columns.Add(String.Format(property.Name + species.Name), typeof(double)); //property.PropertyType);
+                                }
+                            }
+                            else if (columnList)
+                            {
+                                for (int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
+                                {
+                                    Fields.Add(new FieldMetadata { Name = (property.Name + ExtensionMetadata.ColumnNames[i]), Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
                                 }
                             }
                             else
