@@ -49,11 +49,12 @@ namespace Landis.Library.Metadata
                         }
                         else if (columnList)
                         {
-                            for (int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
+                            foreach (String columnName in ExtensionMetadata.ColumnNames)// int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
                             {
-                                if (ExtensionMetadata.ColumnNames[i].Trim() == "")
-                                    break;
-                                tbl.Columns.Add(String.Format(property.Name + ExtensionMetadata.ColumnNames[i]), typeof(double)); //property.PropertyType);
+                                //if (ExtensionMetadata.ColumnNames[i].Trim() == "")
+                                //    break;
+                                //tbl.Columns.Add(String.Format(property.Name + ExtensionMetadata.ColumnNames(i)), typeof(double)); //property.PropertyType);
+                                tbl.Columns.Add(String.Format(property.Name + columnName), typeof(double)); //property.PropertyType);
                             }
                         }
                         else
@@ -169,12 +170,15 @@ namespace Landis.Library.Metadata
                         else if (columnList)
                         {
                             double[] columnValue = (double[])property.GetValue(dataObject, null);
-                            for(int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
+                            int i = 0;
+                            foreach (String columnName in ExtensionMetadata.ColumnNames)
+                                //for (int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
                             {
-                                DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.ColumnNames[i])];
+                                //DataColumn clm = tbl.Columns[(property.Name + ExtensionMetadata.ColumnNames[i])];
+                                DataColumn clm = tbl.Columns[(property.Name + columnName)];
                                 string format = ((DataFieldAttribute)attributes[0]).Format;
                                 dataRow[clm] = format == null ? columnValue[i].ToString() : string.Format("{0:" + format + "}", columnValue[i].ToString());
-                                //nameCnt++;
+                                i++;
                             }
                         }
                         else

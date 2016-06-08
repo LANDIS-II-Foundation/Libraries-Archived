@@ -57,9 +57,11 @@ namespace Landis.Library.Metadata
                             }
                             else if (columnList)
                             {
-                                for (int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
+                                foreach (String columnName in ExtensionMetadata.ColumnNames)
+                                    //for (int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
                                 {
-                                    Fields.Add(new FieldMetadata { Name = (property.Name + ExtensionMetadata.ColumnNames[i]), Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
+                                    //Fields.Add(new FieldMetadata { Name = (property.Name + ExtensionMetadata.ColumnNames[i]), Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
+                                    Fields.Add(new FieldMetadata { Name = (property.Name + columnName), Unit = ((DataFieldAttribute)attributes[0]).Unit, Desc = ((DataFieldAttribute)attributes[0]).Desc, Format = ((DataFieldAttribute)attributes[0]).Format });
                                 }
                             }
                             else
