@@ -51,6 +51,8 @@ namespace Landis.Library.Metadata
                         {
                             for (int i = 0; i < ExtensionMetadata.ColumnNames.Length; i++)
                             {
+                                if (ExtensionMetadata.ColumnNames[i].Trim() == "")
+                                    break;
                                 tbl.Columns.Add(String.Format(property.Name + ExtensionMetadata.ColumnNames[i]), typeof(double)); //property.PropertyType);
                             }
                         }
