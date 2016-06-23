@@ -1,0 +1,21 @@
+<!-- ONLY WHEN DATATYPE OF OUTPUT = Nominal -->
+<!--file name: reclass1_Forest_Type_Map_classDict.xml -->
+<classDict extension="Output Leaf Biomass Reclass" output="reclass1 Forest Type Map">
+    <class value=1 label="DryPine">
+    <class value=2 label="DryMesicPine">
+    <class value=3 label="DryMesicPineOak">
+    <class value=4 label="BorealHardCon">
+    <class value=5 label="MesicNHArd">
+    <class value=6 label="CedarSwamp">
+    <class value=7 label="Tamarack">
+</classDict>
+
+<!-- and in the metadata xml for Output Leaf Biomass Reclass add classDictPath="Metadata\Output Leaf Biomass Reclass\reclass1_Forest_Type_Map_classDict.xml" to the output element -->
+<landisMetadata>
+	<extension name="Output Leaf Biomass Reclass" timeInterval="5">
+		<scenario-replication rasterOutCellArea="1" timeMax="30" timeMin="0"/>
+		<outputs>
+			<output dataType="Nominal" classDictPath="Metadata\Output Leaf Biomass Reclass\reclass1_Forest_Type_Map_classDict.xml" filePath="output-biomass-reclass/bio-reclass1-{timestep}.img" name="reclass1 Forest Type Map" type="Map" unit="" visualize="True"/>
+		</outputs>
+	</extension>
+</landisMetadata>
